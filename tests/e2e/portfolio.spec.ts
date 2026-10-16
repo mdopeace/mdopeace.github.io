@@ -72,7 +72,7 @@ test("quicktodo screenshot actually loaded", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
-  const img = page.locator('img[src="/quicktodo-today.png"]');
+  const img = page.locator('img[src="/quicktodo-hero.png"]');
   await expect(img).toBeVisible();
   const ok = await img.evaluate((n: HTMLImageElement) => n.complete && n.naturalWidth > 0);
   expect(ok, "screenshot failed to load").toBe(true);

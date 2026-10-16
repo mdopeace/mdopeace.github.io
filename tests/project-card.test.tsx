@@ -18,7 +18,7 @@ test("quicktodo renders its screenshot as a local path", async () => {
   const { renderToStaticMarkup } = await import("react-dom/server");
   const html = renderToStaticMarkup(<ProjectCard project={byslug("quicktodo")} />);
 
-  assert.match(html, /<img[^>]+src="\/quicktodo-today\.png"/);
+  assert.match(html, /<img[^>]+src="\/quicktodo-hero\.png"/);
   assert.ok(!html.includes("raw.githubusercontent.com"), "must not hotlink");
 });
 
