@@ -11,7 +11,7 @@ export default function Home() {
     <main>
       <Hero />
       <Section label="Projects" as="h2">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-6">
           {projects.map((p) => (
             <ProjectCard key={p.slug} project={p} />
           ))}
