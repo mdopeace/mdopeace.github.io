@@ -25,3 +25,12 @@ body {
   -webkit-font-smoothing: antialiased;
   line-height: 1.55;
 }
+
+/* The UA focus ring is a blue that measures 2.98:1 on this background — under
+   WCAG 2.2 SC2.4.11's 3:1 — and is off-palette. #948464 against #16171a is
+   4.90:1. */
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+  border-radius: 2px;
+}

@@ -24,14 +24,23 @@ export function ProjectCard({ project }: { project: Project }) {
       <p className="mt-3 text-sm leading-relaxed text-muted">{project.problem}</p>
 
       {project.brew && (
-        <div className="mt-4 rounded-lg border border-amberline bg-amberbg px-3 py-2">
-          <code className="block font-mono text-xs break-all text-amber">
-            {project.brew.tap}
-          </code>
-          <code className="mt-1 block font-mono text-xs break-all text-amber">
-            {project.brew.install}
-          </code>
-        </div>
+        <>
+          <div className="mt-4 rounded-lg border border-amberline bg-amberbg px-3 py-2">
+            <code className="block font-mono text-xs break-words text-amber">
+              {project.brew.tap}
+            </code>
+            <code className="mt-1 block font-mono text-xs break-words text-amber">
+              {project.brew.install}
+            </code>
+          </div>
+          <ul className="mt-2 space-y-0.5">
+            {project.requires.map((r) => (
+              <li key={r} className="text-xs leading-relaxed text-faint">
+                {r}
+              </li>
+            ))}
+          </ul>
+        </>
       )}
 
       <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1">

@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { site } from "../data/site";
 import { Context } from "../components/Context";
 
@@ -22,7 +23,7 @@ test("context mentions the infra scope, not just features", async () => {
 });
 
 test("context is a plain list, not a skills grid with icons or bars", () => {
-  const src = require("node:fs").readFileSync("components/Context.tsx", "utf8") as string;
+  const src = readFileSync("components/Context.tsx", "utf8");
   assert.doesNotMatch(src, /<svg/i);
   assert.doesNotMatch(src, /<img/i);
   assert.doesNotMatch(src, /proficiency|percentage|width=\{|level/i);

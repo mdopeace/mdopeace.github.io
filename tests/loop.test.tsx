@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { loopSteps } from "../data/site";
 import { Loop } from "../components/Loop";
 
@@ -17,7 +18,7 @@ test("loop renders every step in order, numbered", async () => {
 });
 
 test("loop appears after the projects in the page", () => {
-  const page = require("node:fs").readFileSync("app/page.tsx", "utf8") as string;
+  const page = readFileSync("app/page.tsx", "utf8");
   assert.ok(
     page.indexOf("ProjectCard") < page.indexOf("<Loop"),
     "loop must come after the projects, not as a hook before them",

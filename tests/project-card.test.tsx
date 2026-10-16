@@ -54,5 +54,5 @@ test("brew commands render in monospace with amber tokens", () => {
 });
 
 test("brew text can wrap on narrow screens", () => {
-  assert.match(src, /break-all|break-words|whitespace-pre-wrap/);
+  assert.match(src, /break-words|whitespace-pre-wrap/);
 });

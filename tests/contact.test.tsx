@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { site } from "../data/site";
 import { Contact } from "../components/Contact";
 
@@ -21,7 +22,7 @@ test("contact carries no trace of the clone author's handles", async () => {
 });
 
 test("there is no contact form and no backend", () => {
-  const src = require("node:fs").readFileSync("components/Contact.tsx", "utf8") as string;
+  const src = readFileSync("components/Contact.tsx", "utf8");
   assert.doesNotMatch(src, /<form/i);
   assert.doesNotMatch(src, /<input/i);
   assert.doesNotMatch(src, /<textarea/i);
@@ -29,6 +30,6 @@ test("there is no contact form and no backend", () => {
 });
 
 test("external contact links open safely", () => {
-  const src = require("node:fs").readFileSync("components/Contact.tsx", "utf8") as string;
+  const src = readFileSync("components/Contact.tsx", "utf8");
   assert.match(src, /rel="noopener noreferrer"/);
 });

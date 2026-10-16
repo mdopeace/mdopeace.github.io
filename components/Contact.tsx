@@ -6,7 +6,7 @@ const linkClass =
 
 export function Contact() {
   return (
-    <Section label="Get in touch">
+    <Section label="Get in touch" as="h2">
       <ul className="flex flex-wrap gap-x-8 gap-y-2 text-[15px]">
         <li>
           <a href={`mailto:${site.email}`} className={linkClass}>

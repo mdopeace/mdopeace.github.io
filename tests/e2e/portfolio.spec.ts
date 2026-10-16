@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
 
-// Serves the real static export, so what is asserted here is what GitHub Pages
-// would serve — including whether .nojekyll let _next/ survive.
+// Serves the real static export, so these assert the artifact a deploy would
+// copy. `serve` does NOT run Jekyll, so this suite cannot prove the deploy
+// survives Jekyll — tests/verify-script.test.ts covers .nojekyll emission and
+// the first real deploy is the only proof of Jekyll behaviour.
 
 test("hero is complete above the fold at 375px", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });

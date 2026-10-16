@@ -19,9 +19,9 @@ export const site = {
 };
 
 export const loopSteps = [
-  "No player on Mac felt right, so I built one.",
-  "Then I was never satisfied, and the ideas for improving it kept evaporating — so I built a tool to hold them.",
-  "With the list finally captured, I can go back and finish vidp.",
+  "I watch a lot of films and series. Streaming is split across separate subscriptions, and what is free online is buried in ads and buffering — so I download and watch offline.",
+  "There was no Mac player for that which felt native, so I built vidp.",
+  "Then I was never satisfied with it, and the ideas for improving it kept evaporating mid-task — so I built QuickTodo to hold them. With the list captured, I can finally finish vidp.",
 ];
 
 export { projects };
