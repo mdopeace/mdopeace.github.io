@@ -1,44 +1,53 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { site } from "../data/site";
 
-// He is one of two developers on a four-person platform team (one manager,
-// one lead). He does not own the platform work outright, so the page must not
-// claim he does — an inflated ownership claim is the exact thing a reader
-// with interview experience catches.
-test("the page does not claim sole ownership of the platform work", () => {
-  const src = readFileSync("components/Context.tsx", "utf8");
-  assert.doesNotMatch(
-    src,
-    /I own the platform work/i,
-    "claims sole ownership of work his team owns",
-  );
-  assert.doesNotMatch(src, /\bI own\b/);
+// Team composition was shared as background, not as page content. The page
+// should convey "contributor, not sole owner" without publishing headcount.
+const htmlish = () => {
+  const files = [
+    "components/Context.tsx",
+    "components/Hero.tsx",
+    "data/site.ts",
+    "data/projects.ts",
+    "app/page.tsx",
+  ];
+  return files.map((f) => readFileSync(f, "utf8")).join("\n");
+};
+
+test("no team headcount appears anywhere on the page", () => {
+  const src = htmlish();
+  for (const leak of [
+    /two developers/i,
+    /2 developers/i,
+    /\b4\b(?=.*(?:people|person|member|team))/i,
+    /manager/i,
+    /team lead/i,
+  ]) {
+    assert.doesNotMatch(src, leak, `team composition leaked into the page: ${leak}`);
+  }
 });
 
-test("platform work is attributed to the team he is part of", () => {
-  const src = readFileSync("components/Context.tsx", "utf8");
-  assert.match(
-    src,
-    /team|part of|alongside/i,
-    "must attribute the platform work to a team rather than to him alone",
-  );
+test("platform work is still attributed to a team", () => {
+  assert.match(htmlish(), /team/i, "must not over-correct into claiming sole ownership");
 });
 
-test("infraScope is described as shared work, not personal territory", async () => {
+test("the sentence is about the work, not the org chart", async () => {
   const { renderToStaticMarkup } = await import("react-dom/server");
   const { Context } = await import("../components/Context");
   const html = renderToStaticMarkup(<Context />);
 
-  assert.doesNotMatch(html, /I own/i);
-  assert.match(html, /team/i);
+  assert.match(html, /platform team/i);
+  assert.doesNotMatch(html, /developers? (?:handle|do|own)/i);
+  assert.match(html, /handle/);
 });
 
-test("the sentence stays short and does not become a resume bullet", async () => {
-  const { renderToStaticMarkup } = await import("react-dom/server");
-  const { Context } = await import("../components/Context");
-  const html = renderToStaticMarkup(<Context />);
-
-  const paras = html.match(/<p>[\s\S]*?<\/p>/g) ?? [];
-  assert.ok(paras.length <= 2, "Day job should be two short paragraphs, not a list");
+test("infra scope is unchanged and still complete", () => {
+  assert.deepEqual(site.infraScope, [
+    "app framework and build",
+    "logging and error tracking",
+    "public and auth pages",
+    "UI components",
+  ]);
 });

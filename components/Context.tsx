@@ -10,7 +10,7 @@ export function Context() {
           Full-stack web by day — {site.dayStack.join(", ")}.
         </p>
         <p>
-          Part of the platform team, where we two developers handle{" "}
+          Part of the platform team, where we handle{" "}
           {site.infraScope.join(", ")}.
         </p>
       </div>
