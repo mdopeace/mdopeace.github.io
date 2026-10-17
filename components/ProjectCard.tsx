@@ -7,7 +7,7 @@ export function ProjectCard({ project }: { project: Project }) {
     // characters. Full-width rows keep the text readable and the screenshot
     // visible at the same time.
     <article className="grid gap-6 rounded-xl border border-line bg-panel p-5 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-      <div>
+      <div className="flex items-center">
         {project.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
