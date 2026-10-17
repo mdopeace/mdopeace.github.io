@@ -47,12 +47,17 @@ test("external links open safely", () => {
 });
 
 test("brew commands render in monospace with amber tokens", () => {
-  assert.match(src, /font-mono/);
-  assert.match(src, /text-amber/);
-  assert.match(src, /bg-amberbg/);
-  assert.match(src, /border-amberline/);
+  // The command block and its copy button live in CopyCommand now; the card
+  // only decides whether to render one.
+  const cmd = readFileSync("components/CopyCommand.tsx", "utf8");
+  assert.match(cmd, /font-mono/);
+  assert.match(cmd, /text-amber/);
+  assert.match(cmd, /bg-amberbg/);
+  assert.match(cmd, /border-amberline/);
+  assert.match(src, /<CopyCommand/);
 });
 
 test("brew text can wrap on narrow screens", () => {
-  assert.match(src, /break-words|whitespace-pre-wrap/);
+  const cmd = readFileSync("components/CopyCommand.tsx", "utf8");
+  assert.match(cmd, /break-words|whitespace-pre-wrap/);
 });

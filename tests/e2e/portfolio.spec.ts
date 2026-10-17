@@ -41,18 +41,13 @@ test("brew commands render in full without clipping at 375px", async ({
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
 
-  for (const cmd of [
-    "brew tap mdopeace/quicktodo",
-    "brew install --cask quicktodo",
-    "brew tap mdopeace/vidp",
-    "brew install --cask vidp",
-  ]) {
-    const el = page.getByText(cmd, { exact: true }).first();
+  // Both commands share one <code> with a newline, so match on its text.
+  for (const tap of ["brew tap mdopeace/quicktodo", "brew tap mdopeace/vidp"]) {
+    const el = page.locator("code", { hasText: tap }).first();
     await expect(el).toBeVisible();
-    const clipped = await el.evaluate(
-      (n) => n.scrollWidth > n.clientWidth + 1,
-    );
-    expect(clipped, `${cmd} is clipped`).toBe(false);
+    await expect(el).toContainText(tap);
+    const clipped = await el.evaluate((n) => n.scrollWidth > n.clientWidth + 1);
+    expect(clipped, `${tap} is clipped`).toBe(false);
   }
 });
 

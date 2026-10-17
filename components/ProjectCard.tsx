@@ -1,4 +1,5 @@
 import type { Project } from "@/data/projects";
+import { CopyCommand } from "./CopyCommand";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
@@ -36,14 +37,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
         {project.brew && (
           <>
-            <div className="mt-5 max-w-[62ch] rounded-lg border border-amberline bg-amberbg px-3 py-2">
-              <code className="block font-mono text-xs break-words text-amber">
-                {project.brew.tap}
-              </code>
-              <code className="mt-1 block font-mono text-xs break-words text-amber">
-                {project.brew.install}
-              </code>
-            </div>
+            <CopyCommand tap={project.brew.tap} install={project.brew.install} />
             <ul className="mt-2 space-y-0.5">
               {project.requires.map((r) => (
                 <li key={r} className="text-xs leading-relaxed text-faint">
