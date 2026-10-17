@@ -33,11 +33,15 @@ test("no scaffold leftovers are published", () => {
   }
 });
 
-test("the favicon served is our avatar, not the scaffold's", () => {
+test("the favicon served is our GitHub avatar, not the scaffold's", () => {
   const links = html.match(/<link rel="(?:apple-touch-)?icon"[^>]*>/gi) ?? [];
   assert.ok(links.length >= 2, "expected icon links in the built HTML");
   for (const l of links) {
-    assert.match(l, /avatar-\d+\.png/, `${l} is not an avatar`);
+    assert.match(
+      l,
+      /avatars\.githubusercontent\.com\/u\/99809028/,
+      `${l} is not the avatar CDN`,
+    );
   }
   assert.doesNotMatch(html, /favicon\.ico/, "Next's own icon is winning over ours");
 });

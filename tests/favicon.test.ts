@@ -1,59 +1,51 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
 
 const layout = readFileSync("app/layout.tsx", "utf8");
+const CDN = "avatars.githubusercontent.com/u/99809028";
 
-// The GitHub avatar, downloaded once and checked in at the two sizes browsers
-// actually request. Browsers tint favicons in dark mode unless given explicit
-// light and dark variants, so both are declared — "always the profile pic".
-test("the favicon is the GitHub avatar, not the old 32px site icon", () => {
-  assert.ok(existsSync("public/avatar-32.png"), "avatar-32.png missing");
-  assert.ok(existsSync("public/avatar-180.png"), "avatar-180.png missing");
-});
-
-test("the old site favicon is gone", () => {
-  assert.equal(
-    existsSync("public/favicon.png"),
-    false,
-    "the pre-redesign 32px favicon is still published",
+// Hotlinked deliberately: a favicon is cosmetic and low-stakes, so tracking
+// the GitHub avatar automatically beats keeping a copy that drifts. (The
+// screenshot stays local — that one is content, and a broken image matters.)
+test("the favicon points at the GitHub avatar CDN, not a local file", () => {
+  assert.match(layout, /avatars\.githubusercontent\.com\/u\/99809028/);
+  assert.doesNotMatch(
+    layout,
+    /"\/avatar-32\.png"/,
+    "must not reference a local copy — that is the drift being removed",
   );
 });
 
-test("the avatar is a real photo, not a placeholder-sized stub", () => {
-  // 32px tab icon and 180px home-screen icon, both 8-bit.
-  const png = (p: string) => readFileSync(p);
-  assert.ok(png("public/avatar-32.png").length > 500, "avatar-32 looks empty");
-  assert.ok(
-    png("public/avatar-180.png").length > 5000,
-    "avatar-180 looks empty",
-  );
-  const digest = createHash("sha256")
-    .update(png("public/avatar-32.png"))
-    .digest("hex");
-  assert.ok(digest.length === 64);
+test("no avatar image is committed to the repo", () => {
+  for (const f of ["public/avatar-32.png", "public/avatar-180.png"]) {
+    assert.equal(existsSync(f), false, `${f} should be deleted, not hotlinked`);
+  }
 });
 
-test("layout declares the avatar for tab and home-screen use", () => {
-  assert.match(layout, /avatar-32\.png/, "tab favicon not declared");
-  assert.match(layout, /avatar-180\.png/, "apple-touch-icon not declared");
-  assert.doesNotMatch(layout, /"favicon\.ico"/, "must not ship an .ico path");
+test("sized variants are requested so the tab icon is not a 68KB photo", () => {
+  assert.match(layout, /\?s=64/, "tab favicon should request a 64px variant");
+  assert.match(layout, /\?s=180/, "apple-touch-icon should request a 180px variant");
 });
 
-test("both light and dark variants are declared so nothing gets auto-tinted", () => {
-  const variants = layout.match(/url:\s*"\/avatar-32\.png"/g) ?? [];
-  assert.ok(
-    variants.length >= 2,
-    `needs a media-qualified pair for light and dark, found ${variants.length}`,
-  );
+test("both colour schemes are declared so dark mode does not tint the photo", () => {
   assert.match(layout, /media:\s*"\(prefers-color-scheme: light\)"/);
   assert.match(layout, /media:\s*"\(prefers-color-scheme: dark\)"/);
 });
 
-test("the shipped HTML points every browser at the avatar", () => {
+test("the shipped HTML links the CDN, with no local icon and no .ico", () => {
   const html = readFileSync("out/index.html", "utf8");
-  assert.match(html, /avatar-32\.png/);
+  assert.ok(html.includes(CDN), "built HTML does not link the avatar CDN");
   assert.match(html, /apple-touch-icon/);
   assert.doesNotMatch(html, /favicon\.ico/);
+  assert.doesNotMatch(html, /\/avatar-\d+\.png/);
+});
+
+test("the screenshot is still local — only the favicon is hotlinked", () => {
+  // The distinction this codebase draws: cosmetic assets track GitHub,
+  // content assets do not.
+  assert.ok(
+    existsSync("public/quicktodo-hero.png"),
+    "the project screenshot must stay in the repo",
+  );
 });

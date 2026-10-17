@@ -1,19 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+// Hotlinked to the GitHub avatar CDN so a profile-picture change shows up
+// without touching this repo. ?s= keeps it a 6KB icon instead of a 68KB
+// photo. Declared for both colour schemes because browsers tint favicons in
+// dark mode, which would grey out the picture.
+const avatar = "https://avatars.githubusercontent.com/u/99809028";
+
 export const metadata: Metadata = {
   title: "Md Mostafijur Rahman",
   description:
     "Software engineer at Tracxn, Bengaluru. Builds macOS apps: QuickTodo and Vidp.",
-  // Browsers tint favicons in dark mode unless given explicit light and dark
-// variants, which would grey out the profile photo. Declaring both keeps it
-// showing as-is either way.
-icons: {
+  icons: {
     icon: [
-      { url: "/avatar-32.png", media: "(prefers-color-scheme: light)" },
-      { url: "/avatar-32.png", media: "(prefers-color-scheme: dark)" },
+      { url: `${avatar}?s=64`, media: "(prefers-color-scheme: light)" },
+      { url: `${avatar}?s=64`, media: "(prefers-color-scheme: dark)" },
     ],
-    apple: "/avatar-180.png",
+    apple: `${avatar}?s=180`,
   },
 };
 

@@ -63,14 +63,14 @@ test("the 404 page is dark and links home", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Go back/ })).toBeVisible();
 });
 
-test("the favicon is our avatar, not the Next.js logo", async ({ page }) => {
+test("the favicon is our GitHub avatar, not the Next.js logo", async ({ page }) => {
   await page.goto("/");
   const hrefs = await page
     .locator('link[rel="icon"], link[rel="apple-touch-icon"]')
     .evaluateAll((els) => els.map((e) => e.getAttribute("href") ?? ""));
   expect(hrefs.length, "no icon links rendered").toBeGreaterThanOrEqual(2);
   for (const h of hrefs) {
-    expect(h).toMatch(/avatar-\d+\.png/);
+    expect(h).toMatch(/avatars\.githubusercontent\.com\/u\/99809028/);
     expect(h).not.toContain(".ico");
   }
 });
