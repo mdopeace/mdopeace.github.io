@@ -33,10 +33,13 @@ test("no scaffold leftovers are published", () => {
   }
 });
 
-test("the favicon served is ours, not the scaffold's", () => {
-  const link = html.match(/rel="icon"[^>]*/i)?.[0] ?? "";
-  assert.doesNotMatch(link, /favicon\.ico/, "Next's own icon is winning over ours");
-  assert.match(link, /favicon\.png/);
+test("the favicon served is our avatar, not the scaffold's", () => {
+  const links = html.match(/<link rel="(?:apple-touch-)?icon"[^>]*>/gi) ?? [];
+  assert.ok(links.length >= 2, "expected icon links in the built HTML");
+  for (const l of links) {
+    assert.match(l, /avatar-\d+\.png/, `${l} is not an avatar`);
+  }
+  assert.doesNotMatch(html, /favicon\.ico/, "Next's own icon is winning over ours");
 });
 
 test("globals.css carries no light-mode block", () => {

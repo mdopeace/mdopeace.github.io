@@ -5,8 +5,15 @@ export const metadata: Metadata = {
   title: "Md Mostafijur Rahman",
   description:
     "Software engineer at Tracxn, Bengaluru. Builds macOS apps: QuickTodo and Vidp.",
-  icons: {
-    icon: "/favicon.png",
+  // Browsers tint favicons in dark mode unless given explicit light and dark
+// variants, which would grey out the profile photo. Declaring both keeps it
+// showing as-is either way.
+icons: {
+    icon: [
+      { url: "/avatar-32.png", media: "(prefers-color-scheme: light)" },
+      { url: "/avatar-32.png", media: "(prefers-color-scheme: dark)" },
+    ],
+    apple: "/avatar-180.png",
   },
 };
 
