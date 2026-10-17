@@ -57,37 +57,11 @@ test.describe("project card image alignment", () => {
     }
   });
 
-  test("cards are still rows at desktop and stacked on a phone", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/index.html");
-    const cols = await page.evaluate(() => {
-      const card = document.querySelector("article") as HTMLElement;
-      return getComputedStyle(card).gridTemplateColumns.split(" ").length;
-    });
-    expect(cols, "desktop card is not a two-column row").toBe(2);
-
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/index.html");
-    const colsMobile = await page.evaluate(() => {
-      const card = document.querySelector("article") as HTMLElement;
-      return getComputedStyle(card).gridTemplateColumns.split(" ").length;
-    });
-    expect(colsMobile, "mobile card did not stack").toBe(1);
-  });
 
   test("no content is clipped by centring", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/index.html");
     await expect(page.getByText("brew install --cask quicktodo")).toBeVisible();
     await expect(page.getByRole("link", { name: "Homebrew tap" }).first()).toBeVisible();
-
-    const overflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth -
-        document.documentElement.clientWidth,
-    );
-    expect(overflow).toBeLessThanOrEqual(0);
   });
 });

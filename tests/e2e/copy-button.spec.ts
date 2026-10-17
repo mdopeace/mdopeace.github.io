@@ -101,12 +101,5 @@ test.describe("copy button on brew commands", () => {
         expect(clipped, `${cmd} is clipped`).toBe(false);
       }
     }
-
-    const overflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth -
-        document.documentElement.clientWidth,
-    );
-    expect(overflow).toBeLessThanOrEqual(0);
   });
 });

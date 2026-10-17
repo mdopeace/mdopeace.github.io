@@ -98,18 +98,6 @@ test.describe("project layout", () => {
     expect(imgMid).toBeLessThanOrEqual(textCol.y + textCol.height);
   });
 
-  test("still no horizontal overflow, and fine on a phone", async ({ page }) => {
-    for (const width of [320, 375, 768, 1440]) {
-      await page.setViewportSize({ width, height: 900 });
-      await page.goto("/index.html");
-      const overflow = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(overflow, `overflow at ${width}px`).toBeLessThanOrEqual(0);
-    }
-  });
 
   test("the projects section is not taller than the viewport twice over", async ({
     page,

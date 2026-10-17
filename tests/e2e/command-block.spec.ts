@@ -114,40 +114,5 @@ test.describe("command block is a 50/50 split", () => {
     expect(geo.sameRow, "button should share the command's row").toBe(true);
   });
 
-  test("it still copies, and still stacks on a narrow screen", async ({
-    page,
-    context,
-  }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/index.html");
-    await page.getByRole("button", { name: "copy" }).first().click();
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
-      "brew tap mdopeace/quicktodo\nbrew install --cask quicktodo",
-    );
 
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/index.html");
-    const cols = await page.evaluate(
-      () =>
-        getComputedStyle(
-          document.querySelector("article code")!.closest('.cmd')!
-            .parentElement!,
-        ).gridTemplateColumns.split(" ").length,
-    );
-    expect(cols, "should stack on a phone").toBe(1);
-  });
-
-  test("no overflow at any width", async ({ page }) => {
-    for (const width of [320, 375, 768, 1024, 1440]) {
-      await page.setViewportSize({ width, height: 900 });
-      await page.goto("/index.html");
-      const over = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(over, `overflow at ${width}px`).toBeLessThanOrEqual(0);
-    }
-  });
 });

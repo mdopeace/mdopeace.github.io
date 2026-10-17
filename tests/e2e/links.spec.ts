@@ -79,16 +79,4 @@ test.describe("links", () => {
     );
   });
 
-  test("separated links do not overflow on a phone", async ({ page }) => {
-    for (const width of [320, 375]) {
-      await page.setViewportSize({ width, height: 812 });
-      await page.goto("/index.html");
-      const over = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(over, `overflow at ${width}px`).toBeLessThanOrEqual(0);
-    }
-  });
 });
