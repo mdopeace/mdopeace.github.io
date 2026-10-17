@@ -36,8 +36,11 @@ export function CopyCommand({
   };
 
   return (
-    <div className="mt-5 flex max-w-[62ch] items-center gap-3 rounded-lg border border-amberline bg-amberbg px-3 py-2">
-      <code className="min-w-0 font-mono text-xs break-words whitespace-pre-line text-amber">
+    // Geometry matches QuickTodo's .cmd: 10px 12px padding, 7px radius, 13px
+    // monospace, and justify-between so the button is flush right rather
+    // than floating after the text.
+    <div className="mt-5 flex max-w-[62ch] items-center justify-between gap-3 rounded-[7px] border border-amberline bg-amberbg px-3 py-2.5">
+      <code className="min-w-0 font-mono text-[13px] leading-[1.55] break-words whitespace-pre-line text-amber">
         {tap}
         {"\n"}
         {install}
@@ -46,7 +49,7 @@ export function CopyCommand({
         type="button"
         onClick={onClick}
         aria-live="polite"
-        className={`shrink-0 cursor-pointer rounded-[5px] border bg-none px-2 py-[3px] font-sans text-[11px] transition-colors ${
+        className={`shrink-0 cursor-pointer rounded-[5px] border bg-none px-2.25 py-[3px] font-sans text-[11px] transition-colors ${
           state === "done"
             ? "border-[#2c4a32] text-[#3fb950]"
             : state === "failed"
