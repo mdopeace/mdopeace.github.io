@@ -13,14 +13,14 @@ async function cardBox(page: import("@playwright/test").Page) {
 test.describe("project layout", () => {
   test("cards use the full content measure, not half of it", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const box = await cardBox(page);
     expect(box!.width, "card is only using half the measure").toBeGreaterThan(700);
   });
 
   test("cards are not taller than they are wide", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const box = await cardBox(page);
     const aspect = box!.width / box!.height;
     expect(
@@ -31,7 +31,7 @@ test.describe("project layout", () => {
 
   test("both projects are still on the page", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     await expect(page.locator("article")).toHaveCount(2);
     await expect(page.getByRole("heading", { name: "QuickTodo" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Vidp" })).toBeVisible();
@@ -39,7 +39,7 @@ test.describe("project layout", () => {
 
   test("every piece of content survives the layout change", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     // "the ones QuickTodo holds" appears in vidp's copy too, so match the
     // heading rather than the body text.
@@ -64,7 +64,7 @@ test.describe("project layout", () => {
 
   test("screenshot sits beside the text, not above it", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const img = await page
       .locator('img[src*="raw.githubusercontent.com/mdopeace/quicktodo"]')
@@ -101,7 +101,7 @@ test.describe("project layout", () => {
   test("still no horizontal overflow, and fine on a phone", async ({ page }) => {
     for (const width of [320, 375, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto("/");
+      await page.goto("/index.html");
       const overflow = await page.evaluate(
         () =>
           document.documentElement.scrollWidth -
@@ -115,7 +115,7 @@ test.describe("project layout", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const cards = page.locator("article");
     const first = (await cards.first().boundingBox())!;
     const second = (await cards.nth(1).boundingBox())!;

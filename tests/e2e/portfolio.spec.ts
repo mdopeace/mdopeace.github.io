@@ -7,7 +7,7 @@ import { test, expect } from "@playwright/test";
 
 test("hero is complete above the fold at 375px", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
+  await page.goto("/index.html");
 
   const h1 = page.getByRole("heading", { level: 1 });
   await expect(h1).toContainText("Md Mostafijur Rahman");
@@ -26,7 +26,7 @@ test("hero is complete above the fold at 375px", async ({ page }) => {
 
 test("no horizontal overflow at 375px", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
+  await page.goto("/index.html");
   const overflow = await page.evaluate(
     () =>
       document.documentElement.scrollWidth -
@@ -39,7 +39,7 @@ test("brew commands render in full without clipping at 375px", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
+  await page.goto("/index.html");
 
   // Both commands share one <code> with a newline, so match on its text.
   for (const tap of ["brew tap mdopeace/quicktodo", "brew tap mdopeace/vidp"]) {
@@ -53,7 +53,7 @@ test("brew commands render in full without clipping at 375px", async ({
 
 test("both projects are on the page, vidp with no image", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/index.html");
 
   await expect(page.getByRole("heading", { name: "QuickTodo" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vidp" })).toBeVisible();
@@ -65,7 +65,7 @@ test("both projects are on the page, vidp with no image", async ({ page }) => {
 
 test("quicktodo screenshot actually loaded", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/index.html");
 
   const img = page.locator('img[src*="raw.githubusercontent.com/mdopeace/quicktodo"]');
   await expect(img).toBeVisible();
@@ -86,7 +86,7 @@ test("no request 404s, so _next assets survived", async ({ page }) => {
 
 test("page is styled dark, not unstyled HTML", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/index.html");
 
   const bg = await page.evaluate(
     () => getComputedStyle(document.body).backgroundColor,
@@ -96,7 +96,7 @@ test("page is styled dark, not unstyled HTML", async ({ page }) => {
 
 test("no link points at the clone author or a dead vidp page", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/index.html");
 
   const hrefs = await page.locator("a").evaluateAll((as) =>
     as.map((a) => (a as HTMLAnchorElement).href),

@@ -54,7 +54,7 @@ test.describe("measure matches the quicktodo page", () => {
     test(`geometry at ${vw}px`, async ({ page }) => {
       const r = ref(vw);
       await page.setViewportSize({ width: vw, height: 900 });
-      await page.goto("/");
+      await page.goto("/index.html");
       const m = await measure(page);
 
       expect(m.wrapW, `wrap width at ${vw}px`).toBe(r.wrapW);
@@ -77,7 +77,7 @@ test.describe("measure matches the quicktodo page", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const m = await measure(page);
 
     // 24px of wrap gutter on each side must NOT be inside the border.
@@ -87,7 +87,7 @@ test.describe("measure matches the quicktodo page", () => {
 
   test("section labels align with the rule and the body text", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const xs = await page.evaluate(() =>
       [...document.querySelectorAll("section")]
@@ -106,7 +106,7 @@ test.describe("measure matches the quicktodo page", () => {
 
   test("project cards stay inside the content width", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const m = await measure(page);
     const card = (await page.locator("article").first().boundingBox())!;

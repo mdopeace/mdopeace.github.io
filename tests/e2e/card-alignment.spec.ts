@@ -9,7 +9,7 @@ async function imageSlack(page: import("@playwright/test").Page, slug: string) {
   return page.evaluate((s) => {
     const card = [...document.querySelectorAll("article")].find(
       (a) =>
-        a.querySelector("h3")?.textContent?.trim().toLowerCase() === s,
+        a.querySelector("h2")?.textContent?.trim().toLowerCase() === s,
     ) as HTMLElement;
     const imgCol = card.firstElementChild as HTMLElement;
     const textCol = imgCol.nextElementSibling as HTMLElement;
@@ -33,7 +33,7 @@ test.describe("project card image alignment", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const m = await imageSlack(page, "quicktodo");
 
     // Nothing should pool entirely below the image.
@@ -46,7 +46,7 @@ test.describe("project card image alignment", () => {
 
   test("both cards have their image column centred", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     for (const slug of ["quicktodo", "vidp"]) {
       const m = await imageSlack(page, slug);
@@ -61,7 +61,7 @@ test.describe("project card image alignment", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const cols = await page.evaluate(() => {
       const card = document.querySelector("article") as HTMLElement;
       return getComputedStyle(card).gridTemplateColumns.split(" ").length;
@@ -69,7 +69,7 @@ test.describe("project card image alignment", () => {
     expect(cols, "desktop card is not a two-column row").toBe(2);
 
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const colsMobile = await page.evaluate(() => {
       const card = document.querySelector("article") as HTMLElement;
       return getComputedStyle(card).gridTemplateColumns.split(" ").length;
@@ -79,7 +79,7 @@ test.describe("project card image alignment", () => {
 
   test("no content is clipped by centring", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     await expect(page.getByText("brew install --cask quicktodo")).toBeVisible();
     await expect(page.getByRole("link", { name: "Homebrew tap" }).first()).toBeVisible();
 

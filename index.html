@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Md Mostafijur Rahman</title>
+    <meta
+      name="description"
+      content="Software engineer at Tracxn, Bengaluru. Builds macOS apps: QuickTodo and Vidp."
+    />
+    <meta name="theme-color" content="#16171a" />
+    <!-- Hotlinked so a profile-picture change shows up without touching this repo. -->
+    <link
+      rel="icon"
+      href="https://avatars.githubusercontent.com/u/99809028?s=64"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="https://avatars.githubusercontent.com/u/99809028?s=64"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://avatars.githubusercontent.com/u/99809028?s=180"
+    />
+    <style>
+      :root {
+        --bg: #16171a;
+        --panel: #0e0f11;
+        --line: #2a2c31;
+        --text: #f2f3f5;
+        --muted: #9aa1ab;
+        /* 4.90:1 on --bg and 5.25:1 on --panel. The old value failed AA. */
+        --faint: #82868d;
+        --amber-bg: #1a1710;
+        --amber-line: #3a3222;
+        /* 4.89:1 on --amber-bg. */
+        --amber: #948464;
+        --maxw: 980px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+          sans-serif;
+        font-size: 16px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--muted);
+        text-underline-offset: 4px;
+      }
+      a:hover {
+        color: var(--text);
+      }
+      /* The UA focus ring is a blue measuring 2.98:1 on --bg — under WCAG 2.2
+         SC2.4.11's 3:1 — and off-palette. */
+      :focus-visible {
+        outline: 2px solid var(--amber);
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+
+      /* One page-level wrapper owns the measure and the gutter, exactly as the
+         QuickTodo page does. Sections below carry no horizontal padding, so
+         their rules span the content box rather than the full 980px. */
+      .wrap {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      section {
+        padding: 64px 0;
+        border-top: 1px solid var(--line);
+      }
+      .lbl {
+        margin: 0 0 24px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--faint);
+      }
+
+      header.hero {
+        padding: 72px 0 64px;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(32px, 5vw, 46px);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
+      }
+      .role {
+        margin: 8px 0 0;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .lede {
+        margin: 24px 0 0;
+        font-size: 18px;
+        line-height: 1.65;
+        max-width: 34ch;
+      }
+      .tagline {
+        margin: 16px 0 0;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      @media (min-width: 721px) {
+        .lede {
+          max-width: 52ch;
+        }
+      }
+
+      /* Project rows: screenshot left, text right. The grid keeps both
+         columns shrinkable so nothing overflows on a phone. */
+      .project + .project {
+        margin-top: 24px;
+      }
+      article {
+        display: grid;
+        gap: 24px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel);
+      }
+      @media (min-width: 768px) {
+        article {
+          grid-template-columns: 320px minmax(0, 1fr);
+        }
+      }
+      article .shot {
+        display: flex;
+        align-items: center;
+      }
+      article .shot img {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        display: block;
+      }
+      article .shot .pending {
+        width: 100%;
+        min-height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        text-align: center;
+        font-size: 14px;
+        color: var(--faint);
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+      }
+      h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .tagline-s {
+        margin: 4px 0 0;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .body {
+        margin: 16px 0 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--muted);
+        max-width: 62ch;
+      }
+      .body + .body {
+        margin-top: 12px;
+      }
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 20px;
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: 14px;
+      }
+
+      /* 322px / 200px rather than 50/50: a command line plus the copy button
+         beside it needs ~308px, which does not fit in half of a 62ch measure. */
+      .install {
+        display: grid;
+        gap: 8px 24px;
+        margin-top: 20px;
+        max-width: 62ch;
+        align-items: center;
+      }
+      @media (min-width: 640px) {
+        .install {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+        }
+      }
+      .cmd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        background: var(--amber-bg);
+        border: 1px solid var(--amber-line);
+        border-radius: 7px;
+        min-width: 0;
+      }
+      .cmd code {
+        display: block;
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--amber);
+        overflow-wrap: break-word;
+      }
+      .cmd .lines {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .copy {
+        flex: none;
+        font: inherit;
+        font-size: 11px;
+        color: var(--muted);
+        background: none;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 3px 9px;
+        cursor: pointer;
+      }
+      .copy:hover {
+        color: var(--text);
+        border-color: var(--faint);
+      }
+      .copy.done {
+        color: #3fb950;
+        border-color: #2c4a32;
+      }
+      .copy.failed {
+        color: var(--amber);
+        border-color: var(--amber-line);
+      }
+      .requires {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 11px;
+        line-height: 1.5;
+        color: var(--faint);
+      }
+      .requires li {
+        overflow-wrap: break-word;
+      }
+
+      ol.loop {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        max-width: 62ch;
+        display: grid;
+        gap: 16px;
+      }
+      ol.loop li {
+        display: grid;
+        grid-template-columns: 2.5rem minmax(0, 1fr);
+      }
+      ol.loop .n {
+        font-size: 14px;
+        color: var(--faint);
+      }
+      ol.loop p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      .prose {
+        max-width: 62ch;
+        display: grid;
+        gap: 16px;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      .prose p {
+        margin: 0;
+      }
+      .contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 32px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Md Mostafijur Rahman</h1>
+        <p class="role">Software Engineer at Tracxn, Bengaluru — web by day.</p>
+        <p class="lede">
+          I watch a lot of movies, and no Mac player felt right — so I built
+          one. Then I kept losing the ideas for improving it, so I built a tool
+          to hold them.
+        </p>
+        <p class="tagline">Both are on Homebrew.</p>
+      </header>
+
+      <main>
+        <section>
+          <p class="lbl">Projects</p>
+
+          <div class="project">
+            <article>
+              <div class="shot">
+                <img
+                  src="https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/screenshots/completed.png"
+                  alt="QuickTodo — a todo app that lives in your Mac menu bar."
+                />
+              </div>
+              <div>
+                <h2>QuickTodo</h2>
+                <p class="tagline-s">
+                  A todo app that lives in your Mac menu bar.
+                </p>
+                <p class="body">
+                  Native SwiftUI menu-bar app. Add with Return, open with ⌘⌥T.
+                  No window to manage, no account, no Electron.
+                </p>
+                <p class="body">
+                  Standup hands me five things, I spend the day deep in one, and
+                  the other four evaporate. This is where the list goes so it
+                  stops living in my head — which leaves my attention on the
+                  actual work, and shows what I finished by the end of it.
+                  Day-grouped lists, daily or weekly repeat, inline rename,
+                  drag-to-reorder, and a self-updater that verifies the
+                  download's SHA-256 and replaces the running bundle in place.
+                  65KB of tests, including ones that exercise the installer and
+                  relaunch path.
+                </p>
+
+                <div class="install">
+                  <div class="cmd">
+                    <span class="lines">
+                      <code>brew tap mdopeace/quicktodo</code>
+                      <code>brew install --cask quicktodo</code>
+                    </span>
+                    <button
+                      class="copy"
+                      type="button"
+                      data-copy="brew tap mdopeace/quicktodo
+brew install --cask quicktodo"
+                      aria-live="polite"
+                    >
+                      copy
+                    </button>
+                  </div>
+                  <ul class="requires">
+                    <li>macOS 13 or newer</li>
+                    <li>Apple Silicon or Intel</li>
+                  </ul>
+                </div>
+
+                <ul class="links">
+                  <li>
+                    <a href="https://github.com/mdopeace/quicktodo">Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/quicktodo/releases"
+                      >Releases</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://mdopeace.github.io/quicktodo/"
+                      >Live page</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/homebrew-quicktodo"
+                      >Homebrew tap</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+
+          <div class="project">
+            <article>
+              <div class="shot">
+                <div class="pending">
+                  Screenshot coming — the product page isn't out yet.
+                </div>
+              </div>
+              <div>
+                <h2>Vidp</h2>
+                <p class="tagline-s">
+                  A keyboard-driven video player built on libmpv.
+                </p>
+                <p class="body">
+                  Native AppKit player rendering through mpv/OpenGL. Plays mp4,
+                  m4v, mov, mkv, webm and avi, from a file or straight from
+                  Finder.
+                </p>
+                <p class="body">
+                  There was no Mac player that felt native for watching
+                  downloaded video, so I built one — shipping its own libmpv
+                  and FFmpeg, integrating with macOS now-playing, updating
+                  itself from the GitHub API, and uninstalling with full
+                  cleanup. Releases are arm64, so Intel machines need a source
+                  build. It works and I use it daily. It is not finished: the
+                  remaining features are the ones QuickTodo holds.
+                </p>
+
+                <div class="install">
+                  <div class="cmd">
+                    <span class="lines">
+                      <code>brew tap mdopeace/vidp</code>
+                      <code>brew install --cask vidp</code>
+                    </span>
+                    <button
+                      class="copy"
+                      type="button"
+                      data-copy="brew tap mdopeace/vidp
+brew install --cask vidp"
+                      aria-live="polite"
+                    >
+                      copy
+                    </button>
+                  </div>
+                  <ul class="requires">
+                    <li>macOS 13 or newer</li>
+                    <li>Apple Silicon only — build from source on Intel</li>
+                  </ul>
+                </div>
+
+                <ul class="links">
+                  <li>
+                    <a href="https://github.com/mdopeace/vidp">Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/vidp/releases"
+                      >Releases</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/homebrew-vidp"
+                      >Homebrew tap</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <p class="lbl">How this happened</p>
+          <ol class="loop">
+            <li>
+              <span class="n" aria-hidden="true">01</span>
+              <p>
+                I watch a lot of films and series. Streaming is split across
+                separate subscriptions, and what is free online is buried in ads
+                and buffering — so I download and watch offline.
+              </p>
+            </li>
+            <li>
+              <span class="n" aria-hidden="true">02</span>
+              <p>
+                There was no Mac player for that which felt native, so I built
+                vidp.
+              </p>
+            </li>
+            <li>
+              <span class="n" aria-hidden="true">03</span>
+              <p>
+                Then I was never satisfied with it, and the ideas for improving
+                it kept evaporating mid-task — so I built QuickTodo to hold
+                them. With the list captured, I can finally finish vidp.
+              </p>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <p class="lbl">Day job</p>
+          <div class="prose">
+            <p>
+              Software Engineer at Tracxn, Bengaluru, since January 2023.
+              Full-stack web by day — React, Next.js, Astro, Express, MongoDB,
+              AWS Lambda.
+            </p>
+            <p>
+              Part of the platform team, where we handle app framework and
+              build, logging and error tracking, public and auth pages, UI
+              components.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <p class="lbl">Get in touch</p>
+          <ul class="contact">
+            <li><a href="mailto:md.correo.e@gmail.com">md.correo.e@gmail.com</a></li>
+            <li>
+              <a href="https://github.com/mdopeace" rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/in/mdopeace"
+                rel="noopener noreferrer"
+                >LinkedIn</a
+              >
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // The only interactive surface on the page: two buttons that copy a
+      // command. writeText rejects when the clipboard permission is denied or
+      // the document isn't focused, which the presence of navigator.clipboard
+      // does not rule out — hence the "press ⌘C" fallback rather than a
+      // silent failure.
+      (function () {
+        var buttons = document.querySelectorAll(".copy");
+        for (var i = 0; i < buttons.length; i++) {
+          (function (btn) {
+            var label = btn.textContent;
+            var flash = function (text, cls) {
+              btn.textContent = text;
+              btn.classList.add(cls);
+              setTimeout(function () {
+                btn.textContent = label;
+                btn.classList.remove(cls);
+              }, 1400);
+            };
+            var fail = function () {
+              flash("press ⌘C", "failed");
+            };
+            btn.addEventListener("click", function () {
+              if (navigator.clipboard)
+                navigator.clipboard.writeText(btn.dataset.copy).then(
+                  function () {
+                    flash("copied", "done");
+                  },
+                  fail,
+                );
+              else fail();
+            });
+          })(buttons[i]);
+        }
+      })();
+    </script>
+  </body>
+</html>

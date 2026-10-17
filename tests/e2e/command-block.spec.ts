@@ -11,16 +11,16 @@ test.describe("command block is a 50/50 split", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const halves = await page.evaluate(() =>
       [...document.querySelectorAll("article")].map((a) => {
         const grid = a
           .querySelector("code")!
-          .parentElement!.parentElement!.parentElement!;
+          .closest('.install')!;
         const [cmd, req] = [grid.firstElementChild!, grid.lastElementChild!];
         return {
-          name: a.querySelector("h3")!.textContent,
+          name: a.querySelector("h2")!.textContent,
           cmd: Math.round(cmd.getBoundingClientRect().width),
           req: Math.round(req.getBoundingClientRect().width),
         };
@@ -40,11 +40,11 @@ test.describe("command block is a 50/50 split", () => {
 
   test("the grid resolves to two columns at 1440px", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const cols = await page.evaluate(() => {
       const grid = document
         .querySelector("article code")!
-        .parentElement!.parentElement!.parentElement!;
+        .closest('.install')!;
       return getComputedStyle(grid).gridTemplateColumns.split(" ");
     });
     expect(cols, "should be two columns at 1440px").toHaveLength(2);
@@ -52,16 +52,16 @@ test.describe("command block is a 50/50 split", () => {
 
   test("requirements sit outside the bordered command box", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const borders = await page.evaluate(() =>
       [...document.querySelectorAll("article")].map((a) => {
         const grid = a
           .querySelector("code")!
-          .parentElement!.parentElement!.parentElement!;
+          .closest('.install')!;
         const [cmd, req] = [grid.firstElementChild!, grid.lastElementChild!];
         return {
-          name: a.querySelector("h3")!.textContent,
+          name: a.querySelector("h2")!.textContent,
           cmdBorder: getComputedStyle(cmd).borderTopWidth,
           reqBorder: getComputedStyle(req).borderTopWidth,
           reqLeftOfCmd: req.getBoundingClientRect().left > cmd.getBoundingClientRect().left,
@@ -77,7 +77,7 @@ test.describe("command block is a 50/50 split", () => {
 
   test("each command stays on one line", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const heights = await page.evaluate(() =>
       [...document.querySelectorAll("article code")].map((c) =>
@@ -92,12 +92,12 @@ test.describe("command block is a 50/50 split", () => {
 
   test("the copy button sits beside the command, not below it", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
 
     const geo = await page.evaluate(() => {
       const box = document
         .querySelector("article code")!
-        .parentElement!.parentElement!;
+        .closest('.cmd')!;
       const btn = box.querySelector("button")!;
       const first = box.querySelector("code")!;
       const br = btn.getBoundingClientRect();
@@ -120,18 +120,18 @@ test.describe("command block is a 50/50 split", () => {
   }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/");
+    await page.goto("/index.html");
     await page.getByRole("button", { name: "copy" }).first().click();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
       "brew tap mdopeace/quicktodo\nbrew install --cask quicktodo",
     );
 
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/");
+    await page.goto("/index.html");
     const cols = await page.evaluate(
       () =>
         getComputedStyle(
-          document.querySelector("article code")!.parentElement!.parentElement!
+          document.querySelector("article code")!.closest('.cmd')!
             .parentElement!,
         ).gridTemplateColumns.split(" ").length,
     );
@@ -141,7 +141,7 @@ test.describe("command block is a 50/50 split", () => {
   test("no overflow at any width", async ({ page }) => {
     for (const width of [320, 375, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto("/");
+      await page.goto("/index.html");
       const over = await page.evaluate(
         () =>
           document.documentElement.scrollWidth -
