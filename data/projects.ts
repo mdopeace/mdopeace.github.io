@@ -21,7 +21,8 @@ export const projects: Project[] = [
       "Native SwiftUI menu-bar app. Add with Return, open with ⌘⌥T. No window to manage, no account, no Electron.",
     problem:
       "Standup hands me five things, I spend the day deep in one, and the other four evaporate. This is where the list goes so it stops living in my head — which leaves my attention on the actual work, and shows what I finished by the end of it. Day-grouped lists, daily or weekly repeat, inline rename, drag-to-reorder, and a self-updater that verifies the download's SHA-256 and replaces the running bundle in place. 65KB of tests, including ones that exercise the installer and relaunch path.",
-    image: "/quicktodo-hero.png",
+    image:
+      "https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/screenshots/completed.png",
     imageFallback: null,
     requires: ["macOS 13 or newer", "Apple Silicon or Intel"],
     brew: {

@@ -41,11 +41,11 @@ test("the shipped HTML links the CDN, with no local icon and no .ico", () => {
   assert.doesNotMatch(html, /\/avatar-\d+\.png/);
 });
 
-test("the screenshot is still local — only the favicon is hotlinked", () => {
-  // The distinction this codebase draws: cosmetic assets track GitHub,
-  // content assets do not.
-  assert.ok(
-    existsSync("public/quicktodo-hero.png"),
-    "the project screenshot must stay in the repo",
-  );
+test("the avatar CDN and the screenshot use different hosts on purpose", () => {
+  // Both are hotlinked to their source of truth, but via different CDNs:
+  // avatars.githubusercontent for the profile pic, raw.githubusercontent for
+  // the screenshot. Mixing them up or folding one into a local copy drifts.
+  const html = readFileSync("out/index.html", "utf8");
+  assert.ok(html.includes("avatars.githubusercontent.com/u/99809028"));
+  assert.ok(html.includes("raw.githubusercontent.com/mdopeace/quicktodo"));
 });

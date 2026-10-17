@@ -39,10 +39,14 @@ test("vidp has no image and does not fake one", () => {
   );
 });
 
-test("quicktodo has a real local screenshot, not a hotlink", () => {
+test("quicktodo has a real screenshot, hotlinked to its own repo", () => {
   const qt = projects.find((p) => p.slug === "quicktodo") as Project;
   assert.ok(qt.image, "quicktodo has 8 real screenshots available");
-  assert.match(qt.image!, /^\//, "must be a local path, not an absolute URL");
+  assert.match(
+    qt.image!,
+    /^https:\/\/raw\.githubusercontent\.com\/mdopeace\/quicktodo\//,
+    "must point at the quicktodo repo so a new screenshot lands here",
+  );
 });
 
 test("brew commands are the real verified ones", () => {

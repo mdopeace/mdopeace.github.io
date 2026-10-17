@@ -66,7 +66,9 @@ test.describe("project layout", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
 
-    const img = await page.locator('img[src="/quicktodo-hero.png"]').boundingBox();
+    const img = await page
+      .locator('img[src*="raw.githubusercontent.com/mdopeace/quicktodo"]')
+      .boundingBox();
     const heading = await page
       .locator("article")
       .first()

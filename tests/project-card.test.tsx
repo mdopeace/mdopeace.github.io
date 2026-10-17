@@ -14,12 +14,12 @@ test("card never uses next/image", () => {
   assert.doesNotMatch(src, /\bImage\b/);
 });
 
-test("quicktodo renders its screenshot as a local path", async () => {
+test("quicktodo renders its screenshot from the quicktodo repo", async () => {
   const { renderToStaticMarkup } = await import("react-dom/server");
   const html = renderToStaticMarkup(<ProjectCard project={byslug("quicktodo")} />);
 
-  assert.match(html, /<img[^>]+src="\/quicktodo-hero\.png"/);
-  assert.ok(!html.includes("raw.githubusercontent.com"), "must not hotlink");
+  assert.match(html, /<img[^>]+src="https:\/\/raw\.githubusercontent\.com\//);
+  assert.ok(!html.includes("/quicktodo-hero.png"), "no local copy should remain");
 });
 
 test("vidp renders no img and states why", async () => {
