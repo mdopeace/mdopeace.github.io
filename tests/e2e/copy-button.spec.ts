@@ -91,13 +91,15 @@ test.describe("copy button on brew commands", () => {
       ["brew tap mdopeace/quicktodo", "brew install --cask quicktodo"],
       ["brew tap mdopeace/vidp", "brew install --cask vidp"],
     ]) {
-      const code = page.locator("code", { hasText: tap }).first();
-      await expect(code).toContainText(tap);
-      await expect(code).toContainText(install);
-      await expect(code).toBeVisible();
+      // Two separate <code> lines, so assert each on its own element.
+      await expect(page.getByText(tap, { exact: true }).first()).toBeVisible();
+      await expect(page.getByText(install, { exact: true }).first()).toBeVisible();
 
-      const clipped = await code.evaluate((n) => n.scrollWidth > n.clientWidth + 1);
-      expect(clipped, `${tap} is clipped`).toBe(false);
+      for (const cmd of [tap, install]) {
+        const code = page.getByText(cmd, { exact: true }).first();
+        const clipped = await code.evaluate((n) => n.scrollWidth > n.clientWidth + 1);
+        expect(clipped, `${cmd} is clipped`).toBe(false);
+      }
     }
 
     const overflow = await page.evaluate(

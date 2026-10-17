@@ -10,9 +10,11 @@ import { useState } from "react";
 export function CopyCommand({
   tap,
   install,
+  requires,
 }: {
   tap: string;
   install: string;
+  requires: string[];
 }) {
   const [label, setLabel] = useState("copy");
   const [state, setState] = useState<"idle" | "done" | "failed">("idle");
@@ -36,29 +38,44 @@ export function CopyCommand({
   };
 
   return (
-    // Geometry matches QuickTodo's .cmd: 10px 12px padding, 7px radius, 13px
-    // monospace, and justify-between so the button is flush right rather
-    // than floating after the text.
-    <div className="mt-5 flex max-w-[62ch] items-center justify-between gap-3 rounded-[7px] border border-amberline bg-amberbg px-3 py-2.5">
-      <code className="min-w-0 font-mono text-[13px] leading-[1.55] break-words whitespace-pre-line text-amber">
-        {tap}
-        {"\n"}
-        {install}
-      </code>
-      <button
-        type="button"
-        onClick={onClick}
-        aria-live="polite"
-        className={`shrink-0 cursor-pointer rounded-[5px] border bg-none px-2.25 py-[3px] font-sans text-[11px] transition-colors ${
-          state === "done"
-            ? "border-[#2c4a32] text-[#3fb950]"
-            : state === "failed"
-              ? "border-amberline text-amber"
-              : "border-line text-muted hover:border-faint hover:text-text"
-        }`}
-      >
-        {label}
-      </button>
+    // Two halves: the bordered command block on the left, requirements on the
+    // right. The border and amber fill belong to the command only — the
+    // requirements sit outside them so the block stays a single unit.
+    <div className="mt-5 grid max-w-[62ch] items-center gap-x-6 gap-y-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)]">
+      {/* 60/40 rather than 50/50: a command line plus the button beside it
+          needs ~308px, which does not fit in half of a 62ch measure. */}
+      <div className="flex items-center justify-between gap-3 rounded-[7px] border border-amberline bg-amberbg px-3 py-2.5">
+        {/* Two breakable lines rather than one block with a newline: a single
+            whitespace-pre-line element cannot shrink below its longest line,
+            so it could not wrap and the row overflowed at 320px. */}
+        <div className="flex min-w-0 flex-col">
+          <code className="font-mono text-[13px] leading-[1.55] break-words text-amber">
+            {tap}
+          </code>
+          <code className="font-mono text-[13px] leading-[1.55] break-words text-amber">
+            {install}
+          </code>
+        </div>
+        <button
+          type="button"
+          onClick={onClick}
+          aria-live="polite"
+          className={`shrink-0 cursor-pointer rounded-[5px] border bg-none px-2.25 py-[3px] font-sans text-[11px] transition-colors ${
+            state === "done"
+              ? "border-[#2c4a32] text-[#3fb950]"
+              : state === "failed"
+                ? "border-amberline text-amber"
+                : "border-line text-muted hover:border-faint hover:text-text"
+          }`}
+        >
+          {label}
+        </button>
+      </div>
+      <ul className="text-[11px] leading-[1.5] break-words text-faint">
+        {requires.map((r) => (
+          <li key={r}>{r}</li>
+        ))}
+      </ul>
     </div>
   );
 }

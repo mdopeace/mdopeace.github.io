@@ -50,12 +50,12 @@ export const projects: Project[] = [
     summary:
       "Native AppKit player rendering through mpv/OpenGL. Plays mp4, m4v, mov, mkv, webm and avi, from a file or straight from Finder.",
     problem:
-      "There was no Mac player that felt native for watching downloaded video, so I built one — shipping its own libmpv and FFmpeg, integrating with macOS now-playing, updating itself from the GitHub API, and uninstalling with full cleanup. It works and I use it daily. It is not finished: the remaining features are the ones QuickTodo holds.",
+      "There was no Mac player that felt native for watching downloaded video, so I built one — shipping its own libmpv and FFmpeg, integrating with macOS now-playing, updating itself from the GitHub API, and uninstalling with full cleanup. Releases are arm64, so Intel machines need a source build. It works and I use it daily. It is not finished: the remaining features are the ones QuickTodo holds.",
     image: null,
     imageFallback: "Screenshot coming — the product page isn't out yet.",
     requires: [
       "macOS 13 or newer",
-      "Apple Silicon only — releases are arm64, so build from source on Intel",
+      "Apple Silicon only — build from source on Intel",
     ],
     brew: { tap: "brew tap mdopeace/vidp", install: "brew install --cask vidp" },
     links: [

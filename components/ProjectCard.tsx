@@ -36,16 +36,11 @@ export function ProjectCard({ project }: { project: Project }) {
         </p>
 
         {project.brew && (
-          <>
-            <CopyCommand tap={project.brew.tap} install={project.brew.install} />
-            <ul className="mt-2 space-y-0.5">
-              {project.requires.map((r) => (
-                <li key={r} className="text-xs leading-relaxed text-faint">
-                  {r}
-                </li>
-              ))}
-            </ul>
-          </>
+          <CopyCommand
+            tap={project.brew.tap}
+            install={project.brew.install}
+            requires={project.requires}
+          />
         )}
 
         <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1">
