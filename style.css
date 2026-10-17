@@ -47,8 +47,10 @@ a:hover {
    separate destinations, and collapse better than a flex gap on a
    phone. Matches the QuickTodo footer. The column gap is 0 above so the
    separator owns the spacing — symmetric on both sides of the dot. */
-.links li + li::before,
-.contact li + li::before {
+/* Trailing, not leading: these lists wrap on a phone, and a leading separator
+   on li+li leaves a line that begins with a bare "·". */
+.links li:not(:last-child)::after,
+.contact li:not(:last-child)::after {
   content: "·";
   margin: 0 10px;
   color: var(--faint);
@@ -135,11 +137,22 @@ article {
 article .shot {
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+/* The screenshot is a 600x672 menu-bar popover — taller than it is wide. At
+   width:100% it filled whatever the card was, reaching 610x683 on a 700px
+   tablet and pushing every word of the copy below it. Capped at the desktop
+   column width it renders 320x358 on every viewport, which is both smaller
+   than the card and the size the desktop layout was verified at. The pending
+   slot takes the same cap so the two cards line up. */
+article .shot img,
+article .shot .pending {
+  max-width: min(100%, 320px);
+  border-radius: 8px;
 }
 article .shot img {
-  width: 100%;
+  width: auto;
   border: 1px solid var(--line);
-  border-radius: 8px;
   display: block;
 }
 article .shot .pending {
@@ -153,7 +166,6 @@ article .shot .pending {
   font-size: 14px;
   color: var(--faint);
   border: 1px dashed var(--line);
-  border-radius: 8px;
 }
 h2 {
   margin: 0;
@@ -186,19 +198,25 @@ h2 {
   font-size: 14px;
 }
 
-/* 322px / 200px rather than 50/50: a command line plus the copy button
-   beside it needs ~308px, which does not fit in half of a 62ch measure. */
+/* Beside each other at 322px / 200px, stacking below that. flex-wrap is
+   deliberate over a media query: this block sits inside the article's second
+   column, which is only 334px wide at a 768px viewport. A viewport query sees
+   "768px" and splits in two; flex-wrap measures the space actually available
+   and stacks instead. The bases below are the same two numbers the old grid
+   produced, so the 62ch desktop geometry is unchanged. */
 .install {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px 24px;
   margin-top: 20px;
   max-width: 62ch;
   align-items: center;
 }
-@media (min-width: 640px) {
-  .install {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
-  }
+.install .cmd {
+  flex: 1 1 322px;
+}
+.install .requires {
+  flex: 1 1 200px;
 }
 .cmd {
   display: flex;
@@ -216,12 +234,23 @@ h2 {
   font-size: 13px;
   line-height: 1.55;
   color: var(--amber);
-  overflow-wrap: break-word;
+  /* A command is never re-wrapped: "brew install --cask vidp" breaking
+     across three lines is unreadable and uncopyable. Scroll instead. */
+  white-space: pre;
 }
 .cmd .lines {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.cmd .lines::-webkit-scrollbar {
+  height: 4px;
+}
+.cmd .lines::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 2px;
 }
 .copy {
   flex: none;
