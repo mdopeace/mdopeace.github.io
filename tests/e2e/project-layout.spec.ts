@@ -73,16 +73,27 @@ test.describe("project layout", () => {
       .getByRole("heading", { name: "QuickTodo" })
       .boundingBox();
 
-    // Beside means the image column precedes the text column on the same row:
-    // image.x is left of the heading, and their vertical ranges overlap.
+    // Beside means the image sits in the same grid row as the text: the image
+    // is left of the heading, and its vertical centre falls inside the text
+    // column's span. Vertical overlap with the h3 is not the test — the image
+    // is centred against the whole column, not against the heading.
     expect(
       img!.x + img!.width,
       "image is not to the left of the text — they are stacked",
     ).toBeLessThanOrEqual(heading!.x);
+
+    const textCol = (await page
+      .locator("article")
+      .first()
+      .locator(":scope > div")
+      .nth(1)
+      .boundingBox())!;
+    const imgMid = img!.y + img!.height / 2;
     expect(
-      img!.y < heading!.y + heading!.height && heading!.y < img!.y + img!.height,
-      "image and text do not share a row",
-    ).toBe(true);
+      imgMid,
+      "image centre is outside the text column — not a shared row",
+    ).toBeGreaterThanOrEqual(textCol.y);
+    expect(imgMid).toBeLessThanOrEqual(textCol.y + textCol.height);
   });
 
   test("still no horizontal overflow, and fine on a phone", async ({ page }) => {
