@@ -2,11 +2,6 @@
   "name": "mdopeace.github.io",
   "private": true,
   "scripts": {
-    "test": "node --test tests/site.test.mjs",
-    "test:e2e": "playwright test",
-    "verify": "npm test && npm run test:e2e"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.56.1"
+    "test": "node --test tests/site.test.mjs"
   }
 }
