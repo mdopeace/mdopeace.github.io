@@ -2,7 +2,7 @@ import { site } from "@/data/site";
 
 export function Hero() {
   return (
-    <header className="mx-auto w-full max-w-[980px] px-page pt-[72px] pb-16">
+    <header className="pt-[72px] pb-16">
       <h1 className="text-[clamp(32px,5vw,46px)] leading-[1.1] font-bold tracking-[-0.025em] text-text">
         {site.name}
       </h1>

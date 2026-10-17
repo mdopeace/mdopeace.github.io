@@ -9,7 +9,9 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mx-auto w-full max-w-[980px] border-t border-line px-page py-16">
+    // No horizontal padding and no max-width: the page wrapper owns the
+    // measure and the gutter, so the rule spans the content box exactly.
+    <section className="border-t border-line py-16">
       <Heading className="mb-6 text-[11px] font-semibold tracking-[0.1em] text-faint uppercase">
         {label}
       </Heading>
