@@ -103,26 +103,19 @@ h1 {
   margin: 24px 0 0;
   font-size: 18px;
   line-height: 1.65;
-  max-width: 34ch;
 }
 .tagline {
   margin: 16px 0 0;
   font-size: 15px;
   color: var(--muted);
 }
-@media (min-width: 721px) {
-  .lede {
-    max-width: 52ch;
-  }
-}
-
 /* Project rows: screenshot left, text right.
-   flex-wrap, not a media query, for the same reason as .install: this block
-   sits inside a column that shrinks as the viewport narrows. A viewport query
-   turned it two-column at 768px, where the card is only 680px wide — the image
-   took 320px of that and left the copy 334px, so a tall screenshot sat beside a
-   cramped paragraph with 125px of dead space above and below it. That is the
-   iPad mini portrait case, and it was the worst width on the site.
+   flex-wrap, not a media query, because this block sits inside a column that
+   shrinks as the viewport narrows. A viewport query turned it two-column at
+   768px, where the card is only 680px wide — the image took 320px of that and
+   left the copy 334px, so a tall screenshot sat beside a cramped paragraph with
+   125px of dead space above and below it. That is the iPad mini portrait case,
+   and it was the worst width on the site.
    The bases are 320px (image, its verified size) and 420px (the narrowest
    column still worth reading), so the row only stays side by side when both
    genuinely fit — around 876px of viewport and up. */
@@ -192,12 +185,15 @@ h2 {
   font-size: 14px;
   color: var(--muted);
 }
+/* No max-width on any of the copy blocks — .lede, .body, ol.loop, .prose.
+   Their containers already bound them, and a cap on top only ever conflicted
+   with that: at a 768px viewport the old 62ch resolved to 547px and left the
+   paragraphs 131px short of the tagline above them. */
 .body {
   margin: 16px 0 0;
   font-size: 14px;
   line-height: 1.6;
   color: var(--muted);
-  max-width: 62ch;
 }
 .body + .body {
   margin-top: 12px;
@@ -212,31 +208,16 @@ h2 {
   font-size: 14px;
 }
 
-/* Beside each other at 322px / 200px, stacking below that. flex-wrap is
-   deliberate over a media query: this block sits inside the article's second
-   column, which is only 334px wide at a 768px viewport. A viewport query sees
-   "768px" and splits in two; flex-wrap measures the space actually available
-   and stacks instead. The bases below are the same two numbers the old grid
-   produced, so the 62ch desktop geometry is unchanged. */
-.install {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  margin-top: 20px;
-  max-width: 62ch;
-  align-items: center;
-}
-.install .cmd {
-  flex: 1 1 322px;
-}
-.install .requires {
-  flex: 1 1 200px;
-}
+/* The requirements moved up beside the project name as pills, which left this
+   block holding only the command — so the two-column 322px/200px split, the
+   flex-wrap that replaced the old media query, and the .install wrapper are all
+   gone. The command is now simply a capped-width block. */
 .cmd {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-top: 20px;
   padding: 10px 12px;
   background: var(--amber-bg);
   border: 1px solid var(--amber-line);
@@ -289,23 +270,37 @@ h2 {
   color: var(--amber);
   border-color: var(--amber-line);
 }
-.requires {
+/* Requirements sit beside the project name. Informational, so they carry no
+   hover or pointer of their own — a pill that looks clickable and isn't is a
+   trap. --muted on --panel is a verified 4.5:1 pair. */
+.head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
   font-size: 11px;
-  line-height: 1.5;
-  color: var(--faint);
+  line-height: 1;
 }
-.requires li {
-  overflow-wrap: break-word;
+.pills li {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 ol.loop {
   margin: 0;
   padding: 0;
   list-style: none;
-  max-width: 62ch;
   display: grid;
   gap: 16px;
 }
@@ -322,10 +317,15 @@ ol.loop p {
   font-size: 15px;
   line-height: 1.6;
   color: var(--muted);
+  /* The li is a 2.5rem | 1fr grid. Without this, a second paragraph in the
+     same step is auto-placed into column 1 and renders one word per line. */
+  grid-column: 2;
+}
+ol.loop p + p {
+  margin-top: 12px;
 }
 
 .prose {
-  max-width: 62ch;
   display: grid;
   gap: 16px;
   font-size: 15px;

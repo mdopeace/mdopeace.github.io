@@ -26,9 +26,9 @@
         <h1>Md Mostafijur Rahman</h1>
         <p class="role">Software Engineer at Tracxn, Bengaluru — web by day.</p>
         <p class="lede">
-          I watch a lot of movies, and no Mac player felt right — so I built
-          one. Then I kept losing the ideas for improving it, so I built a tool
-          to hold them.
+          A film worth watching is rare. A Mac player that gets it right is
+          rarer. So I built one — and then spent three weeks losing the ideas
+          for making it better. Those had to go somewhere. They did.
         </p>
         <p class="tagline">Both are on Homebrew.</p>
       </header>
@@ -46,46 +46,49 @@
                 />
               </div>
               <div class="info">
-                <h2>QuickTodo</h2>
+                <div class="head">
+                  <h2>QuickTodo</h2>
+                  <ul class="pills">
+                    <li>macOS 13+</li>
+                    <li>Intel or Apple Silicon</li>
+                  </ul>
+                </div>
                 <p class="tagline-s">
-                  A todo app that lives in your Mac menu bar.
+                  A todo app that lives in your Mac menu bar — for the things
+                  that don't survive the meeting.
                 </p>
                 <p class="body">
-                  Native SwiftUI menu-bar app. Add with Return, open with ⌘⌥T.
-                  No window to manage, no account, no Electron.
+                  Native SwiftUI. Add with Return, open with ⌘⌥T. No window to
+                  manage, no account, no Electron.
                 </p>
                 <p class="body">
-                  Standup hands me five things, I spend the day deep in one, and
-                  the other four evaporate. This is where the list goes so it
-                  stops living in my head — which leaves my attention on the
-                  actual work, and shows what I finished by the end of it.
-                  Day-grouped lists, daily or weekly repeat, inline rename,
-                  drag-to-reorder, and a self-updater that verifies the
-                  download's SHA-256 and replaces the running bundle in place.
-                  65KB of tests, including ones that exercise the installer and
-                  relaunch path.
+                  Standup hands you five things. You go deep on one, and the
+                  other four evaporate before you can touch them. So they land
+                  here instead — where they can't be lost, which leaves your
+                  attention on the work in front of you, and shows you what you
+                  actually finished by the end of the day. Day-grouped, repeats
+                  daily or weekly, rename in place, drag to reorder.
+                </p>
+                <p class="body">
+                  It also keeps itself current: verifies the download's SHA-256,
+                  then replaces the running bundle in place. 65KB of tests,
+                  including the installer and the relaunch after it.
                 </p>
 
-                <div class="install">
-                  <div class="cmd">
-                    <span class="lines">
-                      <code>brew tap mdopeace/quicktodo</code>
-                      <code>brew install --cask quicktodo</code>
-                    </span>
-                    <button
-                      class="copy"
-                      type="button"
-                      data-copy="brew tap mdopeace/quicktodo
+                <div class="cmd">
+                  <span class="lines">
+                    <code>brew tap mdopeace/quicktodo</code>
+                    <code>brew install --cask quicktodo</code>
+                  </span>
+                  <button
+                    class="copy"
+                    type="button"
+                    data-copy="brew tap mdopeace/quicktodo
 brew install --cask quicktodo"
-                      aria-live="polite"
-                    >
-                      copy
-                    </button>
-                  </div>
-                  <ul class="requires">
-                    <li>macOS 13 or newer</li>
-                    <li>Apple Silicon or Intel</li>
-                  </ul>
+                    aria-live="polite"
+                  >
+                    copy
+                  </button>
                 </div>
 
                 <ul class="links">
@@ -120,45 +123,49 @@ brew install --cask quicktodo"
                 </div>
               </div>
               <div class="info">
-                <h2>Vidp</h2>
+                <div class="head">
+                  <h2>Vidp</h2>
+                  <ul class="pills">
+                    <li>macOS 13+</li>
+                    <li>Apple Silicon</li>
+                  </ul>
+                </div>
                 <p class="tagline-s">
-                  A keyboard-driven video player built on libmpv.
+                  A keyboard-driven video player built on libmpv — for the film
+                  you already downloaded.
                 </p>
                 <p class="body">
-                  Native AppKit player rendering through mpv/OpenGL. Plays mp4,
-                  m4v, mov, mkv, webm and avi, from a file or straight from
-                  Finder.
+                  You have the file. You double-click it. Then the player you've
+                  got either looks like it belongs to 2009, or wants four clicks
+                  past a licence agreement before it shows you anything. So:
+                  AppKit, mpv, OpenGL. Drag a file in, or hit it from Finder.
+                  mp4, m4v, mov, mkv, webm, avi.
                 </p>
                 <p class="body">
-                  There was no Mac player that felt native for watching
-                  downloaded video, so I built one — shipping its own libmpv and
-                  FFmpeg, integrating with macOS now-playing, updating itself
-                  from the GitHub API, and uninstalling with full cleanup.
-                  Releases are arm64, so Intel machines need a source build. It
-                  works and I use it daily. It is not finished: the remaining
-                  features are the ones QuickTodo holds.
+                  It ships its own libmpv and FFmpeg, hands off to the macOS
+                  now-playing controls, updates itself from the GitHub API, and
+                  uninstalls without leaving anything behind. Releases are
+                  arm64, so an Intel machine has to build it from source.
+                </p>
+                <p class="body">
+                  I use it every day. It isn't finished — and the features it's
+                  still missing are the ones QuickTodo already has.
                 </p>
 
-                <div class="install">
-                  <div class="cmd">
-                    <span class="lines">
-                      <code>brew tap mdopeace/vidp</code>
-                      <code>brew install --cask vidp</code>
-                    </span>
-                    <button
-                      class="copy"
-                      type="button"
-                      data-copy="brew tap mdopeace/vidp
+                <div class="cmd">
+                  <span class="lines">
+                    <code>brew tap mdopeace/vidp</code>
+                    <code>brew install --cask vidp</code>
+                  </span>
+                  <button
+                    class="copy"
+                    type="button"
+                    data-copy="brew tap mdopeace/vidp
 brew install --cask vidp"
-                      aria-live="polite"
-                    >
-                      copy
-                    </button>
-                  </div>
-                  <ul class="requires">
-                    <li>macOS 13 or newer</li>
-                    <li>Apple Silicon only</li>
-                  </ul>
+                    aria-live="polite"
+                  >
+                    copy
+                  </button>
                 </div>
 
                 <ul class="links">
@@ -187,24 +194,31 @@ brew install --cask vidp"
             <li>
               <span class="n" aria-hidden="true">01</span>
               <p>
-                I watch a lot of films and series. Streaming is split across
-                separate subscriptions, and what is free online is buried in ads
-                and buffering — so I download and watch offline.
+                It starts with films. And with the search for one worth sitting
+                through. Streaming splits across separate subscriptions, and
+                whatever is free is buried in ads and buffering — so I download,
+                and watch it dark, on a laptop.
               </p>
             </li>
             <li>
               <span class="n" aria-hidden="true">02</span>
               <p>
-                There was no Mac player for that which felt native, so I built
-                vidp.
+                Which made the player the bottleneck. None of them felt like
+                they belonged on a Mac. So I built one that did — native,
+                keyboard driven, mine.
               </p>
             </li>
             <li>
               <span class="n" aria-hidden="true">03</span>
               <p>
-                Then I was never satisfied with it, and the ideas for improving
-                it kept evaporating mid-task — so I built QuickTodo to hold
-                them. With the list captured, I can finally finish vidp.
+                And then it started over. The first version shipped, and I
+                wasn't satisfied with it. The fixes kept arriving and
+                evaporating mid-task — the next idea, gone before I could write
+                it down. So I built somewhere to put them.
+              </p>
+              <p>
+                With the list finally captured, I can go back and finish what I
+                started.
               </p>
             </li>
           </ol>
@@ -219,9 +233,9 @@ brew install --cask vidp"
               AWS Lambda.
             </p>
             <p>
-              Part of the platform team, where we handle app framework and
-              build, logging and error tracking, public and auth pages, UI
-              components.
+              Part of the platform team: the app framework and build, logging
+              and error tracking, the public and auth pages, the UI components.
+              The parts every product ends up needing, and nobody demos.
             </p>
           </div>
         </section>
