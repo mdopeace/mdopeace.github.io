@@ -1,19 +1,268 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Md Mostafijur Rahman</title>
+    <meta
+      name="description"
+      content="Software engineer at Tracxn, Bengaluru. Builds macOS apps: QuickTodo and Vidp."
+    />
+    <meta name="theme-color" content="#16171a" />
+    <!-- Hotlinked so a profile-picture change shows up without touching this repo. -->
+    <link
+      rel="icon"
+      href="https://avatars.githubusercontent.com/u/99809028?s=64"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://avatars.githubusercontent.com/u/99809028?s=180"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Md Mostafijur Rahman</h1>
+        <p class="role">Software Engineer at Tracxn, Bengaluru — web by day.</p>
+        <p class="lede">
+          A film worth watching is rare. A Mac player that gets it right is
+          rarer. So I built one — and then spent three weeks losing the ideas
+          for making it better. Those had to go somewhere. They did.
+        </p>
+        <p class="tagline">Both are on Homebrew.</p>
+      </header>
 
-<head>
-   <meta charset="UTF-8" />
-   <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Md Mostafijur Rahman - Full Stack Web Developer</title>
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
+      <main>
+        <section>
+          <p class="lbl">Projects</p>
 
-<body>
-   <div id="root"></div>
-   <script type="module" src="/src/main.jsx"></script>
-</body>
+          <div class="project">
+            <article>
+              <div class="shot">
+                <img
+                  src="https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/screenshots/completed.png"
+                  alt="QuickTodo — a todo app that lives in your Mac menu bar."
+                />
+              </div>
+              <div class="info">
+                <div class="head">
+                  <h2>QuickTodo</h2>
+                  <ul class="pills">
+                    <li>macOS 13+</li>
+                    <li>Intel or Apple Silicon</li>
+                  </ul>
+                </div>
+                <p class="tagline-s">
+                  A todo app that lives in your Mac menu bar — for the things
+                  that don't survive the meeting.
+                </p>
+                <p class="body">
+                  Native SwiftUI. Add with Return, open with ⌘⌥T. No window to
+                  manage, no account, no Electron.
+                </p>
+                <p class="body">
+                  Standup hands you five things. You go deep on one, and the
+                  other four evaporate before you can touch them. So they land
+                  here instead — where they can't be lost, which leaves your
+                  attention on the work in front of you, and shows you what you
+                  actually finished by the end of the day. Day-grouped, repeats
+                  daily or weekly, rename in place, drag to reorder.
+                </p>
+                <p class="body">
+                  It also keeps itself current: verifies the download's SHA-256,
+                  then replaces the running bundle in place. 65KB of tests,
+                  including the installer and the relaunch after it.
+                </p>
 
+                <div class="cmd">
+                  <span class="lines">
+                    <code>brew tap mdopeace/quicktodo</code>
+                    <code>brew install --cask quicktodo</code>
+                  </span>
+                  <button
+                    class="copy"
+                    type="button"
+                    data-copy="brew tap mdopeace/quicktodo
+brew install --cask quicktodo"
+                    aria-live="polite"
+                  >
+                    copy
+                  </button>
+                </div>
+
+                <ul class="links">
+                  <li>
+                    <a href="https://github.com/mdopeace/quicktodo">Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/quicktodo/releases"
+                      >Releases</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://mdopeace.github.io/quicktodo/"
+                      >Live page</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/homebrew-quicktodo"
+                      >Homebrew tap</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+
+          <div class="project">
+            <article>
+              <div class="shot">
+                <div class="pending">
+                  Screenshot coming — the product page isn't out yet.
+                </div>
+              </div>
+              <div class="info">
+                <div class="head">
+                  <h2>Vidp</h2>
+                  <ul class="pills">
+                    <li>macOS 13+</li>
+                    <li>Apple Silicon</li>
+                  </ul>
+                </div>
+                <p class="tagline-s">
+                  A keyboard-driven video player built on libmpv — for the film
+                  you already downloaded.
+                </p>
+                <p class="body">
+                  You have the file. You double-click it. Then the player you've
+                  got either looks like it belongs to 2009, or wants four clicks
+                  past a licence agreement before it shows you anything. So:
+                  AppKit, mpv, OpenGL. Drag a file in, or hit it from Finder.
+                  mp4, m4v, mov, mkv, webm, avi.
+                </p>
+                <p class="body">
+                  It ships its own libmpv and FFmpeg, hands off to the macOS
+                  now-playing controls, updates itself from the GitHub API, and
+                  uninstalls without leaving anything behind. Releases are
+                  arm64, so an Intel machine has to build it from source.
+                </p>
+                <p class="body">
+                  I use it every day. It isn't finished — and the features it's
+                  still missing are the ones QuickTodo already has.
+                </p>
+
+                <div class="cmd">
+                  <span class="lines">
+                    <code>brew tap mdopeace/vidp</code>
+                    <code>brew install --cask vidp</code>
+                  </span>
+                  <button
+                    class="copy"
+                    type="button"
+                    data-copy="brew tap mdopeace/vidp
+brew install --cask vidp"
+                    aria-live="polite"
+                  >
+                    copy
+                  </button>
+                </div>
+
+                <ul class="links">
+                  <li>
+                    <a href="https://github.com/mdopeace/vidp">Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/vidp/releases"
+                      >Releases</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://github.com/mdopeace/homebrew-vidp"
+                      >Homebrew tap</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <p class="lbl">How this happened</p>
+          <ol class="loop">
+            <li>
+              <span class="n" aria-hidden="true">01</span>
+              <p>
+                It starts with films. And with the search for one worth sitting
+                through. Streaming splits across separate subscriptions, and
+                whatever is free is buried in ads and buffering — so I download,
+                and watch it dark, on a laptop.
+              </p>
+            </li>
+            <li>
+              <span class="n" aria-hidden="true">02</span>
+              <p>
+                Which made the player the bottleneck. None of them felt like
+                they belonged on a Mac. So I built one that did — native,
+                keyboard driven, mine.
+              </p>
+            </li>
+            <li>
+              <span class="n" aria-hidden="true">03</span>
+              <p>
+                And then it started over. The first version shipped, and I
+                wasn't satisfied with it. The fixes kept arriving and
+                evaporating mid-task — the next idea, gone before I could write
+                it down. So I built somewhere to put them.
+              </p>
+              <p>
+                With the list finally captured, I can go back and finish what I
+                started.
+              </p>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <p class="lbl">Day job</p>
+          <div class="prose">
+            <p>
+              Software Engineer at Tracxn, Bengaluru, since January 2023.
+              Full-stack web by day — React, Next.js, Astro, Express, MongoDB,
+              AWS Lambda.
+            </p>
+            <p>
+              Part of the platform team: the app framework and build, logging
+              and error tracking, the public and auth pages, the UI components.
+              The parts every product ends up needing, and nobody demos.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <p class="lbl">Get in touch</p>
+          <ul class="contact">
+            <li>
+              <a href="mailto:md.correo.e@gmail.com">md.correo.e@gmail.com</a>
+            </li>
+            <li>
+              <a href="https://github.com/mdopeace" rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/in/mdopeace"
+                rel="noopener noreferrer"
+                >LinkedIn</a
+              >
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
 </html>
