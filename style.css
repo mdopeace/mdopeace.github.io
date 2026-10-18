@@ -116,28 +116,42 @@ h1 {
   }
 }
 
-/* Project rows: screenshot left, text right. The grid keeps both
-   columns shrinkable so nothing overflows on a phone. */
+/* Project rows: screenshot left, text right.
+   flex-wrap, not a media query, for the same reason as .install: this block
+   sits inside a column that shrinks as the viewport narrows. A viewport query
+   turned it two-column at 768px, where the card is only 680px wide — the image
+   took 320px of that and left the copy 334px, so a tall screenshot sat beside a
+   cramped paragraph with 125px of dead space above and below it. That is the
+   iPad mini portrait case, and it was the worst width on the site.
+   The bases are 320px (image, its verified size) and 420px (the narrowest
+   column still worth reading), so the row only stays side by side when both
+   genuinely fit — around 876px of viewport and up. */
 .project + .project {
   margin-top: 24px;
 }
 article {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   padding: 20px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--panel);
 }
-@media (min-width: 768px) {
-  article {
-    grid-template-columns: 320px minmax(0, 1fr);
-  }
-}
+/* flex:0 0 auto with a capped width rather than a flex basis, so that when the
+   row wraps the shot still spans its line and centres itself instead of sitting
+   320px wide against the left edge of a 680px card. */
 article .shot {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+article .info {
+  flex: 1 1 420px;
 }
 /* The screenshot is a 600x672 menu-bar popover — taller than it is wide. At
    width:100% it filled whatever the card was, reaching 610x683 on a 700px
