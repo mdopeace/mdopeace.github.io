@@ -150,29 +150,13 @@ article .info {
    width:100% it filled whatever the card was, reaching 610x683 on a 700px
    tablet and pushing every word of the copy below it. Capped at the desktop
    column width it renders 320x358 on every viewport, which is both smaller
-   than the card and the size the desktop layout was verified at. The pending
-   slot takes the same cap so the two cards line up. */
-article .shot img,
-article .shot .pending {
+   than the card and the size the desktop layout was verified at. */
+article .shot img {
   max-width: min(100%, 320px);
   border-radius: 8px;
-}
-article .shot img {
   width: auto;
   border: 1px solid var(--line);
   display: block;
-}
-article .shot .pending {
-  width: 100%;
-  min-height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--faint);
-  border: 1px dashed var(--line);
 }
 h2 {
   margin: 0;
@@ -278,6 +262,14 @@ h2 {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px 10px;
+}
+/* macOS icons ship their own padding, so this reads closer to a 24px glyph.
+   -4px pulls it to 6px off the title, so icon+title read as one unit and the
+   shared 10px gap only separates the pills. */
+.head .logo {
+  width: 32px;
+  height: 32px;
+  margin-right: -4px;
 }
 .pills {
   display: flex;
