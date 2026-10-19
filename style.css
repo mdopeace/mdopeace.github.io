@@ -263,6 +263,14 @@ h2 {
   flex-wrap: wrap;
   gap: 8px 10px;
 }
+/* macOS icons ship their own padding, so this reads closer to a 24px glyph.
+   -4px pulls it to 6px off the title, so icon+title read as one unit and the
+   shared 10px gap only separates the pills. */
+.head .logo {
+  width: 32px;
+  height: 32px;
+  margin-right: -4px;
+}
 .pills {
   display: flex;
   flex-wrap: wrap;
