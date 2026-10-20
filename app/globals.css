@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #16171a;
+  --color-panel: #0e0f11;
+  --color-line: #2a2c31;
+  --color-text: #f2f3f5;
+  --color-muted: #9aa1ab;
+  /* AA-verified: 4.90:1 on bg. */
+  --color-faint: #82868d;
+  --color-amber-bg: #1a1710;
+  --color-amber-line: #3a3222;
+  /* AA-verified: 4.89:1 on amber-bg. */
+  --color-amber: #948464;
+  --color-done: #3fb950;
+  --color-done-line: #2c4a32;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: var(--color-muted);
+    /* Preflight strips the underline project links need. */
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  a:hover {
+    color: var(--color-text);
+  }
+  /* UA ring is 2.98:1 on bg — under WCAG 2.2's 3:1. */
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Trailing middot groups the set and wraps better than a flex gap. */
+  .links li:not(:last-child)::after {
+    content: "·";
+    margin: 0 10px;
+    color: var(--color-faint);
+  }
+}
