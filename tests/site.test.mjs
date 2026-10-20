@@ -1,14 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 
-const html = readFileSync("index.html", "utf8");
-
-// The portfolio is one hand-written HTML file, in the same category as the
-// QuickTodo landing page — which has no tests either. What that page does
-// not have is this failure mode: twelve external URLs that break silently
-// when a repo is renamed or a username changes, with nothing else on the
-// page noticing.
+// The portfolio ships as a static export: GitHub Pages serves out/index.html,
+// so every check reads the built page, not the source. What that page does not
+// have is the old failure mode: a dozen external URLs that break silently when
+// a repo is renamed or a username changes, with nothing else on the page
+// noticing.
+assert.ok(
+  existsSync("out/index.html"),
+  "out/index.html missing — run `npm run build` first",
+);
+const html = readFileSync("out/index.html", "utf8");
 
 // LinkedIn answers HEAD with 405 and GET with 999 to anything automated, so
 // neither status proves a missing profile. Excluded rather than weakening the
@@ -38,5 +41,37 @@ test("every external link resolves", async () => {
     broken,
     [],
     `broken links:\n${broken.map((b) => `  ${b.status} ${b.url}`).join("\n")}`,
+  );
+});
+
+test("copy commands survive the build byte-for-byte", () => {
+  // JSX strings serialize through HTML escaping (&#10; or a literal newline
+  // are both valid); decode before comparing so the payload — not the
+  // serialization — is what's pinned.
+  const payloads = [...html.matchAll(/data-copy="([^"]*)"/g)].map((m) =>
+    m[1].replaceAll("&#10;", "\n"),
+  );
+  assert.deepEqual(payloads, [
+    "brew tap mdopeace/quicktodo\nbrew install --cask quicktodo",
+    "brew tap mdopeace/vidp\nbrew install --cask vidp",
+  ]);
+});
+
+test("page ships its accessibility and identity hooks", () => {
+  assert.ok(
+    html.includes('aria-live="polite"'),
+    "copy button aria-live missing",
+  );
+  assert.ok(
+    html.includes(
+      'rel="icon" href="https://avatars.githubusercontent.com/u/99809028?s=64"',
+    ),
+    "avatar icon link missing",
+  );
+  assert.ok(
+    html.includes(
+      'rel="apple-touch-icon" href="https://avatars.githubusercontent.com/u/99809028?s=180"',
+    ),
+    "apple-touch-icon missing",
   );
 });
