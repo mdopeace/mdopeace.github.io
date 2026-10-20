@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// The only interactive surface on the page: a button that copies a command.
-// writeText rejects when the clipboard permission is denied or the document
-// isn't focused, which the presence of navigator.clipboard does not rule out —
-// hence the "press ⌘C" fallback rather than a silent failure.
+// writeText rejects when permission is denied or the document isn't
+// focused — hence the "press ⌘C" fallback instead of a silent failure.
 export default function CopyButton({ text }: { text: string }) {
   const [state, setState] = useState<"idle" | "done" | "failed">("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

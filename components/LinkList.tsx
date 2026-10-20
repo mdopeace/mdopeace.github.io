@@ -9,10 +9,8 @@ export default function LinkList({
   quiet?: boolean;
   className?: string;
 }) {
-  // Project links keep the underline: they are 14px and are often the only
-  // route to the source, the releases and the tap, so they need the
-  // affordance rather than colour alone. The contact set is a set, not
-  // content references, so it takes the quieter treatment (quiet).
+  // Project links keep the underline (often the only route to the source);
+  // contact is a set, so it takes quiet: no underline.
   return (
     <ul className={`links flex flex-wrap gap-y-1 ${className}`}>
       {items.map((item) => (

@@ -2,16 +2,13 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-// SSR has no layout to measure against, so the measurement effect only runs
-// in the browser either way — this just avoids the useLayoutEffect warning.
+// The effect only runs in the browser anyway; this just avoids the SSR warning.
 const useBrowserLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-// CSS line-clamp keeps the whole text in the HTML (searchable, copyable,
-// readable by screen readers) and paints only the first `lines` rows with an
-// ellipsis. The button appears only when the text is actually clipped —
-// measured after layout and re-measured on resize — so a paragraph that fits
-// never grows a control it doesn't need.
+// CSS line-clamp keeps the full text in the HTML (searchable, screen-reader
+// readable) and paints only `lines` rows. The button appears only when the
+// text actually clips — re-measured on resize.
 export default function MultiLineTruncate({
   text,
   lines = 3,
@@ -28,8 +25,7 @@ export default function MultiLineTruncate({
   useBrowserLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // Clamped, the box height is pinned; scrollHeight still reports the full
-    // content, so their difference is exactly the clipped overflow.
+    // Clamped, the box height is pinned; scrollHeight reports full content.
     const measure = () =>
       setClipped(!expanded && el.scrollHeight > el.clientHeight + 1);
     measure();

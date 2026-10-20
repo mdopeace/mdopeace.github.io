@@ -2,20 +2,14 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 
-// The portfolio ships as a static export: GitHub Pages serves out/index.html,
-// so every check reads the built page, not the source. What that page does not
-// have is the old failure mode: a dozen external URLs that break silently when
-// a repo is renamed or a username changes, with nothing else on the page
-// noticing.
+// Checks read the built page — what ships is what's tested. Run `npm run build` first.
 assert.ok(
   existsSync("out/index.html"),
   "out/index.html missing — run `npm run build` first",
 );
 const html = readFileSync("out/index.html", "utf8");
 
-// LinkedIn answers HEAD with 405 and GET with 999 to anything automated, so
-// neither status proves a missing profile. Excluded rather than weakening the
-// check for every other URL.
+// LinkedIn blocks bots (405/999) — exclude rather than weaken the whole check.
 const SKIP_BOT_WALL = /linkedin\.com/;
 
 const LINKS = [...html.matchAll(/(?:href|src)="(https:\/\/[^"]+)"/g)].map(
@@ -45,9 +39,7 @@ test("every external link resolves", async () => {
 });
 
 test("copy commands survive the build byte-for-byte", () => {
-  // JSX strings serialize through HTML escaping (&#10; or a literal newline
-  // are both valid); decode before comparing so the payload — not the
-  // serialization — is what's pinned.
+  // Decode &#10; so the payload, not the serialization, is pinned.
   const payloads = [...html.matchAll(/data-copy="([^"]*)"/g)].map((m) =>
     m[1].replaceAll("&#10;", "\n"),
   );

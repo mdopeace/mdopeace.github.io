@@ -1,7 +1,6 @@
 import Section from "../Section";
 
-// Without grid-column 2 on the p, a second paragraph in the same step is
-// auto-placed into the number column and renders one word per line.
+// p sits in column 2 — otherwise a second paragraph lands in the number column.
 const STEP_P = "col-start-2 text-[15px] leading-[1.6] text-muted";
 
 export default function Story() {

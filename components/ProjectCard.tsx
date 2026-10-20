@@ -7,13 +7,8 @@ import Tag from "./Tag";
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="flex flex-wrap gap-6 rounded-xl border border-line bg-panel p-5">
-      {/* flex-none with a capped width rather than a flex basis, so that when
-          the row wraps the shot still spans its line and centres itself
-          instead of sitting 320px wide against the left edge of a card. */}
       <div className="mx-auto flex w-full max-w-[320px] shrink-0 items-center justify-center">
-        {/* The screenshots are 600x672 — taller than wide. Capped at the
-            desktop column width they render 320x358 on every viewport,
-            which is the size the desktop layout was verified at. */}
+        {/* Capped at 320 — the width this layout was verified at. */}
         <img
           src={project.shot}
           alt={project.shotAlt}
@@ -22,10 +17,6 @@ export default function ProjectCard({ project }: { project: Project }) {
       </div>
       <div className="flex-[1_1_420px]">
         <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
-          {/* macOS icons ship their own padding, so this reads closer to a
-              24px glyph. -4px pulls it to 6px off the title, so icon+title
-              read as one unit and the shared 10px gap only separates the
-              pills. */}
           <img
             src={project.logo}
             alt=""
@@ -42,11 +33,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             ))}
           </ul>
         </div>
-        {/* Tagline and paragraphs clamp as one block with a shared line
-            budget: every card shows the same number of lines plus one
-            button, so the cards come out the same height whatever the copy
-            does. whitespace-pre-line keeps the paragraph breaks, and they
-            count toward the budget like any other line. */}
+        {/* One shared line budget keeps every card the same height. */}
         <MultiLineTruncate
           text={[project.tagline, ...project.paragraphs].join("\n\n")}
           lines={8}
