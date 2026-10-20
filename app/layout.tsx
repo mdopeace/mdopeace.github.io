@@ -7,7 +7,7 @@ const AVATAR = "https://avatars.githubusercontent.com/u/99809028";
 export const metadata: Metadata = {
   title: "Md Mostafijur Rahman",
   description:
-    "Software engineer at Tracxn, Bengaluru. Builds macOS apps: QuickTodo and Vidp.",
+    "Software engineer at Tracxn by day, builder of small useful things the rest of the time. The work, the story, and how to reach me.",
   icons: {
     icon: `${AVATAR}?s=64`,
     apple: `${AVATAR}?s=180`,
