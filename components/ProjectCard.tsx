@@ -1,6 +1,7 @@
 import type { Project } from "@/data/projects";
 import CodeBlock from "./CodeBlock";
 import LinkList from "./LinkList";
+import MultiLineTruncate from "./MultiLineTruncate";
 import Tag from "./Tag";
 
 export default function ProjectCard({ project }: { project: Project }) {
@@ -41,17 +42,16 @@ export default function ProjectCard({ project }: { project: Project }) {
             ))}
           </ul>
         </div>
-        <p className="mt-1 text-[14px] text-muted">{project.tagline}</p>
-        {project.paragraphs.map((text, i) => (
-          <p
-            key={text}
-            className={`text-[14px] leading-[1.6] text-muted ${
-              i === 0 ? "mt-4" : "mt-3"
-            }`}
-          >
-            {text}
-          </p>
-        ))}
+        {/* Tagline and paragraphs clamp as one block with a shared line
+            budget: every card shows the same number of lines plus one
+            button, so the cards come out the same height whatever the copy
+            does. whitespace-pre-line keeps the paragraph breaks, and they
+            count toward the budget like any other line. */}
+        <MultiLineTruncate
+          text={[project.tagline, ...project.paragraphs].join("\n\n")}
+          lines={8}
+          className="mt-1 whitespace-pre-line text-[14px] leading-[1.6] text-muted"
+        />
         <CodeBlock lines={project.commands} />
         <LinkList items={project.links} className="mt-5 text-[14px]" />
       </div>
