@@ -39,11 +39,26 @@
 | `.gitignore` | merge in `.next/`, `out/`, `next-env.d.ts` |
 
 ## Tasks
-1. **Scaffold.** Run `create-next-app` (TS, Tailwind, App Router, no src dir, npm) in a temp dir, copy configs in — the repo's existing files conflict with in-place install. Keep package.json name/private/test script; add dev/build/start; commit the lockfile. Remove any scaffolded `app/icon*.svg` (favicon stays hotlinked). *Check:* `npm run build` succeeds. Commit.
-2. **Layout + theme.** Port palette into `@theme`, base rules into `globals.css`, metadata into `layout.tsx`. *Check:* build passes; `out/index.html` head has title, description, theme-color, both icon links. Commit.
-3. **Primitives + data (3a).** `data/projects.ts`, `Section`, `Tag`, `CodeBlock`, `CopyButton`, `LinkList`, `ProjectCard` — compile-checked, not yet mounted. **Sections + page (3b).** The five sections + `page.tsx`. *Check:* build passes; `npm test` green. Commit.
-4. **CI + deploy.** Update test workflow, add deploy workflow. *Check:* `npm run build && npm test` locally; link test excludes LinkedIn. Commit.
-5. **Parity + cleanup.** Serve `out/` locally; browser-compare against live site at desktop, ~876px wrap point, iPad-mini width; click both copy buttons, confirm both flash paths; delete `index.html`, `style.css`, `script.js`. Commit. Flag one-time repo setting: Settings → Pages → Source → GitHub Actions.
+
+### Task 1: Scaffold
+
+Run `create-next-app` (TS, Tailwind, App Router, no src dir, npm) in a temp dir, copy configs in — the repo's existing files conflict with in-place install. Keep package.json name/private/test script; add dev/build/start; commit the lockfile. Remove any scaffolded `app/icon*.svg` (favicon stays hotlinked). *Check:* `npm run build` succeeds. Commit.
+
+### Task 2: Layout + theme
+
+Port palette into `@theme`, base rules into `globals.css`, metadata into `layout.tsx`. *Check:* build passes; `out/index.html` head has title, description, theme-color, both icon links. Commit.
+
+### Task 3: Primitives, data, sections, page
+
+**3a:** `data/projects.ts`, `Section`, `Tag`, `CodeBlock`, `CopyButton`, `LinkList`, `ProjectCard` — compile-checked, not yet mounted. **3b:** The five sections (`Hero`, `Projects`, `Story`, `DayJob`, `Contact`) + `page.tsx`. *Check:* build passes; `npm test` green. Commit.
+
+### Task 4: CI + deploy
+
+Update test workflow, add deploy workflow. *Check:* `npm run build && npm test` locally; link test excludes LinkedIn. Commit.
+
+### Task 5: Parity + cleanup
+
+Serve `out/` locally; browser-compare against live site at desktop, ~876px wrap point, iPad-mini width; click both copy buttons, confirm both flash paths; delete `index.html`, `style.css`, `script.js`. Commit. Flag one-time repo setting: Settings → Pages → Source → GitHub Actions.
 
 ## Review focus (things tests won't catch)
 - GitHub Pages serving the export at root (asset URLs absolute from `/`) — verified by serving `out/` locally in Task 5.
