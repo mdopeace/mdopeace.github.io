@@ -32,8 +32,10 @@ export default function MultiLineTruncate({
     // Clamped: clientHeight is the clamp box, scrollHeight the full text.
     const measure = () => {
       setClipped(!expanded && el.scrollHeight > el.clientHeight + 1);
+      // Unclamped, clientHeight is cut by max-height — it isn't the clamp box.
       if (clamped)
         setHeights({ clamp: el.clientHeight, full: el.scrollHeight });
+      else setHeights((h) => h && { clamp: h.clamp, full: el.scrollHeight });
     };
     measure();
     window.addEventListener("resize", measure);
