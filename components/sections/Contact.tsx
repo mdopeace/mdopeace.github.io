@@ -9,8 +9,13 @@ export default function Contact() {
         className="text-[15px]"
         items={[
           {
-            label: "md.correo.e@gmail.com",
+            label: "Mail",
             href: "mailto:md.correo.e@gmail.com",
+          },
+          {
+            label: "WhatsApp",
+            href: "https://wa.me/mdopeace",
+            rel: "noopener noreferrer",
           },
           {
             label: "GitHub",
