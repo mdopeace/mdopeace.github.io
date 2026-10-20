@@ -32,6 +32,10 @@
   }
   a {
     color: var(--color-muted);
+    /* Preflight resets text-decoration, which is exactly the underline
+       project links depend on — restore it for parity; the contact set
+       opts out via .no-underline. */
+    text-decoration: underline;
     text-underline-offset: 4px;
   }
   a:hover {
