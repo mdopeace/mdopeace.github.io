@@ -46,7 +46,7 @@ export const projects: Project[] = [
   {
     name: "Vidp",
     logo: "https://raw.githubusercontent.com/mdopeace/vidp/main/docs/icon.png",
-    shot: "https://raw.githubusercontent.com/mdopeace/vidp/main/docs/screenshots/playing.png",
+    shot: "https://raw.githubusercontent.com/mdopeace/vidp/main/docs/screenshots/paused.png",
     shotAlt:
       "Vidp — a keyboard-driven video player for the film you already downloaded.",
     pills: ["macOS 13+", "Apple Silicon"],
