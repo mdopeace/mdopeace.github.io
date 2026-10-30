@@ -1,12 +1,13 @@
 import CopyEmailButton from "../CopyEmailButton";
 import Section from "../Section";
+import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 
 const email = "md.correo.e@gmail.com";
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com/mdopeace" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/mdopeace" },
-  { label: "WhatsApp", href: "https://wa.me/mdopeace" },
+  { label: "GitHub", href: "https://github.com/mdopeace", icon: FaGithub },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mdopeace", icon: FaLinkedinIn },
+  { label: "WhatsApp", href: "https://wa.me/mdopeace", icon: FaWhatsapp },
 ];
 
 export default function Contact() {
@@ -28,14 +29,14 @@ export default function Contact() {
             </a>
             <CopyEmailButton email={email} />
           </div>
-          <p className="contact-address">{email}</p>
-
           <div className="contact-social-block">
             <p className="contact-social-label">Find me elsewhere</p>
             <div className="contact-socials">
-              {socialLinks.map(({ label, href }) => (
+              {socialLinks.map(({ label, href, icon: Icon }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer">
-                  {label}<span aria-hidden="true"> ↗</span>
+                  <Icon className="social-icon" aria-hidden="true" focusable="false" />
+                  <span>{label}</span>
+                  <span aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>
