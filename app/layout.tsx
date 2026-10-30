@@ -15,13 +15,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#16171a",
+  themeColor: "#f5efdf",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" data-theme="system" suppressHydrationWarning>
+      <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('portfolio-theme');var theme=t==='light'||t==='dark'?t:'system';document.documentElement.dataset.theme=theme;var dark=theme==='dark'||(theme==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?'#1b1b1b':'#f5efdf'}catch(e){document.documentElement.dataset.theme='system'}`,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

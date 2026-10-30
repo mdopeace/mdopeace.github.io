@@ -3,7 +3,7 @@ import Section from "../Section";
 
 export default function Contact() {
   return (
-    <Section label="Get in touch">
+    <Section label="Get in touch" id="contact" index="05">
       <LinkList
         quiet
         className="text-[15px]"
