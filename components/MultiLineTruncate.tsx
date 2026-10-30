@@ -82,7 +82,7 @@ export default function MultiLineTruncate({
         <button
           type="button"
           onClick={toggle}
-          className="mt-1 cursor-pointer rounded-[5px] border border-line px-[9px] py-[3px] text-[11px] text-muted hover:border-faint hover:text-text"
+          className="project-action mt-1 cursor-pointer border-line text-muted hover:border-faint hover:text-text"
         >
           {expanded ? "show less" : "show more"}
         </button>

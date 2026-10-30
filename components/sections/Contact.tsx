@@ -25,7 +25,7 @@ export default function Contact() {
 
           <div className="contact-actions">
             <a className="button-comic contact-email-button" href={`mailto:${email}`}>
-              Start a conversation <span aria-hidden="true">↗</span>
+              Start a conversation <span className="external-arrow" aria-hidden="true">↗</span>
             </a>
             <CopyEmailButton email={email} />
           </div>
@@ -36,7 +36,7 @@ export default function Contact() {
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer">
                   <Icon className="social-icon" aria-hidden="true" focusable="false" />
                   <span>{label}</span>
-                  <span aria-hidden="true">↗</span>
+                  <span className="external-arrow" aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>

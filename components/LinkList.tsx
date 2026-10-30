@@ -1,4 +1,13 @@
 import type { ProjectLink } from "@/data/projects";
+import type { IconType } from "react-icons";
+import { FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
+
+const projectLinkIcons: Record<string, IconType> = {
+  Source: FaGithub,
+  Releases: FaTag,
+  "Live page": FaGlobe,
+  "Homebrew tap": FaGithub,
+};
 
 export default function LinkList({
   items,
@@ -9,21 +18,26 @@ export default function LinkList({
   quiet?: boolean;
   className?: string;
 }) {
-  // Project links keep the underline (often the only route to the source);
-  // contact is a set, so it takes quiet: no underline.
+  // Project actions are styled as compact comic links; quiet remains available
+  // for link groups that should read as plain text.
   return (
-    <ul className={`links flex flex-wrap gap-y-1 ${className}`}>
-      {items.map((item) => (
-        <li key={item.href}>
-          <a
-            href={item.href}
-            rel={item.rel}
-            className={quiet ? "no-underline" : undefined}
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
+    <ul className={`project-links ${className}`}>
+      {items.map((item) => {
+        const Icon = projectLinkIcons[item.label];
+        return (
+          <li key={item.href}>
+            <a
+              href={item.href}
+              rel={item.rel}
+              className={quiet ? "no-underline" : undefined}
+            >
+              {Icon && <Icon className="project-link-icon" aria-hidden="true" focusable="false" />}
+              {item.label}
+              <span className="external-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }

@@ -46,7 +46,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           className="mt-2 whitespace-pre-line text-[14px] leading-[1.7] text-muted"
         />
         <CodeBlock lines={project.commands} />
-        <LinkList items={project.links} className="mt-5 text-[14px]" />
+        <LinkList items={project.links} />
       </div>
     </article>
   );

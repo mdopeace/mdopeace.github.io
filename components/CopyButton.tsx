@@ -41,7 +41,7 @@ export default function CopyButton({ text }: { text: string }) {
           flash("failed");
         }
       }}
-      className={`flex-none cursor-pointer rounded-[5px] border px-[9px] py-[3px] text-[11px] ${cls}`}
+      className={`project-action flex-none cursor-pointer ${cls}`}
     >
       {label}
     </button>
