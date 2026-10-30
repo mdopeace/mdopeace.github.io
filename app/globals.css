@@ -121,6 +121,28 @@
   .maker-art { position: relative; z-index: 1; width: min(100%, 410px); align-self: end; margin-top: 4rem; animation: maker-float 4s ease-in-out infinite; }
   .hero-speech { position: absolute; z-index: 2; top: 9%; right: 7%; max-width: 190px; border-radius: 48% 46% 42% 18%; padding: .75rem 1rem; font-size: .82rem; font-weight: 800; line-height: 1.35; transform: rotate(4deg); }
   .art-caption { position: absolute; right: 1rem; bottom: .8rem; z-index: 2; border: 2px solid var(--ink); background: var(--card); padding: .3rem .55rem; font-family: ui-monospace, monospace; font-size: .65rem; font-weight: 900; text-transform: uppercase; }
+  .contact-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr); align-items: center; gap: clamp(2rem, 6vw, 5rem); }
+  .contact-copy { max-width: 570px; }
+  .contact-headline { max-width: 12ch; margin-top: 1.25rem; font-size: clamp(2rem, 4.5vw, 3.6rem); font-weight: 950; line-height: .98; letter-spacing: -.065em; }
+  .contact-description { max-width: 48ch; margin-top: 1.1rem; color: var(--color-muted); font-size: 1.02rem; line-height: 1.7; }
+  .contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .85rem; margin-top: 1.5rem; }
+  .contact-email-button { min-height: 48px; }
+  .copy-email-button { min-height: 44px; border: 2px solid var(--ink); background: var(--card); color: var(--ink); padding: .6rem .8rem; font-size: .76rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: transform 120ms ease, box-shadow 120ms ease; }
+  .copy-email-button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+  .contact-address { margin-top: .55rem; color: var(--color-faint); font-family: ui-monospace, monospace; font-size: .78rem; }
+  .contact-social-block { margin-top: 2rem; }
+  .contact-social-label { margin-bottom: .55rem; font-family: ui-monospace, monospace; font-size: .7rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+  .contact-socials { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .contact-socials a { display: inline-flex; align-items: center; border: 2px solid var(--ink); background: var(--card); box-shadow: 3px 3px 0 var(--ink); padding: .45rem .65rem; color: var(--ink); font-size: .76rem; font-weight: 850; text-decoration: none; transition: transform 120ms ease, box-shadow 120ms ease; }
+  .contact-socials a:hover { color: var(--ink); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+  .contact-art { position: relative; display: grid; min-height: 365px; overflow: hidden; place-items: end center; padding: 3rem 1rem .6rem; background-color: var(--blue); background-image: radial-gradient(color-mix(in srgb, var(--ink) 18%, transparent) .7px, transparent .7px); background-size: 7px 7px; box-shadow: 7px 7px 0 var(--ink); }
+  .contact-stamp { position: absolute; top: 1rem; left: 1rem; z-index: 2; border: 2px solid var(--ink); background: var(--accent); padding: .35rem .5rem; font-family: ui-monospace, monospace; font-size: .62rem; font-weight: 900; letter-spacing: .06em; transform: rotate(-3deg); }
+  .contact-speech { position: absolute; top: 17%; right: 7%; z-index: 2; max-width: 175px; border: 2px solid var(--ink); border-radius: 45% 45% 38% 14%; background: var(--card); padding: .65rem .85rem; font-size: .82rem; font-weight: 900; line-height: 1.25; text-align: center; transform: rotate(4deg); }
+  .contact-illustration { position: relative; z-index: 1; width: min(100%, 440px); animation: contact-bob 4.5s ease-in-out infinite; }
+  .contact-signal { fill: none; stroke: var(--ink); stroke-width: 5px; stroke-linecap: round; animation: contact-ping 2.4s ease-in-out infinite; }
+  .contact-signal-two { animation-delay: .35s; }
+  .contact-spark { transform-box: fill-box; transform-origin: center; animation: contact-twinkle 3.3s ease-in-out infinite; }
+  .contact-art-caption { position: absolute; right: .85rem; bottom: .65rem; z-index: 2; border: 2px solid var(--ink); background: var(--card); padding: .25rem .45rem; font-family: ui-monospace, monospace; font-size: .6rem; font-weight: 900; text-transform: uppercase; }
   .section-index { display: grid; width: 30px; aspect-ratio: 1; place-items: center; border: 2px solid var(--ink); background: var(--accent-2); color: #201f1b; font-family: ui-monospace, monospace; font-size: .7rem; font-weight: 900; transform: rotate(-5deg); }
   .portfolio-section { scroll-margin-top: 100px; border-bottom: 2px dashed color-mix(in srgb, var(--ink) 42%, transparent); }
   .story-card { padding: 1.2rem; }
@@ -141,6 +163,9 @@
   .project-detail-label { margin-top: 1.1rem; font-family: ui-monospace, monospace; font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
   .experience-grid .comic-panel { box-shadow: 5px 5px 0 var(--ink); }
   @keyframes maker-float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-7px) rotate(-.5deg); } }
+  @keyframes contact-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-5px) rotate(-.4deg); } }
+  @keyframes contact-ping { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+  @keyframes contact-twinkle { 0%, 100% { transform: scale(.94) rotate(-3deg); } 50% { transform: scale(1.06) rotate(3deg); } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
   @media (max-width: 680px) {
     .site-shell { width: min(100% - 24px, 560px); }
@@ -151,6 +176,10 @@
     .hero-art { min-height: 280px; }
     .maker-art { width: min(92%, 360px); margin-top: 4rem; }
     .hero-sun { width: 190px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-art { min-height: 300px; }
+    .contact-illustration { width: min(100%, 390px); }
+    .contact-speech { top: 19%; right: 5%; }
     .next-up { min-height: 210px; }
   }
   /* Trailing middot groups the set and wraps better than a flex gap. */
