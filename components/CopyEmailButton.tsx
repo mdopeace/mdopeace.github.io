@@ -1,17 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CopyEmailButton({ email }: { email: string }) {
   const [copied, setCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => clearTimeout(timer.current ?? undefined), []);
+
+  const flashCopied = () => {
+    setCopied(true);
+    clearTimeout(timer.current ?? undefined);
+    timer.current = setTimeout(() => setCopied(false), 1400);
+  };
 
   async function copyEmail() {
     try {
       await navigator.clipboard.writeText(email);
-      setCopied(true);
+      flashCopied();
       setCopyFailed(false);
     } catch {
+      clearTimeout(timer.current ?? undefined);
       setCopied(false);
       setCopyFailed(true);
     }
