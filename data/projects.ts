@@ -65,4 +65,28 @@ export const projects: Project[] = [
       { label: "Homebrew tap", href: "https://github.com/mdopeace/homebrew-vidp" },
     ],
   },
+  {
+    name: "Cookieater",
+    logo: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/icon.png",
+    shot: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/screenshots/overview.png",
+    shotAlt:
+      "Cookieater showing example.com cookies and the search, add, import, export, and clear actions.",
+    pills: ["Chrome Extension", "Manifest V3"],
+    tagline:
+      "A friendly Chrome extension for viewing, searching, and editing cookies on the current site.",
+    paragraphs: [
+      "See the active site's cookies at a glance, search names, values, and domains, then edit individual cookie settings or add and remove cookies.",
+      "Import cookies from a JSON array, export the current domain's cookies, or clear them all after confirmation.",
+      "Cookieater handles cookie data locally in your browser; it doesn't send your data to a Cookieater server.",
+    ],
+    commands: [],
+    links: [
+      { label: "Source", href: "https://github.com/mdopeace/cookieater" },
+      { label: "Live page", href: "https://mdopeace.github.io/cookieater/" },
+      {
+        label: "Chrome Web Store",
+        href: "https://chromewebstore.google.com/detail/cookieater/eokikmfhgicnmkhldphchbligfgjbkbi",
+      },
+    ],
+  },
 ];
