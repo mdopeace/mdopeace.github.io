@@ -12,7 +12,7 @@ export default function DayJob() {
         <p>
           Software Engineer at Tracxn, Bengaluru, since January 2023.
           Full-stack web by day — React, Next.js, Astro, Express, MongoDB,
-          AWS Lambda.
+          AWS Lambda, and more.
         </p>
         <p>
           Part of the platform team: the app framework and build, logging
@@ -25,7 +25,7 @@ export default function DayJob() {
           <p className="font-mono text-xs font-bold uppercase tracking-[.12em]">Things I work with</p>
           <div className="mt-5">
             <h3 className="font-black uppercase tracking-[.08em]">Web platform</h3>
-            <p className="mt-2 text-sm leading-[1.8] text-muted">React · Next.js · Astro · Express · MongoDB · AWS Lambda</p>
+            <p className="mt-2 text-sm leading-[1.8] text-muted">React · Next.js · Astro · Express · MongoDB · AWS Lambda · and more</p>
           </div>
           <div className="mt-5 border-t border-line pt-5">
             <h3 className="font-black uppercase tracking-[.08em]">Native Mac apps</h3>
