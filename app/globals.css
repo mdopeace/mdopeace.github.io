@@ -135,16 +135,16 @@
   .button-secondary { background: var(--card); color: var(--ink); }
   .button-secondary:hover { color: var(--ink); }
   .hero-art { position: relative; isolation: isolate; display: grid; place-items: center; min-height: 410px; background: var(--accent); }
-  .hero-art.gameboy-stage { min-height: clamp(480px, 72vh, 640px); padding: 0; place-items: stretch; background: var(--accent); }
-  .gameboy { position: relative; z-index: 1; box-sizing: border-box; display: flex; width: 100%; height: 100%; min-height: 0; flex-direction: column; justify-content: flex-start; gap: 0; border: 0; border-radius: 0; background: var(--accent); box-shadow: none; padding: clamp(12px, 2vw, 20px) clamp(8px, 1.2vw, 14px); color: var(--ink); touch-action: manipulation; }
+  .hero-art.gameboy-stage { min-width: 0; min-height: clamp(480px, 72vh, 640px); padding: 0; place-items: stretch; background: var(--accent); }
+  .gameboy { position: relative; z-index: 1; box-sizing: border-box; display: flex; width: 100%; min-width: 0; height: 100%; min-height: 0; flex-direction: column; justify-content: flex-start; gap: 0; border: 0; border-radius: 0; background: var(--accent); box-shadow: none; padding: clamp(12px, 2vw, 20px) clamp(8px, 1.2vw, 14px); color: var(--ink); touch-action: manipulation; }
   .gameboy:focus-visible { outline: 0; box-shadow: inset 0 0 0 3px var(--ink), inset 0 0 0 6px var(--card); }
   .gameboy button:focus-visible { position: relative; z-index: 5; outline: 3px solid #fffaf0; outline-offset: 2px; box-shadow: 0 0 0 5px #25231f; }
   .gameboy-brand { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: .5rem; padding: 0 0 .55rem; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 950; letter-spacing: .08em; }
   .gameboy-brand > span:first-child { display: grid; width: 30px; aspect-ratio: 1; place-items: center; border: 2px solid var(--ink); border-radius: 0; background: var(--accent-2); box-shadow: 2px 2px 0 var(--ink); color: var(--ink-on-accent-2); font-size: .65rem; letter-spacing: -.08em; }
   .gameboy-brand i { color: var(--ink); font-style: normal; }
   .gameboy-led { width: 8px; aspect-ratio: 1; border: 1px solid var(--ink); border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-2) 28%, transparent); }
-  .gameboy-bezel { flex: 0 0 auto; border: 3px solid var(--ink); border-radius: 0; background: #34342a; padding: 8px; box-shadow: none; }
-  .gameboy-screen { position: relative; border: 2px solid #27291e; background: #d8dfb2; padding: 7px; color: #25271e; box-shadow: inset 0 0 0 1px #f3f0ca; }
+  .gameboy-bezel { box-sizing: border-box; width: 100%; min-width: 0; flex: 0 0 auto; border: 3px solid var(--ink); border-radius: 0; background: #34342a; padding: 8px; box-shadow: none; }
+  .gameboy-screen { position: relative; min-width: 0; border: 2px solid #27291e; background: #d8dfb2; padding: 7px; color: #25271e; box-shadow: inset 0 0 0 1px #f3f0ca; }
   .gameboy-screen-heading { display: flex; justify-content: space-between; padding: 0 1px 5px; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 950; letter-spacing: .08em; }
   .tetris-screen-layout { display: flex; align-items: flex-start; justify-content: center; gap: clamp(8px, 2vw, 14px); }
   .tetris-board { position: relative; display: grid; flex: 0 1 auto; width: auto; height: clamp(170px, 28vh, 240px); max-width: 54%; aspect-ratio: 1 / 2; grid-template-columns: repeat(10, minmax(0, 1fr)); overflow: hidden; border: 2px solid #34372a; background: #cbd3a4; }
@@ -264,6 +264,13 @@
   @keyframes contact-twinkle { 0%, 100% { transform: scale(.94) rotate(-3deg); } 50% { transform: scale(1.06) rotate(3deg); } }
   @keyframes contact-cloud-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  @media (min-width: 681px) and (max-width: 900px) {
+    .gameboy-controls { gap: 6px; padding-inline: 6px; }
+    .gameboy-dpad { width: 80px; height: 80px; flex: 0 0 80px; }
+    .gameboy-speaker { grid-template-columns: repeat(6, 5px); gap: 5px 3px; }
+    .gameboy-speaker i { width: 5px; }
+    .gameboy-speaker i:nth-child(n + 19) { display: none; }
+  }
   @media (max-width: 680px) {
     .site-shell { width: min(100% - 24px, 560px); }
     .site-nav-inner { flex-wrap: wrap; justify-content: space-between; gap: .65rem; }
