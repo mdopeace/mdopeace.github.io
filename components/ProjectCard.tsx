@@ -15,7 +15,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           width={800}
           height={600}
           unoptimized
-          className="block h-auto w-auto max-h-90 rounded-lg"
+          className="block h-auto w-auto max-h-90"
         />
       </div>
       <div className="min-w-0 py-1">
