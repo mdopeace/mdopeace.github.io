@@ -58,7 +58,13 @@ export default function ThemeToggle() {
   );
 
   return (
-    <div className="theme-toggle" role="group" aria-label="Color theme">
+    <div
+      className="theme-toggle"
+      data-theme={theme}
+      role="group"
+      aria-label="Color theme"
+    >
+      <span className="theme-toggle-indicator" aria-hidden="true" />
       {(["light", "dark", "system"] as const).map((item) => (
         <button
           key={item}

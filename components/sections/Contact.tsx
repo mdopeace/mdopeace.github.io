@@ -97,6 +97,7 @@ export default function Contact() {
               src="/contact-maker.png"
               alt=""
               fill
+              loading="eager"
               unoptimized
               sizes="(max-width: 800px) 90vw, 440px"
             />

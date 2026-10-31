@@ -221,13 +221,31 @@
     color: var(--amber);
   }
   .theme-toggle {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    position: relative;
     gap: 2px;
     border: 2px solid var(--ink);
     padding: 2px;
     background: var(--paper);
   }
+  .theme-toggle-indicator {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 0;
+    background: var(--accent);
+    pointer-events: none;
+    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .theme-toggle[data-theme="dark"] .theme-toggle-indicator {
+    transform: translateX(calc(100% + 2px));
+  }
+  .theme-toggle[data-theme="system"] .theme-toggle-indicator {
+    transform: translateX(calc(200% + 4px));
+  }
   .theme-toggle button {
+    grid-row: 1;
+    z-index: 1;
     border: 0;
     background: transparent;
     color: var(--ink);
@@ -236,9 +254,22 @@
     font-weight: 800;
     cursor: pointer;
   }
+  .theme-toggle button:nth-of-type(1) {
+    grid-column: 1;
+  }
+  .theme-toggle button:nth-of-type(2) {
+    grid-column: 2;
+  }
+  .theme-toggle button:nth-of-type(3) {
+    grid-column: 3;
+  }
   .theme-toggle button[aria-pressed="true"] {
-    background: var(--accent);
     color: #201f1b;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle-indicator {
+      transition: none;
+    }
   }
   .shadow-comic {
     box-shadow: 8px 8px 0 var(--ink);
@@ -582,10 +613,12 @@
     pointer-events: none;
   }
   @keyframes tetris-start-shine {
-    0%, 28% {
+    0%,
+    28% {
       left: -60%;
     }
-    72%, 100% {
+    72%,
+    100% {
       left: 125%;
     }
   }
@@ -988,12 +1021,12 @@
   .contact-thought span {
     position: absolute;
     top: 30%;
-    left: 14%;
+    left: 4%;
     right: 14%;
     height: 30%;
     display: grid;
     place-items: center;
-    color: var(--ink);
+    color: #25231f;
     font-size: clamp(0.64rem, 1.15vw, 0.78rem);
     font-weight: 900;
     line-height: 1.2;
