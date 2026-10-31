@@ -341,6 +341,15 @@
     outline-offset: 2px;
     box-shadow: 0 0 0 5px #25231f;
   }
+  .gameboy button:not(:disabled) {
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .gameboy button:not(:disabled):hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
   .gameboy-brand {
     display: flex;
     flex: 0 0 auto;
