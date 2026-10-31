@@ -11,7 +11,7 @@
   <rect width="1200" height="630" fill="url(#halftone)"/>
   <path d="M0 0h1200v104H0z" fill="#25231f"/>
   <path d="M0 104h1200v20H0z" fill="#f5cb56"/>
-  <text x="64" y="69" fill="#fffaf0" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="27" font-weight="700" letter-spacing="3">PERSONAL PORTFOLIO · BENGALURU</text>
+  <text x="78" y="69" fill="#fffaf0" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="27" font-weight="700" letter-spacing="3">PERSONAL PORTFOLIO · BENGALURU</text>
   <text x="1136" y="67" text-anchor="end" fill="#f5cb56" font-family="Courier New, monospace" font-size="20" font-weight="700">ISSUE 01</text>
   <rect x="58" y="165" width="684" height="354" fill="#25231f"/>
   <rect x="44" y="151" width="684" height="354" fill="#fffaf0" stroke="#25231f" stroke-width="5"/>
