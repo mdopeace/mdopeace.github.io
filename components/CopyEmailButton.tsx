@@ -26,7 +26,7 @@ export default function CopyEmailButton({ email }: { email: string }) {
         {copied
           ? "Email address copied to clipboard."
           : copyFailed
-            ? "Could not copy the address. Select it above to copy manually."
+            ? "Could not copy the address. Use Start a conversation to email me."
             : ""}
       </span>
     </div>

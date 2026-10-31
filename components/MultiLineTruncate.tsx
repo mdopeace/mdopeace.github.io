@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 // Browser-only anyway; avoids the useLayoutEffect SSR warning.
 const useBrowserLayoutEffect =
@@ -18,6 +18,7 @@ export default function MultiLineTruncate({
   className?: string;
 }) {
   const ref = useRef<HTMLParagraphElement>(null);
+  const contentId = useId();
   const [expanded, setExpanded] = useState(false);
   const [clamped, setClamped] = useState(true);
   const [clipped, setClipped] = useState(false);
@@ -57,6 +58,7 @@ export default function MultiLineTruncate({
   return (
     <>
       <p
+        id={contentId}
         ref={ref}
         className={`transition-[max-height] duration-300 ease-out motion-reduce:transition-none ${className}`}
         style={{
@@ -81,6 +83,8 @@ export default function MultiLineTruncate({
       {(clipped || expanded || !clamped) && (
         <button
           type="button"
+          aria-expanded={expanded}
+          aria-controls={contentId}
           onClick={toggle}
           className="project-action mt-1 cursor-pointer border-line text-muted hover:border-faint hover:text-text"
         >

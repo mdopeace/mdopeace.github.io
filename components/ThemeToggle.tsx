@@ -58,6 +58,7 @@ export default function ThemeToggle() {
         <button
           key={item}
           type="button"
+          aria-label={item === "system" ? "System" : undefined}
           aria-pressed={theme === item}
           onClick={() => chooseTheme(item)}
         >

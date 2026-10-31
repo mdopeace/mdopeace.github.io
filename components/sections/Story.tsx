@@ -8,7 +8,7 @@ export default function Story() {
     <Section label="How I think" id="story" index="01">
       <ol className="story-grid grid gap-4 md:grid-cols-3">
         <li className="story-card comic-panel">
-          <span aria-hidden="true" className="comic-label">01 / Notice</span>
+          <h3 className="comic-label">01 / Notice</h3>
           <p className={STEP_P}>
             It starts with films. And with the search for one worth sitting
             through. Streaming splits across separate subscriptions, and
@@ -17,7 +17,7 @@ export default function Story() {
           </p>
         </li>
         <li className="story-card comic-panel">
-          <span aria-hidden="true" className="comic-label">02 / Make</span>
+          <h3 className="comic-label">02 / Make</h3>
           <p className={STEP_P}>
             Which made the player the bottleneck. None of them felt like
             they belonged on a Mac. So I built one that did — native,
@@ -25,7 +25,7 @@ export default function Story() {
           </p>
         </li>
         <li className="story-card comic-panel">
-          <span aria-hidden="true" className="comic-label">03 / Refine</span>
+          <h3 className="comic-label">03 / Refine</h3>
           <p className={STEP_P}>
             And then it started over. The first version shipped, and I
             wasn&apos;t satisfied with it. The fixes kept arriving and

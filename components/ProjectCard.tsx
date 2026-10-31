@@ -28,9 +28,9 @@ export default function ProjectCard({ project }: { project: Project }) {
             unoptimized
             className="-mr-1 h-8 w-8"
           />
-          <h2 className="text-[20px] font-semibold tracking-[-0.01em]">
+          <h3 className="text-[20px] font-semibold tracking-[-0.01em]">
             {project.name}
-          </h2>
+          </h3>
           <ul className="flex flex-wrap gap-1.5">
             {project.pills.map((pill) => (
               <Tag key={pill}>{pill}</Tag>

@@ -12,7 +12,7 @@ export default function Now() {
             <p className="mt-4 text-[15px] leading-[1.7] text-muted">
               I use it every day. The features it’s still missing are the ones QuickTodo already has. That gap is part of the work—and a reminder that building something useful means paying attention after the first release.
             </p>
-            <a href="https://github.com/mdopeace/vidp" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-1 font-mono text-xs font-black uppercase tracking-[.08em] text-text no-underline"><span className="underline underline-offset-4">Follow the build</span><span className="external-arrow" aria-hidden="true">↗</span></a>
+            <a href="https://github.com/mdopeace/vidp" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-6 items-center gap-1 font-mono text-xs font-black uppercase tracking-[.08em] text-text no-underline"><span className="underline underline-offset-4">Follow the build</span><span className="external-arrow" aria-hidden="true">↗</span></a>
           </div>
         </article>
         <article className="next-up comic-panel halftone flex min-h-62.5 flex-col justify-between p-6 sm:p-8">

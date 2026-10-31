@@ -7,7 +7,7 @@ export default function CodeBlock({ lines }: { lines: string[] }) {
         {lines.map((line) => (
           <code
             key={line}
-            className="block text-[13px] leading-[1.55] whitespace-pre text-amber"
+            className="code-command block text-[13px] leading-[1.55] whitespace-pre"
           >
             {line}
           </code>
