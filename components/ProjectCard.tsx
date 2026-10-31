@@ -42,7 +42,6 @@ export default function ProjectCard({ project }: { project: Project }) {
         <p className="project-detail-label">The thinking behind it</p>
         <MultiLineTruncate
           text={project.paragraphs.join("\n\n")}
-          lines={7}
           className="mt-2 whitespace-pre-line text-[14px] leading-[1.7] text-muted"
         />
         <CodeBlock lines={project.commands} />
