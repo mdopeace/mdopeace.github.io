@@ -375,8 +375,17 @@
     aspect-ratio: 1;
     border: 1px solid var(--ink);
     border-radius: 50%;
-    background: var(--accent-2);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-2) 28%, transparent);
+    background: #ef5538;
+    box-shadow: 0 0 0 2px rgb(239 85 56 / 25%), 0 0 9px 3px rgb(239 85 56 / 60%);
+    transition: background-color 160ms ease, box-shadow 160ms ease;
+  }
+  .gameboy-led--playing {
+    background: #2ba84a;
+    box-shadow: 0 0 0 2px rgb(43 168 74 / 25%), 0 0 9px 3px rgb(43 168 74 / 60%);
+  }
+  .gameboy-led--paused {
+    background: #1769c2;
+    box-shadow: 0 0 0 2px rgb(23 105 194 / 25%), 0 0 8px 3px rgb(23 105 194 / 55%);
   }
   .gameboy-bezel {
     box-sizing: border-box;

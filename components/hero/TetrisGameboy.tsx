@@ -66,7 +66,7 @@ function visibleBoard(
 }
 
 export default function TetrisGameboy() {
-  const [engine] = useState(() => createEngine({ seed: 8675309 }));
+  const [engine] = useState(() => createEngine());
   const gameboyRef = useRef<HTMLElement>(null);
   const heldKeys = useRef(new Set<string>());
   const [announcement, setAnnouncement] = useState(
@@ -88,6 +88,7 @@ export default function TetrisGameboy() {
   const running =
     isPlaying(game) || isClearing(game) || game.phase.kind === "countdown";
   const stateActive = isPlaying(game);
+  const ledState = paused ? "paused" : running ? "playing" : "default";
 
   useEffect(() => {
     if (!running) return;
@@ -128,7 +129,8 @@ export default function TetrisGameboy() {
   }, [engine]);
 
   function start() {
-    engine.startGame({ mode: "marathon" });
+    const seed = window.crypto.getRandomValues(new Uint32Array(1))[0];
+    engine.startGame({ mode: "marathon", seed });
     setAnnouncement("Game starting. Controls unlock in a moment.");
     gameboyRef.current?.focus({ preventScroll: true });
   }
@@ -296,11 +298,14 @@ export default function TetrisGameboy() {
       onKeyDown={handleKeyDown}
     >
       <div className="gameboy-brand">
-        <span aria-hidden="true">Md</span>
+        <span aria-hidden="true">GB</span>
         <span>
           POCKET <i>COLOR</i>
         </span>
-        <span className="gameboy-led" aria-hidden="true" />
+        <span
+          className={`gameboy-led gameboy-led--${ledState}`}
+          aria-hidden="true"
+        />
       </div>
       <div className="gameboy-bezel">
         <div className="gameboy-screen">
