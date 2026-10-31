@@ -556,6 +556,30 @@
     font-weight: 900;
     cursor: pointer;
   }
+  .tetris-screen-button--start {
+    position: relative;
+    overflow: hidden;
+    background: #25271e;
+    color: #f1f0d3;
+  }
+  .tetris-screen-button--start::after {
+    position: absolute;
+    inset: -40% auto -40% -60%;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, #ffffffa8, transparent);
+    content: "";
+    transform: skewX(-20deg);
+    animation: tetris-start-shine 4.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes tetris-start-shine {
+    0%, 28% {
+      left: -60%;
+    }
+    72%, 100% {
+      left: 125%;
+    }
+  }
   .gameboy-hinge {
     display: grid;
     flex: 0 0 24px;
@@ -960,12 +984,12 @@
   .contact-thought span {
     position: absolute;
     top: 30%;
-    left: 4%;
+    left: 14%;
     right: 14%;
     height: 30%;
     display: grid;
     place-items: center;
-    color: #25231f;
+    color: var(--ink);
     font-size: clamp(0.64rem, 1.15vw, 0.78rem);
     font-weight: 900;
     line-height: 1.2;

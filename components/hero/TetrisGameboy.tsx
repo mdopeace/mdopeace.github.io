@@ -369,7 +369,7 @@ export default function TetrisGameboy() {
               {overlayButton ? (
                 <button
                   type="button"
-                  className="tetris-screen-button"
+                  className={`tetris-screen-button${ready ? " tetris-screen-button--start" : ""}`}
                   onClick={
                     paused
                       ? () => {
