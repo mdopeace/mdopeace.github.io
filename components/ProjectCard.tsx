@@ -14,6 +14,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           alt={project.shotAlt}
           width={800}
           height={600}
+          loading={project.name === "QuickTodo" ? "eager" : "lazy"}
           unoptimized
           className="block h-auto w-auto max-h-90"
         />
