@@ -31,9 +31,17 @@ export default function LinkList({
               rel={item.rel}
               className={quiet ? "no-underline" : undefined}
             >
-              {Icon && <Icon className="project-link-icon" aria-hidden="true" focusable="false" />}
+              {Icon && (
+                <Icon
+                  className="project-link-icon"
+                  aria-hidden="true"
+                  focusable="false"
+                />
+              )}
               {item.label}
-              <span className="external-arrow" aria-hidden="true">↗</span>
+              <span className="external-arrow" aria-hidden="true">
+                ↗
+              </span>
             </a>
           </li>
         );

@@ -7,11 +7,11 @@ type Theme = "light" | "dark" | "system";
 function updateThemeColor(theme: Theme) {
   const dark =
     theme === "dark" ||
-    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute(
-    "content",
-    dark ? "#1b1b1b" : "#f5efdf",
-  );
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", dark ? "#1b1b1b" : "#f5efdf");
 }
 
 function getThemeSnapshot(): Theme {
@@ -26,7 +26,8 @@ function getServerThemeSnapshot(): Theme {
 function subscribeToTheme(onChange: () => void) {
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   const onSystemThemeChange = () => {
-    if (document.documentElement.dataset.theme === "system") updateThemeColor("system");
+    if (document.documentElement.dataset.theme === "system")
+      updateThemeColor("system");
     onChange();
   };
   window.addEventListener("portfolio-theme-change", onChange);
@@ -50,7 +51,11 @@ function chooseTheme(next: Theme) {
 }
 
 export default function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getServerThemeSnapshot);
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
 
   return (
     <div className="theme-toggle" role="group" aria-label="Color theme">
