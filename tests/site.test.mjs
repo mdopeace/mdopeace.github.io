@@ -54,16 +54,9 @@ test("page ships its accessibility and identity hooks", () => {
     html.includes('aria-live="polite"'),
     "copy button aria-live missing",
   );
-  assert.ok(
-    html.includes(
-      'rel="icon" href="https://avatars.githubusercontent.com/u/99809028?s=64"',
-    ),
-    "avatar icon link missing",
-  );
-  assert.ok(
-    html.includes(
-      'rel="apple-touch-icon" href="https://avatars.githubusercontent.com/u/99809028?s=180"',
-    ),
-    "apple-touch-icon missing",
+  assert.match(
+    html,
+    /<link rel="icon" href="[^"]*\/icon\.svg(?:\?[^"]*)?"[^>]*>/,
+    "local SVG favicon missing",
   );
 });
