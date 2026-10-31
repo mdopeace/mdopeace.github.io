@@ -1,34 +1,99 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #16171a;
-  --color-panel: #0e0f11;
-  --color-line: #2a2c31;
-  --color-text: #f2f3f5;
-  --color-muted: #9aa1ab;
-  /* AA-verified: 4.90:1 on bg. */
-  --color-faint: #82868d;
-  --color-amber-bg: #1a1710;
-  --color-amber-line: #3a3222;
-  /* AA-verified: 4.89:1 on amber-bg. */
-  --color-amber: #948464;
-  --color-done: #3fb950;
-  --color-done-line: #2c4a32;
+  --color-bg: var(--paper);
+  --color-panel: var(--card);
+  --color-line: var(--ink);
+  --color-text: var(--ink);
+  --color-muted: color-mix(in srgb, var(--ink) 72%, transparent);
+  --color-faint: color-mix(in srgb, var(--ink) 58%, transparent);
+  --color-amber-bg: var(--accent);
+  --color-amber-line: var(--ink);
+  --color-amber: var(--accent-2);
+  --color-done: #3f6c48;
+  --color-done-line: var(--ink);
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
     sans-serif;
 }
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --paper: #f5efdf;
+    --ink: #25231f;
+    --card: #fffaf0;
+    --accent: #f5cb56;
+    --accent-2: #a13c24;
+    --blue: #8ec8d3;
+    --ink-on-accent: #201f1b;
+    --ink-on-blue: #201f1b;
+    --ink-on-accent-2: #fffaf0;
+    --shadow: 5px 5px 0 var(--ink);
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #1b1b1b;
+    --ink: #f6f0df;
+    --card: #2b2a26;
+    --color-muted: color-mix(in srgb, var(--ink) 90%, transparent);
+    --color-faint: color-mix(in srgb, var(--ink) 76%, transparent);
+    --accent: #f5cb56;
+    --accent-2: #f08b6b;
+    --blue: #79b9c5;
+    --ink-on-accent-2: #1b1b1b;
+    --color-done: #a8d5a2;
+    --shadow: 5px 5px 0 #080808;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme="system"] {
+      color-scheme: dark;
+      --paper: #1b1b1b;
+      --ink: #f6f0df;
+      --card: #2b2a26;
+      --color-muted: color-mix(in srgb, var(--ink) 90%, transparent);
+      --color-faint: color-mix(in srgb, var(--ink) 76%, transparent);
+      --accent: #f5cb56;
+      --accent-2: #f08b6b;
+      --blue: #79b9c5;
+      --ink-on-accent: #201f1b;
+      --ink-on-blue: #201f1b;
+      --ink-on-accent-2: #1b1b1b;
+      --color-done: #a8d5a2;
+      --shadow: 5px 5px 0 #080808;
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="system"] {
+      color-scheme: light;
+      --paper: #f5efdf;
+      --ink: #25231f;
+      --card: #fffaf0;
+      --accent: #f5cb56;
+      --accent-2: #a13c24;
+      --blue: #8ec8d3;
+      --shadow: 5px 5px 0 #25231f;
+    }
+  }
   html {
     -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
   }
   body {
-    background: var(--color-bg);
-    color: var(--color-text);
+    background-color: var(--paper);
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--ink) 10%, transparent) 0.65px,
+      transparent 0.65px
+    );
+    background-size: 7px 7px;
+    color: var(--ink);
     font-size: 16px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
   }
   a {
     color: var(--color-muted);
@@ -39,15 +104,1328 @@
   a:hover {
     color: var(--color-text);
   }
+  .skip-link {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    transform: translateY(calc(-100% - 1.5rem));
+    border: 2px solid var(--ink);
+    background: var(--accent);
+    padding: 0.55rem 0.8rem;
+    color: var(--ink-on-accent);
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+  main:focus {
+    outline: none;
+  }
   /* UA ring is 2.98:1 on bg — under WCAG 2.2's 3:1. */
   :focus-visible {
-    outline: 2px solid var(--color-amber);
+    outline: 3px solid var(--accent-2);
     outline-offset: 2px;
     border-radius: 2px;
   }
 }
 
 @layer components {
+  .site-shell {
+    width: min(1120px, calc(100% - 36px));
+    margin-inline: auto;
+  }
+  .site-nav-inner > a:first-child {
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+  }
+  .site-brand {
+    flex: 0 0 auto;
+    min-height: 34px !important;
+    gap: 0.15rem;
+    border: 2px solid var(--ink);
+    background: var(--accent-2);
+    box-shadow: 2px 2px 0 var(--ink);
+    padding: 0 0.55rem;
+    color: var(--ink-on-accent-2) !important;
+  }
+  .comic-panel {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow);
+  }
+  .comic-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: #201f1b;
+    border: 2px solid var(--ink);
+    padding: 0.3rem 0.65rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .halftone {
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--ink) 24%, transparent) 0.7px,
+      transparent 0.7px
+    );
+    background-size: 6px 6px;
+  }
+  .site-nav {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    margin-top: 14px;
+  }
+  .site-nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 0.65rem 0.85rem;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.6rem, 2vw, 1.4rem);
+    flex: 1;
+  }
+  .nav-links a {
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .nav-links a:hover {
+    color: var(--amber);
+  }
+  .theme-toggle {
+    display: flex;
+    gap: 2px;
+    border: 2px solid var(--ink);
+    padding: 2px;
+    background: var(--paper);
+  }
+  .theme-toggle button {
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    padding: 0.3rem 0.45rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .theme-toggle button[aria-pressed="true"] {
+    background: var(--accent);
+    color: #201f1b;
+  }
+  .shadow-comic {
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .hero-grid {
+    isolation: isolate;
+  }
+  .hero-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.38;
+    pointer-events: none;
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--ink) 30%, transparent) 0.7px,
+      transparent 0.7px
+    );
+    background-size: 7px 7px;
+    mask-image: linear-gradient(90deg, transparent 35%, #000);
+  }
+  .hero-name {
+    color: var(--accent-2);
+    text-shadow: 3px 3px 0 var(--ink);
+  }
+  .button-comic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    border: 2px solid var(--ink);
+    background: var(--accent);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 0.7rem 0.9rem;
+    color: #201f1b;
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .button-comic:hover {
+    color: #201f1b;
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .button-secondary {
+    background: var(--card);
+    color: var(--ink);
+  }
+  .button-secondary:hover {
+    color: var(--ink);
+  }
+  .hero-art {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 410px;
+    background: var(--accent);
+  }
+  .hero-art.gameboy-stage {
+    min-width: 0;
+    min-height: clamp(480px, 72vh, 640px);
+    padding: 0;
+    place-items: stretch;
+    background: var(--accent);
+  }
+  .gameboy {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    border: 0;
+    border-radius: 0;
+    background: var(--accent);
+    box-shadow: none;
+    padding: clamp(12px, 2vw, 20px) clamp(8px, 1.2vw, 14px);
+    color: var(--ink);
+    touch-action: manipulation;
+  }
+  .gameboy:focus-visible {
+    outline: 0;
+    box-shadow:
+      inset 0 0 0 3px var(--ink),
+      inset 0 0 0 6px var(--card);
+  }
+  .gameboy button:focus-visible {
+    position: relative;
+    z-index: 5;
+    outline: 3px solid #fffaf0;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px #25231f;
+  }
+  .gameboy-brand {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 0 0.55rem;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: 0.08em;
+  }
+  .gameboy-brand > span:first-child {
+    display: grid;
+    width: 30px;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    background: var(--accent-2);
+    box-shadow: 2px 2px 0 var(--ink);
+    color: var(--ink-on-accent-2);
+    font-size: 0.65rem;
+    letter-spacing: -0.08em;
+  }
+  .gameboy-brand i {
+    color: var(--ink);
+    font-style: normal;
+  }
+  .gameboy-led {
+    width: 8px;
+    aspect-ratio: 1;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-2) 28%, transparent);
+  }
+  .gameboy-bezel {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+    border: 3px solid var(--ink);
+    border-radius: 0;
+    background: #34342a;
+    padding: 8px;
+    box-shadow: none;
+  }
+  .gameboy-screen {
+    position: relative;
+    min-width: 0;
+    border: 2px solid #27291e;
+    background: #d8dfb2;
+    padding: 7px;
+    color: #25271e;
+    box-shadow: inset 0 0 0 1px #f3f0ca;
+  }
+  .gameboy-screen-heading {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1px 5px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: 0.08em;
+  }
+  .tetris-screen-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 14px);
+  }
+  .tetris-board {
+    position: relative;
+    display: grid;
+    flex: 0 1 auto;
+    width: auto;
+    height: clamp(170px, 28vh, 240px);
+    max-width: 54%;
+    aspect-ratio: 1 / 2;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    overflow: hidden;
+    border: 2px solid #34372a;
+    background: #cbd3a4;
+  }
+  .tetris-cell {
+    min-width: 0;
+    border: 1px solid #5d644366;
+    background: #b9c48c;
+  }
+  .tetris-cell--I {
+    background: #52a8b8;
+    box-shadow: inset 0 0 0 1px #193f43;
+  }
+  .tetris-cell--O {
+    background: #f5cb56;
+    box-shadow: inset 0 0 0 1px #594817;
+  }
+  .tetris-cell--T {
+    background: #a675a9;
+    box-shadow: inset 0 0 0 1px #47304b;
+  }
+  .tetris-cell--S {
+    background: #6d9c62;
+    box-shadow: inset 0 0 0 1px #304a2b;
+  }
+  .tetris-cell--Z {
+    background: #d66c50;
+    box-shadow: inset 0 0 0 1px #642e23;
+  }
+  .tetris-cell--J {
+    background: #5d7eae;
+    box-shadow: inset 0 0 0 1px #293d5c;
+  }
+  .tetris-cell--L {
+    background: #e69b4f;
+    box-shadow: inset 0 0 0 1px #67431f;
+  }
+  .tetris-cell--ghost {
+    opacity: 0.34;
+  }
+  .tetris-hud {
+    display: grid;
+    width: 53px;
+    gap: 9px;
+    padding-top: 3px;
+    font-family: ui-monospace, monospace;
+  }
+  .tetris-hud > div {
+    display: grid;
+    gap: 1px;
+  }
+  .tetris-hud span {
+    font-size: 11px;
+    font-weight: 950;
+    letter-spacing: 0.06em;
+  }
+  .tetris-hud strong {
+    font-size: 14px;
+    line-height: 1.1;
+  }
+  .tetris-next {
+    margin-top: 2px;
+  }
+  .tetris-preview {
+    display: grid;
+    width: 44px;
+    aspect-ratio: 1;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid #4f5439;
+    margin-top: 3px;
+  }
+  .tetris-preview i {
+    border: 1px solid #89926955;
+    background: #cbd3a4;
+  }
+  .tetris-preview .tetris-cell--I,
+  .tetris-preview .tetris-cell--O,
+  .tetris-preview .tetris-cell--T,
+  .tetris-preview .tetris-cell--S,
+  .tetris-preview .tetris-cell--Z,
+  .tetris-preview .tetris-cell--J,
+  .tetris-preview .tetris-cell--L {
+    border: 1px solid #34372a;
+  }
+  .tetris-overlay {
+    position: absolute;
+    inset: 32px 7px 7px;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 9px;
+    background: #d8dfb2ef;
+    font-family: ui-monospace, monospace;
+    text-align: center;
+  }
+  .tetris-overlay strong {
+    font-size: 0.9rem;
+    font-weight: 950;
+    letter-spacing: 0.06em;
+  }
+  .tetris-countdown-note {
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .tetris-screen-button {
+    min-width: 104px;
+    min-height: 36px;
+    border: 2px solid #25271e;
+    background: #25271e;
+    box-shadow: 2px 2px 0 #8f9668;
+    color: #f1f0d3;
+    padding: 0.45rem 0.65rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 900;
+    cursor: pointer;
+  }
+  .gameboy-hinge {
+    display: grid;
+    flex: 0 0 24px;
+    height: 24px;
+    place-items: center;
+    margin: -1px 0 0;
+    border: 2px solid var(--ink);
+    border-top: 0;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--accent-2) 20%, var(--accent));
+  }
+  .gameboy-hinge span {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 950;
+    letter-spacing: 0.14em;
+  }
+  .gameboy-controls {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 126px;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(10px, 2vw, 24px);
+    padding: 12px 10px;
+  }
+  .gameboy-dpad {
+    display: grid;
+    width: 100px;
+    height: 100px;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    filter: drop-shadow(
+      2px 2px 0 color-mix(in srgb, var(--ink) 30%, transparent)
+    );
+  }
+  .gameboy-dpad button {
+    display: grid;
+    min-width: 24px;
+    min-height: 24px;
+    place-items: center;
+    border: 2px solid var(--ink);
+    background: #49473f;
+    color: #fff8df;
+    font-size: 0.75rem;
+    font-weight: 950;
+    cursor: pointer;
+  }
+  .gameboy-dpad button:active,
+  .gameboy-ab button:active,
+  .gameboy-small-button:active {
+    transform: translate(1px, 1px);
+  }
+  .dpad-up {
+    grid-area: 1 / 2;
+  }
+  .dpad-left {
+    grid-area: 2 / 1;
+  }
+  .dpad-center {
+    z-index: 1;
+    grid-area: 2 / 2;
+    border: 2px solid var(--ink);
+    background: #393830;
+  }
+  .dpad-right {
+    grid-area: 2 / 3;
+  }
+  .dpad-down {
+    grid-area: 3 / 2;
+  }
+  .gameboy-speaker {
+    display: grid;
+    flex: 1 1 auto;
+    min-width: 0;
+    grid-template-columns: repeat(8, 6px);
+    justify-content: space-evenly;
+    align-content: center;
+    gap: 7px 4px;
+    align-self: stretch;
+    transform: none;
+  }
+  .gameboy-speaker i {
+    width: 6px;
+    aspect-ratio: 1;
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    background: color-mix(in srgb, var(--ink) 65%, var(--accent));
+  }
+  .gameboy-ab {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 9px;
+    transform: none;
+  }
+  .gameboy-ab button {
+    display: grid;
+    width: 48px;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    background: var(--accent-2);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink-on-accent-2);
+    cursor: pointer;
+  }
+  .gameboy-ab button:first-child {
+    transform: none;
+  }
+  .gameboy-ab button b {
+    font-family: ui-monospace, monospace;
+    font-size: 0.9rem;
+  }
+  .gameboy-utility {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 2px;
+  }
+  .gameboy-small-button {
+    min-width: 72px;
+    min-height: 30px;
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    background: var(--card);
+    box-shadow: 2px 2px 0 var(--ink);
+    padding: 0.2rem 0.45rem;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 950;
+    cursor: pointer;
+  }
+  .gameboy-instructions {
+    display: grid;
+    gap: 2px;
+    margin: 10px 0 0;
+    border-top: 1px dashed color-mix(in srgb, var(--ink) 65%, transparent);
+    padding-top: 7px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: 0.025em;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .gameboy-instructions span {
+    color: var(--ink);
+  }
+  .gameboy button:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+  }
+  .hero-sun {
+    position: absolute;
+    z-index: -1;
+    top: 18%;
+    left: 34%;
+    width: 170px;
+    aspect-ratio: 1;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 7px 7px 0 var(--ink);
+    opacity: 0.8;
+  }
+  .maker-art {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 410px);
+    align-self: end;
+    margin-top: 2.5rem;
+    animation: maker-float 4s ease-in-out infinite;
+  }
+  .tech-floats {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+  }
+  .tech-float {
+    position: absolute;
+    display: grid;
+    width: 58px;
+    min-height: 62px;
+    justify-items: center;
+    align-content: center;
+    gap: 1px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 0.25rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.53rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .tech-float svg {
+    display: block;
+    width: 38px;
+    height: 36px;
+    overflow: visible;
+  }
+  .tech-float--code {
+    top: 29%;
+    left: 6%;
+    animation: badge-code-drift 4.2s ease-in-out infinite;
+  }
+  .tech-float--react {
+    top: 31%;
+    right: 7%;
+    animation: badge-react-drift 5s ease-in-out infinite;
+  }
+  .tech-float--html {
+    bottom: 19%;
+    left: 10%;
+    animation: badge-html-drift 4.7s ease-in-out infinite;
+  }
+  .tech-float--css {
+    right: 9%;
+    bottom: 20%;
+    animation: badge-css-drift 5.3s ease-in-out infinite;
+  }
+  .tech-float--mongo {
+    top: 9%;
+    left: 5%;
+    animation: badge-mongo-drift 4.5s ease-in-out infinite;
+  }
+  .hero-speech {
+    position: absolute;
+    z-index: 2;
+    top: 9%;
+    right: 7%;
+    max-width: 190px;
+    border-radius: 48% 46% 42% 18%;
+    padding: 0.75rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.35;
+    transform: rotate(4deg);
+  }
+  .art-caption {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.8rem;
+    z-index: 2;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    padding: 0.3rem 0.55rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+  .contact-copy {
+    max-width: 570px;
+  }
+  .contact-headline {
+    max-width: 12ch;
+    margin-top: 1.25rem;
+    font-size: clamp(2rem, 4.5vw, 3.6rem);
+    font-weight: 950;
+    line-height: 0.98;
+    letter-spacing: -0.065em;
+  }
+  .contact-description {
+    max-width: 48ch;
+    margin-top: 1.1rem;
+    color: var(--color-muted);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+  }
+  .contact-email-button {
+    min-height: 48px;
+  }
+  .copy-email-button {
+    min-height: 48px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+    padding: 0.45rem 0.65rem;
+    font-size: 0.76rem;
+    font-weight: 850;
+    cursor: pointer;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .copy-email-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .contact-social-block {
+    margin-top: 2rem;
+  }
+  .contact-social-label {
+    margin-bottom: 0.55rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .contact-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .contact-socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 0.45rem 0.65rem;
+    color: var(--ink);
+    font-size: 0.76rem;
+    font-weight: 850;
+    text-decoration: none;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .social-icon {
+    display: block;
+    width: 15px;
+    height: 15px;
+    flex: none;
+  }
+  .external-arrow {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    letter-spacing: normal;
+    line-height: 1;
+  }
+  .contact-socials a:hover {
+    color: var(--ink);
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .contact-art {
+    position: relative;
+    display: grid;
+    min-height: 365px;
+    overflow: hidden;
+    place-items: end center;
+    padding: 2.8rem 0.5rem 0.6rem;
+    background-color: var(--blue);
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--ink) 18%, transparent) 0.7px,
+      transparent 0.7px
+    );
+    background-size: 7px 7px;
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+  .contact-stamp {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    border: 2px solid var(--ink);
+    background: var(--accent);
+    color: var(--ink-on-accent);
+    padding: 0.35rem 0.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    transform: rotate(-3deg);
+  }
+  .contact-thought {
+    position: absolute;
+    top: 6%;
+    right: 4%;
+    z-index: 2;
+    width: clamp(145px, 33%, 155px);
+    aspect-ratio: 1200 / 779;
+    animation: contact-cloud-float 4.8s ease-in-out infinite;
+  }
+  .contact-thought-image {
+    object-fit: contain;
+  }
+  .contact-thought span {
+    position: absolute;
+    top: 30%;
+    left: 14%;
+    right: 14%;
+    height: 30%;
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+    font-size: clamp(0.64rem, 1.15vw, 0.78rem);
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: center;
+    transform: translate(6%, 2%);
+  }
+  .contact-illustration {
+    position: relative;
+    z-index: 1;
+    width: min(84%, 380px);
+    aspect-ratio: 660 / 640;
+    margin-bottom: 1.4rem;
+    animation: contact-bob 4.5s ease-in-out infinite;
+  }
+  .contact-maker-image {
+    object-fit: contain;
+  }
+  .contact-effects {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .contact-spark {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: contact-twinkle 3.3s ease-in-out infinite;
+  }
+  .contact-art-caption {
+    position: absolute;
+    right: 0.85rem;
+    bottom: 0.65rem;
+    z-index: 2;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    padding: 0.25rem 0.45rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .section-index {
+    display: grid;
+    width: 30px;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 2px solid var(--ink-on-accent-2);
+    background: var(--accent-2);
+    color: var(--ink-on-accent-2);
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 900;
+    transform: rotate(-5deg);
+  }
+  .portfolio-section {
+    scroll-margin-top: 100px;
+    border-bottom: 2px dashed color-mix(in srgb, var(--ink) 42%, transparent);
+  }
+  .story-card {
+    padding: 1.2rem;
+  }
+  .story-card:nth-child(2) {
+    background: color-mix(in srgb, var(--blue) 30%, var(--card));
+  }
+  .story-card:nth-child(3) {
+    background: color-mix(in srgb, var(--accent) 28%, var(--card));
+  }
+  .story-card .comic-label {
+    font-size: 0.65rem;
+  }
+  .toolkit-panel {
+    --color-muted: var(--ink-on-blue);
+    --color-text: var(--ink-on-blue);
+    background: var(--blue);
+    box-shadow: 5px 5px 0 var(--ink);
+    color: var(--ink-on-blue);
+  }
+  .now-panel {
+    background: color-mix(in srgb, var(--accent) 25%, var(--card));
+  }
+  .now-stamp {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    border: 2px solid var(--ink-on-accent-2);
+    background: var(--accent-2);
+    color: var(--ink-on-accent-2);
+    padding: 0.35rem 0.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem;
+    font-weight: 900;
+    transform: rotate(7deg);
+  }
+  .project-card {
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 5px 5px 0 var(--ink);
+    transition:
+      transform 150ms ease,
+      box-shadow 150ms ease;
+  }
+  .project-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .project-shot-wrap {
+    display: grid;
+    place-items: center;
+    min-height: 220px;
+    background: var(--blue);
+    border: 2px solid var(--ink);
+  }
+  .project-shot-wrap img {
+    max-width: min(100%, 320px);
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .project-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .project-title-row li {
+    border-radius: 0;
+    border-width: 2px;
+    background: var(--paper);
+    font-family: ui-monospace, monospace;
+    font-weight: 800;
+  }
+  .project-intro {
+    border-left: 4px solid var(--accent-2);
+    padding-left: 0.85rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+  .project-detail-label {
+    margin-top: 1.1rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .project-action {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    background: var(--card);
+    box-shadow: 2px 2px 0 var(--ink);
+    padding: 0.28rem 0.5rem;
+    color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease,
+      background-color 120ms ease;
+  }
+  .project-action:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.25rem;
+  }
+  .project-links a {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    gap: 0.35rem;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 2px 2px 0 var(--ink);
+    padding: 0.28rem 0.5rem;
+    color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease,
+      background-color 120ms ease;
+  }
+  .project-link-icon {
+    display: block;
+    width: 13px;
+    height: 13px;
+    flex: none;
+  }
+  .code-command {
+    color: var(--ink-on-accent);
+  }
+  .project-links a:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .project-links a:hover,
+  .project-action:hover {
+    background: var(--accent);
+    color: #201f1b;
+  }
+  .experience-grid .comic-panel {
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  @keyframes maker-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-7px) rotate(-0.5deg);
+    }
+  }
+  @keyframes badge-code-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(-4deg);
+    }
+    50% {
+      transform: translate(4px, -10px) rotate(2deg);
+    }
+  }
+  @keyframes badge-react-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(3deg);
+    }
+    50% {
+      transform: translate(-5px, 8px) rotate(-5deg);
+    }
+  }
+  @keyframes badge-html-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(2deg);
+    }
+    50% {
+      transform: translate(4px, -8px) rotate(-3deg);
+    }
+  }
+  @keyframes badge-css-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(-2deg);
+    }
+    50% {
+      transform: translate(-4px, -9px) rotate(4deg);
+    }
+  }
+  @keyframes badge-mongo-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(-5deg);
+    }
+    50% {
+      transform: translate(5px, 6px) rotate(3deg);
+    }
+  }
+  @keyframes contact-bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-5px) rotate(-0.4deg);
+    }
+  }
+  @keyframes contact-twinkle {
+    0%,
+    100% {
+      transform: scale(0.94) rotate(-3deg);
+    }
+    50% {
+      transform: scale(1.06) rotate(3deg);
+    }
+  }
+  @keyframes contact-cloud-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  @media (min-width: 681px) and (max-width: 900px) {
+    .gameboy-controls {
+      gap: 6px;
+      padding-inline: 6px;
+    }
+    .gameboy-dpad {
+      width: 80px;
+      height: 80px;
+      flex: 0 0 80px;
+    }
+    .gameboy-speaker {
+      grid-template-columns: repeat(6, 5px);
+      gap: 5px 3px;
+    }
+    .gameboy-speaker i {
+      width: 5px;
+    }
+    .gameboy-speaker i:nth-child(n + 19) {
+      display: none;
+    }
+  }
+  @media (max-width: 680px) {
+    .site-shell {
+      width: min(100% - 24px, 560px);
+    }
+    .site-nav-inner {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.65rem;
+    }
+    .site-brand {
+      min-height: 32px !important;
+      padding-inline: 0.45rem;
+    }
+    .nav-links {
+      order: 3;
+      width: 100%;
+      justify-content: space-between;
+      border-top: 1px dashed var(--ink);
+      padding-top: 0.55rem;
+    }
+    .nav-links a {
+      font-size: 0.66rem;
+    }
+    .theme-toggle button {
+      padding-inline: 0.32rem;
+    }
+    .hero-art {
+      min-height: 340px;
+    }
+    .hero-art.gameboy-stage {
+      min-height: min(470px, 56vh);
+    }
+    .gameboy {
+      min-height: 0;
+      gap: 0;
+      padding: 8px;
+    }
+    .gameboy-brand {
+      padding: 0 0 0.25rem;
+    }
+    .gameboy-brand > span:first-child {
+      width: 26px;
+    }
+    .gameboy-bezel {
+      padding: 6px;
+    }
+    .gameboy-hinge {
+      flex-basis: 18px;
+      height: 18px;
+    }
+    .gameboy-instructions {
+      margin-top: 4px;
+      padding-top: 5px;
+      font-size: 11px;
+    }
+    .tetris-board {
+      height: clamp(100px, 12.8vh, 108px);
+    }
+    .tetris-hud {
+      gap: 5px;
+    }
+    .gameboy-controls {
+      min-height: 96px;
+      gap: 8px;
+      padding: 8px 4px;
+    }
+    .gameboy-dpad {
+      width: 80px;
+      height: 80px;
+    }
+    .gameboy-ab button {
+      width: 40px;
+    }
+    .gameboy-speaker {
+      grid-template-columns: repeat(8, 5px);
+      gap: 5px 3px;
+    }
+    .gameboy-speaker i {
+      width: 5px;
+    }
+    .maker-art {
+      width: min(92%, 360px);
+      margin-top: 2.5rem;
+    }
+    .hero-sun {
+      top: 22%;
+      left: 30%;
+      width: 150px;
+    }
+    .hero-speech {
+      display: none;
+    }
+    .tech-float {
+      width: 48px;
+      min-height: 52px;
+      padding: 0.15rem;
+      font-size: 0.45rem;
+    }
+    .tech-float svg {
+      width: 32px;
+      height: 30px;
+    }
+    .tech-float--code {
+      top: 35%;
+      left: 3%;
+    }
+    .tech-float--react {
+      top: 37%;
+      right: 3%;
+    }
+    .tech-float--html {
+      bottom: 17%;
+      left: 4%;
+    }
+    .tech-float--css {
+      right: 4%;
+      bottom: 17%;
+    }
+    .tech-float--mongo {
+      top: 7%;
+      left: 7%;
+    }
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .contact-art {
+      min-height: 330px;
+    }
+    .contact-illustration {
+      width: min(87%, 340px);
+    }
+    .contact-thought {
+      top: 5%;
+      right: 3%;
+      width: clamp(106px, 28%, 114px);
+    }
+    .contact-thought span {
+      font-size: 0.58rem;
+    }
+    .next-up {
+      min-height: 210px;
+    }
+  }
   /* Trailing middot groups the set and wraps better than a flex gap. */
   .links li:not(:last-child)::after {
     content: "·";
