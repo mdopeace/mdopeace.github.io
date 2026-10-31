@@ -113,6 +113,7 @@
 @layer components {
   .site-shell { width: min(1120px, calc(100% - 36px)); margin-inline: auto; }
   .site-nav-inner > a:first-child { display: inline-flex; min-height: 24px; align-items: center; }
+  .site-brand { flex: 0 0 auto; min-height: 34px !important; gap: .15rem; border: 2px solid var(--ink); background: var(--accent-2); box-shadow: 2px 2px 0 var(--ink); padding: 0 .55rem; color: var(--ink-on-accent-2) !important; }
   .comic-panel { background: var(--card); border: 2px solid var(--ink); box-shadow: var(--shadow); }
   .comic-label { display: inline-flex; align-items: center; gap: .5rem; background: var(--accent); color: #201f1b; border: 2px solid var(--ink); padding: .3rem .65rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
   .section-title { font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 900; letter-spacing: -.06em; line-height: 1; text-transform: uppercase; }
@@ -134,6 +135,62 @@
   .button-secondary { background: var(--card); color: var(--ink); }
   .button-secondary:hover { color: var(--ink); }
   .hero-art { position: relative; isolation: isolate; display: grid; place-items: center; min-height: 410px; background: var(--accent); }
+  .hero-art.gameboy-stage { min-height: clamp(480px, 72vh, 640px); padding: 0; place-items: stretch; background: var(--accent); }
+  .gameboy { position: relative; z-index: 1; box-sizing: border-box; display: flex; width: 100%; height: 100%; min-height: 0; flex-direction: column; justify-content: flex-start; gap: 0; border: 0; border-radius: 0; background: var(--accent); box-shadow: none; padding: clamp(12px, 2vw, 20px) clamp(8px, 1.2vw, 14px); color: var(--ink); touch-action: manipulation; }
+  .gameboy:focus-visible { outline: 0; box-shadow: inset 0 0 0 3px var(--ink), inset 0 0 0 6px var(--card); }
+  .gameboy button:focus-visible { position: relative; z-index: 5; outline: 3px solid #fffaf0; outline-offset: 2px; box-shadow: 0 0 0 5px #25231f; }
+  .gameboy-brand { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: .5rem; padding: 0 0 .55rem; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 950; letter-spacing: .08em; }
+  .gameboy-brand > span:first-child { display: grid; width: 30px; aspect-ratio: 1; place-items: center; border: 2px solid var(--ink); border-radius: 0; background: var(--accent-2); box-shadow: 2px 2px 0 var(--ink); color: var(--ink-on-accent-2); font-size: .65rem; letter-spacing: -.08em; }
+  .gameboy-brand i { color: var(--ink); font-style: normal; }
+  .gameboy-led { width: 8px; aspect-ratio: 1; border: 1px solid var(--ink); border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-2) 28%, transparent); }
+  .gameboy-bezel { flex: 0 0 auto; border: 3px solid var(--ink); border-radius: 0; background: #34342a; padding: 8px; box-shadow: none; }
+  .gameboy-screen { position: relative; border: 2px solid #27291e; background: #d8dfb2; padding: 7px; color: #25271e; box-shadow: inset 0 0 0 1px #f3f0ca; }
+  .gameboy-screen-heading { display: flex; justify-content: space-between; padding: 0 1px 5px; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 950; letter-spacing: .08em; }
+  .tetris-screen-layout { display: flex; align-items: flex-start; justify-content: center; gap: clamp(8px, 2vw, 14px); }
+  .tetris-board { position: relative; display: grid; flex: 0 1 auto; width: auto; height: clamp(170px, 28vh, 240px); max-width: 54%; aspect-ratio: 1 / 2; grid-template-columns: repeat(10, minmax(0, 1fr)); overflow: hidden; border: 2px solid #34372a; background: #cbd3a4; }
+  .tetris-cell { min-width: 0; border: 1px solid #5d644366; background: #b9c48c; }
+  .tetris-cell--I { background: #52a8b8; box-shadow: inset 0 0 0 1px #193f43; }
+  .tetris-cell--O { background: #f5cb56; box-shadow: inset 0 0 0 1px #594817; }
+  .tetris-cell--T { background: #a675a9; box-shadow: inset 0 0 0 1px #47304b; }
+  .tetris-cell--S { background: #6d9c62; box-shadow: inset 0 0 0 1px #304a2b; }
+  .tetris-cell--Z { background: #d66c50; box-shadow: inset 0 0 0 1px #642e23; }
+  .tetris-cell--J { background: #5d7eae; box-shadow: inset 0 0 0 1px #293d5c; }
+  .tetris-cell--L { background: #e69b4f; box-shadow: inset 0 0 0 1px #67431f; }
+  .tetris-cell--ghost { opacity: .34; }
+  .tetris-hud { display: grid; width: 53px; gap: 9px; padding-top: 3px; font-family: ui-monospace, monospace; }
+  .tetris-hud > div { display: grid; gap: 1px; }
+  .tetris-hud span { font-size: 11px; font-weight: 950; letter-spacing: .06em; }
+  .tetris-hud strong { font-size: 14px; line-height: 1.1; }
+  .tetris-next { margin-top: 2px; }
+  .tetris-preview { display: grid; width: 44px; aspect-ratio: 1; grid-template-columns: repeat(4, 1fr); border: 1px solid #4f5439; margin-top: 3px; }
+  .tetris-preview i { border: 1px solid #89926955; background: #cbd3a4; }
+  .tetris-preview .tetris-cell--I, .tetris-preview .tetris-cell--O, .tetris-preview .tetris-cell--T, .tetris-preview .tetris-cell--S, .tetris-preview .tetris-cell--Z, .tetris-preview .tetris-cell--J, .tetris-preview .tetris-cell--L { border: 1px solid #34372a; }
+  .tetris-overlay { position: absolute; inset: 32px 7px 7px; display: grid; align-content: center; justify-items: center; gap: 9px; background: #d8dfb2eF; font-family: ui-monospace, monospace; text-align: center; }
+  .tetris-overlay strong { font-size: .9rem; font-weight: 950; letter-spacing: .06em; }
+  .tetris-countdown-note { font-size: .75rem; font-weight: 800; }
+  .tetris-screen-button { min-width: 104px; min-height: 36px; border: 2px solid #25271e; background: #25271e; box-shadow: 2px 2px 0 #8f9668; color: #f1f0d3; padding: .45rem .65rem; font-family: ui-monospace, monospace; font-size: .7rem; font-weight: 900; cursor: pointer; }
+  .gameboy-hinge { display: grid; flex: 0 0 24px; height: 24px; place-items: center; margin: -1px 0 0; border: 2px solid var(--ink); border-top: 0; border-radius: 0; background: color-mix(in srgb, var(--accent-2) 20%, var(--accent)); }
+  .gameboy-hinge span { font-family: ui-monospace, monospace; font-size: 11px; font-weight: 950; letter-spacing: .14em; }
+  .gameboy-controls { display: flex; flex: 1 1 auto; min-height: 126px; align-items: center; justify-content: space-between; gap: clamp(10px, 2vw, 24px); padding: 12px 10px; }
+  .gameboy-dpad { display: grid; width: 100px; height: 100px; grid-template: repeat(3, 1fr) / repeat(3, 1fr); filter: drop-shadow(2px 2px 0 color-mix(in srgb, var(--ink) 30%, transparent)); }
+  .gameboy-dpad button { display: grid; min-width: 24px; min-height: 24px; place-items: center; border: 2px solid var(--ink); background: #49473f; color: #fff8df; font-size: .75rem; font-weight: 950; cursor: pointer; }
+  .gameboy-dpad button:active, .gameboy-ab button:active, .gameboy-small-button:active { transform: translate(1px, 1px); }
+  .dpad-up { grid-area: 1 / 2; }
+  .dpad-left { grid-area: 2 / 1; }
+  .dpad-center { z-index: 1; grid-area: 2 / 2; border: 2px solid var(--ink); background: #393830; }
+  .dpad-right { grid-area: 2 / 3; }
+  .dpad-down { grid-area: 3 / 2; }
+  .gameboy-speaker { display: grid; flex: 1 1 auto; min-width: 0; grid-template-columns: repeat(8, 6px); justify-content: space-evenly; align-content: center; gap: 7px 4px; align-self: stretch; transform: none; }
+  .gameboy-speaker i { width: 6px; aspect-ratio: 1; border: 1px solid var(--ink); border-radius: 0; background: color-mix(in srgb, var(--ink) 65%, var(--accent)); }
+  .gameboy-ab { display: flex; flex: 0 0 auto; align-items: center; gap: 9px; transform: none; }
+  .gameboy-ab button { display: grid; width: 48px; aspect-ratio: 1; place-items: center; border: 2px solid var(--ink); border-radius: 0; background: var(--accent-2); box-shadow: 3px 3px 0 var(--ink); color: var(--ink-on-accent-2); cursor: pointer; }
+  .gameboy-ab button:first-child { transform: none; }
+  .gameboy-ab button b { font-family: ui-monospace, monospace; font-size: .9rem; }
+  .gameboy-utility { display: flex; justify-content: center; gap: 10px; padding-top: 2px; }
+  .gameboy-small-button { min-width: 72px; min-height: 30px; border: 2px solid var(--ink); border-radius: 0; background: var(--card); box-shadow: 2px 2px 0 var(--ink); padding: .2rem .45rem; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 950; cursor: pointer; }
+  .gameboy-instructions { display: grid; gap: 2px; margin: 10px 0 0; border-top: 1px dashed color-mix(in srgb, var(--ink) 65%, transparent); padding-top: 7px; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 950; letter-spacing: .025em; line-height: 1.4; text-align: center; }
+  .gameboy-instructions span { color: var(--ink); }
+  .gameboy button:disabled { cursor: not-allowed; opacity: .62; }
   .hero-sun { position: absolute; z-index: -1; top: 18%; left: 34%; width: 170px; aspect-ratio: 1; border: 2px solid var(--ink); border-radius: 50%; background: var(--accent-2); box-shadow: 7px 7px 0 var(--ink); opacity: .8; }
   .maker-art { position: relative; z-index: 1; width: min(100%, 410px); align-self: end; margin-top: 2.5rem; animation: maker-float 4s ease-in-out infinite; }
   .tech-floats { position: absolute; z-index: 2; inset: 0; pointer-events: none; }
@@ -209,11 +266,26 @@
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
   @media (max-width: 680px) {
     .site-shell { width: min(100% - 24px, 560px); }
-    .site-nav-inner { flex-wrap: wrap; }
+    .site-nav-inner { flex-wrap: wrap; justify-content: space-between; gap: .65rem; }
+    .site-brand { min-height: 32px !important; padding-inline: .45rem; }
     .nav-links { order: 3; width: 100%; justify-content: space-between; border-top: 1px dashed var(--ink); padding-top: .55rem; }
     .nav-links a { font-size: .66rem; }
     .theme-toggle button { padding-inline: .32rem; }
     .hero-art { min-height: 340px; }
+    .hero-art.gameboy-stage { min-height: min(470px, 56vh); }
+    .gameboy { min-height: 0; gap: 0; padding: 8px; }
+    .gameboy-brand { padding: 0 0 .25rem; }
+    .gameboy-brand > span:first-child { width: 26px; }
+    .gameboy-bezel { padding: 6px; }
+    .gameboy-hinge { flex-basis: 18px; height: 18px; }
+    .gameboy-instructions { margin-top: 4px; padding-top: 5px; font-size: 11px; }
+    .tetris-board { height: clamp(100px, 12.8vh, 108px); }
+    .tetris-hud { gap: 5px; }
+    .gameboy-controls { min-height: 96px; gap: 8px; padding: 8px 4px; }
+    .gameboy-dpad { width: 80px; height: 80px; }
+    .gameboy-ab button { width: 40px; }
+    .gameboy-speaker { grid-template-columns: repeat(8, 5px); gap: 5px 3px; }
+    .gameboy-speaker i { width: 5px; }
     .maker-art { width: min(92%, 360px); margin-top: 2.5rem; }
     .hero-sun { top: 22%; left: 30%; width: 150px; }
     .hero-speech { display: none; }

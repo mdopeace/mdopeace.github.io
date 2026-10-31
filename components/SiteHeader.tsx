@@ -12,8 +12,8 @@ export default function SiteHeader() {
   return (
     <nav className="site-nav" aria-label="Main navigation">
       <div className="site-nav-inner">
-        <a href="#top" aria-label="Md Mostafijur Rahman, home" className="font-mono text-sm font-black tracking-[-.08em] text-text no-underline">
-          Md<span className="text-amber">✳</span>
+        <a href="#top" aria-label="Md Mostafijur Rahman, home" className="site-brand font-mono text-sm font-black tracking-[-.08em] no-underline">
+          Md
         </a>
         <div className="nav-links">
           {links.map(([label, href]) => (
