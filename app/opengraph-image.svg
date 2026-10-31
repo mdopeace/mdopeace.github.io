@@ -11,7 +11,7 @@
   <rect width="1200" height="630" fill="url(#halftone)"/>
   <path d="M0 0h1200v104H0z" fill="#25231f"/>
   <path d="M0 104h1200v20H0z" fill="#f5cb56"/>
-  <text x="64" y="69" fill="#fffaf0" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="5">PERSONAL PORTFOLIO · BENGALURU</text>
+  <text x="64" y="69" fill="#fffaf0" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="27" font-weight="700" letter-spacing="3">PERSONAL PORTFOLIO · BENGALURU</text>
   <text x="1136" y="67" text-anchor="end" fill="#f5cb56" font-family="Courier New, monospace" font-size="20" font-weight="700">ISSUE 01</text>
   <rect x="58" y="165" width="684" height="354" fill="#25231f"/>
   <rect x="44" y="151" width="684" height="354" fill="#fffaf0" stroke="#25231f" stroke-width="5"/>
@@ -19,11 +19,11 @@
   <rect x="44" y="151" width="12" height="354" fill="#a13c24"/>
   <rect x="78" y="185" width="236" height="39" fill="#f5cb56" stroke="#25231f" stroke-width="3"/>
   <text x="96" y="212" fill="#25231f" font-family="Courier New, monospace" font-size="18" font-weight="700">THE MAKER</text>
-  <text x="78" y="304" fill="#25231f" font-family="Arial, Helvetica, sans-serif" font-size="61" font-weight="900" letter-spacing="-2">Md Mostafijur</text>
-  <text x="78" y="369" fill="#a13c24" font-family="Arial, Helvetica, sans-serif" font-size="71" font-weight="900" letter-spacing="-3">Rahman</text>
+  <text x="78" y="304" fill="#25231f" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="61" font-weight="900" letter-spacing="-2">Md Mostafijur</text>
+  <text x="78" y="369" fill="#a13c24" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="71" font-weight="900" letter-spacing="-3">Rahman</text>
   <path d="M80 397h390" stroke="#25231f" stroke-width="6"/>
-  <text x="80" y="438" fill="#25231f" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Software engineer at Tracxn by day.</text>
-  <text x="80" y="473" fill="#25231f" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Builder of small useful things after.</text>
+  <text x="80" y="438" fill="#25231f" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="24" font-weight="700">Software engineer at Tracxn by day.</text>
+  <text x="80" y="473" fill="#25231f" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="24" font-weight="700">Builder of small useful things after.</text>
   <g transform="translate(820 178) rotate(5)">
     <path d="M36 0h180l44 44v284l-44 44H36L0 328V44z" fill="#25231f"/>
     <path d="M38 16h176l29 29v268l-29 29H38L16 313V45z" fill="#8ec8d3" stroke="#25231f" stroke-width="5"/>
