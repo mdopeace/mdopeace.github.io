@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="halftone" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.3" fill="#25231f" opacity=".18"/>
+    </pattern>
+    <pattern id="stripes" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
+      <rect width="7" height="18" fill="#f5cb56" opacity=".65"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#f5efdf"/>
+  <rect width="1200" height="630" fill="url(#halftone)"/>
+  <path d="M0 0h1200v104H0z" fill="#25231f"/>
+  <path d="M0 104h1200v20H0z" fill="#f5cb56"/>
+  <text x="44" y="69" fill="#fffaf0" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="27" font-weight="700" letter-spacing="3">PERSONAL PORTFOLIO · BENGALURU</text>
+  <text x="1156" y="67" text-anchor="end" fill="#f5cb56" font-family="Courier New, monospace" font-size="20" font-weight="700">ISSUE 01</text>
+  <rect x="58" y="165" width="684" height="354" fill="#25231f"/>
+  <rect x="44" y="151" width="684" height="354" fill="#fffaf0" stroke="#25231f" stroke-width="5"/>
+  <rect x="44" y="151" width="684" height="354" fill="url(#halftone)" opacity=".35"/>
+  <rect x="44" y="151" width="12" height="354" fill="#a13c24"/>
+  <rect x="78" y="185" width="136" height="39" fill="#f5cb56" stroke="#25231f" stroke-width="3"/>
+  <text x="96" y="212" fill="#25231f" font-family="Courier New, monospace" font-size="18" font-weight="700">THE MAKER</text>
+  <text x="78" y="304" fill="#25231f" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="61" font-weight="900" letter-spacing="-2">Md Mostafijur</text>
+  <text x="78" y="369" fill="#a13c24" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="71" font-weight="900" letter-spacing="-3">Rahman</text>
+  <path d="M80 397h390" stroke="#25231f" stroke-width="6"/>
+  <text x="80" y="438" fill="#25231f" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="24" font-weight="700">Software engineer at Tracxn by day.</text>
+  <text x="80" y="473" fill="#25231f" font-family="-apple-system, BlinkMacSystemFont, &quot;SF Pro Text&quot;, &quot;Helvetica Neue&quot;, sans-serif" font-size="24" font-weight="700">Builder of small useful things after.</text>
+  <g transform="translate(848 178) rotate(5)">
+    <path d="M36 0h180l44 44v284l-44 44H36L0 328V44z" fill="#25231f"/>
+    <path d="M38 16h176l29 29v268l-29 29H38L16 313V45z" fill="#8ec8d3" stroke="#25231f" stroke-width="5"/>
+    <rect x="39" y="45" width="174" height="142" rx="6" fill="#25231f"/>
+    <rect x="52" y="58" width="148" height="116" fill="#f5cb56"/>
+    <path d="M84 142h24v-24h24V94h24v24h24v24h-24v24h-24v-24h-24v24H84z" fill="#a13c24"/>
+    <rect x="58" y="210" width="45" height="45" fill="#25231f"/>
+    <path d="M80 220v25M68 232h25" stroke="#f5efdf" stroke-width="8"/>
+    <circle cx="166" cy="228" r="17" fill="#a13c24" stroke="#25231f" stroke-width="4"/>
+    <circle cx="208" cy="249" r="17" fill="#a13c24" stroke="#25231f" stroke-width="4"/>
+    <rect x="119" y="277" width="57" height="10" rx="5" fill="#25231f"/>
+  </g>
+  <path d="M792 481l290-48 25 25-290 48z" fill="#f5cb56" stroke="#25231f" stroke-width="5"/>
+  <text x="1156" y="598" text-anchor="end" fill="#25231f" font-family="Courier New, monospace" font-size="18" font-weight="700">mdopeace.github.io</text>
+</svg>
