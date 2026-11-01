@@ -41,6 +41,8 @@
     --accent: #f5cb56;
     --accent-2: #f08b6b;
     --blue: #79b9c5;
+    --ink-on-accent: #201f1b;
+    --ink-on-blue: #201f1b;
     --ink-on-accent-2: #1b1b1b;
     --color-done: #a8d5a2;
     --shadow: 5px 5px 0 #080808;
@@ -608,7 +610,7 @@
     width: 40%;
     background: linear-gradient(90deg, transparent, #ffffffa8, transparent);
     content: "";
-    transform: skewX(-20deg);
+    transform: skewX(-45deg);
     animation: tetris-start-shine 4.8s ease-in-out infinite;
     pointer-events: none;
   }
@@ -923,6 +925,141 @@
     transform: translate(2px, 2px);
     box-shadow: 1px 1px 0 var(--ink);
   }
+  .support-trigger {
+    min-height: 48px;
+    cursor: pointer;
+  }
+  .support-heart {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    color: var(--accent-2);
+  }
+  .support-dialog {
+    position: fixed;
+    inset: 0;
+    width: min(620px, calc(100% - 24px));
+    max-height: calc(100vh - 24px);
+    margin: auto;
+    overflow: auto;
+    border: 3px solid var(--ink);
+    border-radius: 0;
+    background: var(--card);
+    box-shadow: 8px 8px 0 var(--ink);
+    padding: 0;
+    color: var(--ink);
+  }
+  .support-dialog::backdrop {
+    background: color-mix(in srgb, var(--ink) 58%, transparent);
+    backdrop-filter: blur(2px);
+  }
+  .support-dialog-inner {
+    padding: clamp(1rem, 4vw, 1.75rem);
+  }
+  .support-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .support-dialog-label {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid var(--ink);
+    background: var(--accent);
+    padding: 0.3rem 0.65rem;
+    color: #201f1b;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+  .support-dialog-close {
+    display: grid;
+    width: 38px;
+    aspect-ratio: 1;
+    flex: none;
+    place-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .support-dialog-close:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .support-dialog-close svg {
+    width: 16px;
+    height: 16px;
+  }
+  .support-dialog-title {
+    margin-top: 1.25rem;
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    font-weight: 950;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+  .support-dialog-description {
+    max-width: 480px;
+    margin-top: 0.85rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+  .support-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+  }
+  .support-option {
+    display: grid;
+    min-height: 112px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 1rem;
+    text-decoration: none;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .support-option-github {
+    background: var(--accent);
+    color: var(--ink-on-accent);
+  }
+  .support-option-coffee {
+    background: var(--blue);
+    color: var(--ink-on-blue);
+  }
+  .support-option:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .support-option-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .support-option strong,
+  .support-option small {
+    display: block;
+  }
+  .support-option strong {
+    font-size: 0.9rem;
+    line-height: 1.15;
+  }
+  .support-option small {
+    margin-top: 0.35rem;
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
   .contact-social-block {
     margin-top: 2rem;
   }
@@ -968,6 +1105,7 @@
     justify-content: center;
     font-family: var(--font-sans);
     font-size: 0.76rem;
+    font-weight: 900;
     letter-spacing: normal;
     line-height: 1;
   }
@@ -1502,6 +1640,16 @@
     }
     .next-up {
       min-height: 210px;
+    }
+    .support-dialog {
+      max-height: calc(100vh - 16px);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .support-options {
+      grid-template-columns: 1fr;
+    }
+    .support-option {
+      min-height: 92px;
     }
   }
   /* Trailing middot groups the set and wraps better than a flex gap. */

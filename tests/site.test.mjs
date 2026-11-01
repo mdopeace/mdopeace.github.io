@@ -60,3 +60,17 @@ test("page ships its accessibility and identity hooks", () => {
     "local SVG favicon missing",
   );
 });
+
+test("support dialog ships both provider links and dialog hooks", () => {
+  assert.ok(html.includes('aria-haspopup="dialog"'));
+  assert.ok(html.includes("support-dialog"));
+  assert.ok(html.includes('aria-labelledby="support-dialog-title"'));
+  assert.ok(
+    html.includes("https://github.com/sponsors/mdopeace"),
+    "GitHub Sponsors link missing",
+  );
+  assert.ok(
+    html.includes("https://buymeacoffee.com/mdopeace"),
+    "Buy Me a Coffee link missing",
+  );
+});
