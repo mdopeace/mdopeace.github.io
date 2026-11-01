@@ -69,12 +69,9 @@ export default function Contact() {
           </div>
         </div>
 
-        <div
-          className="contact-art comic-panel"
-          aria-label="A little signal desk, ready for your message"
-        >
+        <div className="contact-art comic-panel">
           <span className="contact-stamp">SIGNAL READY</span>
-          <div className="contact-thought" aria-label="What are you building?">
+          <div className="contact-thought">
             <Image
               className="contact-thought-image"
               src="/contact-thought-bubble.png"
