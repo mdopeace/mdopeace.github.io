@@ -1,5 +1,6 @@
 import CopyEmailButton from "../CopyEmailButton";
 import Section from "../Section";
+import SupportDialog from "../SupportDialog";
 import Image from "next/image";
 import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 
@@ -41,6 +42,7 @@ export default function Contact() {
               </span>
             </a>
             <CopyEmailButton email={email} />
+            <SupportDialog />
           </div>
           <div className="contact-social-block">
             <p className="contact-social-label">Find me elsewhere</p>
