@@ -123,7 +123,8 @@
     transform: translateY(0);
   }
   main:focus {
-    outline: none;
+    outline: 3px solid var(--accent-2);
+    outline-offset: 4px;
   }
   /* UA ring is 2.98:1 on bg — under WCAG 2.2's 3:1. */
   :focus-visible {
@@ -715,7 +716,10 @@
   .gameboy-ab {
     display: flex;
     flex: 0 0 auto;
+    max-width: 105px;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 9px;
     transform: none;
   }
@@ -730,6 +734,15 @@
     box-shadow: 3px 3px 0 var(--ink);
     color: var(--ink-on-accent-2);
     cursor: pointer;
+  }
+  .gameboy-ab .gameboy-hold-button {
+    width: 100%;
+    min-height: 26px;
+    aspect-ratio: auto;
+    padding: 0.15rem 0.35rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.62rem;
+    font-weight: 950;
   }
   .gameboy-ab button:first-child {
     transform: none;
@@ -1567,6 +1580,9 @@
     .gameboy-dpad {
       width: 80px;
       height: 80px;
+    }
+    .gameboy-ab {
+      max-width: 89px;
     }
     .gameboy-ab button {
       width: 40px;

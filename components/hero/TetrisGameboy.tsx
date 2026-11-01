@@ -121,8 +121,20 @@ export default function TetrisGameboy() {
       ),
       engine.on("lineClear", (clear) =>
         setAnnouncement(
-          `${clear.lines} line${clear.lines === 1 ? "" : "s"} cleared. ${clear.points} points earned.`,
+          `${clear.lines} line${clear.lines === 1 ? "" : "s"} cleared. ${clear.points} points earned. Score ${engine.getSnapshot().score}, ${engine.getSnapshot().lines} lines, level ${engine.getSnapshot().level}.`,
         ),
+      ),
+      engine.on("pieceLock", () => {
+        const state = engine.getSnapshot();
+        setAnnouncement(
+          `Piece placed. Score ${state.score}, ${state.lines} lines, level ${state.level}.`,
+        );
+      }),
+      engine.on("levelUp", ({ level }) =>
+        setAnnouncement(`Level ${level}. Score ${engine.getSnapshot().score}.`),
+      ),
+      engine.on("hold", ({ current }) =>
+        setAnnouncement(`Piece held. ${current} piece is in the hold slot.`),
       ),
     ];
     return () => unsubscribe.forEach((stop) => stop());
@@ -458,6 +470,15 @@ export default function TetrisGameboy() {
             onClick={() => engine.rotate("cw")}
           >
             <b>A</b>
+          </button>
+          <button
+            type="button"
+            className="gameboy-hold-button"
+            aria-label="Hold piece"
+            disabled={!stateActive}
+            onClick={() => engine.hold()}
+          >
+            HOLD
           </button>
         </div>
       </div>
