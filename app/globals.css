@@ -122,7 +122,7 @@
   .skip-link:focus {
     transform: translateY(0);
   }
-  main:focus {
+  main:focus-visible {
     outline: 3px solid var(--accent-2);
     outline-offset: 4px;
   }
