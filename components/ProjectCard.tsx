@@ -19,7 +19,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           className="block h-auto w-auto max-h-90"
         />
       </div>
-      <div className="min-w-0 py-1">
+      <div className="min-w-0 py-1 md:self-center">
         <div className="project-title-row">
           <Image
             src={project.logo}
