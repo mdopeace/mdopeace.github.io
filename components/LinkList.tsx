@@ -1,13 +1,12 @@
 import type { ProjectLink } from "@/data/projects";
 import type { IconType } from "react-icons";
-import { FaGithub, FaGlobe, FaPuzzlePiece, FaTag } from "react-icons/fa6";
-
+import { FaChrome, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
 const projectLinkIcons: Record<string, IconType> = {
   Source: FaGithub,
   Releases: FaTag,
   "Live page": FaGlobe,
   "Homebrew tap": FaGithub,
-  "Chrome Web Store": FaPuzzlePiece,
+  "Chrome Web Store": FaChrome,
 };
 
 export default function LinkList({
