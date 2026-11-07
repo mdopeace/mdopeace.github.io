@@ -49,7 +49,7 @@ export const projects: Project[] = [
     shot: "https://raw.githubusercontent.com/vidp-org/vidp/main/docs/screenshots/paused.png",
     shotAlt:
       "Vidp — a keyboard-driven video player for the film you already downloaded.",
-    pills: ["macOS 13+", "Apple Silicon"],
+    pills: ["macOS 26+", "Apple Silicon"],
     tagline:
       "A keyboard-driven video player built on libmpv — for the film you already downloaded.",
     paragraphs: [
