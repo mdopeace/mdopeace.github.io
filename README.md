@@ -7,7 +7,7 @@ The visual direction is retro, comic-inspired, and deliberately playful. The pag
 ## What’s on the page
 
 - **How I think** — the problems and motivations behind my work.
-- **Selected work** — QuickTodo and Vidp, with project context, build commands, and links.
+- **Selected work** — QuickTodo, Vidp and Cookieater, with project context, build commands, and links.
 - **Experience & toolkit** — my role at Tracxn and technologies I work with.
 - **What’s cooking** — current work and ideas in progress.
 - **Get in touch** — email and social links.
