@@ -45,10 +45,10 @@ export const projects: Project[] = [
   },
   {
     name: "Vidp",
-    logo: "https://raw.githubusercontent.com/vidp-labs/vidp/main/docs/icon.png",
-    shot: "https://raw.githubusercontent.com/vidp-labs/vidp/main/docs/screenshots/paused.png",
+    logo: "https://vidp-labs.github.io/icon.png",
+    shot: "https://vidp-labs.github.io/screenshots/paused.png",
     shotAlt:
-      "Vidp — a keyboard-driven video player for the film you already downloaded.",
+      "Vidp paused on a lunar scene, with playback controls, the video title, and timeline visible.",
     pills: ["macOS 26+", "Apple Silicon"],
     tagline:
       "A keyboard-driven video player built on libmpv — for the film you already downloaded.",
@@ -61,7 +61,7 @@ export const projects: Project[] = [
     links: [
       { label: "Source", href: "https://github.com/vidp-labs/vidp" },
       { label: "Releases", href: "https://github.com/vidp-labs/vidp/releases" },
-      { label: "Live page", href: "https://vidp-labs.github.io/vidp/" },
+      { label: "Live page", href: "https://vidp-labs.github.io/" },
       { label: "Homebrew tap", href: "https://github.com/vidp-labs/homebrew-vidp" },
     ],
   },
