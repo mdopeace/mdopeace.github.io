@@ -22,7 +22,7 @@ export default function Now() {
               first release.
             </p>
             <a
-              href="https://github.com/vidp-org/vidp"
+              href="https://github.com/vidp-labs/vidp"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-flex min-h-6 items-center gap-1 font-mono text-xs font-black uppercase tracking-[.08em] text-text no-underline"
