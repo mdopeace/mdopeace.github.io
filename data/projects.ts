@@ -45,8 +45,8 @@ export const projects: Project[] = [
   },
   {
     name: "Vidp",
-    logo: "https://vidp-labs.github.io/icon.png",
-    shot: "https://vidp-labs.github.io/screenshots/paused.png",
+    logo: "https://vidplabs.github.io/icon.png",
+    shot: "https://vidplabs.github.io/screenshots/paused.png",
     shotAlt:
       "Vidp paused on a lunar scene, with playback controls, the video title, and timeline visible.",
     pills: ["macOS 26+", "Apple Silicon"],
@@ -57,12 +57,12 @@ export const projects: Project[] = [
       "It ships its own libmpv and FFmpeg, hands off to the macOS now-playing controls, updates itself from the GitHub API, and uninstalls without leaving anything behind. Releases are arm64, so an Intel machine has to build it from source.",
       "I use it every day. It isn't finished — and the features it's still missing are the ones QuickTodo already has.",
     ],
-    commands: ["brew tap vidp-labs/vidp", "brew install --cask vidp"],
+    commands: ["brew tap vidplabs/vidp", "brew install --cask vidp"],
     links: [
-      { label: "Source", href: "https://github.com/vidp-labs/vidp" },
-      { label: "Releases", href: "https://github.com/vidp-labs/vidp/releases" },
-      { label: "Live page", href: "https://vidp-labs.github.io/" },
-      { label: "Homebrew tap", href: "https://github.com/vidp-labs/homebrew-vidp" },
+      { label: "Source", href: "https://github.com/vidplabs/vidp" },
+      { label: "Releases", href: "https://github.com/vidplabs/vidp/releases" },
+      { label: "Live page", href: "https://vidplabs.github.io/" },
+      { label: "Homebrew tap", href: "https://github.com/vidplabs/homebrew-vidp" },
     ],
   },
   {
