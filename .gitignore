@@ -15,3 +15,7 @@ npm-debug.log*
 
 # os
 .DS_Store
+
+# browser verification
+/test-results/
+/playwright-report/

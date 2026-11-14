@@ -1,4 +1,8 @@
-export type ProjectLink = { label: string; href: string };
+export type ProjectLink = {
+  label: string;
+  href: string;
+  icon: "github" | "tag" | "globe" | "chrome";
+};
 
 export type Project = {
   name: string;
@@ -26,19 +30,26 @@ export const projects: Project[] = [
       "Standup hands you five things. You go deep on one, and the other four evaporate before you can touch them. So they land here instead — where they can't be lost, which leaves your attention on the work in front of you, and shows you what you actually finished by the end of the day. Day-grouped, repeats daily or weekly, rename in place, drag to reorder.",
       "It also keeps itself current: verifies the download's SHA-256, then replaces the running bundle in place. 65KB of tests, including the installer and the relaunch after it.",
     ],
-    commands: [
-      "brew tap mdopeace/quicktodo",
-      "brew install --cask quicktodo",
-    ],
+    commands: ["brew tap mdopeace/quicktodo", "brew install --cask quicktodo"],
     links: [
-      { label: "Source", href: "https://github.com/mdopeace/quicktodo" },
+      {
+        label: "Source",
+        icon: "github",
+        href: "https://github.com/mdopeace/quicktodo",
+      },
       {
         label: "Releases",
+        icon: "tag",
         href: "https://github.com/mdopeace/quicktodo/releases",
       },
-      { label: "Live page", href: "https://mdopeace.github.io/quicktodo/" },
+      {
+        label: "Live page",
+        icon: "globe",
+        href: "https://mdopeace.github.io/quicktodo/",
+      },
       {
         label: "Homebrew tap",
+        icon: "github",
         href: "https://github.com/mdopeace/homebrew-quicktodo",
       },
     ],
@@ -59,10 +70,26 @@ export const projects: Project[] = [
     ],
     commands: ["brew tap vidplabs/vidp", "brew install --cask vidp"],
     links: [
-      { label: "Source", href: "https://github.com/vidplabs/vidp" },
-      { label: "Releases", href: "https://github.com/vidplabs/vidp/releases" },
-      { label: "Live page", href: "https://vidplabs.github.io/" },
-      { label: "Homebrew tap", href: "https://github.com/vidplabs/homebrew-vidp" },
+      {
+        label: "Source",
+        icon: "github",
+        href: "https://github.com/vidplabs/vidp",
+      },
+      {
+        label: "Releases",
+        icon: "tag",
+        href: "https://github.com/vidplabs/vidp/releases",
+      },
+      {
+        label: "Live page",
+        icon: "globe",
+        href: "https://vidplabs.github.io/",
+      },
+      {
+        label: "Homebrew tap",
+        icon: "github",
+        href: "https://github.com/vidplabs/homebrew-vidp",
+      },
     ],
   },
   {
@@ -81,10 +108,19 @@ export const projects: Project[] = [
     ],
     commands: [],
     links: [
-      { label: "Source", href: "https://github.com/mdopeace/cookieater" },
-      { label: "Live page", href: "https://mdopeace.github.io/cookieater/" },
+      {
+        label: "Source",
+        icon: "github",
+        href: "https://github.com/mdopeace/cookieater",
+      },
+      {
+        label: "Live page",
+        icon: "globe",
+        href: "https://mdopeace.github.io/cookieater/",
+      },
       {
         label: "Chrome Web Store",
+        icon: "chrome",
         href: "https://chromewebstore.google.com/detail/cookieater/eokikmfhgicnmkhldphchbligfgjbkbi",
       },
     ],

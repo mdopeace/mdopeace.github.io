@@ -1,0 +1,178 @@
+"use client";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  type ComponentPropsWithRef,
+  type ReactNode,
+} from "react";
+import { FaXmark } from "react-icons/fa6";
+import { useControllable } from "@/hooks/useControllable";
+import { Button } from "./Button";
+import { Stack } from "./Layout";
+import { Heading, Text } from "./Typography";
+import { cx, type Size } from "./tokens";
+import styles from "./ui.module.css";
+
+type State =
+  | { open: boolean; defaultOpen?: never }
+  | { open?: never; defaultOpen?: boolean };
+export type DialogProps = Omit<
+  ComponentPropsWithRef<"dialog">,
+  "open" | "title" | "aria-labelledby" | "aria-describedby"
+> &
+  State & {
+    title: string;
+    description?: ReactNode;
+    closeLabel: string;
+    size?: Size;
+    onOpenChange?: (open: boolean) => void;
+  };
+let locks = 0;
+let previousOverflow = "";
+function lockScroll() {
+  if (locks++ === 0) {
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+  }
+  return () => {
+    if (--locks === 0) document.body.style.overflow = previousOverflow;
+  };
+}
+export function Dialog({
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  title,
+  description,
+  closeLabel,
+  size = "sm",
+  children,
+  className,
+  ref,
+  onCancel,
+  onClose,
+  onClick,
+  onPointerDown,
+  onKeyDown,
+  ...props
+}: DialogProps) {
+  const [isOpen, setOpen] = useControllable(open, defaultOpen, onOpenChange);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const backdropDown = useRef(false);
+  const restore = useRef<(() => void) | null>(null);
+  const titleId = useId();
+  const descriptionId = useId();
+  const finishClose = useCallback(() => {
+    dialog.current?.close();
+    restore.current?.();
+    restore.current = null;
+  }, []);
+  useEffect(() => {
+    const element = dialog.current;
+    if (!element) return;
+    if (isOpen) {
+      delete element.dataset.closing;
+      if (!element.open) {
+        const trigger =
+          document.activeElement instanceof HTMLElement
+            ? document.activeElement
+            : null;
+        element.showModal();
+        const unlock = lockScroll();
+        restore.current = () => {
+          unlock();
+          if (trigger?.isConnected) trigger.focus();
+        };
+      }
+      return;
+    }
+    if (!element.open) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finishClose();
+      return;
+    }
+    element.dataset.closing = "true";
+    const timer = setTimeout(finishClose, 180);
+    return () => clearTimeout(timer);
+  }, [isOpen, finishClose]);
+  useEffect(
+    () => () => {
+      finishClose();
+    },
+    [finishClose],
+  );
+  const requestClose = () => setOpen(false);
+  return (
+    <dialog
+      {...props}
+      ref={(element) => {
+        dialog.current = element;
+        if (typeof ref === "function") return ref(element);
+        if (ref) ref.current = element;
+      }}
+      data-size={size}
+      className={cx(styles.dialog, className)}
+      aria-labelledby={titleId}
+      aria-describedby={description ? descriptionId : undefined}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        if (!event.defaultPrevented && event.key === "Escape") {
+          event.preventDefault();
+          event.stopPropagation();
+          requestClose();
+        }
+      }}
+      onCancel={(event) => {
+        onCancel?.(event);
+        if (!event.defaultPrevented) {
+          event.preventDefault();
+          requestClose();
+        }
+      }}
+      onClose={(event) => {
+        onClose?.(event);
+        if (isOpen && !dialog.current?.open) setOpen(false);
+      }}
+      onPointerDown={(event) => {
+        onPointerDown?.(event);
+        backdropDown.current = event.target === event.currentTarget;
+      }}
+      onClick={(event) => {
+        onClick?.(event);
+        if (
+          !event.defaultPrevented &&
+          backdropDown.current &&
+          event.target === event.currentTarget
+        )
+          requestClose();
+        backdropDown.current = false;
+      }}
+    >
+      <div className={styles.dialogInner}>
+        <Button
+          className={styles.dialogClose}
+          variant="ghost"
+          iconOnly
+          aria-label={closeLabel}
+          onClick={requestClose}
+          startIcon={<FaXmark />}
+        />
+        <Stack gap={6}>
+          <Stack gap={3}>
+            <Heading level={2} size="dialog" id={titleId}>
+              {title}
+            </Heading>
+            {description && (
+              <Text id={descriptionId} tone="muted">
+                {description}
+              </Text>
+            )}
+          </Stack>
+          {children}
+        </Stack>
+      </div>
+    </dialog>
+  );
+}

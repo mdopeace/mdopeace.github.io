@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { Section } from "../ui/Section";
+import { Inline } from "../ui/Layout";
+import { Heading } from "../ui/Typography";
+import { Badge } from "../ui/Badge";
+import { Divider } from "../ui/Divider";
 
-export default function Section({
+export default function PortfolioSection({
   label,
   id,
   index,
@@ -42,19 +47,26 @@ export default function Section({
   }, [id]);
 
   return (
-    <section
+    <Section
       ref={sectionRef}
       id={id}
-      className="portfolio-section py-16 sm:py-20"
+      title={label}
+      className="portfolio-section"
+      heading={
+        <Inline gap={4} wrap={false}>
+          <Badge variant="solid" tone="emphasis" decoration="index" aria-hidden="true">
+            {index}
+          </Badge>
+          <Heading level={2} size="section">
+            {label}
+          </Heading>
+          <div className="section-rule">
+            <Divider />
+          </div>
+        </Inline>
+      }
     >
-      <div className="mb-8 flex items-center gap-4">
-        <span className="section-index" aria-hidden="true">
-          {index}
-        </span>
-        <h2 className="section-title">{label}</h2>
-        <span className="h-0.5 flex-1 bg-line" />
-      </div>
       {children}
-    </section>
+    </Section>
   );
 }

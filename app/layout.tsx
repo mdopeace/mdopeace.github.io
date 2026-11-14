@@ -37,11 +37,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" data-theme="system" suppressHydrationWarning>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('portfolio-theme');var theme=t==='light'||t==='dark'?t:'system';document.documentElement.dataset.theme=theme;var dark=theme==='dark'||(theme==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?'#1b1b1b':'#f5efdf'}catch(e){document.documentElement.dataset.theme='system'}`,
+            __html: `(function(){var t;try{t=localStorage.getItem('portfolio-theme')}catch(e){}var theme=t==='light'||t==='dark'?t:window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=theme;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=theme==='dark'?'#1b1b1b':'#f5efdf'})()`,
           }}
         />
         {children}

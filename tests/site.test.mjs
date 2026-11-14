@@ -63,8 +63,10 @@ test("page ships its accessibility and identity hooks", () => {
 
 test("support dialog ships both provider links and dialog hooks", () => {
   assert.ok(html.includes('aria-haspopup="dialog"'));
-  assert.ok(html.includes("support-dialog"));
-  assert.ok(html.includes('aria-labelledby="support-dialog-title"'));
+  assert.match(html, /<dialog\b[^>]*aria-labelledby="[^"]+"/);
+  assert.ok(html.includes("Fuel the next build"));
+  assert.ok(html.includes('role="switch"'));
+  assert.ok(!html.includes(">AUTO<"));
   assert.ok(
     html.includes("https://github.com/sponsors/mdopeace"),
     "GitHub Sponsors link missing",

@@ -1,5 +1,7 @@
 "use client";
 
+import { FaCaretUp, FaCaretLeft, FaCaretRight, FaCaretDown } from "react-icons/fa6";
+
 import {
   useCallback,
   useEffect,
@@ -418,7 +420,7 @@ export default function TetrisGameboy() {
             disabled={!stateActive}
             onClick={() => engine.rotate("cw")}
           >
-            ▲
+            <FaCaretUp aria-hidden="true" focusable="false" />
           </button>
           <button
             type="button"
@@ -427,7 +429,7 @@ export default function TetrisGameboy() {
             disabled={!stateActive}
             onClick={() => activateDirectionalButton("left")}
           >
-            ◀
+            <FaCaretLeft aria-hidden="true" focusable="false" />
           </button>
           <span className="dpad-center" aria-hidden="true" />
           <button
@@ -437,7 +439,7 @@ export default function TetrisGameboy() {
             disabled={!stateActive}
             onClick={() => activateDirectionalButton("right")}
           >
-            ▶
+            <FaCaretRight aria-hidden="true" focusable="false" />
           </button>
           <button
             type="button"
@@ -446,7 +448,7 @@ export default function TetrisGameboy() {
             disabled={!stateActive}
             onClick={() => activateDirectionalButton("down")}
           >
-            ▼
+            <FaCaretDown aria-hidden="true" focusable="false" />
           </button>
         </div>
         <div className="gameboy-speaker" aria-hidden="true">

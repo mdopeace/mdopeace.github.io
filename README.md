@@ -2,7 +2,7 @@
 
 Personal portfolio for [mdopeace.github.io](https://mdopeace.github.io/). It brings together who I am, how I approach problems, my experience, and the projects I have built or am working on.
 
-The visual direction is retro, comic-inspired, and deliberately playful. The page includes a playable Pocket Tetris Gameboy in the hero, a custom mascot illustration, and light, dark, and system color themes.
+The visual direction is retro, comic-inspired, and deliberately playful. The page includes a playable Pocket Tetris Gameboy in the hero, a custom mascot illustration, and a light/dark theme switch. The operating-system preference is used only for the initial choice when no explicit preference is saved.
 
 ## What’s on the page
 
@@ -56,6 +56,12 @@ GitHub Actions builds and tests the static export, then deploys `out/` to GitHub
 
 ## Where to edit content
 
+The building blocks, design tokens, component APIs, and migration order are documented in the [component library specification](docs/component-library-plan.md). See the [usage guide](docs/component-library-usage.md) for examples.
+
+Run `npm run dev` and open [the local component showcase](http://localhost:3000/components-preview) to inspect component variants, themes and interactions. The showcase is excluded from production exports. Run `npm run test:ui` for component behavior tests.
+
+- `components/ui/` contains generic components; `components/portfolio/` contains business compositions.
+- `styles/tokens.css` contains shared design values.
 - `components/sections/` contains the portfolio sections.
 - `data/projects.ts` contains project descriptions, install commands, and links.
 - `components/hero/TetrisGameboy.tsx` contains the game UI and input handling.

@@ -1,75 +1,76 @@
-import CopyEmailButton from "../CopyEmailButton";
-import Section from "../Section";
-import SupportDialog from "../SupportDialog";
+import Section from "../portfolio/PortfolioSection";
+import { EmailAction } from "../portfolio/EmailAction";
+import SupportDialog from "../portfolio/SupportDialog";
+import { Badge } from "../ui/Badge";
+import { Surface } from "../ui/Surface";
+import { Heading, Text } from "../ui/Typography";
+import { Inline, Stack } from "../ui/Layout";
+import { Link } from "../ui/Link";
+import { LinkGroup } from "../ui/LinkGroup";
 import Image from "next/image";
 import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
-
 const email = "md.correo.e@gmail.com";
-
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com/mdopeace", icon: FaGithub },
+  {
+    label: "GitHub",
+    href: "https://github.com/mdopeace",
+    startIcon: <FaGithub />,
+  },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/mdopeace",
-    icon: FaLinkedinIn,
+    startIcon: <FaLinkedinIn />,
   },
-  { label: "WhatsApp", href: "https://wa.me/mdopeace", icon: FaWhatsapp },
+  {
+    label: "WhatsApp",
+    href: "https://wa.me/mdopeace",
+    startIcon: <FaWhatsapp />,
+  },
 ];
-
 export default function Contact() {
   return (
     <Section label="Get in touch" id="contact" index="05">
       <div className="contact-grid">
-        <div className="contact-copy">
-          <span className="comic-label">CH 05 · OPEN CHANNEL</span>
-          <h3 className="contact-headline">
+        <Stack gap={5}>
+          <Badge variant="solid" tone="accent" size="md">
+            CH 05 · OPEN CHANNEL
+          </Badge>
+          <Heading level={3} size="statement">
             Got an idea that won’t leave you alone?
-          </h3>
-          <p className="contact-description">
+          </Heading>
+          <Text tone="muted">
             If you’re building something useful, stuck on a tricky problem, or
             just want to talk about the work, send a signal. I’d love to hear
             what you’re thinking about.
-          </p>
-
-          <div className="contact-actions">
-            <a
-              className="button-comic contact-email-button"
+          </Text>
+          <Inline gap={3} align="start">
+            <Link
+              variant="primary"
+              size="lg"
               href={`mailto:${email}`}
+              externalIndicator
             >
-              Start a conversation{" "}
-              <span className="external-arrow" aria-hidden="true">
-                ↗
-              </span>
-            </a>
-            <CopyEmailButton email={email} />
+              Start a conversation
+            </Link>
+            <EmailAction email={email} />
             <SupportDialog />
-          </div>
-          <div className="contact-social-block">
-            <p className="contact-social-label">Find me elsewhere</p>
-            <div className="contact-socials">
-              {socialLinks.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon
-                    className="social-icon"
-                    aria-hidden="true"
-                    focusable="false"
-                  />
-                  <span>{label}</span>
-                  <span className="external-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="contact-art comic-panel">
+          </Inline>
+          <Stack gap={3}>
+            <Text variant="eyebrow">
+              Find me elsewhere
+            </Text>
+            <LinkGroup
+              items={socialLinks.map((link) => ({
+                ...link,
+                target: "_blank",
+                externalIndicator: true,
+                variant: "secondary",
+                size: "sm",
+              }))}
+            />
+          </Stack>
+        </Stack>
+        <Surface tone="info" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
           <span className="contact-stamp">SIGNAL READY</span>
           <div className="contact-thought">
             <Image
@@ -124,7 +125,7 @@ export default function Contact() {
             </svg>
           </div>
           <span className="contact-art-caption">Your turn · send a signal</span>
-        </div>
+        </Surface>
       </div>
     </Section>
   );
