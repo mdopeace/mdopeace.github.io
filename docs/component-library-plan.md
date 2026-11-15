@@ -267,7 +267,7 @@ Planning is complete when token scales, initial APIs, ownership rules and implem
 
 ## 9. Implementation notes
 
-- The local showcase is available at `/components-preview` during `npm run dev`. Its `page.dev.tsx` extension is enabled only for development; production builds omit the route.
+- The interactive component library is public at `/playground/` and included in the static export. `/components-preview` remains a development-only alias for earlier review links.
 - Shared visual recipes live in the UI CSS Module; tokens live in `styles/tokens.css`. The Tailwind Turbopack loader applies only to `globals.css`, preserving native CSS Module class exports.
 - Responsive layout props reset unused breakpoint variables locally so nested components cannot inherit an ancestor's responsive overrides accidentally.
 - Dialog exit animation retains native modality and scroll locking until the visual exit completes. Reopening interrupts that exit. Native cancellation and an Escape-key handler both request controlled state changes.

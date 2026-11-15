@@ -58,7 +58,7 @@ GitHub Actions builds and tests the static export, then deploys `out/` to GitHub
 
 The building blocks, design tokens, component APIs, and migration order are documented in the [component library specification](docs/component-library-plan.md). See the [usage guide](docs/component-library-usage.md) for examples.
 
-Run `npm run dev` and open [the local component showcase](http://localhost:3000/components-preview) to inspect component variants, themes and interactions. The showcase is excluded from production exports. Run `npm run test:ui` for component behavior tests.
+Run `npm run dev` and open [the component playground](http://localhost:3000/playground/) to inspect component variants, themes and interactions. The playground is included in production exports and linked from the portfolio. The old `/components-preview` address remains a development-only alias. Run `npm run test:ui` for component behavior tests.
 
 - `components/ui/` contains generic components; `components/portfolio/` contains business compositions.
 - `styles/tokens.css` contains shared design values.

@@ -97,7 +97,7 @@ Dialog uses the browser's native modal behavior and accepts a dialog ref. Put it
 
 ## Local validation
 
-Run `npm run dev` and open `/components-preview` for the development-only showcase. The production build must not contain that route.
+Open `/playground/` for the public interactive component library. It is included in the static export for GitHub Pages; `/components-preview` remains a development-only compatibility route.
 
 Run `npm run test:ui`, `npm run lint`, `npm run build`, then `npm test`. The last command checks the exported page and external destinations and needs network access. Unit tests cover clipboard errors/concurrency/cleanup, native control attributes and refs, Switch behavior, dialog dismissal/focus/scroll restoration and theme persistence. Browser review must additionally cover responsive layouts, contrast, motion, keyboard operation and real overflow measurement; automated checks do not establish full WCAG conformance.
 
@@ -159,7 +159,7 @@ Game Boy overlays fade visibility without delaying game input; hidden overlays a
 
 ## Playground building blocks
 
-The development playground is built with the same components it documents. Its catalog navigation, property controls and code examples use shared components; the page frame, catalog data and property-panel compositions remain specific to the playground.
+The public playground is built with the same components it documents. Its catalog navigation, property controls and code examples use shared components; the page frame, catalog data and property-panel compositions remain specific to the playground.
 
 | Component | Contract |
 | --- | --- |

@@ -14,14 +14,14 @@ import { Switch } from "@/components/ui/Switch";
 import { Dialog } from "@/components/ui/Dialog";
 import { useClipboard } from "@/hooks/useClipboard";
 import ThemeToggle from "@/components/ThemeToggle";
-import ComponentPreview from "@/app/components-preview/page.dev";
+import ComponentPreview from "@/app/playground/Playground";
 import { Field } from "@/components/ui/Field";
 import { TextInput } from "@/components/ui/TextInput";
 import { Select } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { NavigationList } from "@/components/ui/NavigationList";
 import { CodeExample } from "@/components/ui/CodeExample";
-import { elementCode, HighlightedCode, jsxText, completeExample } from "@/app/components-preview/snippets";
+import { elementCode, HighlightedCode, jsxText, completeExample } from "@/app/playground/snippets";
 
 function clipboard(writeText: (text: string) => Promise<void>) {
   Object.defineProperty(navigator, "clipboard", {

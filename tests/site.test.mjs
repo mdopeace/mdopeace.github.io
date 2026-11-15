@@ -9,6 +9,16 @@ assert.ok(
 );
 const html = readFileSync("out/index.html", "utf8");
 
+test("the playground ships as a public directory route with portfolio links", () => {
+  const playground = readFileSync("out/playground/index.html", "utf8");
+  assert.match(html, /href="\/playground\/"/);
+  assert.ok(html.includes("Explore playground"));
+  assert.ok(playground.includes("Small parts. A shared language."));
+  assert.ok(playground.includes("Design decisions"));
+  assert.match(playground, /rel="canonical" href="https:\/\/mdopeace.github.io\/playground\/"/);
+  assert.ok(!existsSync("out/components-preview/index.html"));
+});
+
 // LinkedIn blocks bots (405/999) — exclude rather than weaken the whole check.
 const SKIP_BOT_WALL = /linkedin\.com/;
 

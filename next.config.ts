@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
-  // A custom page extension makes the local showcase absent from production.
+  // Directory indexes allow direct visits on GitHub Pages without rewrites.
+  trailingSlash: true,
+  // Keep the old preview address as a development-only compatibility route.
   pageExtensions:
     process.env.NODE_ENV === "development"
       ? ["tsx", "ts", "dev.tsx"]

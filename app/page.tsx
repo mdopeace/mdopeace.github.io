@@ -32,6 +32,9 @@ export default function Home() {
           <Text size="caption" font="mono" tone="muted">
             Made with curiosity · Bengaluru
           </Text>
+          <Link href="/playground/" size="sm">
+            Built with my component library
+          </Link>
           <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
             Back to top
           </Link>

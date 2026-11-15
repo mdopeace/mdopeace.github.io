@@ -1,6 +1,7 @@
 import { Stack } from "../ui/Layout";
 import { projects } from "@/data/projects";
 import ProjectCard from "../portfolio/ProjectCard";
+import PlaygroundProject from "../portfolio/PlaygroundProject";
 import Section from "../portfolio/PortfolioSection";
 
 export default function Projects() {
@@ -10,6 +11,7 @@ export default function Projects() {
         {projects.map((project) => (
           <ProjectCard key={project.name} project={project} />
         ))}
+        <PlaygroundProject />
       </Stack>
     </Section>
   );
