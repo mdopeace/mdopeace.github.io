@@ -20,7 +20,7 @@ export default function SiteHeader() {
             size="sm"
             aria-label="Md Mostafijur Rahman, home"
           >
-            Md
+            <span className="brand-wordmark">Md</span>
           </Link>
           <Inline
             gap={{ base: 3, md: 6 }}

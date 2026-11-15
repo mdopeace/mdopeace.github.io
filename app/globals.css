@@ -1048,6 +1048,9 @@
     align-self: center;
     width: 100%;
   }
+  .project-logo {
+    background-color: var(--ui-canvas);
+  }
   .project-image {
     max-width: min(100%, 320px);
     max-height: 360px;
@@ -1059,6 +1062,9 @@
   }
   .project-copy {
     align-self: center;
+  }
+  .brand-wordmark {
+    text-transform: none;
   }
   .navigation-links {
     flex: 1;

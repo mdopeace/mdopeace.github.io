@@ -13,8 +13,10 @@ export type LinkProps = Omit<ComponentPropsWithRef<"a">, "href"> &
 export function Link({
   variant = "text",
   size = "md",
+  iconTone = "inherit",
   externalIndicator = false,
   startIcon,
+  startIconSize,
   endIcon,
   children,
   className,
@@ -40,9 +42,9 @@ export function Link({
         className,
       )}
     >
-      <ControlIcon>{startIcon}</ControlIcon>
+      <ControlIcon tone={iconTone} size={startIconSize}>{startIcon}</ControlIcon>
       {children}
-      <ControlIcon>
+      <ControlIcon tone={iconTone}>
         {endIcon ??
           (externalIndicator ? (
             <FaArrowRightLong focusable="false" style={{ transform: "rotate(-45deg)" }} />

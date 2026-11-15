@@ -1,6 +1,6 @@
 import type { Project } from "@/data/projects";
 import Image from "next/image";
-import { FaChrome, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
+import { FaChrome, FaFirefoxBrowser, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
 import { CodeBlock } from "../ui/CodeBlock";
 import { LinkGroup } from "../ui/LinkGroup";
 import { ExpandableText } from "../ui/ExpandableText";
@@ -13,6 +13,7 @@ const icons = {
   tag: FaTag,
   globe: FaGlobe,
   chrome: FaChrome,
+  firefox: FaFirefoxBrowser,
 };
 export default function ProjectCard({ project }: { project: Project }) {
   return (
@@ -35,7 +36,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       </Surface>
       <Stack gap={4} className="project-copy">
         <Inline gap={3}>
-          <Image src={project.logo} alt="" width={32} height={32} unoptimized />
+          <Image src={project.logo} alt="" width={32} height={32} unoptimized className="project-logo" />
           <Heading level={3} size="card">{project.name}</Heading>
           <Inline as="ul" gap={2}>
             {project.pills.map((pill) => (

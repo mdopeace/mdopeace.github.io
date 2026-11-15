@@ -130,6 +130,8 @@ Raised controls move 1px down/right with a 2px shadow on hover; on press they mo
 
 Surface keeps its explicit elevation escape hatch, but app compositions follow the category rules above; do not pick different resting shadows to compensate for a panel’s size or color.
 
-Ghost controls use a subtle foreground tint over their containing surface on hover and keyboard focus. They stay stationary and shadowless; disabled controls retain their resting background. No underline or additional icon is required by this variant.
+Ghost controls use the theme canvas background and text color consistently across containers, with a subtle foreground tint over the canvas on hover and keyboard focus. They stay stationary and shadowless; disabled controls retain their resting background. No underline or additional icon is required by this variant.
 
 Chapter-index badges support `size="sm"` (30px square, 11.2px number) and `size="md"` (40px square, 14px number). Portfolio section headings use `md`; both sizes stay vertically centered and use the theme border color.
+
+Button and Link support `iconTone="inherit"` (default), `emphasis`, `muted`, or `success`. The tone applies to both icon slots without changing the label color. Choose a tone with sufficient contrast on the control background. The support heart uses `emphasis`, the same theme token as the brand background.

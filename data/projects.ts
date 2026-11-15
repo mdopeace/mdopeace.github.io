@@ -1,7 +1,7 @@
 export type ProjectLink = {
   label: string;
   href: string;
-  icon: "github" | "tag" | "globe" | "chrome";
+  icon: "github" | "tag" | "globe" | "chrome" | "firefox";
 };
 
 export type Project = {
@@ -98,9 +98,9 @@ export const projects: Project[] = [
     shot: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/screenshots/overview.png",
     shotAlt:
       "Cookieater showing example.com cookies and the search, add, import, export, and clear actions.",
-    pills: ["Chrome Extension", "Manifest V3"],
+    pills: ["Browser Extension", "Manifest V3"],
     tagline:
-      "A friendly Chrome extension for viewing, searching, and editing cookies on the current site.",
+      "A friendly Chrome and Firefox extension for viewing, searching, and editing cookies on the current site.",
     paragraphs: [
       "See the active site's cookies at a glance, search names, values, and domains, then edit individual cookie settings or add and remove cookies.",
       "Import cookies from a JSON array, export the current domain's cookies, or clear them all after confirmation.",
@@ -122,6 +122,11 @@ export const projects: Project[] = [
         label: "Chrome Web Store",
         icon: "chrome",
         href: "https://chromewebstore.google.com/detail/cookieater/eokikmfhgicnmkhldphchbligfgjbkbi",
+      },
+      {
+        label: "Firefox Add-ons",
+        icon: "firefox",
+        href: "https://addons.mozilla.org/en-US/firefox/addon/cookieater-cookie-manager/",
       },
     ],
   },

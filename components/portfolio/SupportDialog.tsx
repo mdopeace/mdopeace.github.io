@@ -18,6 +18,7 @@ export default function SupportDialog() {
         aria-controls={id}
         onClick={() => setOpen(true)}
         endIcon={<FaHeart />}
+        iconTone="emphasis"
       >
         Support my work
       </Button>
@@ -37,6 +38,7 @@ export default function SupportDialog() {
                 href="https://github.com/sponsors/mdopeace"
                 target="_blank"
                 startIcon={<FaGithub />}
+                startIconSize="md"
                 externalIndicator
               >
                 <strong>GitHub Sponsors</strong>
@@ -50,6 +52,7 @@ export default function SupportDialog() {
                 href="https://buymeacoffee.com/mdopeace"
                 target="_blank"
                 startIcon={<FaMugHot />}
+                startIconSize="md"
                 externalIndicator
               >
                 <strong>Buy Me a Coffee</strong>
