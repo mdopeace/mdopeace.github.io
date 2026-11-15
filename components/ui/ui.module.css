@@ -172,6 +172,7 @@
   transition:
     transform var(--ui-fast) var(--ui-ease),
     box-shadow var(--ui-fast),
+    opacity var(--ui-fast),
     background-color var(--ui-fast);
 }
 .control[data-size="sm"],
@@ -251,6 +252,7 @@
   fill: currentColor;
 }
 .link {
+  transition: color var(--ui-fast), text-decoration-color var(--ui-fast);
   display: inline-flex;
   align-items: center;
   gap: var(--ui-space-1);
@@ -800,3 +802,21 @@
 .text[data-leading="tight"] { line-height: 1.1; }
 .badge[data-tilt="left"] { transform: rotate(-3deg); }
 .badge[data-tilt="right"] { transform: rotate(3deg); }
+
+.feedback {
+  display: inline-grid;
+  align-items: center;
+  justify-items: center;
+}
+.feedback > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ui-fast), visibility var(--ui-fast);
+}
+.feedback > [data-active="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+.icon .feedback { width: 100%; height: 100%; }
+.icon .feedback > span { width: 100%; height: 100%; }

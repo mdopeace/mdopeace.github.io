@@ -2,6 +2,7 @@
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import { useControllable } from "@/hooks/useControllable";
 import { ControlIcon } from "./Button";
+import { FeedbackLabel } from "./FeedbackLabel";
 import { cx, type Size, type AccessibleName } from "./tokens";
 import styles from "./ui.module.css";
 
@@ -54,7 +55,7 @@ export function Switch({
       />
       <span className={styles.track} aria-hidden="true">
         <span className={styles.thumb}>
-          <ControlIcon>{isChecked ? checkedIcon : uncheckedIcon}</ControlIcon>
+          <ControlIcon><FeedbackLabel active={isChecked} idle={uncheckedIcon} feedback={checkedIcon} /></ControlIcon>
         </span>
       </span>
     </span>

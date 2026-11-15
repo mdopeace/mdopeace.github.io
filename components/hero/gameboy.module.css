@@ -59,6 +59,7 @@
   border-color: var(--ink);
   background: #25231f;
   box-shadow: 0 0 10px 2px color-mix(in srgb, var(--indicator-light) 45%, transparent);
+  transition: box-shadow var(--ui-normal) var(--ui-ease);
 }
 .indicator.indicator.indicator[data-state="playing"] { --indicator-light: #2ba84a; }
 .indicator.indicator.indicator[data-state="paused"] { --indicator-light: #1769c2; }

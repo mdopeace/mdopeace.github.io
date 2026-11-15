@@ -392,9 +392,8 @@ export default function TetrisGameboy() {
               </div>
             </aside>
           </div>
-          {overlayTitle ? (
-            <div className="tetris-overlay">
-              <Text as="strong" size="sm" font="mono" weight="black" leading="tight">{overlayTitle}</Text>
+            <div className="tetris-overlay" hidden={!overlayTitle} inert={!overlayTitle}>
+              <Text key={overlayTitle} as="strong" size="sm" font="mono" weight="black" leading="tight" className="tetris-overlay-title">{overlayTitle}</Text>
               {overlayButton ? (
                 <Button size="sm" variant="secondary"
                   type="button"
@@ -410,13 +409,12 @@ export default function TetrisGameboy() {
                 >
                   {overlayButton}
                 </Button>
-              ) : (
+              ) : overlayTitle ? (
                 <Text as="span" size="caption" font="mono" align="center">
                   Controls unlock in a moment
                 </Text>
-              )}
+              ) : null}
             </div>
-          ) : null}
         </div>
       </div>
       <div className="gameboy-hinge">

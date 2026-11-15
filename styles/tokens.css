@@ -112,3 +112,14 @@ html[data-theme-transition] [data-ui-surface="subtle"] {
     --ui-slow: 0ms;
   }
 }
+
+/* Crossfade complete theme snapshots to avoid mismatched intermediate palettes. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--ui-normal);
+  animation-timing-function: var(--ui-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}

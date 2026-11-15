@@ -147,3 +147,11 @@ Contact artwork labels use Badge: an accent label with `tilt="left"` for Signal 
 Game Boy controls use Button, including icon-only directional controls with native accessible names. Shared Button owns focus, disabled state, icon slots and shadow/press feedback. The device integration stylesheet retains its palette, compact physical dimensions, D-pad grid placement and screen-button shine; it does not duplicate interaction rules. Local shadow and border tokens preserve dark edges against the yellow device in both themes.
 
 Game text uses Text with body/mono font tokens, an `xs` size (11px), optional `leading="tight"` for counters, and semantic `as="strong"` for emphasized values. The board cells, speaker slots, LED and illustration shapes remain artwork rather than generic UI components.
+
+## Motion feedback
+
+Theme changes crossfade complete page snapshots with the browser View Transition API; browsers without it retain the neutral-surface color transition. Initial theme selection and reduced-motion mode apply immediately. Shared controls animate depth, background, and disabled opacity; focus outlines remain immediate.
+
+FeedbackLabel overlays two reserved states and fades between them without changing control width. Clipboard actions use it for labels and icons, and Switch uses it for state icons. Inactive states stay out of accessible names. Installation commands are keyboard-focusable so horizontal scrolling remains available on compact layouts.
+
+Game Boy overlays fade visibility without delaying game input; hidden overlays are inert. Indicator cells and glow transition their state colors together. Durations use shared motion tokens, and reduced-motion preferences suppress the effects.

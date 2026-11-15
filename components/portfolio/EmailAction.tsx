@@ -1,6 +1,7 @@
 "use client";
 import { useClipboard } from "@/hooks/useClipboard";
 import { Button } from "../ui/Button";
+import { FeedbackLabel } from "../ui/FeedbackLabel";
 import { Stack } from "../ui/Layout";
 import { Text } from "../ui/Typography";
 export function EmailAction({ email }: { email: string }) {
@@ -13,7 +14,7 @@ export function EmailAction({ email }: { email: string }) {
         loading={status === "copying"}
         onClick={() => void copy(email)}
       >
-        {status === "success" ? "Copied!" : "Copy email"}
+        <FeedbackLabel active={status === "success"} idle="Copy email" feedback="Copied!" />
       </Button>
       <Text
         size="caption"

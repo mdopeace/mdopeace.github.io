@@ -3,6 +3,7 @@ import type { ComponentPropsWithRef } from "react";
 import { FaCheck, FaCopy } from "react-icons/fa6";
 import { useClipboard } from "@/hooks/useClipboard";
 import { Button } from "./Button";
+import { FeedbackLabel } from "./FeedbackLabel";
 import { Surface } from "./Surface";
 import { Stack } from "./Layout";
 import styles from "./ui.module.css";
@@ -25,7 +26,7 @@ export function CodeBlock({
     <Surface {...props} tone="accent" elevation="none" padding={3}>
       <Stack gap={2}>
         <div className={styles.code}>
-          <pre>
+          <pre tabIndex={0} aria-label="Installation command">
             <code>{code}</code>
           </pre>
           <Button
@@ -35,9 +36,9 @@ export function CodeBlock({
             data-copy={code}
             loading={status === "copying"}
             onClick={() => void copy(code)}
-            startIcon={status === "success" ? <FaCheck /> : <FaCopy />}
+            startIcon={<FeedbackLabel active={status === "success"} idle={<FaCopy />} feedback={<FaCheck />} />}
           >
-            {status === "success" ? "Copied" : copyLabel}
+            <FeedbackLabel active={status === "success"} idle={copyLabel} feedback="Copied" />
           </Button>
         </div>
         <span

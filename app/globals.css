@@ -294,6 +294,17 @@
     justify-items: center;
     gap: 9px;
     background: #d8dfb2ef;
+    opacity: 1;
+    transition: opacity var(--ui-normal) var(--ui-ease), display var(--ui-normal) allow-discrete;
+  }
+  .tetris-overlay[hidden] { display: none; opacity: 0; }
+  @starting-style {
+    .tetris-overlay { opacity: 0; }
+  }
+  .tetris-overlay-title { animation: tetris-overlay-fade var(--ui-fast) ease; }
+  @keyframes tetris-overlay-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
 
