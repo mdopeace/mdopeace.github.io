@@ -5,6 +5,7 @@ import Now from "@/components/sections/Now";
 import Projects from "@/components/sections/Projects";
 import Story from "@/components/sections/Story";
 import SiteHeader from "@/components/SiteHeader";
+import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
 import { Container, Inline } from "@/components/ui/Layout";
 import { Link } from "@/components/ui/Link";
 import { Text } from "@/components/ui/Typography";
@@ -13,6 +14,7 @@ import { FaArrowUp } from "react-icons/fa6";
 export default function Home() {
   return (
     <Container>
+      <SectionNavigation />
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>

@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useRef, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Section } from "../ui/Section";
 import { Inline } from "../ui/Layout";
 import { Heading } from "../ui/Typography";
@@ -18,37 +16,8 @@ export default function PortfolioSection({
   index: string;
   children: ReactNode;
 }) {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || !window.location.hash) return;
-
-        const hash = `#${id}`;
-        if (window.location.hash !== hash) {
-          window.history.replaceState(
-            null,
-            "",
-            `${window.location.pathname}${window.location.search}${hash}`,
-          );
-        }
-      },
-      { rootMargin: "-30% 0px -60% 0px" },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, [id]);
-
   return (
     <Section
-      ref={sectionRef}
       id={id}
       title={label}
       className="portfolio-section"

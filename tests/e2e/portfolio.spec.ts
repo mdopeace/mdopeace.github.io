@@ -16,7 +16,8 @@ for (const theme of ["light", "dark"] as const) {
     expect(style.leading / style.size).toBeCloseTo(0.86, 2);
     expect(await page.locator(".hero-name").evaluate(e => getComputedStyle(e).textShadow)).not.toBe("none");
     await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Work", exact: true }).click();
-    await expect(page).toHaveURL(/#work$/);
+    expect(new URL(page.url()).hash).toBe("");
+    await expect(page.locator("#work")).toBeFocused();
     const project = page.locator("#work article").filter({ has: page.getByRole("heading", { name: "Vidp", exact: true }) });
     await project.getByRole("button", { name: "Read more" }).click();
     await expect(project.getByRole("button", { name: "Read less" })).toHaveAttribute("aria-expanded", "true");
