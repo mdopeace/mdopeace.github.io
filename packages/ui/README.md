@@ -5,8 +5,7 @@ This is a separate package in the same repository, not a separate repository.
 
 ## Status and rights
 
-Version `0.1.0` is prepared locally and has not been published to npm or GitHub
-Releases. The reusable package is licensed under [MIT](./LICENSE), with copyright
+The reusable package is licensed under [MIT](./LICENSE), with copyright
 attributed to Md Mostafijur Rahman. Others may use, modify, redistribute and sell
 copies under MIT's terms, including retaining the copyright and license notice.
 MIT does not require a visible credit link in an application's interface.
@@ -75,16 +74,19 @@ npm run pack:ui
 npm run test:package
 ```
 
-Packing creates a local `mdopeace-ui-0.1.0.tgz` archive. To try it elsewhere,
-install the archive with `npm install /absolute/path/to/mdopeace-ui-0.1.0.tgz`.
+Packing creates a local `mdopeace-ui-<version>.tgz` archive. To try it elsewhere,
+install that archive with `npm install /absolute/path/to/mdopeace-ui-<version>.tgz`
+(replace `<version>` with the package version).
 No package registry or repository publication is involved. The package test
 installs the archive into an isolated consumer and verifies rendering, styles,
 types and interactive behavior without the portfolio's aliases or CSS reset.
 
 Rebuild after package source edits; generated `dist` files and archives are
 ignored by Git. The portfolio's dev, test and production build scripts build the
-package first. A future release may attach this archive to a versioned GitHub
-Release after release approval.
+package first. The maintainer-controlled **UI Release** workflow publishes the
+validated archive and checksum under `ui-v<version>` on GitHub Releases; it does
+not publish to npm. See the [release guide](https://github.com/mdopeace/mdopeace.github.io/blob/main/docs/ui-release.md) for App setup,
+version-only PRs, protected auto-merge and recovery behavior.
 
 ## Scope
 
@@ -92,5 +94,5 @@ Generic layout, typography, controls, fields, navigation, surfaces, badges,
 dialogs, disclosure, code examples and clipboard behavior live here. Portfolio
 sections, content, device artwork and game logic stay in the app.
 
-Read the repository's [contribution guidelines](../../CONTRIBUTING.md) and
-[code of conduct](../../CODE_OF_CONDUCT.md) before proposing changes.
+Read the repository's [contribution guidelines](https://github.com/mdopeace/mdopeace.github.io/blob/main/CONTRIBUTING.md) and
+[code of conduct](https://github.com/mdopeace/mdopeace.github.io/blob/main/CODE_OF_CONDUCT.md) before proposing changes.

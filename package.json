@@ -13,7 +13,8 @@
     "compare:visual": "node scripts/compare-portfolio.mjs",
     "build:ui": "npm run build --workspace @mdopeace/ui",
     "pack:ui": "npm pack --workspace @mdopeace/ui",
-    "test:package": "node scripts/test-ui-package.mjs"
+    "test:package": "node scripts/test-ui-package.mjs",
+    "test:release": "node --test tests/ui-release.test.mjs"
   },
   "dependencies": {
     "@mdopeace/ui": "0.1.0",

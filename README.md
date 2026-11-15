@@ -82,3 +82,6 @@ and the [Code of Conduct](./CODE_OF_CONDUCT.md). The package has its own
 [MIT license](./packages/ui/LICENSE). The MIT grant applies to the UI package;
 portfolio content and branding remain rights reserved under the root license.
 Portfolio content and branding are not included in the package.
+
+The [UI release guide](./docs/ui-release.md) explains the App-driven release PR,
+required CI, protected auto-merge and versioned GitHub Release archive.
