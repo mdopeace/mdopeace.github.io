@@ -51,7 +51,6 @@
 }
 .instructions.instructions { margin: 10px 0 0; }
 @media (max-width: 680px) {
-  .instructions.instructions { margin-top: 4px; }
   .action.action.action { width: 40px; height: 40px; }
   .hold.hold.hold { width: 100%; height: auto; }
 }
