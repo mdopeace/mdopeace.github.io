@@ -1,13 +1,13 @@
 import type { Project } from "@/data/projects";
 import Image from "next/image";
 import { FaChrome, FaFirefoxBrowser, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
-import { CodeBlock } from "../ui/CodeBlock";
-import { LinkGroup } from "../ui/LinkGroup";
-import { ExpandableText } from "../ui/ExpandableText";
-import { Badge } from "../ui/Badge";
-import { Surface } from "../ui/Surface";
-import { Stack, Inline } from "../ui/Layout";
-import { Heading, Text } from "../ui/Typography";
+import { CodeBlock } from "@mdopeace/ui/CodeBlock";
+import { LinkGroup } from "@mdopeace/ui/LinkGroup";
+import { ExpandableText } from "@mdopeace/ui/ExpandableText";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Stack, Inline } from "@mdopeace/ui/Layout";
+import { Heading, Text } from "@mdopeace/ui/Typography";
 const icons = {
   github: FaGithub,
   tag: FaTag,

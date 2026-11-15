@@ -1,8 +1,8 @@
 import Section from "../portfolio/PortfolioSection";
-import { Surface } from "../ui/Surface";
-import { Grid, Inline, Stack } from "../ui/Layout";
-import { Heading, Text } from "../ui/Typography";
-import { Badge } from "../ui/Badge";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Grid, Inline, Stack } from "@mdopeace/ui/Layout";
+import { Heading, Text } from "@mdopeace/ui/Typography";
+import { Badge } from "@mdopeace/ui/Badge";
 
 const toolkit = [
   { title: "Web interfaces", label: "01 / Build the interface", tone: "subtle", tools: "JavaScript · TypeScript · React · Next.js · Astro · CSS · SCSS" },

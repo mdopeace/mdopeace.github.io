@@ -1,6 +1,6 @@
 "use client";
 import type { ComponentPropsWithRef, ReactNode } from "react";
-import { useControllable } from "@/hooks/useControllable";
+import { useControllable } from "./hooks/useControllable";
 import { ControlIcon } from "./Button";
 import { FeedbackLabel } from "./FeedbackLabel";
 import { cx, type Size, type AccessibleName } from "./tokens";

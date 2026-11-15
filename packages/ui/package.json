@@ -1,0 +1,143 @@
+{
+  "name": "@mdopeace/ui",
+  "version": "0.1.0",
+  "description": "React building blocks behind the mdopeace portfolio.",
+  "private": true,
+  "license": "MIT",
+  "author": "Md Mostafijur Rahman",
+  "type": "module",
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./package.json": "./package.json",
+    "./Badge": {
+      "types": "./dist/Badge.d.ts",
+      "import": "./dist/Badge.js"
+    },
+    "./Button": {
+      "types": "./dist/Button.d.ts",
+      "import": "./dist/Button.js"
+    },
+    "./Checkbox": {
+      "types": "./dist/Checkbox.d.ts",
+      "import": "./dist/Checkbox.js"
+    },
+    "./CodeBlock": {
+      "types": "./dist/CodeBlock.d.ts",
+      "import": "./dist/CodeBlock.js"
+    },
+    "./CodeExample": {
+      "types": "./dist/CodeExample.d.ts",
+      "import": "./dist/CodeExample.js"
+    },
+    "./Dialog": {
+      "types": "./dist/Dialog.d.ts",
+      "import": "./dist/Dialog.js"
+    },
+    "./Divider": {
+      "types": "./dist/Divider.d.ts",
+      "import": "./dist/Divider.js"
+    },
+    "./ExpandableText": {
+      "types": "./dist/ExpandableText.d.ts",
+      "import": "./dist/ExpandableText.js"
+    },
+    "./FeedbackLabel": {
+      "types": "./dist/FeedbackLabel.d.ts",
+      "import": "./dist/FeedbackLabel.js"
+    },
+    "./Field": {
+      "types": "./dist/Field.d.ts",
+      "import": "./dist/Field.js"
+    },
+    "./HighlightedCode": {
+      "types": "./dist/HighlightedCode.d.ts",
+      "import": "./dist/HighlightedCode.js"
+    },
+    "./Layout": {
+      "types": "./dist/Layout.d.ts",
+      "import": "./dist/Layout.js"
+    },
+    "./Link": {
+      "types": "./dist/Link.d.ts",
+      "import": "./dist/Link.js"
+    },
+    "./LinkGroup": {
+      "types": "./dist/LinkGroup.d.ts",
+      "import": "./dist/LinkGroup.js"
+    },
+    "./NavigationList": {
+      "types": "./dist/NavigationList.d.ts",
+      "import": "./dist/NavigationList.js"
+    },
+    "./Section": {
+      "types": "./dist/Section.d.ts",
+      "import": "./dist/Section.js"
+    },
+    "./Select": {
+      "types": "./dist/Select.d.ts",
+      "import": "./dist/Select.js"
+    },
+    "./Surface": {
+      "types": "./dist/Surface.d.ts",
+      "import": "./dist/Surface.js"
+    },
+    "./Switch": {
+      "types": "./dist/Switch.d.ts",
+      "import": "./dist/Switch.js"
+    },
+    "./TextInput": {
+      "types": "./dist/TextInput.d.ts",
+      "import": "./dist/TextInput.js"
+    },
+    "./Typography": {
+      "types": "./dist/Typography.d.ts",
+      "import": "./dist/Typography.js"
+    },
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js"
+    },
+    "./hooks/useClipboard": {
+      "types": "./dist/hooks/useClipboard.d.ts",
+      "import": "./dist/hooks/useClipboard.js"
+    },
+    "./hooks/useControllable": {
+      "types": "./dist/hooks/useControllable.d.ts",
+      "import": "./dist/hooks/useControllable.js"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "react-icons": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mdopeace/mdopeace.github.io.git",
+    "directory": "packages/ui"
+  }
+}

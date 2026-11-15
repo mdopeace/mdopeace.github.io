@@ -1,12 +1,12 @@
 import Section from "../portfolio/PortfolioSection";
 import { EmailAction } from "../portfolio/EmailAction";
 import SupportDialog from "../portfolio/SupportDialog";
-import { Badge } from "../ui/Badge";
-import { Surface } from "../ui/Surface";
-import { Heading, Text } from "../ui/Typography";
-import { Inline, Stack } from "../ui/Layout";
-import { Link } from "../ui/Link";
-import { LinkGroup } from "../ui/LinkGroup";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Heading, Text } from "@mdopeace/ui/Typography";
+import { Inline, Stack } from "@mdopeace/ui/Layout";
+import { Link } from "@mdopeace/ui/Link";
+import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import Image from "next/image";
 import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 const email = "md.correo.e@gmail.com";

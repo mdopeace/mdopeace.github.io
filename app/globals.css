@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "../styles/tokens.css";
+@import "@mdopeace/ui/tokens.css";
+@import "../styles/theme-motion.css";
 
 @theme {
   --color-bg: var(--paper);

@@ -6,7 +6,7 @@ import {
   useState,
   type ComponentPropsWithRef,
 } from "react";
-import { useControllable } from "@/hooks/useControllable";
+import { useControllable } from "./hooks/useControllable";
 import { Button } from "./Button";
 import { cx } from "./tokens";
 import styles from "./ui.module.css";

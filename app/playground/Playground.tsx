@@ -3,29 +3,29 @@
 import { useState, type ReactNode } from "react";
 import { FaArrowLeft, FaHeart } from "react-icons/fa6";
 import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
-import { Container, Grid, Inline, Stack } from "@/components/ui/Layout";
-import { Surface } from "@/components/ui/Surface";
-import { Heading, Text } from "@/components/ui/Typography";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { Link } from "@/components/ui/Link";
-import { Dialog } from "@/components/ui/Dialog";
-import { Divider } from "@/components/ui/Divider";
-import { Switch } from "@/components/ui/Switch";
-import { CodeBlock } from "@/components/ui/CodeBlock";
-import { ExpandableText } from "@/components/ui/ExpandableText";
+import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Heading, Text } from "@mdopeace/ui/Typography";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Button } from "@mdopeace/ui/Button";
+import { Link } from "@mdopeace/ui/Link";
+import { Dialog } from "@mdopeace/ui/Dialog";
+import { Divider } from "@mdopeace/ui/Divider";
+import { Switch } from "@mdopeace/ui/Switch";
+import { CodeBlock } from "@mdopeace/ui/CodeBlock";
+import { ExpandableText } from "@mdopeace/ui/ExpandableText";
 
-import { LinkGroup } from "@/components/ui/LinkGroup";
-import { Field } from "@/components/ui/Field";
-import { TextInput } from "@/components/ui/TextInput";
-import { Select } from "@/components/ui/Select";
-import { Checkbox } from "@/components/ui/Checkbox";
-import { NavigationList } from "@/components/ui/NavigationList";
-import { CodeExample } from "@/components/ui/CodeExample";
+import { LinkGroup } from "@mdopeace/ui/LinkGroup";
+import { Field } from "@mdopeace/ui/Field";
+import { TextInput } from "@mdopeace/ui/TextInput";
+import { Select } from "@mdopeace/ui/Select";
+import { Checkbox } from "@mdopeace/ui/Checkbox";
+import { NavigationList } from "@mdopeace/ui/NavigationList";
+import { CodeExample } from "@mdopeace/ui/CodeExample";
 import ThemeToggle from "@/components/ThemeToggle";
 import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
 
-import type { Size, Tone, Variant, Elevation } from "@/components/ui/tokens";
+import type { Size, Tone, Variant, Elevation } from "@mdopeace/ui/tokens";
 import styles from "./playground.module.css";
 import { elementCode, jsxText, completeExample } from "./snippets";
 
@@ -223,7 +223,7 @@ function Snippet({ code }: { code: string }) {
       code={code}
       codeLabel="Usage example"
       border="none"
-      description="Complete example using this repository’s component imports."
+      description="Complete example using the shared UI package."
       className={styles.snippet}
     />
   );

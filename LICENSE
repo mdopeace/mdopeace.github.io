@@ -1,0 +1,20 @@
+Copyright (c) 2026 Md Mostafijur Rahman.
+All rights reserved in the original material owned by Md Mostafijur Rahman.
+
+No general permission to use, copy, modify, distribute, sublicense, or sell that
+material is granted by this notice. Obtain written permission from the rights
+holder unless a separate applicable license or applicable law permits the use.
+GitHub's applicable Terms of Service continue to apply to hosting and platform
+features, including viewing and forking public repositories.
+
+Third-party dependencies, assets, and contributions retain their respective
+rights and applicable licenses. This notice does not claim ownership of them.
+Any separate license included with a package or identified file governs that
+material only. It does not grant rights to portfolio text, photographs, logos,
+personal identity, or other material outside its stated scope.
+
+Exception: the reusable UI package under packages/ui, including its original
+source, styles, build scripts, documentation and generated distribution, is
+licensed under the MIT License in packages/ui/LICENSE. The reservation of rights
+above does not override that MIT grant. Separately identified third-party
+material continues to be governed by its applicable terms.

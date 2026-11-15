@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { Surface } from "../ui/Surface";
-import { Stack } from "../ui/Layout";
-import { Badge } from "../ui/Badge";
-import type { Tone } from "../ui/tokens";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Stack } from "@mdopeace/ui/Layout";
+import { Badge } from "@mdopeace/ui/Badge";
+import type { Tone } from "@mdopeace/ui/tokens";
 export function StoryStep({
   title,
   tone = "default",

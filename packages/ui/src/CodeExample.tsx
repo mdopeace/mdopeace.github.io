@@ -1,6 +1,6 @@
 "use client";
 import type { ComponentPropsWithRef } from "react";
-import { useClipboard } from "@/hooks/useClipboard";
+import { useClipboard } from "./hooks/useClipboard";
 import { Button } from "./Button";
 import { FeedbackLabel } from "./FeedbackLabel";
 import { Inline } from "./Layout";
@@ -65,7 +65,7 @@ export function CodeExample({
           {description}
         </Text>
       )}
-      <span className="sr-only" role="status">
+      <span className={styles.srOnly} role="status">
         {status === "success"
           ? "Example copied."
           : status === "error"

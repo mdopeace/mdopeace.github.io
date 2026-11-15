@@ -1,10 +1,10 @@
 import { FaArrowDown } from "react-icons/fa6";
 import TetrisGameboy from "../hero/TetrisGameboy";
-import { Surface } from "../ui/Surface";
-import { Stack, Inline } from "../ui/Layout";
-import { Heading, Text } from "../ui/Typography";
-import { Badge } from "../ui/Badge";
-import { Link } from "../ui/Link";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Stack, Inline } from "@mdopeace/ui/Layout";
+import { Heading, Text } from "@mdopeace/ui/Typography";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Link } from "@mdopeace/ui/Link";
 export default function Hero() {
   return (
     <Surface

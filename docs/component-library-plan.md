@@ -224,14 +224,14 @@ Section has no portfolio chapter number or scroll/hash side effects. PortfolioSe
 | [ThemeToggle](../components/ThemeToggle.tsx) | Switch + app light/dark persistence and theme-color synchronization; remove Auto and continuous system tracking during migration |
 | [TetrisGameboy](../components/hero/TetrisGameboy.tsx) | Game engine/input behavior remains local; adopt Button/Text where appropriate without forcing device geometry into generic layouts |
 
-The former section wrapper is now [PortfolioSection](../components/portfolio/PortfolioSection.tsx). Project tags use [Badge](../components/ui/Badge.tsx) with explicit list items; project/social links use [LinkGroup](../components/ui/LinkGroup.tsx). The former copy buttons and truncation wrapper have been replaced by [useClipboard](../hooks/useClipboard.ts), [EmailAction](../components/portfolio/EmailAction.tsx), [CodeBlock](../components/ui/CodeBlock.tsx) and [ExpandableText](../components/ui/ExpandableText.tsx). The superseded files and unused visual recipes were removed.
+The former section wrapper is now [PortfolioSection](../components/portfolio/PortfolioSection.tsx). Project tags use [Badge](../packages/ui/src/Badge.tsx) with explicit list items; project/social links use [LinkGroup](../packages/ui/src/LinkGroup.tsx). The former copy buttons and truncation wrapper have been replaced by [useClipboard](../packages/ui/src/hooks/useClipboard.ts), [EmailAction](../components/portfolio/EmailAction.tsx), [CodeBlock](../packages/ui/src/CodeBlock.tsx) and [ExpandableText](../packages/ui/src/ExpandableText.tsx). The superseded files and unused visual recipes were removed.
 
 Use framework image handling directly for now. Images have different intrinsic/layout requirements; create a generic media frame only when a shared frame behavior is established. Illustrations, stamps, halftones, and game sprites may retain local CSS.
 
 ## 7. Proposed organization and runtime boundaries
 
 ```text
-components/ui/          Generic primitives and generic compositions
+packages/ui/src/          Generic primitives and generic compositions
 components/portfolio/   Business components shared within this portfolio
 components/sections/    Page sections
 components/hero/        Game and hero-specific artwork
@@ -268,7 +268,7 @@ Planning is complete when token scales, initial APIs, ownership rules and implem
 ## 9. Implementation notes
 
 - The interactive component library is public at `/playground/` and included in the static export. `/components-preview` remains a development-only alias for earlier review links.
-- Shared visual recipes live in the UI CSS Module; tokens live in `styles/tokens.css`. The Tailwind Turbopack loader applies only to `globals.css`, preserving native CSS Module class exports.
+- Shared visual recipes live in the UI CSS Module; tokens live in `packages/ui/styles/tokens.css`. The Tailwind Turbopack loader applies only to `globals.css`, preserving native CSS Module class exports.
 - Responsive layout props reset unused breakpoint variables locally so nested components cannot inherit an ancestor's responsive overrides accidentally.
 - Dialog exit animation retains native modality and scroll locking until the visual exit completes. Reopening interrupts that exit. Native cancellation and an Escape-key handler both request controlled state changes.
 - Game controls use shared Button with local device geometry as the documented specialized-artwork exception. Their directional icons use `react-icons/fa6`; the device uses a dark foreground on its yellow shell in both themes.

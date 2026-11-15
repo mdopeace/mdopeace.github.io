@@ -1,12 +1,12 @@
 "use client";
 import { useId, useState } from "react";
 import { FaGithub, FaHeart, FaMugHot } from "react-icons/fa6";
-import { Dialog } from "../ui/Dialog";
-import { Button } from "../ui/Button";
-import { Link } from "../ui/Link";
-import { Grid, Stack } from "../ui/Layout";
-import { Surface } from "../ui/Surface";
-import { Text } from "../ui/Typography";
+import { Dialog } from "@mdopeace/ui/Dialog";
+import { Button } from "@mdopeace/ui/Button";
+import { Link } from "@mdopeace/ui/Link";
+import { Grid, Stack } from "@mdopeace/ui/Layout";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Text } from "@mdopeace/ui/Typography";
 export default function SupportDialog() {
   const [open, setOpen] = useState(false);
   const id = useId();

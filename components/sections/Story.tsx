@@ -1,7 +1,7 @@
 import Section from "../portfolio/PortfolioSection";
 
-import { Grid } from "../ui/Layout";
-import { Text } from "../ui/Typography";
+import { Grid } from "@mdopeace/ui/Layout";
+import { Text } from "@mdopeace/ui/Typography";
 import { StoryStep } from "../portfolio/StoryStep";
 
 export default function Story() {

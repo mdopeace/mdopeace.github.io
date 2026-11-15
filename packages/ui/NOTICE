@@ -1,0 +1,12 @@
+@mdopeace/ui — maintained by Md Mostafijur Rahman (@mdopeace).
+
+Original package material is licensed under the accompanying MIT LICENSE.
+Retain the copyright and license notice when distributing copies or substantial
+portions of the package. Third-party
+dependencies retain their respective copyrights and licenses. React and React
+DOM are peer dependencies; react-icons is a separately installed dependency.
+This package does not bundle their implementations or claim ownership of them.
+
+The package excludes portfolio text, personal identity, project logos, app
+screenshots, the Game Boy illustration and game logic. No branding rights or
+endorsement are granted by installing this package.

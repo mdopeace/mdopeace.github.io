@@ -1,13 +1,13 @@
 # Using the component library
 
-Import components directly from [components/ui](../components/ui/). The [specification](component-library-plan.md) contains the complete prop tables, defaults, token scales and accessibility requirements. Exported prop types live beside each component. No package publishing is required to use the library in this app.
+Import components from the local [`@mdopeace/ui` workspace package](../packages/ui/README.md). The [specification](component-library-plan.md) contains the complete prop tables, defaults, token scales and accessibility requirements. Exported prop types live beside each component. No package publishing is required to use the library in this app.
 
 ## Layout and surfaces
 
 ```tsx
-import { Grid, Stack } from "@/components/ui/Layout";
-import { Surface } from "@/components/ui/Surface";
-import { Heading, Text } from "@/components/ui/Typography";
+import { Grid, Stack } from "@mdopeace/ui/Layout";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Heading, Text } from "@mdopeace/ui/Typography";
 
 <Grid columns={{ base: 1, md: 2 }} gap={6}>
   <Surface as="article" tone="info" elevation="lg">
@@ -27,8 +27,8 @@ Semantic `as` choices retain their native attributes and ref types. Render expli
 
 ```tsx
 import { FaCopy } from "react-icons/fa6";
-import { Button } from "@/components/ui/Button";
-import { Link } from "@/components/ui/Link";
+import { Button } from "@mdopeace/ui/Button";
+import { Link } from "@mdopeace/ui/Link";
 
 <Button variant="secondary" size="sm" startIcon={<FaCopy />} onClick={copy}>
   Copy
@@ -45,8 +45,8 @@ Buttons default to `type="button"`. Use native `disabled`; `loading` also preven
 
 ```tsx
 "use client";
-import { useClipboard } from "@/hooks/useClipboard";
-import { Button } from "@/components/ui/Button";
+import { useClipboard } from "@mdopeace/ui/hooks/useClipboard";
+import { Button } from "@mdopeace/ui/Button";
 
 function CopyAddress({ address }: { address: string }) {
   const { copy, status } = useClipboard();
@@ -170,7 +170,7 @@ The public playground is built with the same components it documents. Its catalo
 | NavigationList | Required accessible `label` and grouped `items`; optional `activeId` and `onSelect`. Items with `href` remain native links; local selections use buttons. |
 | CodeExample | Exact `code` string, optional `title`, `description`, `codeLabel`, `language` (`tsx` or `text`) and `border` (`standard` or `none`). Includes copy feedback and keyboard-scrollable source. |
 
-Import each component from its matching file in `components/ui`. Field uses a render function so its accessible attributes reach the actual input rather than a wrapper:
+Import each component from its public subpath, such as `@mdopeace/ui/TextInput`. Field uses a render function so its accessible attributes reach the actual input rather than a wrapper:
 
 ```tsx
 <Field label="Your name" description="How should we address you?" required>
@@ -183,3 +183,25 @@ Use Checkbox directly, since it already owns its label. Native controlled and un
 NavigationList uses grouped lists inside a labeled navigation landmark. Link items identify the current page; local buttons identify the current selection. Disabled items remain unavailable to activation.
 
 CodeExample highlights React/TSX examples with lightweight lexical coloring; it is not a general-purpose language parser or editor. Choose `language="text"` for plain source. Copy always uses the original code string, and markup is rendered as text. Keep the simpler CodeBlock for installation commands and other compact snippets.
+
+
+## Distribution boundary
+
+The generic source is in `packages/ui/src`, with compiled ESM, declarations and
+CSS Modules in its ignored `dist` directory. React is a peer dependency. The
+portfolio imports public package subpaths; generated snippets use those same
+imports. Include `@mdopeace/ui/tokens.css` once in a consumer's global entry.
+No Tailwind reset or portfolio CSS is needed for the components themselves.
+
+`npm run test:package` packs and installs the actual archive into an isolated
+React consumer, type-checks its imports, builds it with CSS Modules, and checks
+keyboard controls, control heights, both themes and exact clipboard text.
+Publication is separate from building or packing; see the package README and
+license notice before sharing an archive.
+
+
+The UI package is MIT-licensed with copyright attributed to Md Mostafijur Rahman.
+The root repository license reserves rights in portfolio content and branding;
+it explicitly excludes the MIT package from that reservation. Distribution must
+include the package copyright and MIT license notice. The package's `private`
+flag prevents accidental registry publishing; it is not a restriction on MIT reuse.

@@ -1,4 +1,4 @@
-import { Stack } from "../ui/Layout";
+import { Stack } from "@mdopeace/ui/Layout";
 import { projects } from "@/data/projects";
 import ProjectCard from "../portfolio/ProjectCard";
 import PlaygroundProject from "../portfolio/PlaygroundProject";

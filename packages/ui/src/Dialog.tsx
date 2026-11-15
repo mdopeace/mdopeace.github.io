@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { FaXmark } from "react-icons/fa6";
-import { useControllable } from "@/hooks/useControllable";
+import { useControllable } from "./hooks/useControllable";
 import { Button } from "./Button";
 import { Stack } from "./Layout";
 import { Heading, Text } from "./Typography";

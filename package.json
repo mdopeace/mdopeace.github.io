@@ -3,16 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run build:ui && next dev",
+    "build": "npm run build:ui && next build",
     "start": "serve out",
     "lint": "eslint",
     "test": "node --test tests/site.test.mjs",
-    "test:ui": "vitest run",
+    "test:ui": "npm run build:ui && vitest run",
     "test:e2e": "playwright test",
-    "compare:visual": "node scripts/compare-portfolio.mjs"
+    "compare:visual": "node scripts/compare-portfolio.mjs",
+    "build:ui": "npm run build --workspace @mdopeace/ui",
+    "pack:ui": "npm pack --workspace @mdopeace/ui",
+    "test:package": "node scripts/test-ui-package.mjs"
   },
   "dependencies": {
+    "@mdopeace/ui": "0.1.0",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -28,6 +32,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "axe-core": "^4.14.0",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "jsdom": "^26.1.0",
@@ -35,5 +40,8 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.7"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

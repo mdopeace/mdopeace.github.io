@@ -1,4 +1,4 @@
-export { HighlightedCode } from "@/components/ui/HighlightedCode";
+export { HighlightedCode } from "@mdopeace/ui/HighlightedCode";
 
 /** Keep short examples compact; expand longer examples one prop per line. */
 export function elementCode(
@@ -49,26 +49,26 @@ export function jsxText(value: string) {
 }
 
 const imports: Record<string, string> = {
-  Field: "@/components/ui/Field",
-  TextInput: "@/components/ui/TextInput",
-  Select: "@/components/ui/Select",
-  Checkbox: "@/components/ui/Checkbox",
-  NavigationList: "@/components/ui/NavigationList",
-  CodeExample: "@/components/ui/CodeExample",
-  Button: "@/components/ui/Button",
-  Link: "@/components/ui/Link",
-  Switch: "@/components/ui/Switch",
-  Surface: "@/components/ui/Surface",
-  Badge: "@/components/ui/Badge",
-  Heading: "@/components/ui/Typography",
-  Text: "@/components/ui/Typography",
-  Grid: "@/components/ui/Layout",
-  Stack: "@/components/ui/Layout",
-  Divider: "@/components/ui/Divider",
-  Dialog: "@/components/ui/Dialog",
-  ExpandableText: "@/components/ui/ExpandableText",
-  CodeBlock: "@/components/ui/CodeBlock",
-  LinkGroup: "@/components/ui/LinkGroup",
+  Field: "@mdopeace/ui/Field",
+  TextInput: "@mdopeace/ui/TextInput",
+  Select: "@mdopeace/ui/Select",
+  Checkbox: "@mdopeace/ui/Checkbox",
+  NavigationList: "@mdopeace/ui/NavigationList",
+  CodeExample: "@mdopeace/ui/CodeExample",
+  Button: "@mdopeace/ui/Button",
+  Link: "@mdopeace/ui/Link",
+  Switch: "@mdopeace/ui/Switch",
+  Surface: "@mdopeace/ui/Surface",
+  Badge: "@mdopeace/ui/Badge",
+  Heading: "@mdopeace/ui/Typography",
+  Text: "@mdopeace/ui/Typography",
+  Grid: "@mdopeace/ui/Layout",
+  Stack: "@mdopeace/ui/Layout",
+  Divider: "@mdopeace/ui/Divider",
+  Dialog: "@mdopeace/ui/Dialog",
+  ExpandableText: "@mdopeace/ui/ExpandableText",
+  CodeBlock: "@mdopeace/ui/CodeBlock",
+  LinkGroup: "@mdopeace/ui/LinkGroup",
   FaHeart: "react-icons/fa6",
   PiMoonStarsBold: "react-icons/pi",
   PiSunBold: "react-icons/pi",

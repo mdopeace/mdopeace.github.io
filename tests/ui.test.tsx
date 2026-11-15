@@ -8,19 +8,19 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Button } from "@/components/ui/Button";
-import { Link } from "@/components/ui/Link";
-import { Switch } from "@/components/ui/Switch";
-import { Dialog } from "@/components/ui/Dialog";
-import { useClipboard } from "@/hooks/useClipboard";
+import { Button } from "@mdopeace/ui/Button";
+import { Link } from "@mdopeace/ui/Link";
+import { Switch } from "@mdopeace/ui/Switch";
+import { Dialog } from "@mdopeace/ui/Dialog";
+import { useClipboard } from "@mdopeace/ui/hooks/useClipboard";
 import ThemeToggle from "@/components/ThemeToggle";
 import ComponentPreview from "@/app/playground/Playground";
-import { Field } from "@/components/ui/Field";
-import { TextInput } from "@/components/ui/TextInput";
-import { Select } from "@/components/ui/Select";
-import { Checkbox } from "@/components/ui/Checkbox";
-import { NavigationList } from "@/components/ui/NavigationList";
-import { CodeExample } from "@/components/ui/CodeExample";
+import { Field } from "@mdopeace/ui/Field";
+import { TextInput } from "@mdopeace/ui/TextInput";
+import { Select } from "@mdopeace/ui/Select";
+import { Checkbox } from "@mdopeace/ui/Checkbox";
+import { NavigationList } from "@mdopeace/ui/NavigationList";
+import { CodeExample } from "@mdopeace/ui/CodeExample";
 import { elementCode, HighlightedCode, jsxText, completeExample } from "@/app/playground/snippets";
 
 function clipboard(writeText: (text: string) => Promise<void>) {
@@ -36,7 +36,7 @@ describe("component playground", () => {
     const code = completeExample(elementCode("Switch", ['aria-label="Example"', "checked={checked}", "onCheckedChange={setChecked}"]), "const [checked, setChecked] = useState(false);", true);
     expect(code).toContain('"use client";');
     expect(code).toContain('import { useState } from "react";');
-    expect(code).toContain('import { Switch } from "@/components/ui/Switch";');
+    expect(code).toContain('import { Switch } from "@mdopeace/ui/Switch";');
     expect(code).toContain("const [checked, setChecked] = useState(false);");
     expect(code).toContain("export default function Example()");
   });

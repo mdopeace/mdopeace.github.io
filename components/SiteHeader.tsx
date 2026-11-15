@@ -1,7 +1,7 @@
 import ThemeToggle from "./ThemeToggle";
-import { Inline } from "./ui/Layout";
-import { Surface } from "./ui/Surface";
-import { Link } from "./ui/Link";
+import { Inline } from "@mdopeace/ui/Layout";
+import { Surface } from "@mdopeace/ui/Surface";
+import { Link } from "@mdopeace/ui/Link";
 const links = [
   ["Story", "#story"],
   ["Work", "#work"],

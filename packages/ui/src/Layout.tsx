@@ -1,4 +1,4 @@
-import { createElement, type ComponentPropsWithRef } from "react";
+import { createElement, type ReactElement, type ComponentPropsWithRef } from "react";
 import {
   cx,
   responsive,
@@ -27,7 +27,7 @@ export function Stack<T extends LayoutTag = "div">({
   className,
   style,
   ...props
-}: StackProps<T>) {
+}: StackProps<T>): ReactElement {
   return createElement(as ?? "div", {
     ...props,
     className: cx(styles.stack, className),
@@ -53,7 +53,7 @@ export function Inline<T extends LayoutTag = "div">({
   className,
   style,
   ...props
-}: InlineProps<T>) {
+}: InlineProps<T>): ReactElement {
   return createElement(as ?? "div", {
     ...props,
     className: cx(styles.inline, className),
@@ -83,7 +83,7 @@ export function Grid<T extends GridTag = "div">({
   className,
   style,
   ...props
-}: GridProps<T>) {
+}: GridProps<T>): ReactElement {
   return createElement(as ?? "div", {
     ...props,
     className: cx(styles.grid, className),
@@ -105,7 +105,7 @@ export function Container({
   className,
   style,
   ...props
-}: ContainerProps) {
+}: ContainerProps): ReactElement {
   return (
     <div
       {...props}

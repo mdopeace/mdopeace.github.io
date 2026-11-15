@@ -1,7 +1,7 @@
 "use client";
 import { useSyncExternalStore } from "react";
 import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
-import { Switch } from "./ui/Switch";
+import { Switch } from "@mdopeace/ui/Switch";
 
 type Theme = "light" | "dark";
 let transitionTimer: ReturnType<typeof setTimeout> | undefined;

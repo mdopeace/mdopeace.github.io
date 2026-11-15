@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
+  transpilePackages: ["@mdopeace/ui"],
   // Directory indexes allow direct visits on GitHub Pages without rewrites.
   trailingSlash: true,
   // Keep the old preview address as a development-only compatibility route.

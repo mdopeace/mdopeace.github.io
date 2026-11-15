@@ -1,7 +1,7 @@
 "use client";
 import type { ComponentPropsWithRef } from "react";
 import { FaCheck, FaCopy } from "react-icons/fa6";
-import { useClipboard } from "@/hooks/useClipboard";
+import { useClipboard } from "./hooks/useClipboard";
 import { Button } from "./Button";
 import { FeedbackLabel } from "./FeedbackLabel";
 import { Surface } from "./Surface";
@@ -44,7 +44,7 @@ export function CodeBlock({
         <span
           role="status"
           aria-live="polite"
-          className={status === "error" ? styles.status : "sr-only"}
+          className={status === "error" ? styles.status : styles.srOnly}
         >
           {status === "success"
             ? successMessage

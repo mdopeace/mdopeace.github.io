@@ -1,0 +1,14 @@
+Project maintained by Md Mostafijur Rahman (@mdopeace).
+
+The reusable UI package lives in packages/ui. The portfolio is a consumer of
+that package. The package is MIT-licensed under packages/ui/LICENSE; the
+repository-level LICENSE applies to original material outside that scope.
+
+Authorship and copyright are different from project administration. Repository
+ownership, a contribution, or a code of conduct does not automatically transfer
+copyright. Third-party material remains subject to its own terms.
+
+Dependencies include React, React DOM and react-icons, among others. They are
+not owned by this project's maintainer. Their copyright and license notices
+must be respected. The package does not bundle these dependencies into its
+distributed JavaScript; package managers install them separately.

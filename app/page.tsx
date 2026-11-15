@@ -6,9 +6,9 @@ import Projects from "@/components/sections/Projects";
 import Story from "@/components/sections/Story";
 import SiteHeader from "@/components/SiteHeader";
 import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
-import { Container, Inline } from "@/components/ui/Layout";
-import { Link } from "@/components/ui/Link";
-import { Text } from "@/components/ui/Typography";
+import { Container, Inline } from "@mdopeace/ui/Layout";
+import { Link } from "@mdopeace/ui/Link";
+import { Text } from "@mdopeace/ui/Typography";
 import { FaArrowUp } from "react-icons/fa6";
 
 export default function Home() {

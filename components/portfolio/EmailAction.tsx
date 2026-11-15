@@ -1,9 +1,9 @@
 "use client";
-import { useClipboard } from "@/hooks/useClipboard";
-import { Button } from "../ui/Button";
-import { FeedbackLabel } from "../ui/FeedbackLabel";
-import { Stack } from "../ui/Layout";
-import { Text } from "../ui/Typography";
+import { useClipboard } from "@mdopeace/ui/hooks/useClipboard";
+import { Button } from "@mdopeace/ui/Button";
+import { FeedbackLabel } from "@mdopeace/ui/FeedbackLabel";
+import { Stack } from "@mdopeace/ui/Layout";
+import { Text } from "@mdopeace/ui/Typography";
 export function EmailAction({ email }: { email: string }) {
   const { copy, status } = useClipboard();
   return (

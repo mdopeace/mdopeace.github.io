@@ -1,4 +1,4 @@
-import { createElement, type ComponentPropsWithRef } from "react";
+import { createElement, type ReactElement, type ComponentPropsWithRef } from "react";
 import { cx } from "./tokens";
 import styles from "./ui.module.css";
 
@@ -13,7 +13,7 @@ export function Heading({
   tone = "default",
   className,
   ...props
-}: HeadingProps) {
+}: HeadingProps): ReactElement {
   return createElement(`h${level}`, {
     ...props,
     "data-size": size,
@@ -44,7 +44,7 @@ export function Text<T extends "p" | "span" | "strong" = "p">({
   className,
   style,
   ...props
-}: TextProps<T>) {
+}: TextProps<T>): ReactElement {
   return createElement(as ?? "p", {
     ...props,
     "data-size": size,

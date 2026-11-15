@@ -22,6 +22,16 @@ for (const theme of ["light", "dark"] as const) {
     const source = await page.getByLabel("Usage example", { exact: true }).textContent();
     await page.getByRole("button", { name: "Copy code", exact: true }).click();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(source);
+    await navigation.getByRole("button", { name: "Badge", exact: true }).click();
+    const badge = page.locator('[data-decoration]').filter({ hasText: "Work in progress" });
+    await page.getByRole("checkbox", { name: "Solid fill" }).uncheck();
+    for (const tone of ["default", "accent", "info", "emphasis"]) {
+      await page.getByRole("combobox", { name: "Tone", exact: true }).selectOption(tone);
+      const foreground = tone === "emphasis"
+        ? theme === "light" ? "rgb(161, 60, 36)" : "rgb(240, 139, 107)"
+        : theme === "light" ? "rgb(37, 35, 31)" : "rgb(246, 240, 223)";
+      await expect(badge).toHaveCSS("color", foreground);
+    }
     await page.reload();
     await expect(navigation).toBeVisible();
     await expect(page.getByRole("heading", { name: "Button", exact: true })).toBeVisible();

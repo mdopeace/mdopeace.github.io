@@ -1,8 +1,8 @@
 "use client";
 
-import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
-import { Text } from "../ui/Typography";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Button } from "@mdopeace/ui/Button";
+import { Text } from "@mdopeace/ui/Typography";
 import styles from "./gameboy.module.css";
 
 import { FaCaretUp, FaCaretLeft, FaCaretRight, FaCaretDown } from "react-icons/fa6";

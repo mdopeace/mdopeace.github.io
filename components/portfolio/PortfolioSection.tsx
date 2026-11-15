@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { Section } from "../ui/Section";
-import { Inline } from "../ui/Layout";
-import { Heading } from "../ui/Typography";
-import { Badge } from "../ui/Badge";
-import { Divider } from "../ui/Divider";
+import { Section } from "@mdopeace/ui/Section";
+import { Inline } from "@mdopeace/ui/Layout";
+import { Heading } from "@mdopeace/ui/Typography";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Divider } from "@mdopeace/ui/Divider";
 
 export default function PortfolioSection({
   label,

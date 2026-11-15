@@ -1,4 +1,4 @@
-import { createElement, type ComponentPropsWithRef } from "react";
+import { createElement, type ReactElement, type ComponentPropsWithRef } from "react";
 import {
   cx,
   responsive,
@@ -36,7 +36,7 @@ export function Surface<T extends Tag = "div">({
   className,
   style,
   ...props
-}: SurfaceProps<T>) {
+}: SurfaceProps<T>): ReactElement {
   return createElement(as ?? "div", {
     ...props,
     "data-ui-surface": tone,
