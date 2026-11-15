@@ -175,7 +175,7 @@ Defaults are part of the API. Layout alignment uses `start | center | end | stre
 | Stack | Responsive `gap={4}`, `align="stretch"`, `justify="start"`; vertical flex; `as="div"` with restricted `div/section/article/nav/ul/ol` semantics |
 | Inline | Responsive `gap={3}`, `align="center"`, `justify="start"`, `wrap=true`; horizontal flex; same restricted semantic tags |
 | Grid | Responsive `columns={1}` (1–4 equal columns), `gap={4}`, `align="stretch"`; `as="div"` (`div/ul/ol`) with corresponding native props; specialized unequal layouts remain business CSS initially |
-| Surface | `tone="default"`, responsive `padding={{ base: 4, sm: 6 }}`, `elevation="lg"`, `radius="none"`, `border="standard"`; `as="div"` or `article/section/li/header`; `variant="solid"` (`solid/soft`), `interactive=false`; optional hover lift respects reduced motion |
+| Surface | `tone="default"`, responsive `padding={{ base: 4, sm: 6 }}`, `elevation="lg"`, `radius="none"`, `border="standard"`; `as="div"` or `article/section/li/header`; `variant="solid"` (`solid/soft`), `interactive=false`; optional hover compression respects reduced motion |
 | Heading | Required `level={1..6}`; `size="title"` (`title/section/display/card/label/feature/statement/dialog`), `tone="default"` (`default/muted/emphasis`); native heading props |
 | Text | `as="p"` (`p/span`), `size="md"` (`caption/sm/body/md/lg`), `weight="regular"`, `tone="default"` (`default/muted/subtle/emphasis/success`), `align="start"`, `font="body"`, `variant="body"` (`body/eyebrow/callout/quote`); native props for selected tag |
 | Button | `variant="primary"` (`primary/secondary/ghost/emphasis`), `size="md"`, `iconOnly=false`, `loading=false`, `startIcon`, `endIcon`; native button props; default `type="button"` |
@@ -272,3 +272,5 @@ Planning is complete when token scales, initial APIs, ownership rules and implem
 - Dialog exit animation retains native modality and scroll locking until the visual exit completes. Reopening interrupts that exit. Native cancellation and an Escape-key handler both request controlled state changes.
 - Game controls retain native buttons and local device geometry as the documented specialized-artwork exception. Their directional icons use `react-icons/fa6`; the device uses a dark foreground on its yellow shell in both themes.
 - Library behavior tests run with `npm run test:ui`; the existing static-export tests continue to run with `npm test` after a production build. See [usage examples](component-library-usage.md).
+
+The agreed app depth policy is defined in [Depth rules](component-library-usage.md#depth-rules): 3px controls, 5px panels, flat nested content, consistent across sizes and themes. This supersedes the earlier per-composition shadow choices.

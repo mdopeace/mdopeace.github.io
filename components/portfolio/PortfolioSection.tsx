@@ -54,7 +54,7 @@ export default function PortfolioSection({
       className="portfolio-section"
       heading={
         <Inline gap={4} wrap={false}>
-          <Badge variant="solid" tone="emphasis" decoration="index" aria-hidden="true">
+          <Badge variant="solid" tone="emphasis" decoration="index" size="md" aria-hidden="true">
             {index}
           </Badge>
           <Heading level={2} size="section">

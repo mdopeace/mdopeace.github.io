@@ -12,7 +12,6 @@ export default function Hero() {
       id="top"
       padding={0}
       border="strong"
-      elevation="xl"
       className="hero-layout"
     >
       <div className="hero-copy">

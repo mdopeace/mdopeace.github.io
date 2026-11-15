@@ -16,7 +16,7 @@ const icons = {
 };
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <Surface as="article" interactive className="project-layout">
+    <Surface as="article" className="project-layout">
       <Surface
         tone="info"
         padding={4}
@@ -55,7 +55,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           <Text variant="eyebrow" size="caption">
             The thinking behind it
           </Text>
-          <ExpandableText expandLabel="Show more" collapseLabel="Show less">
+          <ExpandableText expandLabel="Read more" collapseLabel="Read less">
             {project.paragraphs.join("\n\n")}
           </ExpandableText>
         </Stack>

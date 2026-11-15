@@ -12,7 +12,7 @@ const links = [
 export default function SiteHeader() {
   return (
     <nav className="site-nav" aria-label="Main navigation">
-      <Surface padding={3} elevation="md">
+      <Surface padding={3}>
         <Inline gap={4} wrap={false} className="navigation-layout">
           <Link
             href="#top"

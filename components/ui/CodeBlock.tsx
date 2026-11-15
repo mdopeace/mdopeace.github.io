@@ -22,7 +22,7 @@ export function CodeBlock({
   const { copy, status } = useClipboard();
   if (!code) return null;
   return (
-    <Surface {...props} tone="accent" elevation="md" padding={3}>
+    <Surface {...props} tone="accent" elevation="none" padding={3}>
       <Stack gap={2}>
         <div className={styles.code}>
           <pre>

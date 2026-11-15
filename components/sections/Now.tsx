@@ -38,7 +38,7 @@ export default function Now() {
         </Surface>
         <Surface as="article" padding={{ base: 6, sm: 8 }} className="halftone">
           <Stack gap={6} justify="between" className="full-height">
-            <Badge variant="solid" tone="accent" stretch>
+            <Badge variant="solid" tone="accent">
               More in the works
             </Badge>
             <Text variant="quote">

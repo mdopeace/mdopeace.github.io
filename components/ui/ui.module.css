@@ -206,13 +206,20 @@
   box-shadow: none;
   border-color: transparent;
 }
-.control:not(:disabled):hover {
+.control[data-variant="ghost"]:not(:disabled):is(:hover, :focus-visible) {
+  --control-bg: color-mix(
+    in srgb,
+    var(--control-fg) 8%,
+    var(--ui-local-bg, var(--ui-canvas))
+  );
+}
+.control:not(:disabled):not([data-variant="ghost"]):hover {
   color: var(--control-fg);
   transform: translate(1px, 1px);
   box-shadow: var(--ui-shadow-sm);
 }
-.control:not(:disabled):active {
-  transform: translate(2px, 2px);
+.control:not(:disabled):not([data-variant="ghost"]):active {
+  transform: translate(3px, 3px);
   box-shadow: none;
 }
 .control:disabled {
@@ -255,7 +262,6 @@
 .switch:has(input:focus-visible) {
   outline: 3px solid var(--ui-focus);
   outline-offset: 3px;
-  box-shadow: 0 0 0 3px var(--ui-canvas);
 }
 .badge {
   display: inline-flex;
@@ -294,7 +300,6 @@
 .badge[data-variant="outline"] {
   background: var(--ui-local-bg, var(--ui-surface));
   color: var(--ui-local-text, var(--badge-fg));
-  box-shadow: var(--ui-shadow-sm);
 }
 .divider {
   border: 0;
@@ -379,7 +384,7 @@
   border: 3px solid var(--ui-border);
   background: var(--ui-surface);
   color: var(--ui-text);
-  box-shadow: var(--ui-shadow-xl);
+  box-shadow: var(--ui-shadow-lg);
   overflow: auto;
 }
 .dialog[data-size="sm"] {
@@ -697,8 +702,8 @@
 .surface[data-interactive="true"] {
   transition: transform var(--ui-fast), box-shadow var(--ui-fast);
 }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .surface[data-interactive="true"]:hover { transform: translate(-2px,-2px); box-shadow: var(--ui-shadow-xl); }
+@media (hover: hover) {
+  .surface[data-interactive="true"]:hover { transform: translate(2px, 2px); box-shadow: var(--ui-shadow-md); }
 }
 .badge {
   font-size: 0.65rem;
@@ -711,17 +716,24 @@
 .badge[data-decoration="index"] {
   display: grid;
   place-items: center;
+  align-self: center;
   flex: none;
   width: 1.875rem;
   height: 1.875rem;
   padding: 0;
   font-size: 0.7rem;
-  border-color: var(--ui-on-emphasis);
+  border-color: var(--ui-border);
   transform: rotate(-5deg);
+}
+.badge[data-decoration="index"][data-size="md"] {
+  width: var(--ui-space-10);
+  height: var(--ui-space-10);
+  padding: 0;
+  font-size: var(--ui-font-sm);
 }
 .badge[data-decoration="stamp"] {
   padding: 0.35rem 0.6rem;
-  border-color: var(--ui-on-emphasis);
+  border-color: var(--ui-border);
   font-size: 0.75rem;
   transform: rotate(7deg);
 }
@@ -730,7 +742,6 @@
   gap: 0.8rem;
   font-size: 0.76rem;
   line-height: 1.55;
-  box-shadow: var(--ui-shadow-md);
 }
 .control[data-size="md"] {
   --control-height: 2.75rem;
@@ -744,7 +755,6 @@
   gap: 0.35rem;
   font: 900 0.65rem/1.55 var(--ui-mono);
   letter-spacing: 0.04em;
-  box-shadow: var(--ui-shadow-sm);
 }
 .link[data-size="sm"] {
   font: 900 0.75rem/1.55 var(--ui-mono);
@@ -755,6 +765,7 @@
 .code pre { font-size: 0.8125rem; line-height: 1.55; }
 @media (prefers-reduced-motion: reduce) {
   .surface[data-interactive="true"] { transition: none; }
+  .surface[data-interactive="true"]:hover { transform: none; }
 }
 
 @media (min-width: 40rem) { .text[data-size="lg"] { font-size: var(--ui-font-lg); } }

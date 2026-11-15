@@ -121,7 +121,7 @@ export default function ComponentPreview() {
             </Inline>
             <Divider />
             <CodeBlock code={"npm install\nnpm run dev"} />
-            <ExpandableText expandLabel="Show more" collapseLabel="Show less">
+            <ExpandableText expandLabel="Read more" collapseLabel="Read less">
               {"Expandable content. ".repeat(100)}
             </ExpandableText>
             <LinkGroup

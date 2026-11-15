@@ -105,7 +105,7 @@ Run `npm run test:ui`, `npm run lint`, `npm run build`, then `npm test`. The las
 
 Shared recipes preserve the live portfolio’s tight display headings, uppercase chapter titles, small mono labels, warm paper, hard offset shadows and tinted panels. Use Heading sizes `card`, `label`, `feature`, `statement` and `dialog` for their corresponding visual hierarchy, independently of heading level. Text variants `eyebrow`, `callout` and `quote` own their type and accent rules. The `lg` text size increases from 16px to 18px at the small breakpoint.
 
-Use `Surface variant="soft" tone="info"` for a blue tint, or a soft accent/subtle surface for yellow. Solid colored surfaces retain their paired foregrounds. `interactive` adds a decorative lift without making the card itself clickable. Badge `decoration="index"` and `decoration="stamp"` own their rotations; `stretch` fills the available line. Button/Link `emphasis` and Link `nav` reuse the shared action and navigation recipes.
+Use `Surface variant="soft" tone="info"` for a blue tint, or a soft accent/subtle surface for yellow. Solid colored surfaces retain their paired foregrounds. `interactive` adds hover compression without making the card itself clickable. Badge `decoration="index"` and `decoration="stamp"` own their rotations; `stretch` fills the available line. Button/Link `emphasis` and Link `nav` reuse the shared action and navigation recipes.
 
 The contact illustration retains asymmetric artwork padding through Surface’s native style escape hatch. Its dots and illustration placement remain business artwork; ordinary cards use the component padding scale.
 
@@ -114,3 +114,22 @@ The contact illustration retains asymmetric artwork padding through Surface’s 
 Run `npm run build` and then `npm run test:e2e` to test the exported app in Chromium at desktop and mobile sizes in both themes. The tests cover tight hero typography, overflow, hash navigation, expandable descriptions, exact clipboard payloads, support dialog dismissal/focus, and theme persistence.
 
 With the app running at port 3001, run `npm run compare:visual`. Override `LOCAL_URL` to compare a production preview instead. It captures every section of the live site and local app at matched desktop/mobile sizes in both themes, then writes a side-by-side HTML report and computed metrics under `test-results/visual-comparison/`. The theme switch and visible dark shadows are deliberate retained changes.
+
+## Depth rules
+
+Use the same hard shadow geometry in both themes: equal horizontal and vertical offsets with zero blur or spread. Size and color do not change depth.
+
+| Category | Resting offset |
+| --- | --- |
+| Buttons and button-styled links, all sizes | 3px (`md`) |
+| Cards, panels, hero, navigation bar, dialogs | 5px (`lg`) |
+| Sections, layout containers, nested image frames, code blocks, badges | None |
+| Ghost buttons and plain links | None in all states |
+
+Raised controls move 1px down/right with a 2px shadow on hover; on press they move 3px down/right with no shadow. Interactive panels move 2px down/right with a 3px shadow on hover. Project panels stay stationary with a 5px shadow because the panels themselves are not actionable. Only their links and buttons provide interaction feedback. Keyboard focus adds an outline while preserving the current depth. Reduced motion disables movement. Game Boy artwork retains its own shading.
+
+Surface keeps its explicit elevation escape hatch, but app compositions follow the category rules above; do not pick different resting shadows to compensate for a panel’s size or color.
+
+Ghost controls use a subtle foreground tint over their containing surface on hover and keyboard focus. They stay stationary and shadowless; disabled controls retain their resting background. No underline or additional icon is required by this variant.
+
+Chapter-index badges support `size="sm"` (30px square, 11.2px number) and `size="md"` (40px square, 14px number). Portfolio section headings use `md`; both sizes stay vertically centered and use the theme border color.

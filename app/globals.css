@@ -1054,7 +1054,8 @@
     width: auto;
     height: auto;
     border: 2px solid var(--ui-border);
-    box-shadow: var(--ui-shadow-md);
+    background-color: var(--ui-border);
+    box-shadow: none;
   }
   .project-copy {
     align-self: center;
