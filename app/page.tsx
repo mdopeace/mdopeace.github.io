@@ -30,7 +30,7 @@ export default function Home() {
           <Text size="caption" font="mono" tone="muted">
             Made with curiosity · Bengaluru
           </Text>
-          <Link href="#top" endIcon={<FaArrowUp />}>
+          <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
             Back to top
           </Link>
         </Inline>

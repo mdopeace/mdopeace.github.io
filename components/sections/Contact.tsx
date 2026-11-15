@@ -71,7 +71,7 @@ export default function Contact() {
           </Stack>
         </Stack>
         <Surface tone="info" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
-          <span className="contact-stamp">SIGNAL READY</span>
+          <Badge variant="solid" tone="accent" tilt="left" className="contact-stamp">SIGNAL READY</Badge>
           <div className="contact-thought">
             <Image
               className="contact-thought-image"
@@ -124,7 +124,7 @@ export default function Contact() {
               </g>
             </svg>
           </div>
-          <span className="contact-art-caption">Your turn · send a signal</span>
+          <Badge variant="solid" tone="default" className="contact-art-caption">Your turn · send a signal</Badge>
         </Surface>
       </div>
     </Section>

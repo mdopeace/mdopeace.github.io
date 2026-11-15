@@ -135,3 +135,15 @@ Ghost controls use the theme canvas background and text color consistently acros
 Chapter-index badges support `size="sm"` (30px square, 11.2px number) and `size="md"` (40px square, 14px number). Portfolio section headings use `md`; both sizes stay vertically centered and use the theme border color.
 
 Button and Link support `iconTone="inherit"` (default), `emphasis`, `muted`, or `success`. The tone applies to both icon slots without changing the label color. Choose a tone with sufficient contrast on the control background. The support heart uses `emphasis`, the same theme token as the brand background.
+
+Game Boy controls use the same interaction geometry as shared buttons: 3px resting shadow, 1px hover movement with a 2px shadow, and 3px pressed movement with no shadow. Device-specific shapes, fills, labels and dark shadow color remain local artwork. The D-pad uses individual button shadows rather than an additional group shadow. Focus preserves depth, disabled controls do not move, and reduced motion suppresses movement.
+
+Badge supports `shape="square"` for unrotated square labels: `sm` is 30px and `md` is 40px. The Game Boy GB brand uses a solid emphasis square Badge in `sm`, including compact layouts; its device context retains the dark border on the yellow shell.
+
+## Completed component migrations
+
+Contact artwork labels use Badge: an accent label with `tilt="left"` for Signal Ready and a default solid label for the caption. Their local CSS only positions them. Badge tilt is optional (`left`/`right`) and independent of shape and decoration.
+
+Game Boy controls use Button, including icon-only directional controls with native accessible names. Shared Button owns focus, disabled state, icon slots and shadow/press feedback. The device integration stylesheet retains its palette, compact physical dimensions, D-pad grid placement and screen-button shine; it does not duplicate interaction rules. Local shadow and border tokens preserve dark edges against the yellow device in both themes.
+
+Game text uses Text with body/mono font tokens, an `xs` size (11px), optional `leading="tight"` for counters, and semantic `as="strong"` for emphasized values. The board cells, speaker slots, LED and illustration shapes remain artwork rather than generic UI components.

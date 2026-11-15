@@ -89,6 +89,7 @@ The app will expose only light and dark via a theme Switch. Remove the Auto opti
 
 | Token | Initial size / line height | Use |
 | --- | --- | --- |
+| `xs` | 11px / 1.55 | Compact device labels |
 | `caption` | 12px / 1.5 | Labels and metadata |
 | `sm` | 14px / 1.7 | Supporting text |
 | `md` | 16px / 1.7 | Body text |
@@ -177,7 +178,7 @@ Defaults are part of the API. Layout alignment uses `start | center | end | stre
 | Grid | Responsive `columns={1}` (1–4 equal columns), `gap={4}`, `align="stretch"`; `as="div"` (`div/ul/ol`) with corresponding native props; specialized unequal layouts remain business CSS initially |
 | Surface | `tone="default"`, responsive `padding={{ base: 4, sm: 6 }}`, `elevation="lg"`, `radius="none"`, `border="standard"`; `as="div"` or `article/section/li/header`; `variant="solid"` (`solid/soft`), `interactive=false`; optional hover compression respects reduced motion |
 | Heading | Required `level={1..6}`; `size="title"` (`title/section/display/card/label/feature/statement/dialog`), `tone="default"` (`default/muted/emphasis`); native heading props |
-| Text | `as="p"` (`p/span`), `size="md"` (`caption/sm/body/md/lg`), `weight="regular"`, `tone="default"` (`default/muted/subtle/emphasis/success`), `align="start"`, `font="body"`, `variant="body"` (`body/eyebrow/callout/quote`); native props for selected tag |
+| Text | `as="p"` (`p/span/strong`), `size="md"` (`xs/caption/sm/body/md/lg`), `weight="regular"`, `tone="default"` (`default/muted/subtle/emphasis/success`), `align="start"`, `font="body"`, `variant="body"` (`body/eyebrow/callout/quote`); native props for selected tag |
 | Button | `variant="primary"` (`primary/secondary/ghost/emphasis`), `size="md"`, `iconOnly=false`, `loading=false`, `startIcon`, `endIcon`; native button props; default `type="button"` |
 | Link | Required `href`; `variant="text"` (`text/nav/primary/secondary/ghost/emphasis`), `size="md"`, `startIcon`, `endIcon`, `externalIndicator=false`; native anchor props; button variants use Button recipes |
 | Badge | `variant="outline"` (`outline/solid`), `tone="default"` (`default/accent/info/emphasis/success`), `size="sm"` (`sm/md`), `decoration="none"` (`none/index/stamp`), `stretch=false`; native span props; never inserts a list item |
@@ -270,7 +271,9 @@ Planning is complete when token scales, initial APIs, ownership rules and implem
 - Shared visual recipes live in the UI CSS Module; tokens live in `styles/tokens.css`. The Tailwind Turbopack loader applies only to `globals.css`, preserving native CSS Module class exports.
 - Responsive layout props reset unused breakpoint variables locally so nested components cannot inherit an ancestor's responsive overrides accidentally.
 - Dialog exit animation retains native modality and scroll locking until the visual exit completes. Reopening interrupts that exit. Native cancellation and an Escape-key handler both request controlled state changes.
-- Game controls retain native buttons and local device geometry as the documented specialized-artwork exception. Their directional icons use `react-icons/fa6`; the device uses a dark foreground on its yellow shell in both themes.
+- Game controls use shared Button with local device geometry as the documented specialized-artwork exception. Their directional icons use `react-icons/fa6`; the device uses a dark foreground on its yellow shell in both themes.
 - Library behavior tests run with `npm run test:ui`; the existing static-export tests continue to run with `npm test` after a production build. See [usage examples](component-library-usage.md).
 
 The agreed app depth policy is defined in [Depth rules](component-library-usage.md#depth-rules): 3px controls, 5px panels, flat nested content, consistent across sizes and themes. This supersedes the earlier per-composition shadow choices.
+
+Game Boy controls now use shared Button with a device-specific geometry/palette stylesheet; device text uses Text. Contact artwork labels use Badge. See [completed migrations](component-library-usage.md#completed-component-migrations).

@@ -21,23 +21,25 @@ export function Heading({
     className: cx(styles.heading, className),
   });
 }
-export type TextProps<T extends "p" | "span" = "p"> =
+export type TextProps<T extends "p" | "span" | "strong" = "p"> =
   ComponentPropsWithRef<T> & {
     as?: T;
-    size?: "caption" | "sm" | "body" | "md" | "lg";
+    size?: "xs" | "caption" | "sm" | "body" | "md" | "lg";
     weight?: "regular" | "medium" | "bold" | "black";
     tone?: "default" | "muted" | "subtle" | "emphasis" | "success";
     align?: "start" | "center" | "end";
     font?: "body" | "mono";
+    leading?: "normal" | "tight";
     variant?: "body" | "eyebrow" | "callout" | "quote";
   };
-export function Text<T extends "p" | "span" = "p">({
+export function Text<T extends "p" | "span" | "strong" = "p">({
   as,
   size = "md",
   weight = "regular",
   tone = "default",
   align = "start",
   font = "body",
+  leading = "normal",
   variant = "body",
   className,
   style,
@@ -49,6 +51,7 @@ export function Text<T extends "p" | "span" = "p">({
     "data-weight": weight,
     "data-tone": tone,
     "data-font": font,
+    "data-leading": leading,
     "data-variant": variant,
     className: cx(styles.text, className),
     style: { "--text-align": align, ...style },

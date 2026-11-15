@@ -124,6 +124,10 @@
   .gameboy {
     /* The yellow device is a light surface even in dark mode. */
     --ink: var(--ui-on-accent);
+    --ui-border: var(--ink);
+    --ui-focus: var(--ink);
+    --ui-shadow-sm: 2px 2px 0 var(--ink);
+    --ui-shadow-md: 3px 3px 0 var(--ink);
     --card: #fffaf0;
     position: relative;
     z-index: 1;
@@ -150,46 +154,16 @@
       inset 0 0 0 3px var(--ink),
       inset 0 0 0 6px var(--card);
   }
-  .gameboy button:focus-visible {
-    position: relative;
-    z-index: 5;
-    outline: 3px solid #fffaf0;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 5px #25231f;
-  }
-  .gameboy button:not(:disabled) {
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .gameboy button:not(:disabled):hover {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
+
   .gameboy-brand {
+    --ui-border: var(--ink);
     display: flex;
     flex: 0 0 auto;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
     padding: 0 0 0.55rem;
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 950;
     letter-spacing: 0.08em;
-  }
-  .gameboy-brand > span:first-child {
-    display: grid;
-    width: 30px;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--accent-2);
-    box-shadow: 2px 2px 0 var(--ink);
-    color: var(--ink-on-accent-2);
-    font-size: 0.65rem;
-    letter-spacing: -0.08em;
   }
   .gameboy-brand i {
     color: var(--ink);
@@ -244,9 +218,6 @@
     display: flex;
     justify-content: space-between;
     padding: 0 1px 5px;
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 950;
     letter-spacing: 0.08em;
   }
   .tetris-screen-layout {
@@ -315,15 +286,7 @@
     display: grid;
     gap: 1px;
   }
-  .tetris-hud span {
-    font-size: 11px;
-    font-weight: 950;
-    letter-spacing: 0.06em;
-  }
-  .tetris-hud strong {
-    font-size: 14px;
-    line-height: 1.1;
-  }
+
   .tetris-next {
     margin-top: 2px;
   }
@@ -356,36 +319,12 @@
     justify-items: center;
     gap: 9px;
     background: #d8dfb2ef;
-    font-family: ui-monospace, monospace;
-    text-align: center;
   }
-  .tetris-overlay strong {
-    font-size: 0.9rem;
-    font-weight: 950;
-    letter-spacing: 0.06em;
-  }
-  .tetris-countdown-note {
-    font-size: 0.75rem;
-    font-weight: 800;
-  }
-  .tetris-screen-button {
-    min-width: 104px;
-    min-height: 36px;
-    border: 2px solid #25271e;
-    background: #25271e;
-    box-shadow: 2px 2px 0 #8f9668;
-    color: #f1f0d3;
-    padding: 0.45rem 0.65rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.7rem;
-    font-weight: 900;
-    cursor: pointer;
-  }
+
+
   .tetris-screen-button--start {
     position: relative;
     overflow: hidden;
-    background: #25271e;
-    color: #f1f0d3;
   }
   .tetris-screen-button--start::after {
     position: absolute;
@@ -419,9 +358,6 @@
     background: color-mix(in srgb, var(--accent-2) 20%, var(--accent));
   }
   .gameboy-hinge span {
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 950;
     letter-spacing: 0.14em;
   }
   .gameboy-controls {
@@ -438,27 +374,9 @@
     width: 100px;
     height: 100px;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-    filter: drop-shadow(
-      2px 2px 0 color-mix(in srgb, var(--ink) 30%, transparent)
-    );
+    gap: var(--ui-space-1);
   }
-  .gameboy-dpad button {
-    display: grid;
-    min-width: 24px;
-    min-height: 24px;
-    place-items: center;
-    border: 2px solid var(--ink);
-    background: #49473f;
-    color: #fff8df;
-    font-size: 0.75rem;
-    font-weight: 950;
-    cursor: pointer;
-  }
-  .gameboy-dpad button:active,
-  .gameboy-ab button:active,
-  .gameboy-small-button:active {
-    transform: translate(1px, 1px);
-  }
+
   .dpad-up {
     grid-area: 1 / 2;
   }
@@ -470,6 +388,7 @@
     grid-area: 2 / 2;
     border: 2px solid var(--ink);
     background: #393830;
+    box-shadow: 3px 3px 0 var(--ink);
   }
   .dpad-right {
     grid-area: 2 / 3;
@@ -505,73 +424,22 @@
     gap: 9px;
     transform: none;
   }
-  .gameboy-ab button {
-    display: grid;
-    width: 48px;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--accent-2);
-    box-shadow: 3px 3px 0 var(--ink);
-    color: var(--ink-on-accent-2);
-    cursor: pointer;
-  }
-  .gameboy-ab .gameboy-hold-button {
-    width: 100%;
-    min-height: 26px;
-    aspect-ratio: auto;
-    padding: 0.15rem 0.35rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.62rem;
-    font-weight: 950;
-  }
-  .gameboy-ab button:first-child {
-    transform: none;
-  }
-  .gameboy-ab button b {
-    font-family: ui-monospace, monospace;
-    font-size: 0.9rem;
-  }
+
   .gameboy-utility {
     display: flex;
     justify-content: center;
     gap: 10px;
     padding-top: 2px;
   }
-  .gameboy-small-button {
-    min-width: 72px;
-    min-height: 30px;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--card);
-    box-shadow: 2px 2px 0 var(--ink);
-    padding: 0.2rem 0.45rem;
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 950;
-    cursor: pointer;
-  }
+
   .gameboy-instructions {
     display: grid;
     gap: 2px;
-    margin: 10px 0 0;
     border-top: 1px dashed color-mix(in srgb, var(--ink) 65%, transparent);
     padding-top: 7px;
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 950;
     letter-spacing: 0.025em;
-    line-height: 1.4;
-    text-align: center;
   }
-  .gameboy-instructions span {
-    color: var(--ink);
-  }
-  .gameboy button:disabled {
-    cursor: not-allowed;
-    opacity: 0.62;
-  }
+
   .hero-sun {
     position: absolute;
     z-index: -1;
@@ -696,15 +564,6 @@
     top: 1rem;
     left: 1rem;
     z-index: 2;
-    border: 2px solid var(--ink);
-    background: var(--accent);
-    color: var(--ink-on-accent);
-    padding: 0.35rem 0.5rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.62rem;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    transform: rotate(-3deg);
   }
   .contact-thought {
     position: absolute;
@@ -758,18 +617,10 @@
     animation: contact-twinkle 3.3s ease-in-out infinite;
   }
   .contact-art-caption {
-    color: var(--ink);
     position: absolute;
     right: 0.85rem;
     bottom: 0.65rem;
     z-index: 2;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    padding: 0.25rem 0.45rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.6rem;
-    font-weight: 900;
-    text-transform: uppercase;
   }
   @keyframes maker-float {
     0%,
@@ -900,9 +751,6 @@
     .gameboy-brand {
       padding: 0 0 0.25rem;
     }
-    .gameboy-brand > span:first-child {
-      width: 26px;
-    }
     .gameboy-bezel {
       padding: 6px;
     }
@@ -911,9 +759,7 @@
       height: 18px;
     }
     .gameboy-instructions {
-      margin-top: 4px;
       padding-top: 5px;
-      font-size: 11px;
     }
     .tetris-board {
       height: clamp(100px, 12.8vh, 108px);
@@ -933,9 +779,7 @@
     .gameboy-ab {
       max-width: 89px;
     }
-    .gameboy-ab button {
-      width: 40px;
-    }
+
     .gameboy-speaker {
       grid-template-columns: repeat(8, 5px);
       gap: 5px 3px;
@@ -1069,11 +913,7 @@
   .navigation-links {
     flex: 1;
   }
-  .gameboy-dpad button svg {
-    width: 1rem;
-    height: 1rem;
-    margin: auto;
-  }
+
   @media (min-width: 40rem) {
     .hero-copy {
       padding: var(--ui-space-10);

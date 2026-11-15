@@ -484,7 +484,7 @@
   .expandViewport {
     transition: none;
   }
-  .control:not(:disabled):is(:hover, :active) {
+  .control:not(:disabled):not([data-variant="ghost"]):is(:hover, :active) {
     transform: none;
   }
   .dialog[open],
@@ -781,3 +781,24 @@
 .control[data-variant="ghost"] { box-shadow: none; }
 .control[data-variant="emphasis"] { --control-bg: var(--ui-emphasis); --control-fg: var(--ui-on-emphasis); }
 .link[data-variant="nav"] { font-family: var(--ui-body); font-weight: 800; font-size: 0.78rem; text-decoration: none; }
+
+.badge[data-shape="square"] {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  flex: none;
+  width: 1.875rem;
+  height: 1.875rem;
+  padding: 0;
+}
+.badge[data-shape="square"][data-size="md"] {
+  width: var(--ui-space-10);
+  height: var(--ui-space-10);
+  padding: 0;
+  font-size: var(--ui-font-sm);
+}
+
+.text[data-size="xs"] { font-size: var(--ui-font-xs); line-height: 1.55; }
+.text[data-leading="tight"] { line-height: 1.1; }
+.badge[data-tilt="left"] { transform: rotate(-3deg); }
+.badge[data-tilt="right"] { transform: rotate(3deg); }

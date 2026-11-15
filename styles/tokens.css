@@ -19,6 +19,7 @@
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
     sans-serif;
   --ui-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ui-font-xs: 0.6875rem;
   --ui-font-caption: 0.75rem;
   --ui-font-sm: 0.875rem;
   --ui-font-md: 1rem;

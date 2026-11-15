@@ -1,5 +1,10 @@
 "use client";
 
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
+import { Text } from "../ui/Typography";
+import styles from "./gameboy.module.css";
+
 import { FaCaretUp, FaCaretLeft, FaCaretRight, FaCaretDown } from "react-icons/fa6";
 
 import {
@@ -312,10 +317,10 @@ export default function TetrisGameboy() {
       onKeyDown={handleKeyDown}
     >
       <div className="gameboy-brand">
-        <span aria-hidden="true">GB</span>
-        <span>
+        <Badge variant="solid" tone="emphasis" shape="square" size="sm" aria-hidden="true">GB</Badge>
+        <Text as="span" size="caption" font="mono" weight="black">
           POCKET <i>COLOR</i>
-        </span>
+        </Text>
         <span
           className={`gameboy-led gameboy-led--${ledState}`}
           aria-hidden="true"
@@ -324,8 +329,8 @@ export default function TetrisGameboy() {
       <div className="gameboy-bezel">
         <div className="gameboy-screen">
           <div className="gameboy-screen-heading">
-            <span>POCKET TETRIS</span>
-            <span>MARATHON</span>
+            <Text as="span" size="caption" font="mono" weight="black">POCKET TETRIS</Text>
+            <Text as="span" size="caption" font="mono" weight="black">MARATHON</Text>
           </div>
           <div className="tetris-screen-layout">
             <div
@@ -345,19 +350,19 @@ export default function TetrisGameboy() {
             </div>
             <aside className="tetris-hud" aria-label="Game stats">
               <div>
-                <span>SCORE</span>
-                <strong>{game.score.toString().padStart(5, "0")}</strong>
+                <Text as="span" size="xs" font="mono" weight="black">SCORE</Text>
+                <Text as="strong" size="sm" font="mono" weight="black" leading="tight">{game.score.toString().padStart(5, "0")}</Text>
               </div>
               <div>
-                <span>LINES</span>
-                <strong>{game.lines.toString().padStart(2, "0")}</strong>
+                <Text as="span" size="xs" font="mono" weight="black">LINES</Text>
+                <Text as="strong" size="sm" font="mono" weight="black" leading="tight">{game.lines.toString().padStart(2, "0")}</Text>
               </div>
               <div>
-                <span>LEVEL</span>
-                <strong>{game.level.toString().padStart(2, "0")}</strong>
+                <Text as="span" size="xs" font="mono" weight="black">LEVEL</Text>
+                <Text as="strong" size="sm" font="mono" weight="black" leading="tight">{game.level.toString().padStart(2, "0")}</Text>
               </div>
               <div>
-                <span>NEXT</span>
+                <Text as="span" size="xs" font="mono" weight="black">NEXT</Text>
                 <div className="tetris-preview">
                   {Array.from({ length: 16 }, (_, index) => {
                     const x = index % 4;
@@ -379,11 +384,11 @@ export default function TetrisGameboy() {
           </div>
           {overlayTitle ? (
             <div className="tetris-overlay">
-              <strong>{overlayTitle}</strong>
+              <Text as="strong" size="sm" font="mono" weight="black" leading="tight">{overlayTitle}</Text>
               {overlayButton ? (
-                <button
+                <Button size="sm" variant="secondary"
                   type="button"
-                  className={`tetris-screen-button${ready ? " tetris-screen-button--start" : ""}`}
+                  className={`${styles.deviceButton} ${styles.screen} tetris-screen-button${ready ? " tetris-screen-button--start" : ""}`}
                   onClick={
                     paused
                       ? () => {
@@ -394,18 +399,18 @@ export default function TetrisGameboy() {
                   }
                 >
                   {overlayButton}
-                </button>
+                </Button>
               ) : (
-                <span className="tetris-countdown-note">
+                <Text as="span" size="caption" font="mono" align="center">
                   Controls unlock in a moment
-                </span>
+                </Text>
               )}
             </div>
           ) : null}
         </div>
       </div>
       <div className="gameboy-hinge">
-        <span>PIXEL POWER · 8-BIT DAYDREAM</span>
+        <Text as="span" size="xs" font="mono" weight="black">PIXEL POWER · 8-BIT DAYDREAM</Text>
       </div>
       <div className="gameboy-controls" role="group" aria-label="Game controls">
         <div
@@ -413,43 +418,43 @@ export default function TetrisGameboy() {
           role="group"
           aria-label="Directional controls"
         >
-          <button
+          <Button size="sm" variant="secondary"
             type="button"
-            className="dpad-up"
+            iconOnly
+            startIcon={<FaCaretUp focusable="false" />}
+            className={`${styles.deviceButton} ${styles.direction} dpad-up`}
             aria-label="Rotate clockwise"
             disabled={!stateActive}
             onClick={() => engine.rotate("cw")}
-          >
-            <FaCaretUp aria-hidden="true" focusable="false" />
-          </button>
-          <button
+          />
+          <Button size="sm" variant="secondary"
             type="button"
-            className="dpad-left"
+            iconOnly
+            startIcon={<FaCaretLeft focusable="false" />}
+            className={`${styles.deviceButton} ${styles.direction} dpad-left`}
             aria-label="Move left"
             disabled={!stateActive}
             onClick={() => activateDirectionalButton("left")}
-          >
-            <FaCaretLeft aria-hidden="true" focusable="false" />
-          </button>
+          />
           <span className="dpad-center" aria-hidden="true" />
-          <button
+          <Button size="sm" variant="secondary"
             type="button"
-            className="dpad-right"
+            iconOnly
+            startIcon={<FaCaretRight focusable="false" />}
+            className={`${styles.deviceButton} ${styles.direction} dpad-right`}
             aria-label="Move right"
             disabled={!stateActive}
             onClick={() => activateDirectionalButton("right")}
-          >
-            <FaCaretRight aria-hidden="true" focusable="false" />
-          </button>
-          <button
+          />
+          <Button size="sm" variant="secondary"
             type="button"
-            className="dpad-down"
+            iconOnly
+            startIcon={<FaCaretDown focusable="false" />}
+            className={`${styles.deviceButton} ${styles.direction} dpad-down`}
             aria-label="Soft drop"
             disabled={!stateActive}
             onClick={() => activateDirectionalButton("down")}
-          >
-            <FaCaretDown aria-hidden="true" focusable="false" />
-          </button>
+          />
         </div>
         <div className="gameboy-speaker" aria-hidden="true">
           {Array.from({ length: 24 }, (_, index) => (
@@ -457,37 +462,39 @@ export default function TetrisGameboy() {
           ))}
         </div>
         <div className="gameboy-ab" role="group" aria-label="Action controls">
-          <button
+          <Button size="sm" variant="secondary"
             type="button"
+            className={`${styles.deviceButton} ${styles.action}`}
             aria-label="Hard drop piece"
             disabled={!stateActive}
             onClick={() => engine.hardDrop()}
           >
-            <b>B</b>
-          </button>
-          <button
+            B
+          </Button>
+          <Button size="sm" variant="secondary"
             type="button"
+            className={`${styles.deviceButton} ${styles.action}`}
             aria-label="Rotate piece"
             disabled={!stateActive}
             onClick={() => engine.rotate("cw")}
           >
-            <b>A</b>
-          </button>
-          <button
+            A
+          </Button>
+          <Button size="sm" variant="secondary"
             type="button"
-            className="gameboy-hold-button"
+            className={`${styles.deviceButton} ${styles.action} ${styles.hold} gameboy-hold-button`}
             aria-label="Hold piece"
             disabled={!stateActive}
             onClick={() => engine.hold()}
           >
             HOLD
-          </button>
+          </Button>
         </div>
       </div>
       <div className="gameboy-utility">
-        <button
+        <Button size="sm" variant="secondary"
           type="button"
-          className="gameboy-small-button"
+          className={`${styles.deviceButton} ${styles.utility} gameboy-small-button`}
           aria-label="Reset game"
           onClick={() => {
             engine.reset();
@@ -496,10 +503,10 @@ export default function TetrisGameboy() {
           }}
         >
           SELECT
-        </button>
-        <button
+        </Button>
+        <Button size="sm" variant="secondary"
           type="button"
-          className="gameboy-small-button"
+          className={`${styles.deviceButton} ${styles.utility} gameboy-small-button`}
           aria-label={
             paused
               ? "Resume game"
@@ -521,20 +528,20 @@ export default function TetrisGameboy() {
               : isClearing(game)
                 ? "WAIT"
                 : "START / PAUSE"}
-        </button>
+        </Button>
       </div>
-      <p className="gameboy-instructions" id="gameboy-instructions">
-        <span>TAB FOCUS · ← / → MOVE · ↓ DROP · ↑ / X TURN</span>
-        <span>Z CCW · SPACE DROP · C HOLD · P PAUSE · ENTER</span>
-      </p>
-      <p
+      <Text size="xs" font="mono" weight="black" align="center" className={`${styles.instructions} gameboy-instructions`} id="gameboy-instructions">
+        <Text as="span" size="xs" font="mono" weight="black" align="center">TAB FOCUS · ← / → MOVE · ↓ DROP · ↑ / X TURN</Text>
+        <Text as="span" size="xs" font="mono" weight="black" align="center">Z CCW · SPACE DROP · C HOLD · P PAUSE · ENTER</Text>
+      </Text>
+      <Text
         className="sr-only"
         role="status"
         aria-live="polite"
         aria-atomic="true"
       >
         {announcement}
-      </p>
+      </Text>
     </section>
   );
 }

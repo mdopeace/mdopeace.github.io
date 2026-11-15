@@ -38,4 +38,31 @@ for (const theme of ["light", "dark"] as const) {
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme === "dark" ? "light" : "dark");
   });
+
+  test(`${theme}: migrated Game Boy controls start, play, pause and resume`, async ({ page }) => {
+    await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
+    await page.goto("/");
+    const game = page.getByRole("region", { name: "Pocket Tetris game" });
+    const rotate = game.getByRole("button", { name: "Rotate piece", exact: true });
+    await expect(rotate).toBeDisabled();
+    await game.getByRole("button", { name: "START GAME", exact: true }).click();
+    await expect(rotate).toBeEnabled({ timeout: 10000 });
+    await rotate.hover();
+    expect(await rotate.evaluate(e => getComputedStyle(e).transform)).toBe("none");
+    await game.getByRole("button", { name: "Hold piece", exact: true }).click();
+    await expect(game.getByRole("status")).toContainText("Piece held");
+    await game.getByRole("button", { name: "Hard drop piece", exact: true }).click();
+    await expect(game.getByRole("status")).toContainText("Piece placed");
+    await game.getByRole("button", { name: "Pause game", exact: true }).click();
+    await expect(rotate).toBeDisabled();
+    await expect(game.getByRole("button", { name: "RESUME", exact: true })).toBeVisible();
+    await game.getByRole("button", { name: "RESUME", exact: true }).click();
+    await expect(rotate).toBeEnabled();
+    await rotate.focus();
+    await page.keyboard.press("Enter");
+    await expect(rotate).toBeEnabled();
+    await game.getByRole("button", { name: "Reset game", exact: true }).click();
+    await expect(game.getByRole("status")).toContainText("New game started");
+  });
+
 }
