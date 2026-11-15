@@ -8,6 +8,7 @@ import { Badge } from "@mdopeace/ui/Badge";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Stack, Inline } from "@mdopeace/ui/Layout";
 import { Heading, Text } from "@mdopeace/ui/Typography";
+import ComponentLibraryPreview from "./ComponentLibraryPreview";
 const icons = {
   github: FaGithub,
   tag: FaTag,
@@ -19,24 +20,30 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <Surface as="article" className="project-layout">
       <Surface
-        tone="info"
+        tone={project.preview === "component-library" ? "subtle" : "info"}
         padding={4}
         elevation="none"
         className="project-media"
       >
-        <Image
-          src={project.shot}
-          alt={project.shotAlt}
-          width={800}
-          height={600}
-          loading={project.name === "QuickTodo" ? "eager" : "lazy"}
-          unoptimized
-          className="project-image"
-        />
+        {project.preview === "component-library" ? (
+          <ComponentLibraryPreview />
+        ) : (
+          <Image
+            src={project.shot}
+            alt={project.shotAlt}
+            width={800}
+            height={600}
+            loading={project.name === "QuickTodo" ? "eager" : "lazy"}
+            unoptimized
+            className="project-image"
+          />
+        )}
       </Surface>
       <Stack gap={4} className="project-copy">
         <Inline gap={3}>
-          <Image src={project.logo} alt="" width={32} height={32} unoptimized className="project-logo" />
+          {project.logo && (
+            <Image src={project.logo} alt="" width={32} height={32} unoptimized className="project-logo" />
+          )}
           <Heading level={3} size="card">{project.name}</Heading>
           <Inline as="ul" gap={2}>
             {project.pills.map((pill) => (

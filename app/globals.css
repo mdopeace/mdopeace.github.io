@@ -881,6 +881,7 @@
   }
   .project-logo {
     background-color: var(--ui-canvas);
+    border-radius: var(--ui-radius-md);
   }
   .project-image {
     max-width: min(100%, 320px);

@@ -6,15 +6,16 @@ export type ProjectLink = {
 
 export type Project = {
   name: string;
-  logo: string;
-  shot: string;
-  shotAlt: string;
+  logo?: string;
   pills: string[];
   tagline: string;
   paragraphs: string[];
   commands: string[];
   links: ProjectLink[];
-};
+} & (
+  | { shot: string; shotAlt: string; preview?: never }
+  | { preview: "component-library"; shot?: never; shotAlt?: never }
+);
 
 export const projects: Project[] = [
   {
@@ -128,6 +129,21 @@ export const projects: Project[] = [
         icon: "firefox",
         href: "https://addons.mozilla.org/en-US/firefox/addon/cookieater-cookie-manager/",
       },
+    ],
+  },
+  {
+    name: "Component Library",
+    preview: "component-library",
+    pills: ["React", "TypeScript", "Component library"],
+    tagline:
+      "A small component library that powers this portfolio. Explore the variants, change the properties, and copy working React examples.",
+    paragraphs: [
+      "Shared sizing, spacing and depth keep the interface consistent. Keyboard interactions, light and dark themes, and reduced-motion support live in the components, so every page starts with the same foundations.",
+    ],
+    commands: [],
+    links: [
+      { label: "Explore playground", icon: "globe", href: "/playground/" },
+      { label: "View source", icon: "github", href: "https://github.com/mdopeace/mdopeace.github.io" },
     ],
   },
 ];
