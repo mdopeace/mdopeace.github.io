@@ -55,9 +55,10 @@
   display: grid;
   grid-template: repeat(5, 1fr) / repeat(5, 1fr);
   gap: 1px;
-  padding: 2px;
+  padding: 0;
   border-color: var(--ink);
   background: #25231f;
+  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--indicator-light) 45%, transparent);
 }
 .indicator.indicator.indicator[data-state="playing"] { --indicator-light: #2ba84a; }
 .indicator.indicator.indicator[data-state="paused"] { --indicator-light: #1769c2; }
@@ -67,14 +68,11 @@
   background: var(--indicator-light);
   transition: background-color 160ms ease;
 }
-.indicator > [data-ring="2"] {
-  background: color-mix(in srgb, var(--indicator-light) 60%, #25231f);
-}
 .indicator > [data-ring="1"] {
-  background: color-mix(in srgb, var(--indicator-light) 80%, white);
+  background: color-mix(in srgb, var(--indicator-light) 90%, black);
 }
-.indicator > [data-ring="0"] {
-  background: color-mix(in srgb, var(--indicator-light) 40%, white);
+.indicator > [data-ring="2"] {
+  background: color-mix(in srgb, var(--indicator-light) 80%, black);
 }
 @media (max-width: 680px) {
   .action.action.action { width: 40px; height: 40px; }
