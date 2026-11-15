@@ -1,6 +1,6 @@
 "use client";
 import { useSyncExternalStore } from "react";
-import { FaMoon, FaSun } from "react-icons/fa6";
+import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
 import { Switch } from "./ui/Switch";
 
 type Theme = "light" | "dark";
@@ -41,8 +41,8 @@ export default function ThemeToggle() {
       size="sm"
       checked={theme === "dark"}
       onCheckedChange={(dark) => chooseTheme(dark ? "dark" : "light")}
-      checkedIcon={<FaMoon />}
-      uncheckedIcon={<FaSun />}
+      checkedIcon={<PiMoonStarsBold />}
+      uncheckedIcon={<PiSunBold />}
     />
   );
 }
