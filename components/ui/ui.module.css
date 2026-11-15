@@ -309,6 +309,9 @@
   background: var(--ui-local-bg, var(--ui-surface));
   color: var(--ui-local-text, var(--badge-fg));
 }
+.badge[data-variant="outline"][data-tone="emphasis"] {
+  color: var(--ui-emphasis);
+}
 .divider {
   border: 0;
   margin: 0;
@@ -820,3 +823,43 @@
 }
 .icon .feedback { width: 100%; height: 100%; }
 .icon .feedback > span { width: 100%; height: 100%; }
+
+/* Form primitives share control heights and immediate square focus feedback. */
+.field { display: grid; gap: var(--ui-space-2); min-width: 0; }
+.field > label { font: 700 var(--ui-font-caption) var(--ui-mono); }
+.fieldHelp, .fieldError { margin: 0; font: var(--ui-font-caption)/1.5 var(--ui-body); }
+.fieldHelp { color: var(--ui-local-muted, var(--ui-muted)); }
+.fieldError { color: var(--ui-emphasis); }
+.textInput, .select {
+  --input-height: var(--ui-control-md);
+  width: 100%; min-width: 0; height: var(--input-height); padding: 6px 8px;
+  border: 2px solid var(--ui-border); border-radius: 0;
+  background: var(--ui-canvas); color: var(--ui-text);
+  font: 400 var(--ui-font-sm)/1.5 var(--ui-body);
+  transition: border-color var(--ui-fast), opacity var(--ui-fast), background-color var(--ui-fast);
+}
+.textInput[data-size="sm"], .select[data-size="sm"] { --input-height: var(--ui-control-sm); }
+.textInput[data-size="lg"], .select[data-size="lg"] { --input-height: var(--ui-control-lg); }
+.textInput:focus-visible, .select:focus-visible, .checkbox input:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
+.textInput[aria-invalid="true"], .select[aria-invalid="true"], .checkbox input[aria-invalid="true"] { border-color: var(--ui-emphasis); }
+.textInput:disabled, .select:disabled, .checkbox:has(input:disabled) { opacity: .65; cursor: not-allowed; }
+.textInput::placeholder { color: var(--ui-muted); opacity: 1; }
+.checkbox { display: grid; gap: 4px; }
+.checkbox > label { display: flex; align-items: center; gap: 10px; min-height: 32px; font-size: var(--ui-font-sm); cursor: pointer; }
+.checkbox:has(input:disabled) label, .checkbox input:disabled { cursor: not-allowed; }
+.checkbox input { appearance: none; flex: none; display: grid; place-content: center; margin: 0; width: 18px; height: 18px; border: 2px solid var(--ui-border); border-radius: 0; background: var(--ui-canvas); color: var(--ui-on-accent); transition: background-color var(--ui-fast); }
+.checkbox input:checked { background: var(--ui-accent); }
+.checkbox input:checked::after { content: ""; width: 5px; height: 9px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+.checkbox > p { padding-left: 28px; }
+.navigationList { display: grid; align-content: start; gap: 20px; min-width: 0; }
+.navigationGroups { display: grid; grid-template-columns: repeat(var(--navigation-columns, 1), minmax(0, 1fr)); gap: 20px; }
+.navigationGroup { display: grid; gap: 4px; align-content: start; }
+.navigationGroup ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.navigationItem { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 40px; padding: 8px 10px; border: 2px solid transparent; border-radius: 0; background: transparent; color: var(--ui-text); text-align: left; text-decoration: none; font: 700 var(--ui-font-sm)/1.3 var(--ui-body); cursor: pointer; transition: background-color var(--ui-fast), border-color var(--ui-fast), opacity var(--ui-fast); }
+.navigationItem svg { flex: none; width: 12px; height: 12px; opacity: 0; }
+.navigationItem:hover { background: var(--ui-subtle); }
+.navigationItem[aria-current] { border-color: var(--ui-border); background: var(--ui-accent); color: var(--ui-on-accent); }
+.navigationItem[aria-current] svg { opacity: 1; }
+.navigationItem:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
+.navigationItem:disabled { opacity: .65; cursor: not-allowed; }
+@media (forced-colors: active) { .checkbox input:checked { background: Highlight; color: HighlightText; } }

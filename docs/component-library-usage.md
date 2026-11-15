@@ -155,3 +155,31 @@ Theme changes crossfade complete page snapshots with the browser View Transition
 FeedbackLabel overlays two reserved states and fades between them without changing control width. Clipboard actions use it for labels and icons, and Switch uses it for state icons. Inactive states stay out of accessible names. Installation commands are keyboard-focusable so horizontal scrolling remains available on compact layouts.
 
 Game Boy overlays fade visibility without delaying game input; hidden overlays are inert. Indicator cells and glow transition their state colors together. Durations use shared motion tokens, and reduced-motion preferences suppress the effects.
+
+
+## Playground building blocks
+
+The development playground is built with the same components it documents. Its catalog navigation, property controls and code examples use shared components; the page frame, catalog data and property-panel compositions remain specific to the playground.
+
+| Component | Contract |
+| --- | --- |
+| Field | Required `label`; optional `description`, `error`, `required`, `controlId`. Its render function supplies the control ID, help/error associations, invalid state and required attribute. |
+| TextInput | Native input props, with `size="sm"`, `"md"` (default), or `"lg"` for 32/40/48px heights. |
+| Select | Native select props and option children; the same size contract as TextInput. |
+| Checkbox | Native checkbox props plus required `label`, optional `description` and `error`. Owns its label and help associations. |
+| NavigationList | Required accessible `label` and grouped `items`; optional `activeId` and `onSelect`. Items with `href` remain native links; local selections use buttons. |
+| CodeExample | Exact `code` string, optional `title`, `description`, `codeLabel`, `language` (`tsx` or `text`) and `border` (`standard` or `none`). Includes copy feedback and keyboard-scrollable source. |
+
+Import each component from its matching file in `components/ui`. Field uses a render function so its accessible attributes reach the actual input rather than a wrapper:
+
+```tsx
+<Field label="Your name" description="How should we address you?" required>
+  {(control) => <TextInput {...control} name="name" autoComplete="name" />}
+</Field>
+```
+
+Use Checkbox directly, since it already owns its label. Native controlled and uncontrolled conventions apply to TextInput, Select and Checkbox; supply either a value/checked state with its change handler or a default value/checked state. Controls retain square borders and immediate focus outlines, with shared color and disabled-state transitions.
+
+NavigationList uses grouped lists inside a labeled navigation landmark. Link items identify the current page; local buttons identify the current selection. Disabled items remain unavailable to activation.
+
+CodeExample highlights React/TSX examples with lightweight lexical coloring; it is not a general-purpose language parser or editor. Choose `language="text"` for plain source. Copy always uses the original code string, and markup is rendered as text. Keep the simpler CodeBlock for installation commands and other compact snippets.
