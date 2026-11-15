@@ -1,62 +1,58 @@
 import Section from "../portfolio/PortfolioSection";
 import { Surface } from "../ui/Surface";
-import { Grid, Stack } from "../ui/Layout";
+import { Grid, Inline, Stack } from "../ui/Layout";
 import { Heading, Text } from "../ui/Typography";
-import { Divider } from "../ui/Divider";
+import { Badge } from "../ui/Badge";
+
+const toolkit = [
+  { title: "Web interfaces", label: "01 / Build the interface", tone: "subtle", tools: "JavaScript · TypeScript · React · Next.js · Astro · CSS · SCSS" },
+  { title: "Backend & data", label: "02 / Connect the pieces", tone: "info", tools: "Express · MongoDB · AWS Lambda" },
+  { title: "Native Mac apps", label: "03 / Make it feel at home", tone: "default", tools: "Swift · SwiftUI · AppKit · mpv · OpenGL" },
+  { title: "Developer tooling", label: "04 / Keep it shipping", tone: "subtle", tools: "Build tooling · Release automation · App updates · Browser extensions" },
+] as const;
+
 export default function DayJob() {
   return (
     <Section label="Experience & toolkit" id="experience" index="03">
-      <Grid columns={{ base: 1, md: 2 }} gap={5} className="experience-layout">
+      <Stack gap={6}>
         <Surface as="article" padding={{ base: 6, sm: 8 }}>
           <Stack gap={6}>
-            <Stack gap={3}>
-              <Text variant="eyebrow" tone="emphasis">
-                01 · Tracxn
-              </Text>
+            <Inline justify="between" gap={4}>
+              <Stack gap={3} align="start">
+              <Badge variant="solid" tone="accent">01 · Tracxn</Badge>
               <Heading level={3}>Software Engineer</Heading>
+              </Stack>
               <Text variant="eyebrow" tone="muted">
                 Bengaluru · Jan 2023 — now
               </Text>
-            </Stack>
-            <Stack gap={4}>
-              <Text size="body" tone="muted">
-                Software Engineer at Tracxn, Bengaluru, since January 2023.
-                Full-stack web by day — React, Next.js, Astro, Express, MongoDB,
-                AWS Lambda, and more.
-              </Text>
-              <Text size="body" tone="muted">
-                Part of the platform team: the app framework and build, logging
-                and error tracking, the public and auth pages, the UI
-                components. The parts every product ends up needing, and nobody
-                demos.
-              </Text>
-            </Stack>
-          </Stack>
-        </Surface>
-        <Surface as="article" tone="info" padding={{ base: 6, sm: 8 }}>
-          <Stack gap={5}>
-            <Text variant="eyebrow">
-              Things I work with
-            </Text>
-            <Stack gap={2}>
-              <Heading level={3} size="label">Web platform</Heading>
-              <Text size="sm">
-                React · Next.js · Astro · Express · MongoDB · AWS Lambda · and
-                more
-              </Text>
-            </Stack>
-            <Divider />
-            <Stack gap={2}>
-              <Heading level={3} size="label">Native Mac apps</Heading>
-              <Text size="sm">SwiftUI · AppKit · mpv · OpenGL</Text>
-            </Stack>
-            <Text size="caption" font="mono">
-              From shared platform foundations to small tools with a sharp
-              purpose.
+            </Inline>
+            <Text size="body" tone="muted" style={{ maxWidth: "72ch" }}>
+              At Tracxn, I build shared foundations across the frontend and
+              backend: reusable UI components, the app framework, and build
+              tooling. My work also spans public-facing and authentication
+              pages, logging, and error tracking—the parts every product ends
+              up needing, and nobody demos.
             </Text>
           </Stack>
         </Surface>
-      </Grid>
+        <Stack gap={4}>
+          <Text variant="eyebrow">Things I work with</Text>
+          <Grid columns={{ base: 1, md: 2 }} gap={5}>
+            {toolkit.map(({ title, label, tone, tools }) => (
+              <Surface key={title} as="article" tone={tone} padding={{ base: 6, sm: 8 }}>
+                <Stack gap={3}>
+                  <Text variant="eyebrow">{label}</Text>
+                  <Heading level={3} size="card">{title}</Heading>
+                  <Text size="sm">{tools}</Text>
+                </Stack>
+              </Surface>
+            ))}
+          </Grid>
+          <Text size="caption" font="mono" tone="muted">
+            From shared platform foundations to small tools with a sharp purpose.
+          </Text>
+        </Stack>
+      </Stack>
     </Section>
   );
 }
