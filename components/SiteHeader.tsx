@@ -2,13 +2,7 @@ import ThemeToggle from "./ThemeToggle";
 import { Inline } from "@mdopeace/ui/Layout";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Link } from "@mdopeace/ui/Link";
-const links = [
-  ["Story", "#story"],
-  ["Work", "#work"],
-  ["Experience", "#experience"],
-  ["Now", "#now"],
-  ["Contact", "#contact"],
-];
+import SectionLinks from "./portfolio/SectionLinks";
 export default function SiteHeader() {
   return (
     <nav className="site-nav" aria-label="Main navigation">
@@ -22,18 +16,7 @@ export default function SiteHeader() {
           >
             <span className="brand-wordmark">Md</span>
           </Link>
-          <Inline
-            gap={{ base: 3, md: 6 }}
-            justify={{ base: "between", md: "center" }}
-            wrap={false}
-            className="navigation-links"
-          >
-            {links.map(([label, href]) => (
-              <Link href={href} key={href} size="sm" variant="nav">
-                {label}
-              </Link>
-            ))}
-          </Inline>
+          <SectionLinks />
           <ThemeToggle />
         </Inline>
       </Surface>
