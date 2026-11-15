@@ -50,6 +50,32 @@
   font-size: 0.7rem;
 }
 .instructions.instructions { margin: 10px 0 0; }
+.indicator.indicator.indicator {
+  --indicator-light: #ef5538;
+  display: grid;
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr);
+  gap: 1px;
+  padding: 2px;
+  border-color: var(--ink);
+  background: #25231f;
+}
+.indicator.indicator.indicator[data-state="playing"] { --indicator-light: #2ba84a; }
+.indicator.indicator.indicator[data-state="paused"] { --indicator-light: #1769c2; }
+.indicator > span {
+  width: 100%;
+  height: 100%;
+  background: var(--indicator-light);
+  transition: background-color 160ms ease;
+}
+.indicator > [data-ring="2"] {
+  background: color-mix(in srgb, var(--indicator-light) 60%, #25231f);
+}
+.indicator > [data-ring="1"] {
+  background: color-mix(in srgb, var(--indicator-light) 80%, white);
+}
+.indicator > [data-ring="0"] {
+  background: color-mix(in srgb, var(--indicator-light) 40%, white);
+}
 @media (max-width: 680px) {
   .action.action.action { width: 40px; height: 40px; }
   .hold.hold.hold { width: 100%; height: auto; }

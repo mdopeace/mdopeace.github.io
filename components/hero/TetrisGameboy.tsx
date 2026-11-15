@@ -321,10 +321,20 @@ export default function TetrisGameboy() {
         <Text as="span" size="caption" font="mono" weight="black">
           POCKET <i>COLOR</i>
         </Text>
-        <span
-          className={`gameboy-led gameboy-led--${ledState}`}
+        <Badge
+          shape="square"
+          size="sm"
+          className={styles.indicator}
+          data-state={ledState}
           aria-hidden="true"
-        />
+        >
+          {Array.from({ length: 25 }, (_, index) => (
+            <span
+              key={index}
+              data-ring={Math.max(Math.abs(index % 5 - 2), Math.abs(Math.floor(index / 5) - 2))}
+            />
+          ))}
+        </Badge>
       </div>
       <div className="gameboy-bezel">
         <div className="gameboy-screen">
