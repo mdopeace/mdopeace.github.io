@@ -74,6 +74,9 @@
   max-width: 360px;
   width: 100%;
 }
+.stage > .badgePreview {
+  align-self: center;
+}
 .fill {
   width: 100%;
   min-width: 0;

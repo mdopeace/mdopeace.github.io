@@ -544,6 +544,7 @@ function Playground({ kind }: { kind: ComponentId }) {
     );
     preview = (
       <Badge
+        className={styles.badgePreview}
         tone={tone === "subtle" ? "default" : tone}
         variant={solid ? "solid" : "outline"}
         size={size === "lg" ? "md" : size}
