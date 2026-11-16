@@ -1,0 +1,96 @@
+name: UI Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: UI version bump (ignored when an exact version is entered)
+        type: choice
+        default: patch
+        options: [patch, minor, major]
+        required: true
+      version:
+        description: Exact MAJOR.MINOR.PATCH version; use 0.1.0 for the initial release
+        type: string
+        required: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ui-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    outputs:
+      version: ${{ steps.prepare.outputs.version }}
+      sha: ${{ steps.prepare.outputs.sha }}
+    steps:
+      - name: Check release App configuration
+        env:
+          RELEASE_APP_ID: ${{ secrets.RELEASE_APP_ID }}
+          RELEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+        run: |
+          if [ -z "$RELEASE_APP_ID" ] || [ -z "$RELEASE_APP_PRIVATE_KEY" ]; then
+            echo "::error::Configure RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY for the release App first."
+            exit 1
+          fi
+      - name: Create release App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Create release PR and wait for protected auto-merge
+        id: prepare
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          BUMP: ${{ inputs.bump }}
+          EXACT_VERSION: ${{ inputs.version }}
+        run: node .github/scripts/release-ui.mjs prepare
+
+  publish:
+    needs: prepare
+    name: Verify and publish UI release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Create fresh release App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+      - uses: ./.github/actions/validate
+      - name: Package validated commit and publish GitHub Release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+          RELEASE_SHA: ${{ needs.prepare.outputs.sha }}
+        run: node .github/scripts/release-ui.mjs publish

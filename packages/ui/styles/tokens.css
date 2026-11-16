@@ -1,0 +1,99 @@
+/* Original portfolio palette, with shadows matching borders in both themes. */
+:root {
+  --ui-canvas: #f5efdf;
+  --ui-surface: #fffaf0;
+  --ui-text: #25231f;
+  --ui-muted: color-mix(in srgb, var(--ui-text) 72%, transparent);
+  --ui-border: #25231f;
+  --ui-shadow-color: #25231f;
+  --ui-accent: #f5cb56;
+  --ui-on-accent: #201f1b;
+  --ui-info: #8ec8d3;
+  --ui-on-info: #201f1b;
+  --ui-emphasis: #a13c24;
+  --ui-on-emphasis: #fffaf0;
+  --ui-success: #3f6c48;
+  --ui-focus: #a13c24;
+  --ui-subtle: color-mix(in srgb, var(--ui-accent) 25%, var(--ui-surface));
+  --ui-body:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    sans-serif;
+  --ui-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ui-font-xs: 0.6875rem;
+  --ui-font-caption: 0.75rem;
+  --ui-font-sm: 0.875rem;
+  --ui-font-md: 1rem;
+  --ui-font-lg: 1.125rem;
+  --ui-font-title: 1.5rem;
+  --ui-font-section: clamp(1.8rem, 4vw, 2.7rem);
+  --ui-font-display: clamp(3rem, 8vw, 6.5rem);
+  --ui-leading-caption: 1.5;
+  --ui-leading-body: 1.7;
+  --ui-leading-lg: 1.75;
+  --ui-leading-title: 1.333333;
+  --ui-leading-section: 1;
+  --ui-weight-regular: 400;
+  --ui-weight-medium: 500;
+  --ui-weight-bold: 700;
+  --ui-weight-black: 900;
+  --ui-control-sm: 2rem;
+  --ui-control-md: 2.5rem;
+  --ui-control-lg: 3rem;
+  --ui-icon-sm: 1rem;
+  --ui-icon-md: 1.25rem;
+  --ui-icon-lg: 1.5rem;
+  --ui-border-thin: 1px;
+  --ui-border-standard: 2px;
+  --ui-border-strong: 3px;
+  --ui-fast: 120ms;
+  --ui-normal: 180ms;
+  --ui-slow: 300ms;
+  --ui-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ui-radius-none: 0;
+  --ui-radius-sm: 0.25rem;
+  --ui-radius-md: 0.5rem;
+  --ui-radius-full: 999px;
+  --ui-layer-base: 0;
+  --ui-layer-raised: 10;
+  --ui-layer-sticky: 20;
+  --ui-layer-overlay: 40;
+  --ui-layer-announcement: 50;
+  --ui-space-0: 0rem;
+  --ui-space-1: 0.25rem;
+  --ui-space-2: 0.5rem;
+  --ui-space-3: 0.75rem;
+  --ui-space-4: 1rem;
+  --ui-space-5: 1.25rem;
+  --ui-space-6: 1.5rem;
+  --ui-space-7: 1.75rem;
+  --ui-space-8: 2rem;
+  --ui-space-10: 2.5rem;
+  --ui-space-12: 3rem;
+  --ui-space-16: 4rem;
+  --ui-space-20: 5rem;
+  --ui-shadow-none: none;
+  --ui-shadow-sm: 2px 2px 0 var(--ui-shadow-color);
+  --ui-shadow-md: 3px 3px 0 var(--ui-shadow-color);
+  --ui-shadow-lg: 5px 5px 0 var(--ui-shadow-color);
+  --ui-shadow-xl: 8px 8px 0 var(--ui-shadow-color);
+}
+:root[data-theme="dark"] {
+  --ui-canvas: #1b1b1b;
+  --ui-surface: #2b2a26;
+  --ui-text: #f6f0df;
+  --ui-muted: color-mix(in srgb, var(--ui-text) 90%, transparent);
+  --ui-border: #f6f0df;
+  --ui-shadow-color: var(--ui-border);
+  --ui-accent: #f5cb56;
+  --ui-on-accent: #201f1b;
+  --ui-info: #79b9c5;
+  --ui-on-info: #201f1b;
+  --ui-emphasis: #f08b6b;
+  --ui-on-emphasis: #1b1b1b;
+  --ui-success: #a8d5a2;
+  --ui-focus: #f08b6b;
+  --ui-subtle: color-mix(in srgb, var(--ui-accent) 25%, var(--ui-surface));
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --ui-fast: 0ms; --ui-normal: 0ms; --ui-slow: 0ms; }
+}

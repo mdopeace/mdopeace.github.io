@@ -1,0 +1,81 @@
+/* Device-only geometry and palette. Shared Button owns depth, interaction,
+   focus, disabled state and icon accessibility. Repeated classes ensure these
+   recipes take precedence over the primitive's size/variant selectors. */
+.deviceButton.deviceButton.deviceButton {
+  --control-bg: var(--card);
+  --control-fg: var(--ink);
+  --control-height: 30px;
+  --control-pad: 0.2rem 0.45rem;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  font-family: var(--ui-mono);
+  font-size: var(--ui-font-xs);
+  font-weight: 900;
+  letter-spacing: normal;
+  line-height: 1.55;
+}
+.direction.direction.direction {
+  --control-bg: #49473f;
+  --control-fg: #fff8df;
+  --control-pad: 0;
+  --icon-size: var(--ui-icon-sm);
+  width: 100%;
+  height: 100%;
+  min-width: 24px;
+  min-height: 24px;
+}
+.action.action.action {
+  --control-bg: var(--accent-2);
+  --control-fg: var(--ink-on-accent-2);
+  --control-pad: 0;
+  width: 48px;
+  height: 48px;
+  font-size: 0.9rem;
+}
+.hold.hold.hold {
+  --control-height: 26px;
+  --control-pad: 0.15rem 0.35rem;
+  width: 100%;
+  height: auto;
+  font-size: 0.62rem;
+}
+.utility.utility.utility { min-width: 72px; }
+.screen.screen.screen {
+  --control-bg: #49473f;
+  --control-fg: #f1f0d3;
+  --control-height: 36px;
+  --control-pad: 0.45rem 0.65rem;
+  min-width: 104px;
+  font-size: 0.7rem;
+}
+.instructions.instructions { margin: 10px 0 0; }
+.indicator.indicator.indicator {
+  --indicator-light: #ef5538;
+  display: grid;
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr);
+  gap: 1px;
+  padding: 0;
+  border-color: var(--ink);
+  background: #25231f;
+  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--indicator-light) 45%, transparent);
+  transition: box-shadow var(--ui-normal) var(--ui-ease);
+}
+.indicator.indicator.indicator[data-state="playing"] { --indicator-light: #2ba84a; }
+.indicator.indicator.indicator[data-state="paused"] { --indicator-light: #1769c2; }
+.indicator > span {
+  width: 100%;
+  height: 100%;
+  background: var(--indicator-light);
+  transition: background-color 160ms ease;
+}
+.indicator > [data-ring="1"] {
+  background: color-mix(in srgb, var(--indicator-light) 90%, black);
+}
+.indicator > [data-ring="2"] {
+  background: color-mix(in srgb, var(--indicator-light) 80%, black);
+}
+@media (max-width: 680px) {
+  .action.action.action { width: 40px; height: 40px; }
+  .hold.hold.hold { width: 100%; height: auto; }
+}

@@ -1,0 +1,29 @@
+/* Animate only after a user chooses a theme, never during initial hydration.
+   Colored surfaces change immediately: interpolating light text to dark text
+   across light/dark emphasis fills can pass through low-contrast midpoints. */
+html[data-theme-transition] body,
+html[data-theme-transition] [data-ui-surface="default"],
+html[data-theme-transition] [data-ui-surface="subtle"] {
+  transition:
+    background-color var(--ui-normal),
+    border-color var(--ui-normal),
+    box-shadow var(--ui-normal);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ui-fast: 0ms;
+    --ui-normal: 0ms;
+    --ui-slow: 0ms;
+  }
+}
+
+/* Crossfade complete theme snapshots to avoid mismatched intermediate palettes. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--ui-normal);
+  animation-timing-function: var(--ui-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}

@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@mdopeace/ui/tokens.css";
+@import "../styles/theme-motion.css";
 
 @theme {
   --color-bg: var(--paper);
@@ -20,62 +22,22 @@
 @layer base {
   :root {
     color-scheme: light;
-    --paper: #f5efdf;
-    --ink: #25231f;
-    --card: #fffaf0;
-    --accent: #f5cb56;
-    --accent-2: #a13c24;
-    --blue: #8ec8d3;
-    --ink-on-accent: #201f1b;
-    --ink-on-blue: #201f1b;
-    --ink-on-accent-2: #fffaf0;
-    --shadow: 5px 5px 0 var(--ink);
+    --paper: var(--ui-canvas);
+    --ink: var(--ui-text);
+    --card: var(--ui-surface);
+    --accent: var(--ui-accent);
+    --accent-2: var(--ui-emphasis);
+    --blue: var(--ui-info);
+    --ink-on-accent: var(--ui-on-accent);
+    --ink-on-blue: var(--ui-on-info);
+    --ink-on-accent-2: var(--ui-on-emphasis);
+    --shadow: var(--ui-shadow-lg);
+    --color-muted: var(--ui-muted);
+    --color-faint: color-mix(in srgb, var(--ui-text) 58%, transparent);
+    --color-done: var(--ui-success);
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --paper: #1b1b1b;
-    --ink: #f6f0df;
-    --card: #2b2a26;
-    --color-muted: color-mix(in srgb, var(--ink) 90%, transparent);
-    --color-faint: color-mix(in srgb, var(--ink) 76%, transparent);
-    --accent: #f5cb56;
-    --accent-2: #f08b6b;
-    --blue: #79b9c5;
-    --ink-on-accent: #201f1b;
-    --ink-on-blue: #201f1b;
-    --ink-on-accent-2: #1b1b1b;
-    --color-done: #a8d5a2;
-    --shadow: 5px 5px 0 #080808;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root[data-theme="system"] {
-      color-scheme: dark;
-      --paper: #1b1b1b;
-      --ink: #f6f0df;
-      --card: #2b2a26;
-      --color-muted: color-mix(in srgb, var(--ink) 90%, transparent);
-      --color-faint: color-mix(in srgb, var(--ink) 76%, transparent);
-      --accent: #f5cb56;
-      --accent-2: #f08b6b;
-      --blue: #79b9c5;
-      --ink-on-accent: #201f1b;
-      --ink-on-blue: #201f1b;
-      --ink-on-accent-2: #1b1b1b;
-      --color-done: #a8d5a2;
-      --shadow: 5px 5px 0 #080808;
-    }
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-theme="system"] {
-      color-scheme: light;
-      --paper: #f5efdf;
-      --ink: #25231f;
-      --card: #fffaf0;
-      --accent: #f5cb56;
-      --accent-2: #a13c24;
-      --blue: #8ec8d3;
-      --shadow: 5px 5px 0 #25231f;
-    }
   }
   html {
     -webkit-text-size-adjust: 100%;
@@ -93,12 +55,9 @@
     font-size: 16px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
-    transition:
-      background-color 180ms ease,
-      color 180ms ease;
   }
   a {
-    color: var(--color-muted);
+    color: inherit;
     /* Preflight strips the underline project links need. */
     text-decoration: underline;
     text-underline-offset: 4px;
@@ -130,56 +89,11 @@
   :focus-visible {
     outline: 3px solid var(--accent-2);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 }
 
 @layer components {
-  .site-shell {
-    width: min(1120px, calc(100% - 36px));
-    margin-inline: auto;
-  }
-  .site-nav-inner > a:first-child {
-    display: inline-flex;
-    min-height: 24px;
-    align-items: center;
-  }
-  .site-brand {
-    flex: 0 0 auto;
-    min-height: 34px !important;
-    gap: 0.15rem;
-    border: 2px solid var(--ink);
-    background: var(--accent-2);
-    box-shadow: 2px 2px 0 var(--ink);
-    padding: 0 0.55rem;
-    color: var(--ink-on-accent-2) !important;
-  }
-  .comic-panel {
-    background: var(--card);
-    border: 2px solid var(--ink);
-    box-shadow: var(--shadow);
-  }
-  .comic-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--accent);
-    color: #201f1b;
-    border: 2px solid var(--ink);
-    padding: 0.3rem 0.65rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .section-title {
-    font-size: clamp(1.8rem, 4vw, 2.7rem);
-    font-weight: 900;
-    letter-spacing: -0.06em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
   .halftone {
     background-image: radial-gradient(
       color-mix(in srgb, var(--ink) 24%, transparent) 0.7px,
@@ -192,140 +106,6 @@
     top: 12px;
     z-index: 20;
     margin-top: 14px;
-  }
-  .site-nav-inner {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    box-shadow: 3px 3px 0 var(--ink);
-    padding: 0.65rem 0.85rem;
-  }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(0.6rem, 2vw, 1.4rem);
-    flex: 1;
-  }
-  .nav-links a {
-    display: inline-flex;
-    min-height: 24px;
-    align-items: center;
-    color: var(--ink);
-    font-size: 0.78rem;
-    font-weight: 800;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .nav-links a:hover {
-    color: var(--amber);
-  }
-  .theme-toggle {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    position: relative;
-    gap: 2px;
-    border: 2px solid var(--ink);
-    padding: 2px;
-    background: var(--paper);
-  }
-  .theme-toggle-indicator {
-    grid-column: 1;
-    grid-row: 1;
-    z-index: 0;
-    background: var(--accent);
-    pointer-events: none;
-    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  .theme-toggle[data-theme="dark"] .theme-toggle-indicator {
-    transform: translateX(calc(100% + 2px));
-  }
-  .theme-toggle[data-theme="system"] .theme-toggle-indicator {
-    transform: translateX(calc(200% + 4px));
-  }
-  .theme-toggle button {
-    grid-row: 1;
-    z-index: 1;
-    border: 0;
-    background: transparent;
-    color: var(--ink);
-    padding: 0.3rem 0.45rem;
-    font-size: 0.68rem;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .theme-toggle button:nth-of-type(1) {
-    grid-column: 1;
-  }
-  .theme-toggle button:nth-of-type(2) {
-    grid-column: 2;
-  }
-  .theme-toggle button:nth-of-type(3) {
-    grid-column: 3;
-  }
-  .theme-toggle button[aria-pressed="true"] {
-    color: #201f1b;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .theme-toggle-indicator {
-      transition: none;
-    }
-  }
-  .shadow-comic {
-    box-shadow: 8px 8px 0 var(--ink);
-  }
-  .hero-grid {
-    isolation: isolate;
-  }
-  .hero-grid::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.38;
-    pointer-events: none;
-    background-image: radial-gradient(
-      color-mix(in srgb, var(--ink) 30%, transparent) 0.7px,
-      transparent 0.7px
-    );
-    background-size: 7px 7px;
-    mask-image: linear-gradient(90deg, transparent 35%, #000);
-  }
-  .hero-name {
-    color: var(--accent-2);
-    text-shadow: 3px 3px 0 var(--ink);
-  }
-  .button-comic {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    border: 2px solid var(--ink);
-    background: var(--accent);
-    box-shadow: 3px 3px 0 var(--ink);
-    padding: 0.7rem 0.9rem;
-    color: #201f1b;
-    font-size: 0.76rem;
-    font-weight: 900;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .button-comic:hover {
-    color: #201f1b;
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-  .button-secondary {
-    background: var(--card);
-    color: var(--ink);
-  }
-  .button-secondary:hover {
-    color: var(--ink);
   }
   .hero-art {
     position: relative;
@@ -343,6 +123,13 @@
     background: var(--accent);
   }
   .gameboy {
+    /* The yellow device is a light surface even in dark mode. */
+    --ink: var(--ui-on-accent);
+    --ui-border: var(--ink);
+    --ui-focus: var(--ink);
+    --ui-shadow-sm: 2px 2px 0 var(--ink);
+    --ui-shadow-md: 3px 3px 0 var(--ink);
+    --card: #fffaf0;
     position: relative;
     z-index: 1;
     box-sizing: border-box;
@@ -368,75 +155,20 @@
       inset 0 0 0 3px var(--ink),
       inset 0 0 0 6px var(--card);
   }
-  .gameboy button:focus-visible {
-    position: relative;
-    z-index: 5;
-    outline: 3px solid #fffaf0;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 5px #25231f;
-  }
-  .gameboy button:not(:disabled) {
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .gameboy button:not(:disabled):hover {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
+
   .gameboy-brand {
+    --ui-border: var(--ink);
     display: flex;
     flex: 0 0 auto;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
     padding: 0 0 0.55rem;
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 950;
     letter-spacing: 0.08em;
-  }
-  .gameboy-brand > span:first-child {
-    display: grid;
-    width: 30px;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--accent-2);
-    box-shadow: 2px 2px 0 var(--ink);
-    color: var(--ink-on-accent-2);
-    font-size: 0.65rem;
-    letter-spacing: -0.08em;
   }
   .gameboy-brand i {
     color: var(--ink);
     font-style: normal;
-  }
-  .gameboy-led {
-    width: 8px;
-    aspect-ratio: 1;
-    border: 1px solid var(--ink);
-    border-radius: 50%;
-    background: #ef5538;
-    box-shadow:
-      0 0 0 2px rgb(239 85 56 / 25%),
-      0 0 9px 3px rgb(239 85 56 / 60%);
-    transition:
-      background-color 160ms ease,
-      box-shadow 160ms ease;
-  }
-  .gameboy-led--playing {
-    background: #2ba84a;
-    box-shadow:
-      0 0 0 2px rgb(43 168 74 / 25%),
-      0 0 9px 3px rgb(43 168 74 / 60%);
-  }
-  .gameboy-led--paused {
-    background: #1769c2;
-    box-shadow:
-      0 0 0 2px rgb(23 105 194 / 25%),
-      0 0 8px 3px rgb(23 105 194 / 55%);
   }
   .gameboy-bezel {
     box-sizing: border-box;
@@ -462,9 +194,6 @@
     display: flex;
     justify-content: space-between;
     padding: 0 1px 5px;
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 950;
     letter-spacing: 0.08em;
   }
   .tetris-screen-layout {
@@ -533,15 +262,7 @@
     display: grid;
     gap: 1px;
   }
-  .tetris-hud span {
-    font-size: 11px;
-    font-weight: 950;
-    letter-spacing: 0.06em;
-  }
-  .tetris-hud strong {
-    font-size: 14px;
-    line-height: 1.1;
-  }
+
   .tetris-next {
     margin-top: 2px;
   }
@@ -574,36 +295,23 @@
     justify-items: center;
     gap: 9px;
     background: #d8dfb2ef;
-    font-family: ui-monospace, monospace;
-    text-align: center;
+    opacity: 1;
+    transition: opacity var(--ui-normal) var(--ui-ease), display var(--ui-normal) allow-discrete;
   }
-  .tetris-overlay strong {
-    font-size: 0.9rem;
-    font-weight: 950;
-    letter-spacing: 0.06em;
+  .tetris-overlay[hidden] { display: none; opacity: 0; }
+  @starting-style {
+    .tetris-overlay { opacity: 0; }
   }
-  .tetris-countdown-note {
-    font-size: 0.75rem;
-    font-weight: 800;
+  .tetris-overlay-title { animation: tetris-overlay-fade var(--ui-fast) ease; }
+  @keyframes tetris-overlay-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-  .tetris-screen-button {
-    min-width: 104px;
-    min-height: 36px;
-    border: 2px solid #25271e;
-    background: #25271e;
-    box-shadow: 2px 2px 0 #8f9668;
-    color: #f1f0d3;
-    padding: 0.45rem 0.65rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.7rem;
-    font-weight: 900;
-    cursor: pointer;
-  }
+
+
   .tetris-screen-button--start {
     position: relative;
     overflow: hidden;
-    background: #25271e;
-    color: #f1f0d3;
   }
   .tetris-screen-button--start::after {
     position: absolute;
@@ -637,9 +345,6 @@
     background: color-mix(in srgb, var(--accent-2) 20%, var(--accent));
   }
   .gameboy-hinge span {
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 950;
     letter-spacing: 0.14em;
   }
   .gameboy-controls {
@@ -656,27 +361,9 @@
     width: 100px;
     height: 100px;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-    filter: drop-shadow(
-      2px 2px 0 color-mix(in srgb, var(--ink) 30%, transparent)
-    );
+    gap: var(--ui-space-1);
   }
-  .gameboy-dpad button {
-    display: grid;
-    min-width: 24px;
-    min-height: 24px;
-    place-items: center;
-    border: 2px solid var(--ink);
-    background: #49473f;
-    color: #fff8df;
-    font-size: 0.75rem;
-    font-weight: 950;
-    cursor: pointer;
-  }
-  .gameboy-dpad button:active,
-  .gameboy-ab button:active,
-  .gameboy-small-button:active {
-    transform: translate(1px, 1px);
-  }
+
   .dpad-up {
     grid-area: 1 / 2;
   }
@@ -688,6 +375,7 @@
     grid-area: 2 / 2;
     border: 2px solid var(--ink);
     background: #393830;
+    box-shadow: 3px 3px 0 var(--ink);
   }
   .dpad-right {
     grid-area: 2 / 3;
@@ -723,73 +411,22 @@
     gap: 9px;
     transform: none;
   }
-  .gameboy-ab button {
-    display: grid;
-    width: 48px;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--accent-2);
-    box-shadow: 3px 3px 0 var(--ink);
-    color: var(--ink-on-accent-2);
-    cursor: pointer;
-  }
-  .gameboy-ab .gameboy-hold-button {
-    width: 100%;
-    min-height: 26px;
-    aspect-ratio: auto;
-    padding: 0.15rem 0.35rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.62rem;
-    font-weight: 950;
-  }
-  .gameboy-ab button:first-child {
-    transform: none;
-  }
-  .gameboy-ab button b {
-    font-family: ui-monospace, monospace;
-    font-size: 0.9rem;
-  }
+
   .gameboy-utility {
     display: flex;
     justify-content: center;
     gap: 10px;
     padding-top: 2px;
   }
-  .gameboy-small-button {
-    min-width: 72px;
-    min-height: 30px;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--card);
-    box-shadow: 2px 2px 0 var(--ink);
-    padding: 0.2rem 0.45rem;
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 950;
-    cursor: pointer;
-  }
+
   .gameboy-instructions {
     display: grid;
     gap: 2px;
-    margin: 10px 0 0;
     border-top: 1px dashed color-mix(in srgb, var(--ink) 65%, transparent);
     padding-top: 7px;
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 950;
     letter-spacing: 0.025em;
-    line-height: 1.4;
-    text-align: center;
   }
-  .gameboy-instructions span {
-    color: var(--ink);
-  }
-  .gameboy button:disabled {
-    cursor: not-allowed;
-    opacity: 0.62;
-  }
+
   .hero-sun {
     position: absolute;
     z-index: -1;
@@ -897,265 +534,23 @@
     align-items: center;
     gap: clamp(2rem, 6vw, 5rem);
   }
-  .contact-headline {
-    margin-top: 1.25rem;
-    font-size: clamp(2rem, 4.5vw, 3.6rem);
-    font-weight: 950;
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-  }
-  .contact-description {
-    margin-top: 1.1rem;
-    color: var(--color-muted);
-    font-size: 1.02rem;
-    line-height: 1.7;
-  }
-  .contact-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.85rem;
-    margin-top: 1.5rem;
-  }
-  .contact-email-button {
-    min-height: 48px;
-  }
-  .copy-email-button {
-    min-height: 48px;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    box-shadow: 3px 3px 0 var(--ink);
-    color: var(--ink);
-    padding: 0.45rem 0.65rem;
-    font-size: 0.76rem;
-    font-weight: 850;
-    cursor: pointer;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .copy-email-button:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-  .support-trigger {
-    min-height: 48px;
-    cursor: pointer;
-  }
-  .support-heart {
-    width: 14px;
-    height: 14px;
-    flex: none;
-    color: var(--accent-2);
-  }
-  .support-dialog {
-    position: fixed;
-    inset: 0;
-    width: min(620px, calc(100% - 24px));
-    max-height: calc(100vh - 24px);
-    margin: auto;
-    overflow: auto;
-    border: 3px solid var(--ink);
-    border-radius: 0;
-    background: var(--card);
-    box-shadow: 8px 8px 0 var(--ink);
-    padding: 0;
-    color: var(--ink);
-  }
-  .support-dialog::backdrop {
-    background: color-mix(in srgb, var(--ink) 58%, transparent);
-    backdrop-filter: blur(2px);
-  }
-  .support-dialog-inner {
-    padding: clamp(1rem, 4vw, 1.75rem);
-  }
-  .support-dialog-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .support-dialog-label {
-    display: inline-flex;
-    align-items: center;
-    border: 2px solid var(--ink);
-    background: var(--accent);
-    padding: 0.3rem 0.65rem;
-    color: #201f1b;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-  }
-  .support-dialog-close {
-    display: grid;
-    width: 38px;
-    aspect-ratio: 1;
-    flex: none;
-    place-items: center;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--paper);
-    box-shadow: 3px 3px 0 var(--ink);
-    color: var(--ink);
-    cursor: pointer;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .support-dialog-close:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-  .support-dialog-close svg {
-    width: 16px;
-    height: 16px;
-  }
-  .support-dialog-title {
-    margin-top: 1.25rem;
-    font-size: clamp(2rem, 7vw, 3.25rem);
-    font-weight: 950;
-    line-height: 0.95;
-    letter-spacing: -0.05em;
-  }
-  .support-dialog-description {
-    max-width: 480px;
-    margin-top: 0.85rem;
-    color: var(--color-muted);
-    line-height: 1.65;
-  }
-  .support-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem;
-    margin-top: 1.5rem;
-  }
-  .support-option {
-    display: grid;
-    min-height: 112px;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.75rem;
-    border: 2px solid var(--ink);
-    box-shadow: 4px 4px 0 var(--ink);
-    padding: 1rem;
-    text-decoration: none;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .support-option-github {
-    background: var(--accent);
-    color: var(--ink-on-accent);
-  }
-  .support-option-coffee {
-    background: var(--blue);
-    color: var(--ink-on-blue);
-  }
-  .support-option:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-  .support-option-icon {
-    width: 36px;
-    height: 36px;
-  }
-  .support-option strong,
-  .support-option small {
-    display: block;
-  }
-  .support-option strong {
-    font-size: 0.9rem;
-    line-height: 1.15;
-  }
-  .support-option small {
-    margin-top: 0.35rem;
-    font-size: 0.68rem;
-    line-height: 1.35;
-  }
-  .contact-social-block {
-    margin-top: 2rem;
-  }
-  .contact-social-label {
-    margin-bottom: 0.55rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.7rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .contact-socials {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .contact-socials a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.42rem;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    box-shadow: 3px 3px 0 var(--ink);
-    padding: 0.45rem 0.65rem;
-    color: var(--ink);
-    font-size: 0.76rem;
-    font-weight: 850;
-    text-decoration: none;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .social-icon {
-    display: block;
-    width: 15px;
-    height: 15px;
-    flex: none;
-  }
-  .external-arrow {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-sans);
-    font-size: 0.76rem;
-    font-weight: 900;
-    letter-spacing: normal;
-    line-height: 1;
-  }
-  .contact-socials a:hover {
-    color: var(--ink);
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
   .contact-art {
     position: relative;
     display: grid;
     min-height: 365px;
     overflow: hidden;
     place-items: end center;
-    padding: 2.8rem 0.5rem 0.6rem;
-    background-color: var(--blue);
     background-image: radial-gradient(
       color-mix(in srgb, var(--ink) 18%, transparent) 0.7px,
       transparent 0.7px
     );
     background-size: 7px 7px;
-    box-shadow: 7px 7px 0 var(--ink);
   }
   .contact-stamp {
     position: absolute;
     top: 1rem;
     left: 1rem;
     z-index: 2;
-    border: 2px solid var(--ink);
-    background: var(--accent);
-    color: var(--ink-on-accent);
-    padding: 0.35rem 0.5rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.62rem;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    transform: rotate(-3deg);
   }
   .contact-thought {
     position: absolute;
@@ -1166,10 +561,7 @@
     aspect-ratio: 1200 / 779;
     animation: contact-cloud-float 4.8s ease-in-out infinite;
   }
-  .contact-thought-image {
-    object-fit: contain;
-  }
-  .contact-thought span {
+  .contact-thought-label {
     position: absolute;
     top: 30%;
     left: 4%;
@@ -1192,9 +584,6 @@
     margin-bottom: 1.4rem;
     animation: contact-bob 4.5s ease-in-out infinite;
   }
-  .contact-maker-image {
-    object-fit: contain;
-  }
   .contact-effects {
     position: absolute;
     inset: 0;
@@ -1213,189 +602,6 @@
     right: 0.85rem;
     bottom: 0.65rem;
     z-index: 2;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    padding: 0.25rem 0.45rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.6rem;
-    font-weight: 900;
-    text-transform: uppercase;
-  }
-  .section-index {
-    display: grid;
-    width: 30px;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 2px solid var(--ink-on-accent-2);
-    background: var(--accent-2);
-    color: var(--ink-on-accent-2);
-    font-family: ui-monospace, monospace;
-    font-size: 0.7rem;
-    font-weight: 900;
-    transform: rotate(-5deg);
-  }
-  .portfolio-section {
-    scroll-margin-top: 100px;
-    border-bottom: 2px dashed color-mix(in srgb, var(--ink) 42%, transparent);
-  }
-  .story-card {
-    padding: 1.2rem;
-  }
-  .story-card:nth-child(2) {
-    background: color-mix(in srgb, var(--blue) 30%, var(--card));
-  }
-  .story-card:nth-child(3) {
-    background: color-mix(in srgb, var(--accent) 28%, var(--card));
-  }
-  .story-card .comic-label {
-    font-size: 0.65rem;
-  }
-  .toolkit-panel {
-    --color-muted: var(--ink-on-blue);
-    --color-text: var(--ink-on-blue);
-    background: var(--blue);
-    box-shadow: 5px 5px 0 var(--ink);
-    color: var(--ink-on-blue);
-  }
-  .now-panel {
-    background: color-mix(in srgb, var(--accent) 25%, var(--card));
-  }
-  .now-stamp {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    border: 2px solid var(--ink-on-accent-2);
-    background: var(--accent-2);
-    color: var(--ink-on-accent-2);
-    padding: 0.35rem 0.5rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.65rem;
-    font-weight: 900;
-    transform: rotate(7deg);
-  }
-  .project-card {
-    border: 2px solid var(--ink);
-    background: var(--card);
-    box-shadow: 5px 5px 0 var(--ink);
-    transition:
-      transform 150ms ease,
-      box-shadow 150ms ease;
-  }
-  .project-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 8px 8px 0 var(--ink);
-  }
-  .project-shot-wrap {
-    display: grid;
-    place-items: center;
-    min-height: 220px;
-    background: var(--blue);
-    border: 2px solid var(--ink);
-  }
-  .project-shot-wrap img {
-    max-width: min(100%, 320px);
-    border: 2px solid var(--ink);
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .project-title-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  .project-title-row li {
-    border-radius: 0;
-    border-width: 2px;
-    background: var(--paper);
-    font-family: ui-monospace, monospace;
-    font-weight: 800;
-  }
-  .project-intro {
-    border-left: 4px solid var(--accent-2);
-    padding-left: 0.85rem;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.6;
-  }
-  .project-detail-label {
-    margin-top: 1.1rem;
-    font-family: ui-monospace, monospace;
-    font-size: 0.65rem;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .project-action {
-    display: inline-flex;
-    align-items: center;
-    min-height: 30px;
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--card);
-    box-shadow: 2px 2px 0 var(--ink);
-    padding: 0.28rem 0.5rem;
-    color: var(--ink);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.65rem;
-    font-weight: 900;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease,
-      background-color 120ms ease;
-  }
-  .project-action:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-  .project-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.55rem;
-    margin-top: 1.25rem;
-  }
-  .project-links a {
-    display: inline-flex;
-    min-height: 30px;
-    align-items: center;
-    gap: 0.35rem;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    box-shadow: 2px 2px 0 var(--ink);
-    padding: 0.28rem 0.5rem;
-    color: var(--ink);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.65rem;
-    font-weight: 900;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition:
-      transform 120ms ease,
-      box-shadow 120ms ease,
-      background-color 120ms ease;
-  }
-  .project-link-icon {
-    display: block;
-    width: 13px;
-    height: 13px;
-    flex: none;
-  }
-  .code-command {
-    color: var(--ink-on-accent);
-  }
-  .project-links a:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-  .project-links a:hover,
-  .project-action:hover {
-    background: var(--accent);
-    color: #201f1b;
-  }
-  .experience-grid .comic-panel {
-    box-shadow: 5px 5px 0 var(--ink);
   }
   @keyframes maker-float {
     0%,
@@ -1512,31 +718,6 @@
     }
   }
   @media (max-width: 680px) {
-    .site-shell {
-      width: min(100% - 24px, 560px);
-    }
-    .site-nav-inner {
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.65rem;
-    }
-    .site-brand {
-      min-height: 32px !important;
-      padding-inline: 0.45rem;
-    }
-    .nav-links {
-      order: 3;
-      width: 100%;
-      justify-content: space-between;
-      border-top: 1px dashed var(--ink);
-      padding-top: 0.55rem;
-    }
-    .nav-links a {
-      font-size: 0.66rem;
-    }
-    .theme-toggle button {
-      padding-inline: 0.32rem;
-    }
     .hero-art {
       min-height: 340px;
     }
@@ -1551,9 +732,6 @@
     .gameboy-brand {
       padding: 0 0 0.25rem;
     }
-    .gameboy-brand > span:first-child {
-      width: 26px;
-    }
     .gameboy-bezel {
       padding: 6px;
     }
@@ -1562,9 +740,7 @@
       height: 18px;
     }
     .gameboy-instructions {
-      margin-top: 4px;
       padding-top: 5px;
-      font-size: 11px;
     }
     .tetris-board {
       height: clamp(100px, 12.8vh, 108px);
@@ -1584,9 +760,7 @@
     .gameboy-ab {
       max-width: 89px;
     }
-    .gameboy-ab button {
-      width: 40px;
-    }
+
     .gameboy-speaker {
       grid-template-columns: repeat(8, 5px);
       gap: 5px 3px;
@@ -1654,24 +828,107 @@
     .contact-thought span {
       font-size: 0.58rem;
     }
-    .next-up {
-      min-height: 210px;
-    }
-    .support-dialog {
-      max-height: calc(100vh - 16px);
-      box-shadow: 5px 5px 0 var(--ink);
-    }
-    .support-options {
-      grid-template-columns: 1fr;
-    }
-    .support-option {
-      min-height: 92px;
-    }
   }
   /* Trailing middot groups the set and wraps better than a flex gap. */
-  .links li:not(:last-child)::after {
-    content: "·";
-    margin: 0 10px;
-    color: var(--color-faint);
+}
+
+/* Portfolio compositions: arrangement and artwork only. */
+@layer components {
+  .section-rule {
+    flex: 1;
+    min-width: 0;
+  }
+  .portfolio-section {
+    scroll-margin-top: 6rem;
+    border-bottom: 2px dashed var(--ui-border);
+  }
+  .page-footer {
+    padding-block: var(--ui-space-8);
+  }
+  @media (max-width: 680px) {
+    .footer-layout {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  .full-height {
+    height: 100%;
+  }
+  .hero-layout {
+    display: grid;
+    margin-top: var(--ui-space-8);
+    overflow: hidden;
+  }
+  .hero-copy {
+    padding: var(--ui-space-6);
+  }
+  .hero-name {
+    color: var(--ui-emphasis);
+    text-shadow: none;
+  }
+  .hero-art.gameboy-stage {
+    border-top: 3px solid var(--ui-border);
+  }
+  .project-layout {
+    display: grid;
+    gap: var(--ui-space-6);
+  }
+  .project-media {
+    display: grid;
+    place-items: center;
+    align-self: center;
+    width: 100%;
+  }
+  .project-copy {
+    align-self: center;
+  }
+  .brand-wordmark {
+    text-transform: none;
+  }
+
+  @media (min-width: 40rem) {
+    .hero-copy {
+      padding: var(--ui-space-10);
+    }
+  }
+  @media (min-width: 48rem) {
+    .hero-layout {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+    .hero-art.gameboy-stage {
+      border-top: 0;
+      border-left: 3px solid var(--ui-border);
+    }
+    .project-layout {
+      grid-template-columns: 0.82fr 1.18fr;
+    }
+  }
+}
+
+@layer components {
+  .portfolio-section { border-bottom-color: color-mix(in srgb, var(--ui-border) 42%, transparent); }
+  .hero-layout { position: relative; isolation: isolate; margin-top: 1.75rem; }
+  .hero-layout::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(color-mix(in srgb, var(--ui-text) 30%, transparent) 0.7px, transparent 0.7px);
+    background-size: 7px 7px;
+    opacity: 0.38;
+    mask-image: linear-gradient(90deg, transparent 35%, #000);
+  }
+  .hero-name { display: block; text-shadow: 3px 3px 0 var(--ui-border); }
+  .project-layout { gap: var(--ui-space-5); }
+  .project-media { max-width: 390px; min-height: 220px; margin-inline: auto; }
+  .workbench-card { position: relative; }
+  .workbench-copy { padding-top: var(--ui-space-10); }
+  .workbench-stamp { position: absolute; top: 1.25rem; right: 1.25rem; }
+  @media (min-width: 48rem) {
+    .experience-layout { grid-template-columns: 1fr 0.8fr; }
+  }
+  @media (min-width: 64rem) {
+    .hero-copy { padding: var(--ui-space-12); }
   }
 }

@@ -1,33 +1,25 @@
 import ThemeToggle from "./ThemeToggle";
-
-const links = [
-  ["Story", "#story"],
-  ["Work", "#work"],
-  ["Experience", "#experience"],
-  ["Now", "#now"],
-  ["Contact", "#contact"],
-];
-
+import { Navbar } from "@mdopeace/ui/Navbar";
+import { Link } from "@mdopeace/ui/Link";
+import SectionLinks from "./portfolio/SectionLinks";
 export default function SiteHeader() {
   return (
-    <nav className="site-nav" aria-label="Main navigation">
-      <div className="site-nav-inner">
-        <a
-          href="#top"
-          aria-label="Md Mostafijur Rahman, home"
-          className="site-brand font-mono text-sm font-black tracking-[-.08em] no-underline"
-        >
-          Md
-        </a>
-        <div className="nav-links">
-          {links.map(([label, href]) => (
-            <a href={href} key={href}>
-              {label}
-            </a>
-          ))}
-        </div>
-        <ThemeToggle />
-      </div>
-    </nav>
+    <Navbar
+      className="site-nav"
+      label="Main navigation"
+      brand={
+          <Link
+            href="#top"
+            variant="emphasis"
+            size="sm"
+            aria-label="Md Mostafijur Rahman, home"
+          >
+            <span className="brand-wordmark">Md</span>
+          </Link>
+      }
+      actions={<ThemeToggle />}
+    >
+      <SectionLinks />
+    </Navbar>
   );
 }

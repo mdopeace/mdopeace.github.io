@@ -15,3 +15,11 @@ npm-debug.log*
 
 # os
 .DS_Store
+
+# browser verification
+/test-results/
+/playwright-report/
+
+# UI package build and release archives
+/packages/*/dist/
+*.tgz

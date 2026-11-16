@@ -9,6 +9,16 @@ assert.ok(
 );
 const html = readFileSync("out/index.html", "utf8");
 
+test("the playground ships as a public directory route with portfolio links", () => {
+  const playground = readFileSync("out/playground/index.html", "utf8");
+  assert.match(html, /href="\/playground\/"/);
+  assert.ok(html.includes("Explore playground"));
+  assert.ok(playground.includes("Small parts. A shared language."));
+  assert.ok(playground.includes("Design decisions"));
+  assert.match(playground, /rel="canonical" href="https:\/\/mdopeace.github.io\/playground\/"/);
+  assert.ok(!existsSync("out/components-preview/index.html"));
+});
+
 // LinkedIn blocks bots (405/999) — exclude rather than weaken the whole check.
 const SKIP_BOT_WALL = /linkedin\.com/;
 
@@ -63,8 +73,10 @@ test("page ships its accessibility and identity hooks", () => {
 
 test("support dialog ships both provider links and dialog hooks", () => {
   assert.ok(html.includes('aria-haspopup="dialog"'));
-  assert.ok(html.includes("support-dialog"));
-  assert.ok(html.includes('aria-labelledby="support-dialog-title"'));
+  assert.match(html, /<dialog\b[^>]*aria-labelledby="[^"]+"/);
+  assert.ok(html.includes("Fuel the next build"));
+  assert.ok(html.includes('role="switch"'));
+  assert.ok(!html.includes(">AUTO<"));
   assert.ok(
     html.includes("https://github.com/sponsors/mdopeace"),
     "GitHub Sponsors link missing",

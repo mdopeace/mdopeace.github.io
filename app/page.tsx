@@ -5,11 +5,16 @@ import Now from "@/components/sections/Now";
 import Projects from "@/components/sections/Projects";
 import Story from "@/components/sections/Story";
 import SiteHeader from "@/components/SiteHeader";
+import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
+import { Container, Inline } from "@mdopeace/ui/Layout";
+import { Link } from "@mdopeace/ui/Link";
+import { Text } from "@mdopeace/ui/Typography";
 import { FaArrowUp } from "react-icons/fa6";
 
 export default function Home() {
   return (
-    <div className="site-shell">
+    <Container>
+      <SectionNavigation />
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
@@ -22,16 +27,16 @@ export default function Home() {
         <Now />
         <Contact />
       </main>
-      <footer className="page-footer flex flex-wrap items-center justify-between gap-3 py-7 font-mono text-[11px] font-bold uppercase tracking-[.08em] text-muted">
-        <span>Made with curiosity · Bengaluru</span>
-        <a
-          href="#top"
-          className="inline-flex min-h-6 items-center gap-1 text-text"
-        >
-          Back to top{" "}
-          <FaArrowUp aria-hidden="true" focusable="false" size="11" />
-        </a>
+      <footer className="page-footer">
+        <Inline justify="between" gap={4} className="footer-layout">
+          <Text size="caption" font="body" tone="muted">
+            Made with curiosity · Bengaluru
+          </Text>
+          <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
+            Back to top
+          </Link>
+        </Inline>
       </footer>
-    </div>
+    </Container>
   );
 }

@@ -1,0 +1,8 @@
+.screenshot {
+  width: min(100%, 320px, calc(360px * var(--image-ratio)));
+  border: var(--ui-border-standard) solid var(--ui-border);
+  background: var(--ui-border);
+}
+.logo {
+  background: var(--ui-canvas);
+}

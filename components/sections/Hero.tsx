@@ -1,39 +1,55 @@
+import { FaArrowDown } from "react-icons/fa6";
 import TetrisGameboy from "../hero/TetrisGameboy";
-
+import { Surface } from "@mdopeace/ui/Surface";
+import { Stack, Inline } from "@mdopeace/ui/Layout";
+import { Heading, Text } from "@mdopeace/ui/Typography";
+import { Badge } from "@mdopeace/ui/Badge";
+import { Link } from "@mdopeace/ui/Link";
 export default function Hero() {
   return (
-    <header
+    <Surface
+      as="header"
       id="top"
-      className="hero-grid relative mt-7 grid overflow-hidden border-[3px] border-line bg-panel shadow-comic md:grid-cols-[1.15fr_.85fr]"
+      padding={0}
+      border="strong"
+      className="hero-layout"
     >
-      <div className="relative z-10 p-6 sm:p-10 lg:p-12">
-        <span className="comic-label">Issue 01 · The maker</span>
-        <p className="mt-7 font-mono text-xs font-bold uppercase tracking-[.12em] text-muted">
-          Software Engineer · Bengaluru
-        </p>
-        <h1 className="mt-3 max-w-175 text-[clamp(3rem,8vw,6.5rem)] font-black leading-[.86] tracking-[-.04em]">
-          Md Mostafijur <span className="hero-name">Rahman</span>
-        </h1>
-        <p className="mt-7 max-w-147.5 text-base leading-[1.75] sm:text-lg">
-          I notice the little frictions that get in the way of a good
-          experience—and I like figuring out how to make them disappear.
-        </p>
-        <p className="mt-3 max-w-147.5 text-sm leading-[1.7] text-muted">
-          At Tracxn, I work across the web platform. Outside work, I turn the
-          things I wish existed into small, useful tools.
-        </p>
-        <div className="mt-7 flex flex-wrap gap-3">
-          <a className="button-comic" href="#work">
-            See what I’ve made <span aria-hidden="true">↘</span>
-          </a>
-          <a className="button-comic button-secondary" href="#story">
-            How I think <span aria-hidden="true">↘</span>
-          </a>
-        </div>
+      <div className="hero-copy">
+        <Stack gap={7}>
+          <Badge variant="solid" tone="accent" size="md">
+            Issue 01 · The maker
+          </Badge>
+          <Stack gap={3}>
+            <Text variant="eyebrow" tone="muted">
+              Software Engineer · Bengaluru
+            </Text>
+            <Heading level={1} size="display">
+              Md Mostafijur <span className="hero-name">Rahman</span>
+            </Heading>
+          </Stack>
+          <Stack gap={3}>
+            <Text size="lg">
+              I notice the little frictions that get in the way of a good
+              experience—and I like figuring out how to make them disappear.
+            </Text>
+            <Text size="sm" tone="muted">
+              At Tracxn, I work across the web platform. Outside work, I turn
+              the things I wish existed into small, useful tools.
+            </Text>
+          </Stack>
+          <Inline gap={3}>
+            <Link variant="primary" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+              See what I’ve made
+            </Link>
+            <Link variant="secondary" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+              How I think
+            </Link>
+          </Inline>
+        </Stack>
       </div>
-      <div className="hero-art gameboy-stage relative min-h-75 overflow-hidden border-t-[3px] border-line md:border-t-0 md:border-l-[3px]">
+      <div className="hero-art gameboy-stage">
         <TetrisGameboy />
       </div>
-    </header>
+    </Surface>
   );
 }

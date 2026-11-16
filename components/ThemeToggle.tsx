@@ -1,81 +1,57 @@
 "use client";
-
 import { useSyncExternalStore } from "react";
+import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
+import { Switch } from "@mdopeace/ui/Switch";
 
-type Theme = "light" | "dark" | "system";
-
-function updateThemeColor(theme: Theme) {
-  const dark =
-    theme === "dark" ||
-    (theme === "system" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches);
+type Theme = "light" | "dark";
+let transitionTimer: ReturnType<typeof setTimeout> | undefined;
+function snapshot(): Theme {
+  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+}
+function serverSnapshot(): Theme {
+  return "light";
+}
+function subscribe(notify: () => void) {
+  window.addEventListener("portfolio-theme-change", notify);
+  return () => window.removeEventListener("portfolio-theme-change", notify);
+}
+function applyTheme(theme: Theme, animateFallback: boolean) {
+  const root = document.documentElement;
+  clearTimeout(transitionTimer);
+  if (animateFallback) root.dataset.themeTransition = "true";
+  root.dataset.theme = theme;
+  transitionTimer = setTimeout(() => {
+    delete root.dataset.themeTransition;
+  }, 200);
   document
     .querySelector('meta[name="theme-color"]')
-    ?.setAttribute("content", dark ? "#1b1b1b" : "#f5efdf");
-}
-
-function getThemeSnapshot(): Theme {
-  const theme = document.documentElement.dataset.theme;
-  return theme === "light" || theme === "dark" ? theme : "system";
-}
-
-function getServerThemeSnapshot(): Theme {
-  return "system";
-}
-
-function subscribeToTheme(onChange: () => void) {
-  const media = window.matchMedia("(prefers-color-scheme: dark)");
-  const onSystemThemeChange = () => {
-    if (document.documentElement.dataset.theme === "system")
-      updateThemeColor("system");
-    onChange();
-  };
-  window.addEventListener("portfolio-theme-change", onChange);
-  media.addEventListener("change", onSystemThemeChange);
-  return () => {
-    window.removeEventListener("portfolio-theme-change", onChange);
-    media.removeEventListener("change", onSystemThemeChange);
-  };
-}
-
-function chooseTheme(next: Theme) {
-  document.documentElement.dataset.theme = next;
-  updateThemeColor(next);
+    ?.setAttribute("content", theme === "dark" ? "#1b1b1b" : "#f5efdf");
   try {
-    if (next === "system") localStorage.removeItem("portfolio-theme");
-    else localStorage.setItem("portfolio-theme", next);
+    localStorage.setItem("portfolio-theme", theme);
   } catch {
-    // The selected theme still applies for this visit if storage is unavailable.
+    /* Apply for this visit even without storage. */
   }
   window.dispatchEvent(new Event("portfolio-theme-change"));
 }
-
+function chooseTheme(theme: Theme) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    applyTheme(theme, false);
+  } else if (document.startViewTransition) {
+    void document.startViewTransition(() => applyTheme(theme, false)).finished.catch(() => {});
+  } else {
+    applyTheme(theme, true);
+  }
+}
 export default function ThemeToggle() {
-  const theme = useSyncExternalStore(
-    subscribeToTheme,
-    getThemeSnapshot,
-    getServerThemeSnapshot,
-  );
-
+  const theme = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   return (
-    <div
-      className="theme-toggle"
-      data-theme={theme}
-      role="group"
-      aria-label="Color theme"
-    >
-      <span className="theme-toggle-indicator" aria-hidden="true" />
-      {(["light", "dark", "system"] as const).map((item) => (
-        <button
-          key={item}
-          type="button"
-          aria-label={item === "system" ? "System" : undefined}
-          aria-pressed={theme === item}
-          onClick={() => chooseTheme(item)}
-        >
-          {item === "system" ? "AUTO" : item.toUpperCase()}
-        </button>
-      ))}
-    </div>
+    <Switch
+      aria-label="Dark mode"
+      size="sm"
+      checked={theme === "dark"}
+      onCheckedChange={(dark) => chooseTheme(dark ? "dark" : "light")}
+      checkedIcon={<PiMoonStarsBold />}
+      uncheckedIcon={<PiSunBold />}
+    />
   );
 }

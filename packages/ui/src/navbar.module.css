@@ -1,0 +1,94 @@
+.layout.layout {
+  min-width: 0;
+}
+@media (max-width: 42.5rem) {
+  .layout.layout { flex-wrap: wrap; justify-content: space-between; }
+  .layout > .links { order: 3; flex-basis: 100%; }
+}
+.links {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.link.link.link {
+  color: var(--ui-text);
+}
+
+.colorTrack .link.link.link {
+  color: var(--ui-emphasis);
+}
+
+.colorTrack {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.colorTrack[data-ready="true"] {
+  transition:
+    clip-path var(--ui-slow) var(--ui-ease),
+    opacity var(--ui-normal) var(--ui-ease);
+}
+
+.indicatorTrack {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.indicator {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  height: 2px;
+  background: var(--ui-emphasis);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.indicator[data-ready="true"] {
+  transition:
+    transform var(--ui-slow) var(--ui-ease),
+    width var(--ui-slow) var(--ui-ease),
+    opacity var(--ui-normal) var(--ui-ease);
+}
+
+.indicator[data-visible="true"],
+.colorTrack[data-visible="true"] {
+  opacity: 1;
+}
+
+.indicator[data-visible="true"] {
+  animation: underlineEnter var(--ui-slow) var(--ui-ease);
+}
+
+.colorTrack[data-visible="true"] {
+  animation: colorEnter var(--ui-slow) var(--ui-ease);
+}
+
+/* Reveal the first highlight from its left edge. Once visible, moving between
+   links keeps using the shared transform and clip-path transitions above. */
+@keyframes underlineEnter {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes colorEnter {
+  from { clip-path: inset(0 calc(100% - var(--highlight-left)) 0 var(--highlight-left)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .colorTrack[data-ready="true"],
+  .indicator[data-ready="true"] {
+    transition: none;
+  }
+  .colorTrack[data-visible="true"],
+  .indicator[data-visible="true"] {
+    animation: none;
+  }
+}
