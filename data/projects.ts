@@ -148,8 +148,8 @@ export const projects: Project[] = [
     ],
     commands: [],
     links: [
+      { label: "Source", icon: "github", href: "https://github.com/mdopeace/mdopeace.github.io" },
       { label: "Explore playground", icon: "globe", href: "/playground/" },
-      { label: "View source", icon: "github", href: "https://github.com/mdopeace/mdopeace.github.io" },
     ],
   },
 ];
