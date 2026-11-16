@@ -10,6 +10,7 @@ import {
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "@mdopeace/ui/Button";
+import { Tile } from "@mdopeace/ui/Tile";
 import { Link } from "@mdopeace/ui/Link";
 import { Switch } from "@mdopeace/ui/Switch";
 import { Dialog } from "@mdopeace/ui/Dialog";
@@ -33,6 +34,18 @@ function clipboard(writeText: (text: string) => Promise<void>) {
     value: { writeText },
   });
 }
+describe("Tile", () => {
+  it("supports branded content, decorative indicators and native refs without adding controls", () => {
+    const ref = createRef<HTMLSpanElement>();
+    const { rerender } = render(<Tile ref={ref} aria-label="Game Boy" faceColor="#a13c24">GB</Tile>);
+    expect(ref.current).toBe(screen.getByLabelText("Game Boy"));
+    expect(ref.current?.textContent).toBe("GB");
+    expect(screen.queryByRole("button")).toBeNull();
+    rerender(<Tile ref={ref} aria-hidden="true" faceColor="#9bdc74" />);
+    expect(ref.current?.getAttribute("aria-hidden")).toBe("true");
+    expect(ref.current?.textContent).toBe("");
+  });
+});
 describe("navigation and media building blocks", () => {
   it("keeps current destinations controlled, decorative labels unfocusable and native clicks cancellable", async () => {
     const user = userEvent.setup();
@@ -89,6 +102,20 @@ describe("navigation and media building blocks", () => {
   });
 });
 describe("component playground", () => {
+  it("exposes Tile presets and includes the public import in copied examples", async () => {
+    const user = userEvent.setup();
+    const write = vi.fn().mockResolvedValue(undefined);
+    clipboard(write);
+    render(<ComponentPreview />);
+    await user.click(screen.getByRole("button", { name: "Tile" }));
+    expect(screen.getByRole("img", { name: "Game Boy mark" }).textContent).toBe("GB");
+    await user.selectOptions(screen.getByLabelText("Appearance"), "paused");
+    await user.click(screen.getByLabelText("Inset depth"));
+    expect(screen.getByRole("img", { name: "paused indicator" }).getAttribute("data-inset")).toBe("false");
+    await user.click(screen.getByRole("button", { name: "Copy code" }));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('import { Tile } from "@mdopeace/ui/Tile";'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('faceColor="#f0ae55"'));
+  });
   it("uses plain escaped JSX labels and supplies imports and state for complete examples", () => {
     expect(jsxText("Make something")).toBe("Make something");
     expect(jsxText("Save <draft> & {notes}")).toBe("Save &lt;draft&gt; &amp; &#123;notes&#125;");

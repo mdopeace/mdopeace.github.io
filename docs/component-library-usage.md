@@ -138,7 +138,9 @@ Button and Link support `iconTone="inherit"` (default), `emphasis`, `muted`, or 
 
 Game Boy controls use the same interaction geometry as shared buttons: 3px resting shadow, 1px hover movement with a 2px shadow, and 3px pressed movement with no shadow. Device-specific shapes, fills, labels and dark shadow color remain local artwork. The D-pad uses individual button shadows rather than an additional group shadow. Focus preserves depth, disabled controls do not move, and reduced motion suppresses movement.
 
-Badge supports `shape="square"` for unrotated square labels: `sm` is 30px and `md` is 40px. The Game Boy GB brand uses a solid emphasis square Badge in `sm`, including compact layouts; its device context retains the dark border on the yellow shell.
+Badge supports `shape="square"` for unrotated square labels: `sm` is 30px and `md` is 40px.
+
+Tile (`@mdopeace/ui/Tile`) is a decorative framed square with an optional inset face. Sizes `sm`, `md`, and `lg` are 30px, 40px, and 48px. Use `faceColor`, `textColor`, and `frameColor` for custom palettes and `inset={false}` for a flat face. Children accept text, icons, or images; omit children for a light indicator. Native span attributes and refs are forwarded; wrap Tile in a link or button when it needs interaction. The Game Boy GB mark and indicator use small Tiles, sharing geometry and inset depth while keeping their own colors. The navbar brand retains its existing design.
 
 ## Completed component migrations
 

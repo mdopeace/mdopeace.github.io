@@ -1,0 +1,36 @@
+.tile {
+  box-sizing: border-box;
+  display: inline-grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  flex: 0 0 auto;
+  width: 1.875rem;
+  height: 1.875rem;
+  border: 2px solid var(--tile-frame, var(--ui-border));
+  background: var(--tile-frame, var(--ui-border));
+  color: var(--tile-text, var(--ui-text));
+  font: var(--ui-weight-bold) var(--ui-font-caption)/1 var(--ui-mono);
+  vertical-align: middle;
+}
+.tile[data-size="md"] {
+  width: var(--ui-control-md);
+  height: var(--ui-control-md);
+  font-size: var(--ui-font-sm);
+}
+.tile[data-size="lg"] {
+  width: var(--ui-control-lg);
+  height: var(--ui-control-lg);
+  font-size: var(--ui-font-md);
+}
+.face {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  background: var(--tile-face, var(--ui-surface));
+  transition: background-color var(--ui-normal) var(--ui-ease);
+}
+.tile[data-inset="true"] > .face {
+  box-shadow:
+    inset 2px 2px 0 rgb(0 0 0 / 20%),
+    inset -2px -2px 0 rgb(255 255 255 / 15%);
+}

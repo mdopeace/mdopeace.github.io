@@ -16,6 +16,10 @@
     "**/*.css"
   ],
   "exports": {
+    "./Tile": {
+      "types": "./dist/Tile.d.ts",
+      "import": "./dist/Tile.js"
+    },
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
