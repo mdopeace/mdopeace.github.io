@@ -29,7 +29,7 @@ export default function Home() {
       </main>
       <footer className="page-footer">
         <Inline justify="between" gap={4} className="footer-layout">
-          <Text size="caption" font="body" tone="muted">
+          <Text size="caption" font="mono" tone="muted">
             Made with curiosity · Bengaluru
           </Text>
           <Link href="#top" size="sm" endIcon={<FaArrowUp />}>

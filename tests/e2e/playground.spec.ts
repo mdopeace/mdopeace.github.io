@@ -1,6 +1,30 @@
 import { expect, test } from "@playwright/test";
 
 for (const theme of ["light", "dark"] as const) {
+  test(`${theme}: portfolio and playground footers share caption typography`, async ({ page }) => {
+    await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
+    const typography = [];
+    for (const path of ["/", "/playground/"]) {
+      await page.goto(path);
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+      const caption = page.getByRole("contentinfo").locator("p");
+      await expect(caption).toHaveAttribute("data-font", "mono");
+      await expect(caption).toHaveAttribute("data-size", "caption");
+      typography.push(await caption.evaluate(element => {
+        const style = getComputedStyle(element);
+        return {
+          fontFamily: style.fontFamily,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          lineHeight: style.lineHeight,
+          letterSpacing: style.letterSpacing,
+        };
+      }));
+    }
+    expect(typography[0].fontFamily).toMatch(/mono/i);
+    expect(typography[1]).toEqual(typography[0]);
+  });
+
   test(`${theme}: discover and use the public component playground`, async ({ page, context }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
