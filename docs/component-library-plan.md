@@ -200,7 +200,7 @@ Additional behavior contracts:
 | Item | Built from | Public responsibility |
 | --- | --- | --- |
 | Section | Stack, Heading, optional Divider | `title`, optional `description`, `size="md"` (`sm/md/lg`), children and native section props; optional `heading` slot for a composed semantic heading; sizes map to vertical padding 12/16/20, with md increasing to 20 at sm; header/content gap 8 |
-| CodeBlock | Surface, native pre/code, Button | `code: string`, optional `copyLabel` and localized copy feedback; preserve whitespace and exact copied bytes; horizontal overflow inside block |
+| CommandBlock | Surface, native pre/code, Button | `code: string`, optional `copyLabel` and localized copy feedback; preserve whitespace and exact copied bytes; horizontal overflow inside block |
 | ExpandableText | Text, Button | `children: string`, `lines=3`, required `expandLabel` and `collapseLabel`, controlled/uncontrolled open contract; only offer expansion when clipped |
 | LinkGroup | Inline or Stack, Link | `items` with `href`, `label`, optional explicit icon/target/rel; `direction="horizontal"`, responsive `gap={3}`; proper list markup |
 | useClipboard | Browser behavior only | `copy(value): Promise<boolean>`, `status: idle/copying/success/error`, `error: Error \| null`, `reset()`; configurable feedback reset delay default 1400ms; cleanup timers and ignore stale request results |
@@ -216,7 +216,7 @@ Section has no portfolio chapter number or scroll/hash side effects. PortfolioSe
 | [SiteHeader](../components/SiteHeader.tsx) | Container + Inline + Link + ThemeToggle |
 | [Hero](../components/sections/Hero.tsx) | Surface + Grid + Stack + Heading + Text + Badge + Links; specialized hero artwork remains local |
 | [Story](../components/sections/Story.tsx) | PortfolioSection + semantic list + Grid + StoryStep (Surface, Badge, Text) |
-| [ProjectCard](../components/portfolio/ProjectCard.tsx) | Surface + business layout + Heading + Badge + Text + ExpandableText + CodeBlock + LinkGroup |
+| [ProjectCard](../components/portfolio/ProjectCard.tsx) | Surface + business layout + Heading + Badge + Text + ExpandableText + CommandBlock + LinkGroup |
 | [DayJob](../components/sections/DayJob.tsx) | PortfolioSection + Grid + ExperienceCard and ToolkitPanel built from Surface, Stack, Heading, Text, Divider |
 | [Now](../components/sections/Now.tsx) | PortfolioSection + Grid + business progress/announcement panels |
 | [Contact](../components/sections/Contact.tsx) | PortfolioSection + Grid + contact copy/actions, LinkGroup, and local artwork |
@@ -224,7 +224,7 @@ Section has no portfolio chapter number or scroll/hash side effects. PortfolioSe
 | [ThemeToggle](../components/ThemeToggle.tsx) | Switch + app light/dark persistence and theme-color synchronization; remove Auto and continuous system tracking during migration |
 | [TetrisGameboy](../components/hero/TetrisGameboy.tsx) | Game engine/input behavior remains local; adopt Button/Text where appropriate without forcing device geometry into generic layouts |
 
-The former section wrapper is now [PortfolioSection](../components/portfolio/PortfolioSection.tsx). Project tags use [Badge](../packages/ui/src/Badge.tsx) with explicit list items; project/social links use [LinkGroup](../packages/ui/src/LinkGroup.tsx). The former copy buttons and truncation wrapper have been replaced by [useClipboard](../packages/ui/src/hooks/useClipboard.ts), [EmailAction](../components/portfolio/EmailAction.tsx), [CodeBlock](../packages/ui/src/CodeBlock.tsx) and [ExpandableText](../packages/ui/src/ExpandableText.tsx). The superseded files and unused visual recipes were removed.
+The former section wrapper is now [PortfolioSection](../components/portfolio/PortfolioSection.tsx). Project tags use [Badge](../packages/ui/src/Badge.tsx) with explicit list items; project/social links use [LinkGroup](../packages/ui/src/LinkGroup.tsx). The former copy buttons and truncation wrapper have been replaced by [useClipboard](../packages/ui/src/hooks/useClipboard.ts), [EmailAction](../components/portfolio/EmailAction.tsx), [CommandBlock](../packages/ui/src/CommandBlock.tsx) and [ExpandableText](../packages/ui/src/ExpandableText.tsx). The superseded files and unused visual recipes were removed.
 
 Use framework image handling directly for now. Images have different intrinsic/layout requirements; create a generic media frame only when a shared frame behavior is established. Illustrations, stamps, halftones, and game sprites may retain local CSS.
 
@@ -249,7 +249,7 @@ Keep static primitives usable in Server Components. Introduce client boundaries 
 1. **Tokens and API foundation:** implement token types, CSS theme variables, responsive mapping and shared conventions. Preserve both original palettes and validate their foreground pairs, borders and depth in the showcase. Map old values to the new scale and document intentional visible changes.
 2. **First primitives and showcase:** Container, Stack, Inline, Grid, Surface, Heading, Text, Button and Link. Create a local component showcase using those components, with light/dark examples, size/variant matrices and keyboard states. Keep the development showcase out of the production export.
 3. **Remaining primitives:** Badge, Divider, Dialog and Switch, with accessibility, animation and state examples in the showcase.
-4. **Reusable compositions:** Section, CodeBlock, ExpandableText, LinkGroup and useClipboard. Add them when their primitives exist; clipboard copying remains Button composition.
+4. **Reusable compositions:** Section, CommandBlock, ExpandableText, LinkGroup and useClipboard. Add them when their primitives exist; clipboard copying remains Button composition.
 5. **Business migration:** migrate one section at a time, beginning with Story as a small vertical slice, then Projects, Experience, Now, Contact/support, Header/theme and Hero/game. Remove obsolete components and styles after their final consumer moves.
 6. **App consistency pass:** inspect spacing, typography, elevation, responsive layouts, themes and interaction together. Resolve repeated overrides through the public API.
 

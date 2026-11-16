@@ -1,5 +1,5 @@
 "use client";
-import type { ComponentPropsWithRef } from "react";
+import type { ComponentPropsWithRef, CSSProperties } from "react";
 import { useClipboard } from "./hooks/useClipboard";
 import { Button } from "./Button";
 import { FeedbackLabel } from "./FeedbackLabel";
@@ -18,6 +18,8 @@ export type CodeExampleProps = Omit<
   codeLabel?: string;
   language?: "tsx" | "text";
   border?: "none" | "standard";
+  /** Limits only the scrollable code area. Numbers are pixels. */
+  maxHeight?: CSSProperties["maxHeight"];
 };
 export function CodeExample({
   code,
@@ -26,6 +28,7 @@ export function CodeExample({
   codeLabel = "Code example",
   language = "tsx",
   border = "standard",
+  maxHeight,
   className,
   ...props
 }: CodeExampleProps) {
@@ -53,7 +56,7 @@ export function CodeExample({
           />
         </Button>
       </Inline>
-      <pre tabIndex={0} aria-label={codeLabel}>
+      <pre tabIndex={0} aria-label={codeLabel} style={{ maxHeight }}>
         {language === "tsx" ? (
           <HighlightedCode code={code} />
         ) : (

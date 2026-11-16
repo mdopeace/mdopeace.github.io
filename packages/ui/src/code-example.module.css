@@ -15,7 +15,7 @@
   box-sizing: border-box;
   margin: 0;
   max-width: 100%;
-  overflow-x: auto;
+  overflow: auto;
   font: 0.8125rem/1.7 var(--ui-mono);
   tab-size: 2;
 }

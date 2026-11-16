@@ -61,7 +61,7 @@ function CopyAddress({ address }: { address: string }) {
 }
 ```
 
-There is no copy-specific visual primitive. The hook preserves exact strings, ignores stale request results, clears timers on unmount and leaves failures available until retry/reset. Successful feedback resets after 1400ms by default. CodeBlock supplies this composition for commands; app-specific actions can provide their own feedback copy.
+There is no copy-specific visual primitive. The hook preserves exact strings, ignores stale request results, clears timers on unmount and leaves failures available until retry/reset. Successful feedback resets after 1400ms by default. CommandBlock supplies this composition for commands; app-specific actions can provide their own feedback copy.
 
 ## Switch and Dialog
 
@@ -90,7 +90,7 @@ Dialog uses the browser's native modal behavior and accepts a dialog ref. Put it
 
 - Section: `title`, optional `description`, `size` and children. PortfolioSection adds numbered headings and hash tracking for this app.
 - ExpandableText: string children, `lines`, required `expandLabel`/`collapseLabel`, optional controlled `open`/`onOpenChange` or `defaultOpen`. It measures overflow and animates the viewport without changing the copied/searchable text.
-- CodeBlock: `code` string, optional `copyLabel`, `successMessage`, `errorMessage`; native div props.
+- CommandBlock: `code` string, optional `copyLabel`, `successMessage`, `errorMessage`; native div props.
 - LinkGroup: explicit `items` with `href`, `label`, optional `startIcon`, `variant`, `size`, `target` and other Link props. `direction` and `gap` control arrangement; no icon is guessed from a label.
 - Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list.
 - Divider: decorative by default; use `decorative={false}` for separator semantics.
@@ -198,7 +198,7 @@ size, background and 8px logo radius live there. Contact artwork uses Image in
 fill mode inside its existing artwork frames. These media recipes share loading
 behavior without publishing portfolio assets as part of the UI package.
 
-CodeExample highlights React/TSX examples with lightweight lexical coloring; it is not a general-purpose language parser or editor. Choose `language="text"` for plain source. Copy always uses the original code string, and markup is rendered as text. Keep the simpler CodeBlock for installation commands and other compact snippets.
+CodeExample highlights React/TSX examples with lightweight lexical coloring; it is not a general-purpose language parser or editor. Choose `language="text"` for plain source. Copy always uses the original code string, and markup is rendered as text. Keep the simpler CommandBlock for installation commands and other compact snippets.
 
 
 ## Distribution boundary

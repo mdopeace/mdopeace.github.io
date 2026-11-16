@@ -163,6 +163,7 @@
   font-size: var(--ui-font-section);
   line-height: var(--ui-leading-section);
   letter-spacing: -0.06em;
+  word-spacing: 0.12em;
   text-transform: uppercase;
 }
 .heading[data-size="display"] {

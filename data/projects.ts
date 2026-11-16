@@ -29,7 +29,7 @@ export const projects: Project[] = [
     tagline:
       "A todo app that lives in your Mac menu bar — for the things that don't survive the meeting.",
     paragraphs: [
-      "Native SwiftUI. Add with Return, open with ⌘⌥T. No window to manage, no account, no Electron.",
+      "Native SwiftUI. Add with Return, open with ⌥⇧Space. No window to manage, no account, no Electron.",
       "Standup hands you five things. You go deep on one, and the other four evaporate before you can touch them. So they land here instead — where they can't be lost, which leaves your attention on the work in front of you, and shows you what you actually finished by the end of the day. Day-grouped, repeats daily or weekly, rename in place, drag to reorder.",
       "It also keeps itself current: verifies the download's SHA-256, then replaces the running bundle in place. 65KB of tests, including the installer and the relaunch after it.",
     ],
@@ -71,7 +71,7 @@ export const projects: Project[] = [
     paragraphs: [
       "You have the file. You double-click it. Then the player you've got either looks like it belongs to 2009, or wants four clicks past a licence agreement before it shows you anything. So: AppKit, mpv, OpenGL. Drag a file in, or hit it from Finder. mp4, m4v, mov, mkv, webm, avi.",
       "It ships its own libmpv and FFmpeg, hands off to the macOS now-playing controls, updates itself from the GitHub API, and uninstalls without leaving anything behind. Releases are arm64, so an Intel machine has to build it from source.",
-      "I use it every day. It isn't finished — and the features it's still missing are the ones QuickTodo already has.",
+      "I use it every day. Playback, everyday controls, and deeper customization are already there. Now I'm exploring the extras I want for myself, including ways to give an offline collection the feel of a streaming library.",
     ],
     commands: ["brew tap vidplabs/vidp", "brew install --cask vidp"],
     links: [

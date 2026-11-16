@@ -116,5 +116,13 @@ Generic layout, typography, controls, fields, navigation, surfaces, badges,
 dialogs, disclosure, code examples and clipboard behavior live here. Portfolio
 sections, content, device artwork and game logic stay in the app.
 
+### Code examples
+
+`CodeExample` accepts an optional `maxHeight` for its code area, such as
+`maxHeight={384}` (pixels), `maxHeight="24rem"`, or
+`maxHeight="min(28rem, 60dvh)"`. The default height is unrestricted. Longer
+examples scroll inside the code area while the title, Copy button and description
+remain outside it. Copy always includes the complete code.
+
 Read the repository's [contribution guidelines](https://github.com/mdopeace/mdopeace.github.io/blob/main/CONTRIBUTING.md) and
 [code of conduct](https://github.com/mdopeace/mdopeace.github.io/blob/main/CODE_OF_CONDUCT.md) before proposing changes.
