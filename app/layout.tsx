@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Md Mostafijur Rahman — software engineer and builder of small useful things",
+        alt: "Md Mostafijur Rahman — Software engineer and maker in Bengaluru. Building small, useful things. A cream and yellow card with a Tetris handheld.",
       },
     ],
   },
@@ -27,7 +27,12 @@ export const metadata: Metadata = {
     title: "Md Mostafijur Rahman",
     description:
       "Software engineer at Tracxn by day, builder of small useful things the rest of the time. The work, the story, and how to reach me.",
-    images: ["/opengraph-image.png"],
+    images: [
+      {
+        url: "/opengraph-image.png",
+        alt: "Md Mostafijur Rahman — Software engineer and maker in Bengaluru. Building small, useful things. A cream and yellow card with a Tetris handheld.",
+      },
+    ],
   },
 };
 
