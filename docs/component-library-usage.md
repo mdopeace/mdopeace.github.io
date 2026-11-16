@@ -154,7 +154,7 @@ Theme changes crossfade complete page snapshots with the browser View Transition
 
 FeedbackLabel overlays two reserved states and fades between them without changing control width. Clipboard actions use it for labels and icons, and Switch uses it for state icons. Inactive states stay out of accessible names. Installation commands are keyboard-focusable so horizontal scrolling remains available on compact layouts.
 
-Game Boy overlays fade visibility without delaying game input; hidden overlays are inert. Indicator cells and glow transition their state colors together. Durations use shared motion tokens, and reduced-motion preferences suppress the effects.
+Game Boy overlays fade visibility without delaying game input; hidden overlays are inert. Indicator cells use a muted warm gray derived from theme charcoal when off, success green while playing, and info blue while paused, without a glow. The charcoal frame and gaps keep the unlit pixel grid visible. Cell colors transition using shared motion tokens, and reduced-motion preferences suppress the effects.
 
 
 ## Playground building blocks
