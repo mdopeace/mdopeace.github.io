@@ -51,28 +51,29 @@
 }
 .instructions.instructions { margin: 10px 0 0; }
 .indicator.indicator.indicator {
-  --indicator-light: color-mix(in srgb, var(--ui-on-accent) 60%, white);
+  /* Device artwork palette stays fixed across light and dark app themes. */
+  --indicator-off: #7d8178;
+  --indicator-on: #9bdc74;
+  --indicator-paused: #f0ae55;
+  --indicator-frame: #292d29;
+  --indicator-light: var(--indicator-off);
   display: grid;
-  grid-template: repeat(5, 1fr) / repeat(5, 1fr);
-  gap: 1px;
+  grid-template: 1fr / 1fr;
   padding: 0;
-  border-color: var(--ink);
-  background: var(--ui-on-accent);
+  border-color: var(--indicator-frame);
+  background: var(--indicator-frame);
   box-shadow: none;
 }
-.indicator.indicator.indicator[data-state="playing"] { --indicator-light: var(--ui-success); }
-.indicator.indicator.indicator[data-state="paused"] { --indicator-light: var(--ui-info); }
+.indicator.indicator.indicator[data-state="playing"] { --indicator-light: var(--indicator-on); }
+.indicator.indicator.indicator[data-state="paused"] { --indicator-light: var(--indicator-paused); }
 .indicator > span {
   width: 100%;
   height: 100%;
   background: var(--indicator-light);
+  box-shadow:
+    inset 2px 2px 0 rgb(0 0 0 / 20%),
+    inset -2px -2px 0 rgb(255 255 255 / 15%);
   transition: background-color var(--ui-normal) var(--ui-ease);
-}
-.indicator > [data-ring="1"] {
-  background: color-mix(in srgb, var(--indicator-light) 90%, black);
-}
-.indicator > [data-ring="2"] {
-  background: color-mix(in srgb, var(--indicator-light) 80%, black);
 }
 @media (max-width: 680px) {
   .action.action.action { width: 40px; height: 40px; }
