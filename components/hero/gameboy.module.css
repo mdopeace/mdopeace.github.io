@@ -51,23 +51,22 @@
 }
 .instructions.instructions { margin: 10px 0 0; }
 .indicator.indicator.indicator {
-  --indicator-light: #ef5538;
+  --indicator-light: color-mix(in srgb, var(--ui-on-accent) 60%, white);
   display: grid;
   grid-template: repeat(5, 1fr) / repeat(5, 1fr);
   gap: 1px;
   padding: 0;
   border-color: var(--ink);
-  background: #25231f;
-  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--indicator-light) 45%, transparent);
-  transition: box-shadow var(--ui-normal) var(--ui-ease);
+  background: var(--ui-on-accent);
+  box-shadow: none;
 }
-.indicator.indicator.indicator[data-state="playing"] { --indicator-light: #2ba84a; }
-.indicator.indicator.indicator[data-state="paused"] { --indicator-light: #1769c2; }
+.indicator.indicator.indicator[data-state="playing"] { --indicator-light: var(--ui-success); }
+.indicator.indicator.indicator[data-state="paused"] { --indicator-light: var(--ui-info); }
 .indicator > span {
   width: 100%;
   height: 100%;
   background: var(--indicator-light);
-  transition: background-color 160ms ease;
+  transition: background-color var(--ui-normal) var(--ui-ease);
 }
 .indicator > [data-ring="1"] {
   background: color-mix(in srgb, var(--indicator-light) 90%, black);
