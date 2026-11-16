@@ -28,16 +28,18 @@ export default function Home() {
         <Contact />
       </main>
       <footer className="page-footer">
-        <Inline justify="between" gap={3}>
-          <Text size="caption" font="mono" tone="muted">
+        <Inline justify="between" gap={4} className="footer-layout">
+          <Text size="caption" font="body" tone="muted">
             Made with curiosity · Bengaluru
           </Text>
-          <Link href="/playground/" size="sm">
-            Built with my component library
-          </Link>
-          <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
-            Back to top
-          </Link>
+          <Inline gap={6}>
+            <Link href="/playground/" size="sm">
+              Component playground
+            </Link>
+            <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
+              Back to top
+            </Link>
+          </Inline>
         </Inline>
       </footer>
     </Container>

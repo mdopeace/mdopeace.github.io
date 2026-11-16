@@ -845,6 +845,12 @@
   .page-footer {
     padding-block: var(--ui-space-8);
   }
+  @media (max-width: 680px) {
+    .footer-layout {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
   .full-height {
     height: 100%;
   }
