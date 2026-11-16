@@ -328,12 +328,7 @@ export default function TetrisGameboy() {
           data-state={ledState}
           aria-hidden="true"
         >
-          {Array.from({ length: 25 }, (_, index) => (
-            <span
-              key={index}
-              data-ring={Math.max(Math.abs(index % 5 - 2), Math.abs(Math.floor(index / 5) - 2))}
-            />
-          ))}
+          <span />
         </Badge>
       </div>
       <div className="gameboy-bezel">

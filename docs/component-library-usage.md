@@ -154,7 +154,9 @@ Theme changes crossfade complete page snapshots with the browser View Transition
 
 FeedbackLabel overlays two reserved states and fades between them without changing control width. Clipboard actions use it for labels and icons, and Switch uses it for state icons. Inactive states stay out of accessible names. Installation commands are keyboard-focusable so horizontal scrolling remains available on compact layouts.
 
-Game Boy overlays fade visibility without delaying game input; hidden overlays are inert. Indicator cells use a muted warm gray derived from theme charcoal when off, success green while playing, and info blue while paused, without a glow. The charcoal frame and gaps keep the unlit pixel grid visible. Cell colors transition using shared motion tokens, and reduced-motion preferences suppress the effects.
+Game Boy overlays fade visibility without delaying game input; hidden overlays are inert. The indicator has a dedicated artwork palette independent of app color tokens: smoke (`#7d8178`) when off, lime (`#9bdc74`) while playing, and amber (`#f0ae55`) while paused. All three states and the dark frame (`#292d29`) stay fixed across themes, without a glow. A single square lens has a subtle inset edge for physical depth. Lens colors transition using shared motion tokens, and reduced-motion preferences suppress the effects.
+
+The state meanings follow established indicator conventions: [Nintendo's Game Boy Advance manual](https://www.nintendo.com/eu/media/downloads/support_1/game_boy_advance_4/GBA_Manual_UK_DE_FR.pdf) uses green for normal power, and [Microsoft's progress states](https://learn.microsoft.com/en-us/dotnet/api/system.windows.shell.taskbaritemprogressstate) use green for normal progress and yellow for pause. The exact shades are device-specific design choices; game status text and overlays also communicate state.
 
 
 ## Playground building blocks
