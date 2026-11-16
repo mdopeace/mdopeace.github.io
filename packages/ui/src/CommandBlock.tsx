@@ -7,19 +7,19 @@ import { FeedbackLabel } from "./FeedbackLabel";
 import { Surface } from "./Surface";
 import { Stack } from "./Layout";
 import styles from "./ui.module.css";
-export type CodeBlockProps = ComponentPropsWithRef<"div"> & {
+export type CommandBlockProps = ComponentPropsWithRef<"div"> & {
   code: string;
   copyLabel?: string;
   successMessage?: string;
   errorMessage?: string;
 };
-export function CodeBlock({
+export function CommandBlock({
   code,
   copyLabel = "Copy",
   successMessage = "Copied to clipboard.",
   errorMessage = "Could not copy. Select the command and copy it manually.",
   ...props
-}: CodeBlockProps) {
+}: CommandBlockProps) {
   const { copy, status } = useClipboard();
   if (!code) return null;
   return (

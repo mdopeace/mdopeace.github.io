@@ -1,6 +1,6 @@
 import type { Project } from "@/data/projects";
 import { FaChrome, FaFirefoxBrowser, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
-import { CodeBlock } from "@mdopeace/ui/CodeBlock";
+import { CommandBlock } from "@mdopeace/ui/CommandBlock";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { ExpandableText } from "@mdopeace/ui/ExpandableText";
 import { Badge } from "@mdopeace/ui/Badge";
@@ -67,7 +67,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           </ExpandableText>
         </Stack>
         {project.commands.length > 0 && (
-          <CodeBlock code={project.commands.join("\n")} />
+          <CommandBlock code={project.commands.join("\n")} />
         )}
         <LinkGroup
           items={project.links.map(({ icon, ...item }) => {

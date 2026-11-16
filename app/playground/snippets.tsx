@@ -70,7 +70,7 @@ const imports: Record<string, string> = {
   Divider: "@mdopeace/ui/Divider",
   Dialog: "@mdopeace/ui/Dialog",
   ExpandableText: "@mdopeace/ui/ExpandableText",
-  CodeBlock: "@mdopeace/ui/CodeBlock",
+  CommandBlock: "@mdopeace/ui/CommandBlock",
   LinkGroup: "@mdopeace/ui/LinkGroup",
   FaHeart: "react-icons/fa6",
   PiMoonStarsBold: "react-icons/pi",

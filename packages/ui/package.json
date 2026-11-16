@@ -34,9 +34,9 @@
       "types": "./dist/Checkbox.d.ts",
       "import": "./dist/Checkbox.js"
     },
-    "./CodeBlock": {
-      "types": "./dist/CodeBlock.d.ts",
-      "import": "./dist/CodeBlock.js"
+    "./CommandBlock": {
+      "types": "./dist/CommandBlock.d.ts",
+      "import": "./dist/CommandBlock.js"
     },
     "./CodeExample": {
       "types": "./dist/CodeExample.d.ts",

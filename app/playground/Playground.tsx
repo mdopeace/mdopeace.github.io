@@ -12,7 +12,7 @@ import { Link } from "@mdopeace/ui/Link";
 import { Dialog } from "@mdopeace/ui/Dialog";
 import { Divider } from "@mdopeace/ui/Divider";
 import { Switch } from "@mdopeace/ui/Switch";
-import { CodeBlock } from "@mdopeace/ui/CodeBlock";
+import { CommandBlock } from "@mdopeace/ui/CommandBlock";
 import { ExpandableText } from "@mdopeace/ui/ExpandableText";
 
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
@@ -135,7 +135,7 @@ const catalog = [
     group: "Composition",
     description: "Useful details, revealed at the right time.",
     rationale:
-      "ExpandableText owns disclosure, CodeBlock composes copying from Button and useClipboard, and LinkGroup arranges destinations. Behavior composes from small building blocks.",
+      "ExpandableText owns disclosure, CommandBlock composes copying from Button and useClipboard, and LinkGroup arranges destinations. Behavior composes from small building blocks.",
     tip: "Try the disclosure and copy action. Copy feedback reserves its width so the button does not jump when its label changes.",
   },
   {
@@ -937,7 +937,7 @@ function Playground({ kind }: { kind: ComponentId }) {
             3,
           )}
         </ExpandableText>
-        <CodeBlock code={"npm install\nnpm run dev"} />
+        <CommandBlock code={"npm install\nnpm run dev"} />
         <LinkGroup
           items={[
             {
@@ -960,7 +960,7 @@ function Playground({ kind }: { kind: ComponentId }) {
         "{description}",
       ) +
       "\n\n" +
-      elementCode("CodeBlock", [
+      elementCode("CommandBlock", [
         `code={${JSON.stringify("npm install\nnpm run dev")}}`,
       ]) +
       "\n\n" +
