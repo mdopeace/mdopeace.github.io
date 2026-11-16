@@ -13,6 +13,12 @@ Object.defineProperty(window, "matchMedia", {
     removeEventListener() {},
   }),
 });
+// jsdom has no layout observer; browser tests cover resize measurements.
+globalThis.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
   configurable: true,
   value: function (this: HTMLDialogElement) {

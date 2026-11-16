@@ -1,5 +1,14 @@
+.layout.layout {
+  min-width: 0;
+}
+@media (max-width: 42.5rem) {
+  .layout.layout { flex-wrap: wrap; justify-content: space-between; }
+  .layout > .links { order: 3; flex-basis: 100%; }
+}
 .links {
   position: relative;
+  flex: 1;
+  min-width: 0;
 }
 
 .link.link.link {
@@ -15,6 +24,7 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
+  overflow: hidden;
 }
 
 .colorTrack[data-ready="true"] {
@@ -23,10 +33,18 @@
     opacity var(--ui-normal) var(--ui-ease);
 }
 
+.indicatorTrack {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
 .indicator {
   position: absolute;
   inset-inline-start: 0;
-  bottom: -3px;
+  top: 0;
   height: 2px;
   background: var(--ui-emphasis);
   pointer-events: none;

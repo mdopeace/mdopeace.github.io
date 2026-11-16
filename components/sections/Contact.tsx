@@ -7,7 +7,7 @@ import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Inline, Stack } from "@mdopeace/ui/Layout";
 import { Link } from "@mdopeace/ui/Link";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
-import Image from "next/image";
+import { Image } from "@mdopeace/ui/Image";
 import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 const email = "md.correo.e@gmail.com";
 const socialLinks = [
@@ -78,10 +78,9 @@ export default function Contact() {
               src="/contact-thought-bubble.png"
               alt=""
               fill
-              unoptimized
               sizes="(max-width: 800px) 45vw, 230px"
             />
-            <span>
+            <span className="contact-thought-label">
               “What are you
               <br />
               building?”
@@ -98,7 +97,6 @@ export default function Contact() {
               alt=""
               fill
               loading="eager"
-              unoptimized
               sizes="(max-width: 800px) 90vw, 440px"
             />
             <svg

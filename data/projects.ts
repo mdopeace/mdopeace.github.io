@@ -13,7 +13,7 @@ export type Project = {
   commands: string[];
   links: ProjectLink[];
 } & (
-  | { shot: string; shotAlt: string; preview?: never }
+  | { shot: string; shotAlt: string; shotWidth: number; shotHeight: number; preview?: never }
   | { preview: "component-library"; shot?: never; shotAlt?: never }
 );
 
@@ -22,6 +22,8 @@ export const projects: Project[] = [
     name: "QuickTodo",
     logo: "https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/icon.png",
     shot: "https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/screenshots/completed.png",
+    shotWidth: 692,
+    shotHeight: 784,
     shotAlt: "QuickTodo — a todo app that lives in your Mac menu bar.",
     pills: ["macOS 13+", "Intel or Apple Silicon"],
     tagline:
@@ -59,6 +61,8 @@ export const projects: Project[] = [
     name: "Vidp",
     logo: "https://vidplabs.github.io/icon.png",
     shot: "https://vidplabs.github.io/screenshots/paused.png",
+    shotWidth: 640,
+    shotHeight: 402,
     shotAlt:
       "Vidp paused on a lunar scene, with playback controls, the video title, and timeline visible.",
     pills: ["macOS 26+", "Apple Silicon"],
@@ -97,6 +101,8 @@ export const projects: Project[] = [
     name: "Cookieater",
     logo: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/icon.png",
     shot: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/screenshots/overview.png",
+    shotWidth: 960,
+    shotHeight: 1018,
     shotAlt:
       "Cookieater showing example.com cookies and the search, add, import, export, and clear actions.",
     pills: ["Browser Extension", "Manifest V3"],

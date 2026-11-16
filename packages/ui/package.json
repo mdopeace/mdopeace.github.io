@@ -117,6 +117,18 @@
     "./hooks/useControllable": {
       "types": "./dist/hooks/useControllable.d.ts",
       "import": "./dist/hooks/useControllable.js"
+    },
+    "./Image": {
+      "types": "./dist/Image.d.ts",
+      "import": "./dist/Image.js"
+    },
+    "./Navbar": {
+      "types": "./dist/Navbar.d.ts",
+      "import": "./dist/Navbar.js"
+    },
+    "./NavbarLinks": {
+      "types": "./dist/NavbarLinks.d.ts",
+      "import": "./dist/NavbarLinks.js"
     }
   },
   "scripts": {

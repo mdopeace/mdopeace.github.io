@@ -1,13 +1,13 @@
 import ThemeToggle from "./ThemeToggle";
-import { Inline } from "@mdopeace/ui/Layout";
-import { Surface } from "@mdopeace/ui/Surface";
+import { Navbar } from "@mdopeace/ui/Navbar";
 import { Link } from "@mdopeace/ui/Link";
 import SectionLinks from "./portfolio/SectionLinks";
 export default function SiteHeader() {
   return (
-    <nav className="site-nav" aria-label="Main navigation">
-      <Surface padding={3}>
-        <Inline gap={4} wrap={false} className="navigation-layout">
+    <Navbar
+      className="site-nav"
+      label="Main navigation"
+      brand={
           <Link
             href="#top"
             variant="emphasis"
@@ -16,10 +16,10 @@ export default function SiteHeader() {
           >
             <span className="brand-wordmark">Md</span>
           </Link>
-          <SectionLinks />
-          <ThemeToggle />
-        </Inline>
-      </Surface>
-    </nav>
+      }
+      actions={<ThemeToggle />}
+    >
+      <SectionLinks />
+    </Navbar>
   );
 }

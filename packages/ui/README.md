@@ -90,6 +90,28 @@ version-only PRs, protected auto-merge and recovery behavior.
 
 ## Scope
 
+### Navigation and images
+
+`Navbar` composes a navigation surface with optional `brand` and `actions` slots.
+Its child `NavbarLinks` accepts `items` (`id`, `label`, `href`), a controlled
+`activeId`, and an optional `onSelect(id, event)` callback. Native link navigation
+is preserved unless the consumer prevents the event. Use `current="location"`
+for section tracking or the default `"page"` for page destinations. Scroll
+tracking and sticky positioning belong to the application. Hover/focus previews,
+the sliding highlight, responsive arrangement and reduced motion live here.
+
+`Image` requires `src`, `alt` and numeric `width`/`height`, or `fill` inside a
+positioned, already-sized parent. It reserves space while loading, fades in after
+decoding, detects cached loads, and retains its frame on errors. `fit`, `radius`,
+`placeholder`, `fallback` and `errorLabel` configure its presentation. Empty alt
+text makes the image and its fallback decorative. `className` and `style` apply
+to the frame; `imageClassName`, native image attributes and the forwarded ref
+apply to the image itself. A changed source resets the loading lifecycle.
+
+This component uses a native image and does not require Next.js. Portfolio-only
+`ProjectImage` and `ProjectLogo` compose it with screenshot constraints and logo
+dimensions; those app-specific recipes are not package exports.
+
 Generic layout, typography, controls, fields, navigation, surfaces, badges,
 dialogs, disclosure, code examples and clipboard behavior live here. Portfolio
 sections, content, device artwork and game logic stay in the app.

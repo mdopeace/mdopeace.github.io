@@ -13,7 +13,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.getByRole("heading", { name: "Design decisions" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     const navigation = page.getByRole("navigation", { name: "Component library" });
-    await expect(navigation.getByRole("button")).toHaveCount(15);
+    await expect(navigation.getByRole("button")).toHaveCount(18);
     await navigation.getByRole("button", { name: "Checkbox", exact: true }).click();
     const sample = page.getByRole("checkbox", { name: "Send me build notes" });
     await sample.focus();

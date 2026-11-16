@@ -22,6 +22,9 @@ import { Select } from "@mdopeace/ui/Select";
 import { Checkbox } from "@mdopeace/ui/Checkbox";
 import { NavigationList } from "@mdopeace/ui/NavigationList";
 import { CodeExample } from "@mdopeace/ui/CodeExample";
+import { Image } from "@mdopeace/ui/Image";
+import { Navbar } from "@mdopeace/ui/Navbar";
+import { NavbarLinks } from "@mdopeace/ui/NavbarLinks";
 import ThemeToggle from "@/components/ThemeToggle";
 import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
 
@@ -30,6 +33,30 @@ import styles from "./playground.module.css";
 import { elementCode, jsxText, completeExample } from "./snippets";
 
 const catalog = [
+  {
+    id: "navbar",
+    name: "Navbar",
+    group: "Navigation",
+    description: "A shared frame for finding your way.",
+    rationale: "Navbar owns the surface, padding and responsive placement of the brand, links and actions. The consuming page decides where it sits and which destination is current.",
+    tip: "Resize the page. Links move onto their own row on small screens, while the brand and actions stay together.",
+  },
+  {
+    id: "navbar-links",
+    name: "NavbarLinks",
+    group: "Navigation",
+    description: "One moving highlight, clear destinations.",
+    rationale: "The text highlight and underline travel together. Active state is supplied by the consumer, so the same component supports page navigation, section tracking or local demos.",
+    tip: "Hover or focus a destination to preview it. Move away to return to the current destination. Reduced motion keeps feedback immediate.",
+  },
+  {
+    id: "image",
+    name: "Image",
+    group: "Media",
+    description: "Space reserved. Loading considered.",
+    rationale: "Explicit dimensions reserve the frame before loading. A subtle placeholder gives way to the decoded image, and failed images retain their space with a fallback. Project screenshots and logos compose this same foundation.",
+    tip: "Compare contain and cover, try rounded corners, or switch to an unavailable source to see the fallback. Decorative images use an empty alt attribute.",
+  },
   {
     id: "button",
     name: "Button",
@@ -170,6 +197,12 @@ type ComponentId = (typeof catalog)[number]["id"];
 const sizes = ["sm", "md", "lg"] as const;
 const tones = ["default", "subtle", "accent", "info", "emphasis"] as const;
 const variants = ["primary", "secondary", "ghost", "emphasis"] as const;
+const navigationItems = [
+  { id: "intro", label: "Intro", href: "#intro" },
+  { id: "build", label: "Build", href: "#build" },
+  { id: "ship", label: "Ship", href: "#ship" },
+];
+const exampleImage = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400"><rect width="640" height="400" fill="#f5cb56"/><rect x="80" y="60" width="480" height="280" fill="#fffaf0" stroke="#25231f" stroke-width="8"/><text x="320" y="225" text-anchor="middle" font-family="monospace" font-size="72" font-weight="bold" fill="#a13c24">UI</text></svg>')}`;
 
 function Choice<T extends string>({
   label,
@@ -263,6 +296,9 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [readOnly, setReadOnly] = useState(false);
   const [sampleActive, setSampleActive] = useState("overview");
   const [language, setLanguage] = useState<"tsx" | "text">("tsx");
+  const [navigationActive, setNavigationActive] = useState("intro");
+  const [imageFit, setImageFit] = useState<"contain" | "cover">("contain");
+  const [imageRadius, setImageRadius] = useState<"none" | "sm" | "md" | "full">("none");
   let controls: ReactNode;
   let preview: ReactNode;
   let code = "";
@@ -280,7 +316,32 @@ function Playground({ kind }: { kind: ComponentId }) {
   const toneControl = (
     <Choice label="Tone" value={tone} options={tones} onChange={setTone} />
   );
-  if (kind === "button") {
+  if (kind === "navbar" || kind === "navbar-links") {
+    controls = (
+      <Choice label="Current destination" value={navigationActive} options={["intro", "build", "ship"]} onChange={setNavigationActive} />
+    );
+    const demoLinks = <NavbarLinks items={navigationItems} activeId={navigationActive} onSelect={(id, event) => { event.preventDefault(); setNavigationActive(id); }} />;
+    preview = kind === "navbar" ? (
+      <Navbar label="Example navbar" brand={<Badge variant="solid" tone="emphasis">UI</Badge>} actions={<Switch aria-label="Example mode" size="sm" checked={checked} onCheckedChange={setChecked} />} className={styles.fill}>
+        {demoLinks}
+      </Navbar>
+    ) : <div className={styles.fill}>{demoLinks}</div>;
+    code = elementCode("NavbarLinks", ["items={items}", "activeId={activeId}", "onSelect={(id, event) => { event.preventDefault(); setActiveId(id); }}"]);
+    if (kind === "navbar") code = elementCode("Navbar", [
+      'label="Example navbar"',
+      'brand={<Badge variant="solid" tone="emphasis">UI</Badge>}',
+      'actions={<Switch aria-label="Example mode" size="sm" checked={checked} onCheckedChange={setChecked} />}',
+    ], code);
+  } else if (kind === "image") {
+    controls = <>
+      <Choice label="Fit" value={imageFit} options={["contain", "cover"]} onChange={setImageFit} />
+      <Choice label="Radius" value={imageRadius} options={["none", "sm", "md", "full"]} onChange={setImageRadius} />
+      <Toggle label="Unavailable source" checked={invalid} onChange={setInvalid} />
+    </>;
+    const src = invalid ? "data:image/png;base64,invalid" : exampleImage;
+    preview = <Image src={src} alt="A framed UI mark on a yellow background" width={320} height={240} fit={imageFit} radius={imageRadius} loading="eager" />;
+    code = elementCode("Image", ["src={src}", 'alt="A framed UI mark on a yellow background"', "width={320}", "height={240}", `fit="${imageFit}"`, `radius="${imageRadius}"`]);
+  } else if (kind === "button") {
     controls = (
       <>
         {variantControl}
@@ -904,6 +965,10 @@ function Playground({ kind }: { kind: ComponentId }) {
       elementCode("LinkGroup", ["items={links}"]);
   }
   let setup = "";
+  if (kind === "navbar" || kind === "navbar-links") {
+    setup = `const [activeId, setActiveId] = useState(${JSON.stringify(navigationActive)});\n${kind === "navbar" ? `const [checked, setChecked] = useState(${checked});\n` : ""}\nconst items = ${JSON.stringify(navigationItems, null, 2)};`;
+  }
+  if (kind === "image") setup = `const src = ${JSON.stringify(invalid ? "data:image/png;base64,invalid" : exampleImage)};`;
   if (kind === "button")
     setup = 'function handleClick() {\n  console.info("Button activated");\n}';
   if (kind === "switch")
@@ -944,6 +1009,8 @@ function Playground({ kind }: { kind: ComponentId }) {
       "select",
       "checkbox",
       "navigation",
+      "navbar",
+      "navbar-links",
     ].includes(kind),
   );
   return (
@@ -1038,7 +1105,7 @@ export default function ComponentPreview() {
           className={styles.sidebar}
           activeId={active}
           onSelect={(id) => setActive(id as ComponentId)}
-          groups={["Actions", "Foundations", "Forms", "Composition"].map(
+          groups={["Actions", "Foundations", "Forms", "Media", "Navigation", "Composition"].map(
             (group) => ({
               label: group,
               items: catalog

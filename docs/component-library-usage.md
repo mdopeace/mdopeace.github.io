@@ -169,6 +169,9 @@ The public playground is built with the same components it documents. Its catalo
 | Checkbox | Native checkbox props plus required `label`, optional `description` and `error`. Owns its label and help associations. |
 | NavigationList | Required accessible `label` and grouped `items`; optional `activeId` and `onSelect`. Items with `href` remain native links; local selections use buttons. |
 | CodeExample | Exact `code` string, optional `title`, `description`, `codeLabel`, `language` (`tsx` or `text`) and `border` (`standard` or `none`). Includes copy feedback and keyboard-scrollable source. |
+| Navbar | Required `label`, optional `brand` and `actions` slots; shared surface, spacing and responsive layout. Sticky placement belongs to the app. |
+| NavbarLinks | Required `items` (`id`, `label`, `href`); controlled `activeId`, optional `current`, `gap`, `justify` and `onSelect(id, event)`. Owns the sliding underline, text highlight and hover/focus previews. |
+| Image | Required `src`, `alt`, and `width`/`height`, or `fill` in a sized parent. Supports `fit`, `radius`, a loading `placeholder`, `fallback`, and `errorLabel`. Frame classes/styles are separate from `imageClassName` and the native image ref/attributes. |
 
 Import each component from its public subpath, such as `@mdopeace/ui/TextInput`. Field uses a render function so its accessible attributes reach the actual input rather than a wrapper:
 
@@ -181,6 +184,19 @@ Import each component from its public subpath, such as `@mdopeace/ui/TextInput`.
 Use Checkbox directly, since it already owns its label. Native controlled and uncontrolled conventions apply to TextInput, Select and Checkbox; supply either a value/checked state with its change handler or a default value/checked state. Controls retain square borders and immediate focus outlines, with shared color and disabled-state transitions.
 
 NavigationList uses grouped lists inside a labeled navigation landmark. Link items identify the current page; local buttons identify the current selection. Disabled items remain unavailable to activation.
+
+NavbarLinks stays independent of routing and scrolling. The portfolio's SectionLinks
+tracks the visible section and supplies `activeId` with `current="location"`;
+other consumers can use page routes or controlled local state. Decorative highlight
+labels never add keyboard stops or accessible links.
+
+Image reserves its frame before loading, fades in decoded images, handles cached
+loads, and resets when the source changes. Errors keep the same dimensions and
+accessible name. `alt=""` keeps both image and fallback decorative. ProjectImage
+and ProjectLogo are portfolio compositions: screenshot constraints, 32px logo
+size, background and 8px logo radius live there. Contact artwork uses Image in
+fill mode inside its existing artwork frames. These media recipes share loading
+behavior without publishing portfolio assets as part of the UI package.
 
 CodeExample highlights React/TSX examples with lightweight lexical coloring; it is not a general-purpose language parser or editor. Choose `language="text"` for plain source. Copy always uses the original code string, and markup is rendered as text. Keep the simpler CodeBlock for installation commands and other compact snippets.
 

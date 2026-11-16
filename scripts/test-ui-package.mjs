@@ -31,11 +31,16 @@ try {
   writeFileSync(join(scratch, "main.tsx"), `
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
-import { Button, Field, TextInput, Switch, Surface, Text, CodeExample } from "@mdopeace/ui";
+import { Button, Field, TextInput, Switch, Surface, Text, CodeExample, Navbar, NavbarLinks, Image } from "@mdopeace/ui";
 import "@mdopeace/ui/tokens.css";
 function App() {
   const [count, setCount] = useState(0);
+  const [activeId, setActiveId] = useState("intro");
   return <Surface>
+    <Navbar label="Consumer navigation" brand={<Text>UI</Text>}>
+      <NavbarLinks items={[{id:"intro",label:"Intro",href:"#intro"},{id:"docs",label:"Docs",href:"#docs"}]} activeId={activeId} onSelect={(id,event) => {event.preventDefault();setActiveId(id);}} />
+    </Navbar>
+    <Image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160'%3E%3Crect width='240' height='160' fill='%23f5cb56'/%3E%3C/svg%3E" alt="Consumer illustration" width={240} height={160} />
     <Text>Independent consumer</Text>
     <Button onClick={() => setCount(value => value + 1)}>Count {count}</Button>
     <Field label="Name" description="Your display name">{props => <TextInput {...props} />}</Field>
@@ -66,6 +71,9 @@ createRoot(document.getElementById("root")!).render(<App />);
   await page.goto(`http://127.0.0.1:${server.address().port}`);
   await page.getByRole("button", { name: "Count 0" }).click();
   await page.getByRole("button", { name: "Count 1" }).waitFor();
+  await page.getByRole("link", { name: "Docs", exact: true }).click();
+  assert.equal(await page.getByRole("link", { name: "Docs", exact: true }).getAttribute("aria-current"), "page");
+  await page.locator('[data-image-state="loaded"]').waitFor();
   await page.getByRole("textbox", { name: "Name" }).fill("Ada");
   assert.equal(await page.getByRole("textbox", { name: "Name" }).inputValue(), "Ada");
   const toggle = page.getByRole("switch", { name: "Notifications" });
@@ -76,7 +84,7 @@ createRoot(document.getElementById("root")!).render(<App />);
     await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
     for (const width of [320, 1280]) {
       await page.setViewportSize({ width, height: 900 });
-      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Consumer overflow at ${width}px`);
       const size = await page.getByRole("textbox", { name: "Name" }).evaluate(el => getComputedStyle(el).height);
       assert.equal(size, "40px");
     }

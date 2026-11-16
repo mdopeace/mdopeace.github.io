@@ -5,6 +5,7 @@ import {
   render,
   renderHook,
   screen,
+  waitFor,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -21,6 +22,9 @@ import { Select } from "@mdopeace/ui/Select";
 import { Checkbox } from "@mdopeace/ui/Checkbox";
 import { NavigationList } from "@mdopeace/ui/NavigationList";
 import { CodeExample } from "@mdopeace/ui/CodeExample";
+import { Image } from "@mdopeace/ui/Image";
+import { Navbar } from "@mdopeace/ui/Navbar";
+import { NavbarLinks } from "@mdopeace/ui/NavbarLinks";
 import { elementCode, HighlightedCode, jsxText, completeExample } from "@/app/playground/snippets";
 
 function clipboard(writeText: (text: string) => Promise<void>) {
@@ -29,6 +33,61 @@ function clipboard(writeText: (text: string) => Promise<void>) {
     value: { writeText },
   });
 }
+describe("navigation and media building blocks", () => {
+  it("keeps current destinations controlled, decorative labels unfocusable and native clicks cancellable", async () => {
+    const user = userEvent.setup();
+    const select = vi.fn((_id, event) => event.preventDefault());
+    const ref = createRef<HTMLDivElement>();
+    const items = [{ id: "one", label: "One", href: "#one" }, { id: "two", label: "Two", href: "#two" }];
+    render(<Navbar label="Demo" brand={<span>Brand</span>} actions={<Button>Account</Button>}><NavbarLinks ref={ref} items={items} activeId="one" onSelect={select} /></Navbar>);
+    expect(screen.getByRole("navigation", { name: "Demo" })).toBeTruthy();
+    expect(screen.getAllByRole("link")).toHaveLength(2);
+    expect(screen.getByRole("link", { name: "One" }).getAttribute("aria-current")).toBe("page");
+    expect([...ref.current!.querySelectorAll('[aria-hidden="true"] a')].every(link => link.getAttribute("tabindex") === "-1")).toBe(true);
+    await user.click(screen.getByRole("link", { name: "Two" }));
+    expect(select).toHaveBeenCalledWith("two", expect.anything());
+    expect(screen.getByRole("link", { name: "One" }).getAttribute("aria-current")).toBe("page");
+  });
+
+  it("preserves the image frame through errors and resets loading for a new source", async () => {
+    const ref = createRef<HTMLImageElement>();
+    const onError = vi.fn();
+    const { container, rerender } = render(<Image ref={ref} src="/missing.png" alt="Example artwork" width={640} height={400} onError={onError} />);
+    const frame = container.querySelector("[data-image-state]")!;
+    expect(frame.getAttribute("data-image-state")).toBe("loading");
+    expect((frame as HTMLElement).style.getPropertyValue("--image-ratio")).toBe("1.6");
+    fireEvent.error(ref.current!);
+    expect(frame.getAttribute("data-image-state")).toBe("error");
+    expect(screen.getByRole("img", { name: "Example artwork" })).toBe(frame);
+    expect(onError).toHaveBeenCalledTimes(1);
+    rerender(<Image ref={ref} src="/working.png" alt="Example artwork" width={640} height={400} />);
+    const replacement = container.querySelector("[data-image-state]")!;
+    expect(replacement.getAttribute("data-image-state")).toBe("loading");
+    Object.defineProperty(ref.current, "naturalWidth", { value: 640 });
+    fireEvent.load(ref.current!);
+    await waitFor(() => expect(replacement.getAttribute("data-image-state")).toBe("loaded"));
+  });
+
+  it("reveals cached images even when their load event preceded hydration", async () => {
+    vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(true);
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(32);
+    const { container } = render(<Image src="/cached.png" alt="" width={32} height={32} radius="md" />);
+    await waitFor(() => expect(container.querySelector("[data-image-state]")?.getAttribute("data-image-state")).toBe("loaded"));
+    expect(screen.queryByRole("img")).toBeNull();
+  });
+
+  it("ignores a previous source's late decode after switching images", async () => {
+    let resolveDecode!: () => void;
+    const { container, rerender } = render(<Image src="/slow.png" alt="Artwork" width={100} height={100} />);
+    const oldImage = screen.getByRole("img");
+    Object.defineProperty(oldImage, "naturalWidth", { value: 100 });
+    Object.defineProperty(oldImage, "decode", { value: () => new Promise<void>(resolve => { resolveDecode = resolve; }) });
+    fireEvent.load(oldImage);
+    rerender(<Image src="/new.png" alt="Artwork" width={100} height={100} />);
+    await act(async () => resolveDecode());
+    expect(container.querySelector("[data-image-state]")?.getAttribute("data-image-state")).toBe("loading");
+  });
+});
 describe("component playground", () => {
   it("uses plain escaped JSX labels and supplies imports and state for complete examples", () => {
     expect(jsxText("Make something")).toBe("Make something");

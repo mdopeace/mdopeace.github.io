@@ -1,26 +1,20 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { Inline } from "@mdopeace/ui/Layout";
-import { Link } from "@mdopeace/ui/Link";
-import styles from "./section-links.module.css";
+import { useEffect, useRef, useState } from "react";
+import { NavbarLinks } from "@mdopeace/ui/NavbarLinks";
 
 const links = [
-  { id: "story", label: "Story" },
-  { id: "work", label: "Work" },
-  { id: "experience", label: "Experience" },
-  { id: "now", label: "Now" },
-  { id: "contact", label: "Contact" },
+  { id: "story", label: "Story", href: "#story" },
+  { id: "work", label: "Work", href: "#work" },
+  { id: "experience", label: "Experience", href: "#experience" },
+  { id: "now", label: "Now", href: "#now" },
+  { id: "contact", label: "Contact", href: "#contact" },
 ] as const;
 type SectionId = (typeof links)[number]["id"];
 
 export default function SectionLinks() {
   const container = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<SectionId | null>(null);
-  const [hovered, setHovered] = useState<SectionId | null>(null);
-  const [focused, setFocused] = useState<SectionId | null>(null);
-  const [indicator, setIndicator] = useState({ left: 0, width: 0, ready: false });
-  const highlighted = hovered ?? focused ?? active;
 
   useEffect(() => {
     const header = container.current?.closest("nav");
@@ -65,83 +59,6 @@ export default function SectionLinks() {
     };
   }, []);
 
-  useLayoutEffect(() => {
-    const element = container.current;
-    if (!element || !highlighted) return;
-    const link = element.querySelector<HTMLAnchorElement>(`a[href="#${highlighted}"]`);
-    if (!link) return;
-    const measure = () => {
-      const parent = element.getBoundingClientRect();
-      const rect = link.getBoundingClientRect();
-      setIndicator(previous => {
-        const left = rect.left - parent.left;
-        return previous.left === left && previous.width === rect.width && previous.ready
-          ? previous
-          : { left, width: rect.width, ready: true };
-      });
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(element);
-    observer.observe(link);
-    return () => observer.disconnect();
-  }, [highlighted]);
 
-  return (
-    <Inline
-      ref={container}
-      gap={{ base: 3, md: 6 }}
-      justify={{ base: "between", md: "center" }}
-      wrap={false}
-      className={`navigation-links ${styles.links}`}
-      style={{ "--highlight-left": `${indicator.left}px` } as CSSProperties}
-      onPointerLeave={() => setHovered(null)}
-    >
-      {links.map(({ id, label }) => (
-        <Link
-          href={`#${id}`}
-          key={id}
-          size="sm"
-          variant="nav"
-          className={styles.link}
-          aria-current={active === id ? "location" : undefined}
-          data-highlighted={highlighted === id || undefined}
-          onPointerEnter={event => {
-            if (event.pointerType === "mouse") setHovered(id);
-          }}
-          onFocus={event => {
-            if (event.currentTarget.matches(":focus-visible")) setFocused(id);
-          }}
-          onBlur={() => setFocused(null)}
-        >
-          {label}
-        </Link>
-      ))}
-      {/* Clip a non-interactive copy of the labels to the same moving band as
-          the underline, so the red text travels with it instead of fading. */}
-      <Inline
-        aria-hidden="true"
-        gap={{ base: 3, md: 6 }}
-        justify={{ base: "between", md: "center" }}
-        wrap={false}
-        className={styles.colorTrack}
-        data-ready={indicator.ready || undefined}
-        data-visible={Boolean(highlighted) || undefined}
-        style={{ clipPath: `inset(0 calc(100% - ${indicator.left + indicator.width}px) 0 ${indicator.left}px)` }}
-      >
-        {links.map(({ id, label }) => (
-          <Link href={`#${id}`} key={id} size="sm" variant="nav" className={styles.link} tabIndex={-1}>
-            {label}
-          </Link>
-        ))}
-      </Inline>
-      <span
-        aria-hidden="true"
-        className={styles.indicator}
-        data-ready={indicator.ready || undefined}
-        data-visible={Boolean(highlighted) || undefined}
-        style={{ width: indicator.width, transform: `translateX(${indicator.left}px)` }}
-      />
-    </Inline>
-  );
+  return <NavbarLinks ref={container} items={links} activeId={active ?? undefined} current="location" />;
 }

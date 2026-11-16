@@ -49,6 +49,9 @@ export function jsxText(value: string) {
 }
 
 const imports: Record<string, string> = {
+  Image: "@mdopeace/ui/Image",
+  Navbar: "@mdopeace/ui/Navbar",
+  NavbarLinks: "@mdopeace/ui/NavbarLinks",
   Field: "@mdopeace/ui/Field",
   TextInput: "@mdopeace/ui/TextInput",
   Select: "@mdopeace/ui/Select",

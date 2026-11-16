@@ -561,10 +561,7 @@
     aspect-ratio: 1200 / 779;
     animation: contact-cloud-float 4.8s ease-in-out infinite;
   }
-  .contact-thought-image {
-    object-fit: contain;
-  }
-  .contact-thought span {
+  .contact-thought-label {
     position: absolute;
     top: 30%;
     left: 4%;
@@ -586,9 +583,6 @@
     aspect-ratio: 660 / 640;
     margin-bottom: 1.4rem;
     animation: contact-bob 4.5s ease-in-out infinite;
-  }
-  .contact-maker-image {
-    object-fit: contain;
   }
   .contact-effects {
     position: absolute;
@@ -879,27 +873,11 @@
     align-self: center;
     width: 100%;
   }
-  .project-logo {
-    background-color: var(--ui-canvas);
-    border-radius: var(--ui-radius-md);
-  }
-  .project-image {
-    max-width: min(100%, 320px);
-    max-height: 360px;
-    width: auto;
-    height: auto;
-    border: 2px solid var(--ui-border);
-    background-color: var(--ui-border);
-    box-shadow: none;
-  }
   .project-copy {
     align-self: center;
   }
   .brand-wordmark {
     text-transform: none;
-  }
-  .navigation-links {
-    flex: 1;
   }
 
   @media (min-width: 40rem) {
@@ -918,16 +896,6 @@
     .project-layout {
       grid-template-columns: 0.82fr 1.18fr;
     }
-  }
-}
-@media (max-width: 42.5rem) {
-  .navigation-layout.navigation-layout {
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .navigation-links.navigation-links {
-    order: 3;
-    flex-basis: 100%;
   }
 }
 

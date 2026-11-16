@@ -1,5 +1,4 @@
 import type { Project } from "@/data/projects";
-import Image from "next/image";
 import { FaChrome, FaFirefoxBrowser, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
 import { CodeBlock } from "@mdopeace/ui/CodeBlock";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
@@ -9,6 +8,8 @@ import { Surface } from "@mdopeace/ui/Surface";
 import { Stack, Inline } from "@mdopeace/ui/Layout";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import ComponentLibraryPreview from "./ComponentLibraryPreview";
+import ProjectImage from "./ProjectImage";
+import ProjectLogo from "./ProjectLogo";
 const icons = {
   github: FaGithub,
   tag: FaTag,
@@ -28,21 +29,19 @@ export default function ProjectCard({ project }: { project: Project }) {
         {project.preview === "component-library" ? (
           <ComponentLibraryPreview />
         ) : (
-          <Image
+          <ProjectImage
             src={project.shot}
             alt={project.shotAlt}
-            width={800}
-            height={600}
+            width={project.shotWidth}
+            height={project.shotHeight}
             loading={project.name === "QuickTodo" ? "eager" : "lazy"}
-            unoptimized
-            className="project-image"
           />
         )}
       </Surface>
       <Stack gap={4} className="project-copy">
         <Inline gap={3}>
           {project.logo && (
-            <Image src={project.logo} alt="" width={32} height={32} unoptimized className="project-logo" />
+            <ProjectLogo src={project.logo} />
           )}
           <Heading level={3} size="card">{project.name}</Heading>
           <Inline as="ul" gap={2}>
