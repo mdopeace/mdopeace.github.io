@@ -255,6 +255,7 @@ function Snippet({ code }: { code: string }) {
     <CodeExample
       code={code}
       codeLabel="Usage example"
+      maxHeight="min(28rem, 60dvh)"
       border="none"
       description="Complete example using the shared UI package."
       className={styles.snippet}
