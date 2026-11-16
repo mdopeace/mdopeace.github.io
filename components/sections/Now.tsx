@@ -12,17 +12,18 @@ export default function Now() {
         <Surface as="article" tone="subtle" padding={{ base: 6, sm: 8 }} className="workbench-card">
           <Stack gap={4} className="workbench-copy">
             <Badge variant="solid" tone="emphasis" decoration="stamp" className="workbench-stamp">
-              In progress
+              Evolving
             </Badge>
             <Text variant="eyebrow" tone="muted">
               On the workbench · 01
             </Text>
-            <Heading level={3} size="feature">Vidp is still a work in progress.</Heading>
+            <Heading level={3} size="feature">Vidp works. My wishlist keeps growing.</Heading>
             <Text size="body" tone="muted">
-              I use it every day. The features it’s still missing are the ones
-              QuickTodo already has. That gap is part of the work—and a reminder
-              that building something useful means paying attention after the
-              first release.
+              I use Vidp every day. Playback, everyday controls, and deeper
+              customization are already there. Now I’m exploring the extras I
+              want for myself—like connecting a movie database to give an offline
+              collection the feel of a streaming library. There’s always
+              something else I want to build into it.
             </Text>
             <div>
               <Link
