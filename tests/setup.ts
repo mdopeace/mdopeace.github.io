@@ -29,7 +29,9 @@ Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
 Object.defineProperty(HTMLDialogElement.prototype, "close", {
   configurable: true,
   value: function (this: HTMLDialogElement) {
+    if (!this.open) return;
     this.open = false;
+    this.dispatchEvent(new Event("close"));
   },
 });
 

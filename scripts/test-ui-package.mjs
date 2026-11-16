@@ -31,7 +31,7 @@ try {
   writeFileSync(join(scratch, "main.tsx"), `
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
-import { Button, Field, TextInput, Switch, Surface, Text, CodeExample, Navbar, NavbarLinks, Image } from "@mdopeace/ui";
+import { Button, Field, TextInput, Switch, Surface, Text, CodeExample, Navbar, NavbarLinks, Image, Grid } from "@mdopeace/ui";
 import "@mdopeace/ui/tokens.css";
 function App() {
   const [count, setCount] = useState(0);
@@ -42,6 +42,7 @@ function App() {
     </Navbar>
     <Image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160'%3E%3Crect width='240' height='160' fill='%23f5cb56'/%3E%3C/svg%3E" alt="Consumer illustration" width={240} height={160} />
     <Text>Independent consumer</Text>
+    <Grid as="ul" aria-label="Grid list"><li>One</li><li>Two</li></Grid>
     <Button onClick={() => setCount(value => value + 1)}>Count {count}</Button>
     <Field label="Name" description="Your display name">{props => <TextInput {...props} />}</Field>
     <Switch aria-label="Notifications" />
@@ -74,6 +75,10 @@ createRoot(document.getElementById("root")!).render(<App />);
   await page.getByRole("link", { name: "Docs", exact: true }).click();
   assert.equal(await page.getByRole("link", { name: "Docs", exact: true }).getAttribute("aria-current"), "page");
   await page.locator('[data-image-state="loaded"]').waitFor();
+  assert.deepEqual(await page.getByRole("list", { name: "Grid list" }).evaluate(el => {
+    const style = getComputedStyle(el);
+    return [style.marginTop, style.marginBottom, style.paddingLeft, style.listStyleType];
+  }), ["0px", "0px", "0px", "none"]);
   await page.getByRole("textbox", { name: "Name" }).fill("Ada");
   assert.equal(await page.getByRole("textbox", { name: "Name" }).inputValue(), "Ada");
   const toggle = page.getByRole("switch", { name: "Notifications" });

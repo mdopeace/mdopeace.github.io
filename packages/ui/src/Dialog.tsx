@@ -64,11 +64,15 @@ export function Dialog({
   const restore = useRef<(() => void) | null>(null);
   const titleId = useId();
   const descriptionId = useId();
+  const restorePage = useCallback(() => {
+    const cleanup = restore.current;
+    restore.current = null;
+    cleanup?.();
+  }, []);
   const finishClose = useCallback(() => {
     dialog.current?.close();
-    restore.current?.();
-    restore.current = null;
-  }, []);
+    restorePage();
+  }, [restorePage]);
   useEffect(() => {
     const element = dialog.current;
     if (!element) return;
@@ -132,8 +136,11 @@ export function Dialog({
         }
       }}
       onClose={(event) => {
+        if (!event.currentTarget.open) {
+          restorePage();
+          if (isOpen) setOpen(false);
+        }
         onClose?.(event);
-        if (isOpen && !dialog.current?.open) setOpen(false);
       }}
       onPointerDown={(event) => {
         onPointerDown?.(event);

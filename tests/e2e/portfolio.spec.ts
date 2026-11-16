@@ -33,6 +33,29 @@ for (const theme of ["light", "dark"] as const) {
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
     await expect(support).toBeFocused();
+    const previousOverflow = await page.evaluate(() => document.body.style.overflow);
+    for (const closeWithForm of [true, false]) {
+      await support.click();
+      await expect(dialog).toBeVisible();
+      await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+      if (closeWithForm) {
+        await dialog.evaluate(element => {
+          const form = document.createElement("form");
+          form.method = "dialog";
+          const submit = document.createElement("button");
+          submit.textContent = "Native close";
+          form.append(submit);
+          element.append(form);
+          form.requestSubmit(submit);
+          form.remove();
+        });
+      } else {
+        await dialog.evaluate(element => (element as HTMLDialogElement).close());
+      }
+      await expect(dialog).not.toBeVisible();
+      await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe(previousOverflow);
+      await expect(support).toBeFocused();
+    }
     const toggle = page.getByRole("switch", { name: "Dark mode" });
     await toggle.click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme === "dark" ? "light" : "dark");

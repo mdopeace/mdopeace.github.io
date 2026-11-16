@@ -5,8 +5,12 @@ for (const theme of ["light", "dark"] as const) {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.goto("/");
-    await expect(page.getByRole("link", { name: "Built with my component library" })).toHaveAttribute("href", "/playground/");
-    await page.getByRole("link", { name: "Explore playground" }).click();
+    const footer = page.getByRole("contentinfo");
+    await expect(footer.getByRole("link")).toHaveCount(1);
+    await expect(footer.getByRole("link", { name: "Back to top" })).toHaveAttribute("href", "#top");
+    const project = page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Component Library", exact: true }) });
+    await expect(project.getByRole("link", { name: "Explore playground" })).toHaveAttribute("href", "/playground/");
+    await project.getByRole("link", { name: "Explore playground" }).click();
     await expect(page).toHaveURL(/\/playground\/$/);
     await expect(page).toHaveTitle("Component Playground · Md Mostafijur Rahman");
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://mdopeace.github.io/playground/");

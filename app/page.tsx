@@ -32,14 +32,9 @@ export default function Home() {
           <Text size="caption" font="body" tone="muted">
             Made with curiosity · Bengaluru
           </Text>
-          <Inline gap={6}>
-            <Link href="/playground/" size="sm">
-              Component playground
-            </Link>
-            <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
-              Back to top
-            </Link>
-          </Inline>
+          <Link href="#top" size="sm" endIcon={<FaArrowUp />}>
+            Back to top
+          </Link>
         </Inline>
       </footer>
     </Container>

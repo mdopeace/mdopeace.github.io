@@ -328,6 +328,33 @@ it("keeps modal semantics during exit, restores focus and previous scroll state"
   expect(document.activeElement).toBe(trigger);
   document.body.style.overflow = "";
 });
+it("restores scrolling and focus after repeated native closes", () => {
+  document.body.style.overflow = "clip";
+  render(<ModalExample />);
+  const trigger = screen.getByRole("button", { name: "Open" });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    trigger.focus();
+    fireEvent.click(trigger);
+    expect(document.body.style.overflow).toBe("hidden");
+    const dialog = screen.getByRole("dialog") as HTMLDialogElement;
+    act(() => dialog.close());
+    expect(document.body.style.overflow).toBe("clip");
+    expect(document.activeElement).toBe(trigger);
+  }
+  document.body.style.overflow = "";
+});
+it("keeps scrolling locked until the final modal closes", () => {
+  const first = createRef<HTMLDialogElement>();
+  const second = createRef<HTMLDialogElement>();
+  render(<>
+    <Dialog ref={first} defaultOpen title="First" closeLabel="Close first" />
+    <Dialog ref={second} defaultOpen title="Second" closeLabel="Close second" />
+  </>);
+  act(() => first.current!.close());
+  expect(document.body.style.overflow).toBe("hidden");
+  act(() => second.current!.close());
+  expect(document.body.style.overflow).toBe("");
+});
 it("only dismisses genuine backdrop gestures and unlocks on unmount", () => {
   vi.useFakeTimers();
   const { unmount } = render(<ModalExample />);

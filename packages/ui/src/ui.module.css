@@ -2,7 +2,7 @@
 :where(.container, .stack, .inline, .grid, .surface, .control, .badge, .switch, .track, .thumb, .dialog, .code, .field, .textInput, .select, .checkbox, .checkbox input, .navigationItem) {
   box-sizing: border-box;
 }
-.inline:is(ul, ol), .stack:is(ul, ol) {
+.inline:is(ul, ol), .stack:is(ul, ol), .grid:is(ul, ol) {
   list-style: none;
   margin: 0;
   padding: 0;
