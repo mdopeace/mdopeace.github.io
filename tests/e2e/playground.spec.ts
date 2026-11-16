@@ -41,7 +41,14 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.getByRole("heading", { name: "Design decisions" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     const navigation = page.getByRole("navigation", { name: "Component library" });
-    await expect(navigation.getByRole("button")).toHaveCount(18);
+    await expect(navigation.getByRole("button")).toHaveCount(19);
+    await navigation.getByRole("button", { name: "Tile", exact: true }).click();
+    await expect(page.getByRole("img", { name: "Game Boy mark" })).toHaveText("GB");
+    await page.getByRole("combobox", { name: "Appearance", exact: true }).selectOption("paused");
+    const tile = page.getByRole("img", { name: "paused indicator" });
+    await expect(tile.locator("span")).toHaveCSS("background-color", "rgb(240, 174, 85)");
+    await page.getByRole("checkbox", { name: "Inset depth" }).uncheck();
+    await expect(tile).toHaveAttribute("data-inset", "false");
     await navigation.getByRole("button", { name: "Checkbox", exact: true }).click();
     const sample = page.getByRole("checkbox", { name: "Send me build notes" });
     await sample.focus();

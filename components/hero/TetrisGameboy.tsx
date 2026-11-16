@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@mdopeace/ui/Badge";
+import { Tile } from "@mdopeace/ui/Tile";
 import { Button } from "@mdopeace/ui/Button";
 import { Text } from "@mdopeace/ui/Typography";
 import styles from "./gameboy.module.css";
@@ -317,19 +317,18 @@ export default function TetrisGameboy() {
       onKeyDown={handleKeyDown}
     >
       <div className="gameboy-brand">
-        <Badge variant="solid" tone="emphasis" shape="square" size="sm" aria-hidden="true">GB</Badge>
+        <Tile faceColor="var(--accent-2)" textColor="var(--ink-on-accent-2)" frameColor="var(--ink)" aria-hidden="true">GB</Tile>
         <Text as="span" size="caption" font="mono" weight="black">
           POCKET <i>COLOR</i>
         </Text>
-        <Badge
-          shape="square"
+        <Tile
           size="sm"
           className={styles.indicator}
+          faceColor="var(--indicator-light)"
+          frameColor="var(--indicator-frame)"
           data-state={ledState}
           aria-hidden="true"
-        >
-          <span />
-        </Badge>
+        />
       </div>
       <div className="gameboy-bezel">
         <div className="gameboy-screen">

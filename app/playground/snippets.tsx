@@ -63,6 +63,7 @@ const imports: Record<string, string> = {
   Switch: "@mdopeace/ui/Switch",
   Surface: "@mdopeace/ui/Surface",
   Badge: "@mdopeace/ui/Badge",
+  Tile: "@mdopeace/ui/Tile",
   Heading: "@mdopeace/ui/Typography",
   Text: "@mdopeace/ui/Typography",
   Grid: "@mdopeace/ui/Layout",

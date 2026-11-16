@@ -7,6 +7,7 @@ import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
+import { Tile } from "@mdopeace/ui/Tile";
 import { Button } from "@mdopeace/ui/Button";
 import { Link } from "@mdopeace/ui/Link";
 import { Dialog } from "@mdopeace/ui/Dialog";
@@ -101,6 +102,14 @@ const catalog = [
     rationale:
       "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
     tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
+  },
+  {
+    id: "tile",
+    name: "Tile",
+    group: "Foundations",
+    description: "A framed face for marks and indicators.",
+    rationale: "A square frame and optional inset edge give text, icons and indicator lights a shared physical finish. Color and content belong to the consumer; Tile adds no interaction or game state.",
+    tip: "Try the GB mark and the three indicator colors. Indicator colors stay fixed across themes. Wrap a tile in a link or button when it needs interaction.",
   },
   {
     id: "badge",
@@ -264,6 +273,8 @@ function Snippet({ code }: { code: string }) {
 }
 
 function Playground({ kind }: { kind: ComponentId }) {
+  const [tilePreset, setTilePreset] = useState<"brand" | "off" | "playing" | "paused">("brand");
+  const [tileInset, setTileInset] = useState(true);
   const [size, setSize] = useState<Size>("md");
   const [variant, setVariant] = useState<Variant>("primary");
   const [linkVariant, setLinkVariant] = useState<Variant | "text" | "nav">(
@@ -518,6 +529,23 @@ function Playground({ kind }: { kind: ComponentId }) {
         ].join("\n"),
       ),
     );
+  } else if (kind === "tile") {
+    const faceColor = { brand: "var(--ui-emphasis)", off: "#7d8178", playing: "#9bdc74", paused: "#f0ae55" }[tilePreset];
+    const textColor = "var(--ui-on-emphasis)";
+    const frameColor = "#292d29";
+    controls = (
+      <>
+        <Choice label="Appearance" value={tilePreset} options={["brand", "off", "playing", "paused"] as const} onChange={setTilePreset} />
+        <Choice label="Size" value={size} options={["sm", "md", "lg"] as const} onChange={setSize} />
+        <Toggle label="Inset depth" checked={tileInset} onChange={setTileInset} />
+      </>
+    );
+    preview = <Tile size={size} faceColor={faceColor} textColor={textColor} frameColor={frameColor} inset={tileInset} role="img" aria-label={tilePreset === "brand" ? "Game Boy mark" : `${tilePreset} indicator`}>{tilePreset === "brand" ? "GB" : null}</Tile>;
+    code = elementCode("Tile", [
+      `size="${size}"`, `faceColor="${faceColor}"`, `textColor="${textColor}"`,
+      `frameColor="${frameColor}"`, `inset={${tileInset}}`, 'role="img"',
+      `aria-label="${tilePreset === "brand" ? "Game Boy mark" : `${tilePreset} indicator`}"`,
+    ], tilePreset === "brand" ? "GB" : "");
   } else if (kind === "badge") {
     controls = (
       <>
