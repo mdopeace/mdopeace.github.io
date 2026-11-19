@@ -8,7 +8,11 @@ import { Inline, Stack } from "@mdopeace/ui/Layout";
 import { Link } from "@mdopeace/ui/Link";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { Image } from "@mdopeace/ui/Image";
-import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
+import { FaGithub, FaLinkedinIn, FaTelegram } from "react-icons/fa6";
+
+// Confirmed Telegram username
+const TELEGRAM_USERNAME = "mdopeace";
+
 const email = "md.correo.e@gmail.com";
 const socialLinks = [
   {
@@ -22,9 +26,9 @@ const socialLinks = [
     startIcon: <FaLinkedinIn />,
   },
   {
-    label: "WhatsApp",
-    href: "https://wa.me/mdopeace",
-    startIcon: <FaWhatsapp />,
+    label: "Telegram",
+    href: `https://t.me/${TELEGRAM_USERNAME}`,
+    startIcon: <FaTelegram />,
   },
 ];
 export default function Contact() {
