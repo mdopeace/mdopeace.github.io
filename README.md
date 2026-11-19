@@ -85,3 +85,10 @@ Portfolio content and branding are not included in the package.
 
 The [UI release guide](./docs/ui-release.md) explains the App-driven release PR,
 required CI, protected auto-merge and versioned GitHub Release archive.
+
+## Analytics
+
+Analytics is disabled by default. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` at build time
+to Md’s personal GA4 measurement ID. Leave it unset while the ID is pending.
+Turn off Enhanced Measurement in the GA4 web stream so the site controls which
+interaction events are sent.

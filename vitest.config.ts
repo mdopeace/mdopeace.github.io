@@ -5,7 +5,7 @@ export default defineConfig({
   esbuild: { jsx: "automatic" },
   test: {
     environment: "jsdom",
-    include: ["tests/ui.test.tsx"],
+    include: ["tests/ui.test.tsx", "tests/analytics-consent.test.tsx"],
     setupFiles: ["./tests/setup.ts"],
   },
 });

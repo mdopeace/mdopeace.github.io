@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { GA_MEASUREMENT_ID } from "./components/analytics/config";
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -11,6 +12,12 @@ const nextConfig: NextConfig = {
       ? ["tsx", "ts", "dev.tsx"]
       : ["tsx", "ts"],
   turbopack: {
+    // Omit the Google tag loader entirely from the default static export.
+    resolveAlias: GA_MEASUREMENT_ID
+      ? {}
+      : {
+          "@/components/analytics/scheduleAnalytics": "./components/analytics/disabled.ts",
+        },
     rules: {
       // Only the Tailwind entry needs this loader. Applying it to *.module.css
       // would turn modules into plain CSS and discard their class exports.

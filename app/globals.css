@@ -845,6 +845,12 @@
   .page-footer {
     padding-block: var(--ui-space-8);
   }
+  .analytics-privacy {
+    display: grid;
+    gap: var(--ui-space-3);
+    margin-block-start: var(--ui-space-4);
+    max-inline-size: 42rem;
+  }
   @media (max-width: 680px) {
     .footer-layout {
       flex-direction: column;

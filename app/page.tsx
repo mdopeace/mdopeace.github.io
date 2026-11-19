@@ -1,3 +1,5 @@
+import AnalyticsConsent from "@/components/analytics/AnalyticsConsent";
+import { GA_MEASUREMENT_ID } from "@/components/analytics/config";
 import Contact from "@/components/sections/Contact";
 import DayJob from "@/components/sections/DayJob";
 import Hero from "@/components/sections/Hero";
@@ -72,6 +74,7 @@ export default function Home() {
             Back to top
           </Link>
         </Inline>
+        <AnalyticsConsent measurementId={GA_MEASUREMENT_ID} />
       </footer>
     </Container>
   );

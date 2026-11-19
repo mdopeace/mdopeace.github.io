@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/components/analytics/events";
+
 import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Sticker } from "@mdopeace/ui/Sticker";
@@ -62,6 +64,7 @@ function createHunt() {
       } catch {
         // Keep progress in memory for this page visit.
       }
+      trackAnalytics("sticker_found");
       listeners.forEach((listener) => listener());
     },
   };

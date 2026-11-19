@@ -145,13 +145,16 @@ for (const theme of ["light", "dark"] as const) {
     await expect(game.getByRole("status")).toContainText("New game started");
   });
 
-  test(`${theme}: the summary and email action pass axe`, async ({ page }) => {
+  test(`${theme}: the summary, email action, and analytics notice pass axe`, async ({ page }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     await page.goto("/");
+    // The consent prompt stays hidden until Md provides a measurement ID.
+    await expect(page.getByRole("region", { name: "Analytics cookies" })).toHaveCount(0);
+    await expect(page.getByText(/Privacy note/i)).toBeVisible();
     await page.addScriptTag({ content: axe.source });
     const violations = await page.evaluate(async () => {
       const { violations } = await window.axe.run({
-        include: [["[aria-labelledby='portfolio-summary']"], ["#contact"]],
+        include: [["[aria-labelledby='portfolio-summary']"], ["#contact"], [".analytics-privacy"]],
       });
       return violations.map(({ id, nodes }) => ({ id, targets: nodes.map(node => node.target) }));
     });

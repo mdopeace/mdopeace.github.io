@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/components/analytics/events";
+
 import { Tile } from "@mdopeace/ui/Tile";
 import { Button } from "@mdopeace/ui/Button";
 import { Text } from "@mdopeace/ui/Typography";
@@ -150,6 +152,7 @@ export default function TetrisGameboy() {
   function start() {
     const seed = window.crypto.getRandomValues(new Uint32Array(1))[0];
     engine.startGame({ mode: "marathon", seed });
+    trackAnalytics("tetris_play");
     setAnnouncement("Game starting. Controls unlock in a moment.");
     gameboyRef.current?.focus({ preventScroll: true });
   }
