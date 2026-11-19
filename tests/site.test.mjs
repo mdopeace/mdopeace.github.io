@@ -9,6 +9,37 @@ assert.ok(
 );
 const html = readFileSync("out/index.html", "utf8");
 
+test("robots.txt allows crawling and references the sitemap", () => {
+  const robots = readFileSync("out/robots.txt", "utf8");
+  assert.match(robots, /^User-Agent: \*$/im);
+  assert.match(robots, /^Allow: \/$/m);
+  assert.match(robots, /^Sitemap: https:\/\/mdopeace\.github\.io\/sitemap\.xml$/m);
+});
+
+test("the sitemap lists the home and playground URLs", () => {
+  const sitemap = readFileSync("out/sitemap.xml", "utf8");
+  assert.ok(sitemap.includes("<loc>https://mdopeace.github.io/</loc>"));
+  assert.ok(sitemap.includes("<loc>https://mdopeace.github.io/playground/</loc>"));
+});
+
+test("the home page has its canonical URL and structured data", () => {
+  assert.ok(html.includes('<link rel="canonical" href="https://mdopeace.github.io/"/>'));
+  const script = html.match(/<script type="application\/ld\+json">([^<]*)<\/script>/);
+  assert.ok(script, "JSON-LD script missing");
+  const jsonLd = JSON.parse(script[1]);
+  const types = jsonLd["@graph"].map((item) => item["@type"]);
+  assert.ok(types.includes("Person"));
+  assert.ok(types.includes("WebSite"));
+  assert.doesNotMatch(script[1], /"(?:telephone|email|image)"\s*:/);
+});
+
+test("the home page ships a single Open Graph image with alt text and Twitter alt text", () => {
+  const alt = readFileSync("app/opengraph-image.alt.txt", "utf8").trim();
+  assert.equal([...html.matchAll(/<meta property="og:image"/g)].length, 1);
+  assert.ok(html.includes(`<meta property="og:image:alt" content="${alt}"`));
+  assert.ok(html.includes(`<meta name="twitter:image:alt" content="${alt}"`));
+});
+
 test("the playground ships as a public directory route with portfolio links", () => {
   const playground = readFileSync("out/playground/index.html", "utf8");
   assert.match(html, /href="\/playground\/"/);
