@@ -1,4 +1,48 @@
 import { expect, test } from "@playwright/test";
+import axe from "axe-core";
+
+declare global {
+  interface Window {
+    axe: typeof axe;
+  }
+}
+
+test("the 60-second summary is in the first viewport and covers the essentials", async ({ page }) => {
+  await page.goto("/");
+  const summary = page.getByRole("region", { name: "60-second TL;DR" });
+  await expect(summary).toBeInViewport({ ratio: 1 });
+  for (const detail of [
+    "Md Mostafijur Rahman", "software engineer in Bengaluru", "Tracxn",
+    "QuickTodo", "Vidp", "Cookieater", "Component Library",
+  ]) {
+    await expect(summary).toContainText(detail);
+  }
+  await expect(summary.getByRole("link", { name: "md.correo.e@gmail.com" }))
+    .toHaveAttribute("href", "mailto:md.correo.e@gmail.com");
+  await expect(summary.getByRole("link", { name: "Telegram" }))
+    .toHaveAttribute("href", "https://t.me/mdopeace");
+  await expect(summary.getByRole("link", { name: "Contact" }))
+    .toHaveAttribute("href", "#contact");
+  await expect(summary.getByText(/\bCV\b/)).toHaveCount(0);
+});
+
+test("copy email offers the email link when clipboard writing fails", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator.clipboard, "writeText", {
+      value: async () => { throw new Error("Clipboard access denied"); },
+    });
+  });
+  await page.goto("/");
+  const contact = page.locator("#contact");
+  const copy = contact.getByRole("button", { name: "Copy email" });
+  await copy.click();
+  await expect(contact.getByRole("status").filter({ hasText: "Could not copy" }))
+    .toHaveText("Could not copy. Use Start a conversation to email me.");
+  await expect(contact.getByText("POW! Copied!")).toHaveCount(0);
+  await expect(copy).toBeEnabled();
+  await expect(contact.getByRole("link", { name: "Start a conversation" }))
+    .toHaveAttribute("href", "mailto:md.correo.e@gmail.com");
+});
 
 for (const theme of ["light", "dark"] as const) {
   test(`${theme}: comic styling, navigation, disclosure, clipboard and support`, async ({ page, context }) => {
@@ -25,6 +69,18 @@ for (const theme of ["light", "dark"] as const) {
     await project.getByRole("button", { name: "Copy", exact: true }).click();
     await expect(project.getByRole("status")).toHaveText("Copied to clipboard.");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brew tap vidplabs/vidp\nbrew install --cask vidp");
+    const contact = page.locator("#contact");
+    const copyEmail = contact.getByRole("button", { name: "Copy email" });
+    await page.clock.install();
+    await copyEmail.click();
+    const burst = contact.getByRole("status").filter({ hasText: "POW! Copied!" });
+    await expect(burst).toBeVisible();
+    await expect(burst).toHaveAttribute("aria-live", "polite");
+    await expect(burst.getByText("Email address copied to clipboard.")).toBeAttached();
+    await expect(burst.locator(":scope > div")).toHaveCSS("animation-name", "none");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("md.correo.e@gmail.com");
+    await page.clock.runFor(1400);
+    await expect(burst).toHaveCount(0);
     const support = page.getByRole("button", { name: "Support my work" });
     await support.click();
     const dialog = page.getByRole("dialog", { name: "Fuel the next build" });
@@ -87,6 +143,19 @@ for (const theme of ["light", "dark"] as const) {
     await expect(rotate).toBeEnabled();
     await game.getByRole("button", { name: "Reset game", exact: true }).click();
     await expect(game.getByRole("status")).toContainText("New game started");
+  });
+
+  test(`${theme}: the summary and email action pass axe`, async ({ page }) => {
+    await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
+    await page.goto("/");
+    await page.addScriptTag({ content: axe.source });
+    const violations = await page.evaluate(async () => {
+      const { violations } = await window.axe.run({
+        include: [["[aria-labelledby='portfolio-summary']"], ["#contact"]],
+      });
+      return violations.map(({ id, nodes }) => ({ id, targets: nodes.map(node => node.target) }));
+    });
+    expect(violations).toEqual([]);
   });
 
 }

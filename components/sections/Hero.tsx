@@ -1,5 +1,6 @@
 import { FaArrowDown } from "react-icons/fa6";
 import TetrisGameboy from "../hero/TetrisGameboy";
+import { PortfolioSummary } from "../portfolio/PortfolioSummary";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Stack, Inline } from "@mdopeace/ui/Layout";
 import { Heading, Text } from "@mdopeace/ui/Typography";
@@ -27,16 +28,11 @@ export default function Hero() {
               Md Mostafijur <span className="hero-name">Rahman</span>
             </Heading>
           </Stack>
-          <Stack gap={3}>
-            <Text size="lg">
-              I notice the little frictions that get in the way of a good
-              experience—and I like figuring out how to make them disappear.
-            </Text>
-            <Text size="sm" tone="muted">
-              At Tracxn, I work across the web platform. Outside work, I turn
-              the things I wish existed into small, useful tools.
-            </Text>
-          </Stack>
+          <PortfolioSummary />
+          <Text size="lg">
+            I notice the little frictions that get in the way of a good
+            experience—and I like figuring out how to make them disappear.
+          </Text>
           <Inline gap={3}>
             <Link variant="primary" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               See what I’ve made
