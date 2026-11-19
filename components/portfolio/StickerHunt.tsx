@@ -40,13 +40,23 @@ function createHunt() {
     getSnapshot,
     subscribe(listener: () => void) {
       listeners.add(listener);
-      return () => { listeners.delete(listener); };
+      const onStorage = (event: StorageEvent) => {
+        if (event.key !== storageKey && event.key !== null) return;
+        found = readFound();
+        listener();
+      };
+      window.addEventListener("storage", onStorage);
+      return () => {
+        listeners.delete(listener);
+        window.removeEventListener("storage", onStorage);
+      };
     },
     collect(id: StickerId) {
       const current = getSnapshot();
       if (current.has(id)) return;
 
-      found = new Set([...current, id]);
+      // Merge with whatever other tabs already wrote before this save.
+      found = new Set([...readFound(), ...current, id]);
       try {
         window.localStorage.setItem(storageKey, JSON.stringify([...found]));
       } catch {
