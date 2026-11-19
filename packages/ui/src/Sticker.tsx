@@ -40,5 +40,5 @@ export function Sticker({
       </button>
     );
   }
-  return <span {...props} {...appearance} aria-hidden="true" />;
+  return <span {...props} {...appearance} aria-hidden="true" inert />;
 }

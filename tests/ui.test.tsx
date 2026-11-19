@@ -88,6 +88,8 @@ describe("comic components", () => {
     expect(document.activeElement).toBe(button);
     await user.keyboard("[Space][Enter]");
     expect(click).toHaveBeenCalledTimes(2);
+    rerender(<Sticker><a href="#star">Decorative link</a></Sticker>);
+    expect(screen.getByText("Decorative link").closest("[aria-hidden='true']")?.hasAttribute("inert")).toBe(true);
     rerender(<Sticker ref={ref} found onClick={click} aria-label="Collect star"><span aria-hidden>★</span></Sticker>);
     expect(screen.getByRole("button", { name: "Collect star", description: "Found" })).toBe(ref.current);
   });
@@ -218,13 +220,35 @@ describe("component playground", () => {
       expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBeTruthy();
     }
     if (name === "ConsentNote") {
-      await user.click(screen.getByRole("button", { name: "Decline" }));
-      expect(screen.queryByRole("region", { name: "Consent notice" })).toBeNull();
-      await user.click(screen.getByLabelText("Open notice"));
-      expect(screen.getByRole("region", { name: "Consent notice" })).toBeTruthy();
+      const preview = within(screen.getByRole("group", { name: "Live preview" }));
+      const status = preview.getByRole("status");
+      const openNotice = screen.getByLabelText("Open notice");
+      expect(status.textContent).toBe("");
+      for (const [action, result] of [["Accept", "Accepted"], ["Decline", "Declined"]]) {
+        preview.getByRole("button", { name: action }).focus();
+        await user.keyboard("[Enter]");
+        expect(preview.queryByRole("region", { name: "Consent notice" })).toBeNull();
+        expect(document.activeElement).toBe(openNotice);
+        expect(preview.getByRole("status")).toBe(status);
+        expect(status.textContent).toBe(result);
+        await user.keyboard("[Space]");
+        expect(preview.getByRole("region", { name: "Consent notice" })).toBeTruthy();
+        expect(status.textContent).toBe("");
+      }
+    }
+    if (name === "Burst") {
+      await user.click(screen.getByLabelText("Announce feedback"));
+      await user.click(screen.getByLabelText("Show burst"));
     }
     await user.click(screen.getByRole("button", { name: "Copy code" }));
     expect(write).toHaveBeenCalledWith(expect.stringContaining(`import { ${name} } from "@mdopeace/ui/${name}";`));
+    if (name === "Burst") {
+      const copied = write.mock.calls[0][0];
+      expect(copied).toContain('"use client";');
+      expect(copied).toContain("useState(null");
+      expect(copied).toContain('onClick={() => setMessage("POW! Copied!")}');
+      expect(copied).toMatch(/<Burst\b[^>]*\bstatus\b[^>]*>\s*\{message\}\s*<\/Burst>/);
+    }
   });
 
   it("exposes Tile presets and includes the public import in copied examples", async () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode, type Ref } from "react";
 import { FaArrowLeft, FaHeart } from "react-icons/fa6";
 import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
 import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
@@ -285,13 +285,16 @@ function Toggle({
   label,
   checked,
   onChange,
+  ref,
 }: {
   label: string;
   checked: boolean;
   onChange: (value: boolean) => void;
+  ref?: Ref<HTMLInputElement>;
 }) {
   return (
     <Checkbox
+      ref={ref}
       label={label}
       checked={checked}
       onChange={(event) => onChange(event.target.checked)}
@@ -323,6 +326,7 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [interactive, setInteractive] = useState(false);
   const [noteOpen, setNoteOpen] = useState(true);
   const [decision, setDecision] = useState("");
+  const noticeToggleRef = useRef<HTMLInputElement>(null);
   const [tilePreset, setTilePreset] = useState<"brand" | "off" | "playing" | "paused">("brand");
   const [tileInset, setTileInset] = useState(true);
   const [size, setSize] = useState<Size>("md");
@@ -604,7 +608,15 @@ function Playground({ kind }: { kind: ComponentId }) {
       </>
     );
     preview = <Burst tone={burstTone} size={size} animated={animated} status={feedback}>{showBurst ? message : null}</Burst>;
-    code = elementCode("Burst", [`tone="${burstTone}"`, sizeProp, animated && "animated", feedback && "status"], showBurst ? message : undefined);
+    const burstProps = [`tone="${burstTone}"`, sizeProp, animated && "animated", feedback && "status"];
+    code = feedback
+      ? [
+          "<>",
+          `<Button onClick={() => setMessage(${JSON.stringify(message)})}>Show feedback</Button>`,
+          elementCode("Burst", burstProps, "{message}"),
+          "</>",
+        ].join("\n")
+      : elementCode("Burst", burstProps, showBurst ? message : undefined);
   } else if (kind === "sticker") {
     const appearance = { size, rotation, found };
     controls = (
@@ -628,9 +640,10 @@ function Playground({ kind }: { kind: ComponentId }) {
     const choose = (label: string) => {
       setDecision(label);
       setNoteOpen(false);
+      noticeToggleRef.current?.focus();
     };
     controls = (
-      <Toggle label="Open notice" checked={noteOpen} onChange={(next) => {
+      <Toggle ref={noticeToggleRef} label="Open notice" checked={noteOpen} onChange={(next) => {
         setNoteOpen(next);
         setDecision("");
       }} />
@@ -638,7 +651,7 @@ function Playground({ kind }: { kind: ComponentId }) {
     preview = (
       <Stack gap={4}>
         <ConsentNote open={noteOpen} onAccept={() => choose("Accepted")} onDecline={() => choose("Declined")}>{notice}</ConsentNote>
-        {decision && <Text role="status">{decision}</Text>}
+        <Text role="status">{decision}</Text>
       </Stack>
     );
     code = [
@@ -1151,6 +1164,8 @@ function Playground({ kind }: { kind: ComponentId }) {
     setup = `const [found, setFound] = useState(${found});`;
   if (kind === "consent-note")
     setup = `const [open, setOpen] = useState(${noteOpen});`;
+  if (kind === "burst" && feedback)
+    setup = "const [message, setMessage] = useState(null as string | null);";
   code = completeExample(
     code,
     setup,
@@ -1165,7 +1180,7 @@ function Playground({ kind }: { kind: ComponentId }) {
       "navigation",
       "navbar",
       "navbar-links",
-    ].includes(kind) || kind === "consent-note" || (kind === "sticker" && interactive),
+    ].includes(kind) || kind === "consent-note" || (kind === "sticker" && interactive) || (kind === "burst" && feedback),
   );
   return (
     <div className={styles.workbench}>
