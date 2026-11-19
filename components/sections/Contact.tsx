@@ -75,7 +75,7 @@ export default function Contact() {
           <div className="contact-thought">
             <Image
               className="contact-thought-image"
-              src="/contact-thought-bubble.png"
+              src="/contact-thought-bubble.webp"
               alt=""
               fill
               sizes="(max-width: 800px) 45vw, 230px"
@@ -93,7 +93,7 @@ export default function Contact() {
           >
             <Image
               className="contact-maker-image"
-              src="/contact-maker.png"
+              src="/contact-maker.webp"
               alt=""
               fill
               loading="eager"
