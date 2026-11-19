@@ -2,12 +2,14 @@
 import { useClipboard } from "@mdopeace/ui/hooks/useClipboard";
 import { Button } from "@mdopeace/ui/Button";
 import { Burst } from "@mdopeace/ui/Burst";
-import { Stack } from "@mdopeace/ui/Layout";
 import { Text } from "@mdopeace/ui/Typography";
+import { cx } from "@mdopeace/ui/tokens";
+import styles from "./email-action.module.css";
+
 export function EmailAction({ email }: { email: string }) {
   const { copy, status } = useClipboard();
   return (
-    <Stack gap={2} align="start">
+    <div className={styles.wrap}>
       <Button
         variant="secondary"
         size="lg"
@@ -21,7 +23,7 @@ export function EmailAction({ email }: { email: string }) {
         status
         animated
         aria-atomic="true"
-        className={status === "success" ? undefined : "sr-only"}
+        className={cx(styles.burst, status === "success" ? undefined : "sr-only")}
       >
         {status === "success" && (
           <>
@@ -33,6 +35,6 @@ export function EmailAction({ email }: { email: string }) {
       <Text size="caption" role="status" className={status === "error" ? undefined : "sr-only"}>
         {status === "error" ? "Could not copy. Use Start a conversation to email me." : ""}
       </Text>
-    </Stack>
+    </div>
   );
 }
