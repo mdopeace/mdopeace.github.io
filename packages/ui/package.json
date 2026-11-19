@@ -16,6 +16,22 @@
     "**/*.css"
   ],
   "exports": {
+    "./SpeechBubble": {
+      "types": "./dist/SpeechBubble.d.ts",
+      "import": "./dist/SpeechBubble.js"
+    },
+    "./Burst": {
+      "types": "./dist/Burst.d.ts",
+      "import": "./dist/Burst.js"
+    },
+    "./Sticker": {
+      "types": "./dist/Sticker.d.ts",
+      "import": "./dist/Sticker.js"
+    },
+    "./ConsentNote": {
+      "types": "./dist/ConsentNote.d.ts",
+      "import": "./dist/ConsentNote.js"
+    },
     "./Tile": {
       "types": "./dist/Tile.d.ts",
       "import": "./dist/Tile.js"

@@ -1,0 +1,33 @@
+.sticker {
+  --sticker-target: var(--ui-control-md);
+  --sticker-rotation: 0deg;
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: var(--sticker-target);
+  min-block-size: var(--sticker-target);
+  max-inline-size: 100%;
+  padding: var(--ui-space-1) var(--ui-space-2);
+  border: var(--ui-border-strong) dashed var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-md);
+  font: var(--ui-weight-bold) var(--ui-font-md)/var(--ui-leading-caption) var(--ui-mono);
+  text-align: center;
+  overflow-wrap: anywhere;
+  transform: rotate(var(--sticker-rotation));
+}
+
+.sticker[data-size="sm"] { --sticker-target: var(--ui-control-sm); font-size: var(--ui-font-sm); }
+.sticker[data-size="lg"] { --sticker-target: var(--ui-control-lg); font-size: var(--ui-font-title); }
+.sticker[data-rotation="left"] { --sticker-rotation: var(--ui-rotation-left); }
+.sticker[data-rotation="right"] { --sticker-rotation: var(--ui-rotation-right); }
+.sticker[data-found="true"] {
+  border-style: solid;
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+}
+
+button.sticker:enabled { cursor: pointer; }
+button.sticker:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }

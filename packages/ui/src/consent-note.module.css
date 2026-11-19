@@ -1,0 +1,12 @@
+.note {
+  display: grid;
+  gap: var(--ui-space-4);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-3);
+}

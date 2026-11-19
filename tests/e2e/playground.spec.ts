@@ -41,7 +41,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.getByRole("heading", { name: "Design decisions" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     const navigation = page.getByRole("navigation", { name: "Component library" });
-    await expect(navigation.getByRole("button")).toHaveCount(19);
+    await expect(navigation.getByRole("button")).toHaveCount(23);
     await navigation.getByRole("button", { name: "Tile", exact: true }).click();
     await expect(page.getByRole("img", { name: "Game Boy mark" })).toHaveText("GB");
     await page.getByRole("combobox", { name: "Appearance", exact: true }).selectOption("paused");
@@ -76,3 +76,28 @@ for (const theme of ["light", "dark"] as const) {
     }
   });
 }
+
+test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "SpeechBubble", exact: true }).click();
+  await page.getByRole("combobox", { name: "Preview width" }).selectOption("narrow");
+  const bubble = page.locator("[data-tail]");
+  for (const tail of ["bottom-start", "bottom-end", "top-start", "top-end"]) {
+    await page.getByRole("combobox", { name: "Tail", exact: true }).selectOption(tail);
+    await bubble.evaluate((node) => { node.textContent = "UnbrokenCaption".repeat(12); });
+    await expect(bubble).toHaveCSS("overflow-wrap", "anywhere");
+    expect(await bubble.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);
+    expect(await bubble.evaluate((node) => getComputedStyle(node, "::after").backgroundColor))
+      .toBe(await bubble.evaluate((node) => getComputedStyle(node).backgroundColor));
+  }
+
+  await page.getByRole("button", { name: "Burst", exact: true }).click();
+  await page.getByRole("checkbox", { name: "Announce feedback" }).check();
+  const face = page.getByRole("status").filter({ hasText: "POW! Copied!" }).getByText("POW! Copied!");
+  await expect(face).toHaveCSS("animation-name", "none");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(face).not.toHaveCSS("animation-name", "none");
+  await page.getByRole("checkbox", { name: "Animate entry" }).uncheck();
+  await expect(face).toHaveCSS("animation-name", "none");
+});

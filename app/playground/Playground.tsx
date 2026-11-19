@@ -7,6 +7,10 @@ import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
+import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
+import { Burst } from "@mdopeace/ui/Burst";
+import { Sticker } from "@mdopeace/ui/Sticker";
+import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Tile } from "@mdopeace/ui/Tile";
 import { Button } from "@mdopeace/ui/Button";
 import { Link } from "@mdopeace/ui/Link";
@@ -34,6 +38,38 @@ import styles from "./playground.module.css";
 import { elementCode, jsxText, completeExample } from "./snippets";
 
 const catalog = [
+  {
+    id: "speech-bubble",
+    name: "SpeechBubble",
+    group: "Comic",
+    description: "A caption with a directional tail.",
+    rationale: "The tail shares the panel's ink and fill. Long words wrap inside the panel.",
+    tip: "Try each tail in the narrow preview.",
+  },
+  {
+    id: "burst",
+    name: "Burst",
+    group: "Comic",
+    description: "A starburst for short captions and feedback.",
+    rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
+    tip: "Hide and show the message to replay its entrance.",
+  },
+  {
+    id: "sticker",
+    name: "Sticker",
+    group: "Comic",
+    description: "Collectible artwork with optional button behavior.",
+    rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
+    tip: "Turn on interaction and press Space or Enter to mark the sticker found.",
+  },
+  {
+    id: "consent-note",
+    name: "ConsentNote",
+    group: "Comic",
+    description: "An inline notice with two actions.",
+    rationale: "The notice stays in the page's reading order and leaves other controls reachable.",
+    tip: "Choose either action, then reopen the notice to try again.",
+  },
   {
     id: "navbar",
     name: "Navbar",
@@ -203,6 +239,9 @@ const catalog = [
   },
 ] as const;
 type ComponentId = (typeof catalog)[number]["id"];
+const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
+const rotations = ["none", "left", "right"] as const;
+const burstTones = ["default", "accent", "info", "emphasis"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 const tones = ["default", "subtle", "accent", "info", "emphasis"] as const;
 const variants = ["primary", "secondary", "ghost", "emphasis"] as const;
@@ -273,6 +312,17 @@ function Snippet({ code }: { code: string }) {
 }
 
 function Playground({ kind }: { kind: ComponentId }) {
+  const [width, setWidth] = useState<"narrow" | "wide">("wide");
+  const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
+  const [rotation, setRotation] = useState<(typeof rotations)[number]>("left");
+  const [burstTone, setBurstTone] = useState<(typeof burstTones)[number]>("accent");
+  const [animated, setAnimated] = useState(true);
+  const [feedback, setFeedback] = useState(false);
+  const [showBurst, setShowBurst] = useState(true);
+  const [found, setFound] = useState(false);
+  const [interactive, setInteractive] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(true);
+  const [decision, setDecision] = useState("");
   const [tilePreset, setTilePreset] = useState<"brand" | "off" | "playing" | "paused">("brand");
   const [tileInset, setTileInset] = useState(true);
   const [size, setSize] = useState<Size>("md");
@@ -314,6 +364,8 @@ function Playground({ kind }: { kind: ComponentId }) {
   let controls: ReactNode;
   let preview: ReactNode;
   let code = "";
+  const comic = catalog.some((item) => item.id === kind && item.group === "Comic");
+  const sizeProp = `size="${size}"`;
   const sizeControl = (
     <Choice label="Size" value={size} options={sizes} onChange={setSize} />
   );
@@ -529,6 +581,74 @@ function Playground({ kind }: { kind: ComponentId }) {
         ].join("\n"),
       ),
     );
+  } else if (kind === "speech-bubble") {
+    const caption = "Every good story starts with a little curiosity.";
+    controls = (
+      <>
+        <Choice label="Tail" value={tail} options={tails} onChange={setTail} />
+        <Choice label="Tone" value={tone} options={tones} onChange={setTone} />
+        {sizeControl}
+      </>
+    );
+    preview = <SpeechBubble tail={tail} tone={tone} size={size}>{caption}</SpeechBubble>;
+    code = elementCode("SpeechBubble", [`tail="${tail}"`, `tone="${tone}"`, sizeProp], caption);
+  } else if (kind === "burst") {
+    const message = "POW! Copied!";
+    controls = (
+      <>
+        <Choice label="Tone" value={burstTone} options={burstTones} onChange={setBurstTone} />
+        {sizeControl}
+        <Toggle label="Animate entry" checked={animated} onChange={setAnimated} />
+        <Toggle label="Announce feedback" checked={feedback} onChange={setFeedback} />
+        <Toggle label="Show burst" checked={showBurst} onChange={setShowBurst} />
+      </>
+    );
+    preview = <Burst tone={burstTone} size={size} animated={animated} status={feedback}>{showBurst ? message : null}</Burst>;
+    code = elementCode("Burst", [`tone="${burstTone}"`, sizeProp, animated && "animated", feedback && "status"], showBurst ? message : undefined);
+  } else if (kind === "sticker") {
+    const appearance = { size, rotation, found };
+    controls = (
+      <>
+        <Choice label="Rotation" value={rotation} options={rotations} onChange={setRotation} />
+        {sizeControl}
+        <Toggle label="Found" checked={found} onChange={setFound} />
+        <Toggle label="Interactive" checked={interactive} onChange={setInteractive} />
+      </>
+    );
+    preview = interactive
+      ? <Sticker {...appearance} onClick={() => setFound(true)}>Star</Sticker>
+      : <Sticker {...appearance}>Star</Sticker>;
+    code = elementCode("Sticker", [
+      sizeProp, `rotation="${rotation}"`,
+      interactive ? "found={found}" : found && "found",
+      interactive && "onClick={() => setFound(true)}",
+    ], "Star");
+  } else if (kind === "consent-note") {
+    const notice = "Would you like to enable reminders?";
+    const choose = (label: string) => {
+      setDecision(label);
+      setNoteOpen(false);
+    };
+    controls = (
+      <Toggle label="Open notice" checked={noteOpen} onChange={(next) => {
+        setNoteOpen(next);
+        setDecision("");
+      }} />
+    );
+    preview = (
+      <Stack gap={4}>
+        <ConsentNote open={noteOpen} onAccept={() => choose("Accepted")} onDecline={() => choose("Declined")}>{notice}</ConsentNote>
+        {decision && <Text role="status">{decision}</Text>}
+      </Stack>
+    );
+    code = [
+      "<>",
+      elementCode("ConsentNote", [
+        "open={open}", "onAccept={() => setOpen(false)}", "onDecline={() => setOpen(false)}",
+      ], notice),
+      '<Button onClick={() => setOpen(true)}>Open notice</Button>',
+      "</>",
+    ].join("\n");
   } else if (kind === "tile") {
     const faceColor = { brand: "var(--ui-emphasis)", off: "#7d8178", playing: "#9bdc74", paused: "#f0ae55" }[tilePreset];
     const textColor = "var(--ui-on-emphasis)";
@@ -1027,6 +1147,10 @@ function Playground({ kind }: { kind: ComponentId }) {
     setup = `const [activeId, setActiveId] = useState("overview");\n\nconst groups = [\n  { label: "Getting started", items: [\n    { id: "overview", label: "Overview" },\n    { id: "principles", label: "Principles" },\n  ] },\n  { label: "Build", items: [\n    { id: "components", label: "Components", disabled: ${disabled} },\n  ] },\n];`;
   if (kind === "code")
     setup = `const example = ${JSON.stringify('<Button variant="primary">Make something</Button>')};`;
+  if (kind === "sticker" && interactive)
+    setup = `const [found, setFound] = useState(${found});`;
+  if (kind === "consent-note")
+    setup = `const [open, setOpen] = useState(${noteOpen});`;
   code = completeExample(
     code,
     setup,
@@ -1041,7 +1165,7 @@ function Playground({ kind }: { kind: ComponentId }) {
       "navigation",
       "navbar",
       "navbar-links",
-    ].includes(kind),
+    ].includes(kind) || kind === "consent-note" || (kind === "sticker" && interactive),
   );
   return (
     <div className={styles.workbench}>
@@ -1052,7 +1176,9 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
           <Badge>Interactive</Badge>
         </div>
-        <div className={styles.stage}>{preview}</div>
+        <div className={styles.stage}>
+          {comic ? <div className={styles.comicPreview} data-width={width} role="group" aria-label="Live preview">{preview}</div> : preview}
+        </div>
       </div>
       <aside className={styles.properties} aria-label="Playground properties">
         <Inline justify="between">
@@ -1063,7 +1189,10 @@ function Playground({ kind }: { kind: ComponentId }) {
             Live
           </Text>
         </Inline>
-        <Stack gap={4}>{controls}</Stack>
+        <Stack gap={4}>
+          {comic && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} />}
+          {controls}
+        </Stack>
         <Text size="caption" tone="muted">
           Changes affect this example only. Switch components to start fresh.
         </Text>
@@ -1135,7 +1264,7 @@ export default function ComponentPreview() {
           className={styles.sidebar}
           activeId={active}
           onSelect={(id) => setActive(id as ComponentId)}
-          groups={["Actions", "Foundations", "Forms", "Media", "Navigation", "Composition"].map(
+          groups={["Actions", "Foundations", "Forms", "Media", "Navigation", "Composition", "Comic"].map(
             (group) => ({
               label: group,
               items: catalog

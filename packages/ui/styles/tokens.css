@@ -45,6 +45,8 @@
   --ui-border-thin: 1px;
   --ui-border-standard: 2px;
   --ui-border-strong: 3px;
+  --ui-rotation-left: -4deg;
+  --ui-rotation-right: 4deg;
   --ui-fast: 120ms;
   --ui-normal: 180ms;
   --ui-slow: 300ms;

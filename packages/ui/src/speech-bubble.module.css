@@ -1,0 +1,35 @@
+.bubble {
+  position: relative;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  font: var(--ui-font-md)/var(--ui-leading-body) var(--ui-body);
+}
+
+.bubble[data-size="sm"] { font-size: var(--ui-font-sm); }
+.bubble[data-size="lg"] { font-size: var(--ui-font-lg); }
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  inline-size: var(--ui-space-3);
+  block-size: var(--ui-space-3);
+  background: var(--ui-local-bg);
+  border: solid var(--ui-border);
+  border-width: 0 var(--ui-border-strong) var(--ui-border-strong) 0;
+  transform: rotate(45deg);
+  inset-block-end: calc(var(--ui-space-2) * -1);
+  inset-inline-start: var(--ui-space-5);
+  pointer-events: none;
+}
+
+.bubble:is([data-tail="bottom-end"], [data-tail="top-end"])::after {
+  inset-inline-start: auto;
+  inset-inline-end: var(--ui-space-5);
+}
+
+.bubble:is([data-tail="top-start"], [data-tail="top-end"])::after {
+  inset-block-end: auto;
+  inset-block-start: calc(var(--ui-space-2) * -1);
+  transform: rotate(225deg);
+}

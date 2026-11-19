@@ -1,0 +1,30 @@
+import type { ComponentPropsWithRef } from "react";
+import { Button } from "./Button";
+import { Surface } from "./Surface";
+import { cx } from "./tokens";
+import styles from "./consent-note.module.css";
+
+export type ConsentNoteProps = ComponentPropsWithRef<"div"> & {
+  open: boolean;
+  onAccept: () => void;
+  onDecline: () => void;
+  acceptLabel?: string;
+  declineLabel?: string;
+};
+
+export function ConsentNote({
+  open, onAccept, onDecline, acceptLabel = "Accept", declineLabel = "Decline",
+  children, className, role = "region", "aria-label": label = "Consent notice", ...props
+}: ConsentNoteProps) {
+  if (!open) return null;
+
+  return (
+    <Surface {...props} role={role} aria-label={label} border="strong" className={cx(styles.note, className)}>
+      <div>{children}</div>
+      <div className={styles.actions}>
+        <Button onClick={onAccept}>{acceptLabel}</Button>
+        <Button variant="secondary" onClick={onDecline}>{declineLabel}</Button>
+      </div>
+    </Surface>
+  );
+}

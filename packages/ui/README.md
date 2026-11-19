@@ -116,6 +116,14 @@ Generic layout, typography, controls, fields, navigation, surfaces, badges,
 dialogs, disclosure, code examples and clipboard behavior live here. Portfolio
 sections, content, device artwork and game logic stay in the app.
 
+### Comic components
+
+`SpeechBubble` frames speech or captions with a directional tail. `Burst`
+highlights text and can announce feedback. `Sticker` renders decorative
+collectible art or an actionable button. `ConsentNote` provides a controlled
+inline notice with accept and decline actions. Each is available from a matching
+component subpath.
+
 ### Code examples
 
 `CodeExample` accepts an optional `maxHeight` for its code area, such as

@@ -153,3 +153,15 @@
     padding: 4px;
   }
 }
+
+.comicPreview {
+  display: grid;
+  justify-items: center;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding-block: var(--ui-space-3);
+}
+
+.comicPreview[data-width="narrow"] {
+  max-inline-size: 20rem;
+}

@@ -225,3 +225,29 @@ The root repository license reserves rights in portfolio content and branding;
 it explicitly excludes the MIT package from that reservation. Distribution must
 include the package copyright and MIT license notice. The package's `private`
 flag prevents accidental registry publishing; it is not a restriction on MIT reuse.
+
+## Comic components
+
+- **SpeechBubble** frames dialogue or captions in a native `div`. Pass
+  `children`, a shared `tone` (default `default`), `size` (default `md`), and
+  `tail` (`bottom-start` by default, `bottom-end`, `top-start`, or `top-end`).
+  Leave room above or below the panel for the tail.
+- **Burst** highlights short captions or feedback. Pass `children`, `size`
+  (default `md`), `tone` (`accent` by default, `default`, `info`, or
+  `emphasis`), and optional `animated` for entry. Motion follows the OS
+  preference. For announcements, mount an empty `<Burst status />` and update
+  its children when feedback arrives.
+- **Sticker** displays collectible art through `children`. Set `found` to
+  switch from a dashed to a solid outline, `size` (default `md`), and
+  `rotation` (`none` by default, `left`, or `right`). Supplying `onClick`
+  renders a button. Give artwork-only buttons an `aria-label` or
+  `aria-labelledby`. Without `onClick`, the sticker is decorative.
+- **ConsentNote** displays an inline notice when `open` is true. Pass notice
+  content as `children` and handle decisions via `onAccept` and `onDecline`.
+  `acceptLabel` and `declineLabel` default to “Accept” and “Decline”. Set
+  `aria-label` or `aria-labelledby` to name the notice. The caller controls
+  visibility and any persistence.
+
+Each component supports a React 19 ref and native attributes for its rendered
+element. Import from the matching subpath, such as
+`import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";`.
