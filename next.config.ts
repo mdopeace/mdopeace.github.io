@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { GA_MEASUREMENT_ID } from "./components/analytics/config";
+
+const root = path.dirname(fileURLToPath(import.meta.url));
+const disabledAnalytics = path.join(root, "components/analytics/disabled.ts");
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -26,6 +31,24 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  webpack: (config) => {
+    if (!GA_MEASUREMENT_ID) {
+      config.resolve ??= {};
+      const alias = (config.resolve.alias && !Array.isArray(config.resolve.alias) && typeof config.resolve.alias === "object")
+        ? config.resolve.alias
+        : (config.resolve.alias = {});
+      // Next resolves `@/` before this hook, so alias every likely specifier.
+      for (const specifier of [
+        "@/components/analytics/scheduleAnalytics",
+        path.join(root, "components/analytics/scheduleAnalytics"),
+        path.join(root, "components/analytics/scheduleAnalytics.ts"),
+        path.join(root, "components/analytics/scheduleAnalytics.js"),
+      ]) {
+        alias[specifier] = disabledAnalytics;
+      }
+    }
+    return config;
   },
 };
 

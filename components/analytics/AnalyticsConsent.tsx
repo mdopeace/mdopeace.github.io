@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Button } from "@mdopeace/ui/Button";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Text } from "@mdopeace/ui/Typography";
 import { scheduleAnalytics } from "@/components/analytics/scheduleAnalytics";
@@ -30,6 +31,7 @@ export default function AnalyticsConsent({ measurementId }: { measurementId: str
   const savedDecision = useSyncExternalStore(subscribe, readDecision, () => undefined);
   const [dismissed, setDismissed] = useState(false);
   const accepted = savedDecision === "accepted";
+  const privacyRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (measurementId && accepted) {
@@ -45,6 +47,7 @@ export default function AnalyticsConsent({ measurementId }: { measurementId: str
       // A blocked store grants no consent.
     }
     setDismissed(true);
+    queueMicrotask(() => privacyRef.current?.focus());
   }
 
   return (
@@ -57,10 +60,20 @@ export default function AnalyticsConsent({ measurementId }: { measurementId: str
       >
         <Text>May this site use analytics cookies to measure visits and how people explore?</Text>
       </ConsentNote>
-      <Text size="caption" tone="muted">
+      <Text ref={privacyRef} tabIndex={-1} size="caption" tone="muted">
         Privacy note. If enabled, Google Analytics loads only with your consent and uses
-        Md’s personal analytics property. You can decline and use the whole site.
+        Md’s personal analytics property. You can change your choice below, or decline
+        and use the whole site.
       </Text>
+      {measurementId && savedDecision ? (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => decide(savedDecision === "accepted" ? "declined" : "accepted")}
+        >
+          {savedDecision === "accepted" ? "Turn off analytics" : "Allow analytics"}
+        </Button>
+      ) : null}
     </div>
   );
 }

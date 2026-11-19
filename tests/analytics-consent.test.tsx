@@ -69,3 +69,18 @@ it("waits for idle after accepting and starts sending events only after the scri
     "event", "sticker_found", undefined,
   ]);
 });
+
+it("lets a visitor withdraw consent and moves focus to the privacy note", async () => {
+  render(<AnalyticsConsent measurementId={testId} />);
+  fireEvent.click(screen.getByRole("button", { name: "Accept" }));
+  expect(localStorage.getItem(storageKey)).toBe("accepted");
+  expect(idle).toHaveBeenCalledTimes(1);
+  const privacy = screen.getByText(/Privacy note/i);
+  await act(async () => {});
+  expect(document.activeElement).toBe(privacy);
+  fireEvent.click(screen.getByRole("button", { name: "Turn off analytics" }));
+  expect(localStorage.getItem(storageKey)).toBe("declined");
+  expect(screen.getByRole("button", { name: "Allow analytics" })).toBeTruthy();
+  await act(async () => {});
+  expect(document.activeElement).toBe(privacy);
+});

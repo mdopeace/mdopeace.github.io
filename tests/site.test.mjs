@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 
 // Checks read the built page — what ships is what's tested. Run `npm run build` first.
 assert.ok(
@@ -127,7 +127,7 @@ test("support dialog ships both provider links and dialog hooks", () => {
 
 test("the default static export contains no GA ID, loader, or command queue", () => {
   const files = readdirSync("out", { recursive: true })
-    .filter((file) => /\.(?:html|js|txt)$/.test(file));
+    .filter((file) => typeof file === "string" && /\.(?:html|js|txt)$/.test(file) && statSync(`out/${file}`).isFile());
   for (const file of files) {
     const contents = readFileSync(`out/${file}`, "utf8");
     assert.doesNotMatch(
