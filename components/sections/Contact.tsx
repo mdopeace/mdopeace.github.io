@@ -8,7 +8,11 @@ import { Inline, Stack } from "@mdopeace/ui/Layout";
 import { Link } from "@mdopeace/ui/Link";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { Image } from "@mdopeace/ui/Image";
-import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
+import { FaGithub, FaLinkedinIn, FaTelegram } from "react-icons/fa6";
+
+// TODO(Md): confirm Telegram username — placeholder
+const TELEGRAM_USERNAME = "mdopeace";
+
 const email = "md.correo.e@gmail.com";
 const socialLinks = [
   {
@@ -20,6 +24,11 @@ const socialLinks = [
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/mdopeace",
     startIcon: <FaLinkedinIn />,
+  },
+  {
+    label: "Telegram",
+    href: `https://t.me/${TELEGRAM_USERNAME}`,
+    startIcon: <FaTelegram />,
   },
 ];
 export default function Contact() {
@@ -63,12 +72,6 @@ export default function Contact() {
                 size: "sm",
               }))}
             />
-            <Inline gap={2}>
-              <FaWhatsapp aria-hidden="true" />
-              <Text size="sm" tone="muted">
-                WhatsApp: @mdopeace
-              </Text>
-            </Inline>
           </Stack>
         </Stack>
         <Surface tone="info" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">

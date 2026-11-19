@@ -9,13 +9,11 @@ assert.ok(
 );
 const html = readFileSync("out/index.html", "utf8");
 
-test("the page shows the WhatsApp handle and requires phone numbers in wa.me links", () => {
+test("the page links to Telegram and omits WhatsApp", () => {
   const hrefs = [...html.matchAll(/\shref="([^"]*)"/g)].map((match) => match[1]);
-  const invalidLinks = hrefs.filter(
-    (href) => href.includes("wa.me") && !/wa\.me\/\+?\d{6,}/.test(href),
-  );
-  assert.deepEqual(invalidLinks, []);
-  assert.match(html, />\s*WhatsApp: @mdopeace\s*<\//);
+  assert.deepEqual(hrefs.filter((href) => href.includes("wa.me")), []);
+  assert.doesNotMatch(html, /WhatsApp/);
+  assert.match(html, /href="https:\/\/t\.me\/[A-Za-z0-9_]{5,}"/);
 });
 
 test("the playground ships as a public directory route with portfolio links", () => {
