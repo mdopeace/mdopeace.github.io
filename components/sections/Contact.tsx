@@ -21,11 +21,6 @@ const socialLinks = [
     href: "https://www.linkedin.com/in/mdopeace",
     startIcon: <FaLinkedinIn />,
   },
-  {
-    label: "WhatsApp",
-    href: "https://wa.me/mdopeace",
-    startIcon: <FaWhatsapp />,
-  },
 ];
 export default function Contact() {
   return (
@@ -68,6 +63,12 @@ export default function Contact() {
                 size: "sm",
               }))}
             />
+            <Inline gap={2}>
+              <FaWhatsapp aria-hidden="true" />
+              <Text size="sm" tone="muted">
+                WhatsApp: @mdopeace
+              </Text>
+            </Inline>
           </Stack>
         </Stack>
         <Surface tone="info" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
