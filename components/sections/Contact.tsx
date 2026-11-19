@@ -10,7 +10,7 @@ import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { Image } from "@mdopeace/ui/Image";
 import { FaGithub, FaLinkedinIn, FaTelegram } from "react-icons/fa6";
 
-// TODO(Md): confirm Telegram username — placeholder
+// Confirmed Telegram username
 const TELEGRAM_USERNAME = "mdopeace";
 
 const email = "md.correo.e@gmail.com";
