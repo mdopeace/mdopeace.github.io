@@ -11,9 +11,42 @@ import { Link } from "@mdopeace/ui/Link";
 import { Text } from "@mdopeace/ui/Typography";
 import { FaArrowUp } from "react-icons/fa6";
 
+const siteUrl = "https://mdopeace.github.io/";
+const name = "Md Mostafijur Rahman";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      name,
+      url: siteUrl,
+      jobTitle: "Software Engineer",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Bengaluru",
+      },
+      sameAs: [
+        "https://github.com/mdopeace",
+        "https://www.linkedin.com/in/mdopeace",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      name,
+      url: siteUrl,
+    },
+  ],
+};
+
 export default function Home() {
   return (
     <Container>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <SectionNavigation />
       <a className="skip-link" href="#main-content">
         Skip to main content

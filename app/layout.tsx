@@ -1,8 +1,18 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+const socialImage = {
+  url: "/opengraph-image.png",
+  width: 1200,
+  height: 630,
+  alt: readFileSync(join(process.cwd(), "app/opengraph-image.alt.txt"), "utf8").trim(),
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://mdopeace.github.io"),
+  alternates: { canonical: "/" },
   title: "Md Mostafijur Rahman",
   description:
     "Software engineer at Tracxn by day, builder of small useful things the rest of the time. The work, the story, and how to reach me.",
@@ -13,26 +23,14 @@ export const metadata: Metadata = {
     description:
       "Software engineer at Tracxn by day, builder of small useful things the rest of the time. The work, the story, and how to reach me.",
     siteName: "Md Mostafijur Rahman",
-    images: [
-      {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Md Mostafijur Rahman — Software engineer and maker in Bengaluru. Building small, useful things. A cream and yellow card with a Tetris handheld.",
-      },
-    ],
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Md Mostafijur Rahman",
     description:
       "Software engineer at Tracxn by day, builder of small useful things the rest of the time. The work, the story, and how to reach me.",
-    images: [
-      {
-        url: "/opengraph-image.png",
-        alt: "Md Mostafijur Rahman — Software engineer and maker in Bengaluru. Building small, useful things. A cream and yellow card with a Tetris handheld.",
-      },
-    ],
+    images: [socialImage],
   },
 };
 
