@@ -1,3 +1,4 @@
+import { HuntSticker } from "../portfolio/StickerHunt";
 import { FaArrowDown } from "react-icons/fa6";
 import TetrisGameboy from "../hero/TetrisGameboy";
 import { PortfolioSummary } from "../portfolio/PortfolioSummary";
@@ -17,9 +18,12 @@ export default function Hero() {
     >
       <div className="hero-copy">
         <Stack gap={7}>
-          <Badge variant="solid" tone="accent" size="md">
-            Issue 01 · The maker
-          </Badge>
+          <Inline gap={4}>
+            <Badge variant="solid" tone="accent" size="md">
+              Issue 01 · The maker
+            </Badge>
+            <HuntSticker id="spark" />
+          </Inline>
           <Stack gap={3}>
             <Text variant="eyebrow" tone="muted">
               Software Engineer · Bengaluru

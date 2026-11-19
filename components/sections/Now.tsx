@@ -1,3 +1,4 @@
+import { HuntSticker } from "../portfolio/StickerHunt";
 import { FaAsterisk } from "react-icons/fa6";
 import Section from "../portfolio/PortfolioSection";
 import { Surface } from "@mdopeace/ui/Surface";
@@ -52,6 +53,7 @@ export default function Now() {
                 Stay curious
               </Text>
               <FaAsterisk aria-hidden="true" />
+              <HuntSticker id="simmer" />
             </Inline>
           </Stack>
         </Surface>
