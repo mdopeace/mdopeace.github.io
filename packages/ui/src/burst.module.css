@@ -15,7 +15,6 @@
 }
 
 .burst[data-tone="default"] { --burst-bg: var(--ui-surface); --burst-fg: var(--ui-text); }
-.burst[data-tone="info"] { --burst-bg: var(--ui-info); --burst-fg: var(--ui-on-info); }
 .burst[data-tone="emphasis"] { --burst-bg: var(--ui-emphasis); --burst-fg: var(--ui-on-emphasis); }
 
 .burst[data-size="sm"] { --burst-font: var(--ui-font-sm); }

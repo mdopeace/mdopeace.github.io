@@ -67,7 +67,7 @@ describe("comic components", () => {
     const ref = createRef<HTMLDivElement>();
     const caption = "AnUnbrokenCaption".repeat(12);
     const { rerender } = render(
-      <SpeechBubble ref={ref} id="caption" lang="en" tail="top-end" tone="info">{caption}</SpeechBubble>,
+      <SpeechBubble ref={ref} id="caption" lang="en" tail="top-end" tone="accent">{caption}</SpeechBubble>,
     );
     const bubble = screen.getByText(caption);
     expect(bubble).toBe(ref.current);
