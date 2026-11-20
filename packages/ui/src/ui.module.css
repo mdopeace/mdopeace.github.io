@@ -196,18 +196,21 @@
     background-color var(--ui-fast);
 }
 .control[data-size="sm"],
+.badge[data-control-size="sm"],
 .switch[data-size="sm"] {
   --control-height: var(--ui-control-sm);
   --icon-size: var(--ui-icon-sm);
   --control-pad: 0.25rem 0.5rem;
 }
 .control[data-size="md"],
+.badge[data-control-size="md"],
 .switch[data-size="md"] {
   --control-height: var(--ui-control-md);
   --icon-size: var(--ui-icon-md);
   --control-pad: 0.5rem 0.75rem;
 }
 .control[data-size="lg"],
+.badge[data-control-size="lg"],
 .switch[data-size="lg"] {
   --control-height: var(--ui-control-lg);
   --icon-size: var(--ui-icon-lg);
@@ -826,6 +829,11 @@
   height: var(--ui-space-10);
   padding: 0;
   font-size: var(--ui-font-sm);
+}
+.badge[data-control-size] {
+  block-size: auto;
+  min-block-size: var(--control-height);
+  padding-block: 0;
 }
 
 .text[data-size="xs"] { font-size: var(--ui-font-xs); line-height: 1.55; }

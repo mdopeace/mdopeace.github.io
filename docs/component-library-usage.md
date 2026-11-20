@@ -92,8 +92,16 @@ Dialog uses the browser's native modal behavior and accepts a dialog ref. Put it
 - ExpandableText: string children, `lines`, required `expandLabel`/`collapseLabel`, optional controlled `open`/`onOpenChange` or `defaultOpen`. It measures overflow and animates the viewport without changing the copied/searchable text.
 - CommandBlock: `code` string, optional `copyLabel`, `successMessage`, `errorMessage`; native div props.
 - LinkGroup: explicit `items` with `href`, `label`, optional `startIcon`, `variant`, `size`, `target` and other Link props. `direction` and `gap` control arrangement; no icon is guessed from a label.
-- Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list.
+- Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list. Set `controlSize="sm"`, `"md"`, or `"lg"` to align a single-line badge with a Button, button-style Link, or Switch of the same size. The badge keeps its own text size and centers its content vertically.
 - Divider: decorative by default; use `decorative={false}` for separator semantics.
+
+### Inline consent notices
+
+`ConsentNote` displays an inline notice when `open` is true. Pass notice
+content as `children` and handle decisions via `onAccept` and `onDecline`.
+`acceptLabel` and `declineLabel` default to “Accept” and “Decline”. Set
+`aria-label` or `aria-labelledby` to name the notice. The caller controls
+visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`.
 
 ## Local validation
 
@@ -237,16 +245,16 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
   `emphasis`), and optional `animated` for entry. Motion follows the OS
   preference. For announcements, mount an empty `<Burst status />` and update
   its children when feedback arrives.
-- **Sticker** displays collectible art through `children`. Set `found` to
-  switch from a dashed to a solid outline, `size` (default `md`), and
-  `rotation` (`none` by default, `left`, or `right`). Supplying `onClick`
-  renders a button. Give artwork-only buttons an `aria-label` or
-  `aria-labelledby`. Without `onClick`, the sticker is decorative.
-- **ConsentNote** displays an inline notice when `open` is true. Pass notice
-  content as `children` and handle decisions via `onAccept` and `onDecline`.
-  `acceptLabel` and `declineLabel` default to “Accept” and “Decline”. Set
-  `aria-label` or `aria-labelledby` to name the notice. The caller controls
-  visibility and any persistence.
+- **Sticker** displays collectible art through `children`. Set `size` (default
+  `md`) and `rotation` (`none` by default, `left`, or `right`). Setting
+  `found` switches the dashed edge to solid. Set `foundTone` to `accent`
+  (the default yellow), `default` (neutral), or `emphasis` (red). Set
+  `pattern` to `none` (the default), `stripes`, `dots`, or `grid`. An
+  optional `icon` appears beside the found label and is hidden from assistive
+  technology. The label sits on an opaque fill when patterned. Supplying
+  `onClick` renders a button with a “Found” or “Not found” description.
+  Give artwork-only buttons an `aria-label` or `aria-labelledby`. Without
+  `onClick`, the sticker is decorative.
 
 Each component supports a React 19 ref and native attributes for its rendered
 element. Import from the matching subpath, such as
