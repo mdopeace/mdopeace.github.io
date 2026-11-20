@@ -1,0 +1,49 @@
+name: PR preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: pr-preview-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        if: github.event.action != 'closed'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: github.event.action != 'closed'
+      - name: Build and check preview export
+        if: github.event.action != 'closed'
+        env:
+          NEXT_PUBLIC_BASE_PATH: /pr-preview/pr-${{ github.event.number }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ""
+        run: |
+          npm run build
+          node --test tests/pr-preview.test.mjs
+      - uses: rossjrw/pr-preview-action@873417d2df72380da1f3978378fb58560bcde976 # v1.8.2
+        with:
+          source-dir: ./out
+          umbrella-dir: pr-preview
+          pages-base-url: mdopeace.github.io
+          qr-code: "false"
+          action: auto
+      - name: Publish Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

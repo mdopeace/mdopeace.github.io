@@ -1,10 +1,11 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Metadata, Viewport } from "next";
+import { withBasePath } from "@/lib/withBasePath";
 import "./globals.css";
 
 const socialImage = {
-  url: "/opengraph-image.png",
+  url: withBasePath("/opengraph-image.png"),
   width: 1200,
   height: 630,
   alt: readFileSync(join(process.cwd(), "app/opengraph-image.alt.txt"), "utf8").trim(),
@@ -13,6 +14,9 @@ const socialImage = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://mdopeace.github.io"),
   alternates: { canonical: "/" },
+  robots: process.env.NEXT_PUBLIC_BASE_PATH
+    ? { index: false, follow: false }
+    : undefined,
   title: "Md Mostafijur Rahman",
   description:
     "Software engineer at Tracxn by day, builder of small useful things the rest of the time. The work, the story, and how to reach me.",
