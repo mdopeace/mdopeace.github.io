@@ -5,6 +5,7 @@ import {
   useId,
   useRef,
   type ComponentPropsWithRef,
+  type KeyboardEvent,
   type ReactNode,
 } from "react";
 import { FaXmark } from "react-icons/fa6";
@@ -31,15 +32,38 @@ export type DialogProps = Omit<
   };
 let locks = 0;
 let previousOverflow = "";
+let previousScrollbarGutter = "";
 function lockScroll() {
   if (locks++ === 0) {
     previousOverflow = document.body.style.overflow;
+    const root = document.documentElement;
+    previousScrollbarGutter = root.style.scrollbarGutter;
+    if (root.clientWidth < window.innerWidth) root.style.scrollbarGutter = "stable";
     document.body.style.overflow = "hidden";
   }
   return () => {
-    if (--locks === 0) document.body.style.overflow = previousOverflow;
+    if (--locks === 0) {
+      document.body.style.overflow = previousOverflow;
+      document.documentElement.style.scrollbarGutter = previousScrollbarGutter;
+    }
   };
 }
+function wrapTab(event: KeyboardEvent<HTMLDialogElement>) {
+  const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+    "a[href], area[href], input, select, textarea, button, iframe, summary, [contenteditable], [tabindex]",
+  )).filter(element =>
+    element.tabIndex >= 0 && !element.matches(":disabled") && !element.closest("[inert]") &&
+    element.getClientRects().length > 0 && getComputedStyle(element).visibility === "visible",
+  ).sort((a, b) => (a.tabIndex || Infinity) - (b.tabIndex || Infinity));
+  const first = controls[0];
+  const last = controls[controls.length - 1];
+  const current = document.activeElement;
+  if (event.shiftKey ? current === first : current === last) {
+    event.preventDefault();
+    (event.shiftKey ? last : first)?.focus();
+  }
+}
+
 export function Dialog({
   open,
   defaultOpen = false,
@@ -87,7 +111,7 @@ export function Dialog({
         const unlock = lockScroll();
         restore.current = () => {
           unlock();
-          if (trigger?.isConnected) trigger.focus();
+          if (trigger?.isConnected) trigger.focus({ preventScroll: true });
         };
       }
       return;
@@ -122,7 +146,9 @@ export function Dialog({
       aria-describedby={description ? descriptionId : undefined}
       onKeyDown={(event) => {
         onKeyDown?.(event);
-        if (!event.defaultPrevented && event.key === "Escape") {
+        if (event.defaultPrevented) return;
+        if (event.key === "Tab") wrapTab(event);
+        if (event.key === "Escape") {
           event.preventDefault();
           event.stopPropagation();
           requestClose();

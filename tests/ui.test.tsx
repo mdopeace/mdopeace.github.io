@@ -127,7 +127,8 @@ describe("comic components", () => {
     const button = screen.getByRole("button", { name: "Star", description: "Not found" });
     expect(button.getAttribute("data-found")).toBe("false");
     expect(getComputedStyle(button).borderStyle).toBe("dashed");
-    expect(button.querySelector("svg")).toBeNull();
+    expect(button.querySelector("svg")?.closest('[aria-hidden="true"]')).toBeTruthy();
+    expect(within(button).queryByRole("img")).toBeNull();
 
     rerender(sticker(true));
     expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBe(button);

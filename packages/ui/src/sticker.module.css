@@ -64,5 +64,7 @@
   margin-inline-end: var(--ui-space-1);
 }
 
-button.sticker:enabled { cursor: pointer; }
+.sticker[data-found="false"] .icon { visibility: hidden; }
+
+button.sticker:enabled:not([aria-disabled="true"]) { cursor: pointer; }
 button.sticker:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }

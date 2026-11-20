@@ -280,8 +280,19 @@ function Choice<T extends string>({
         <Select
           {...field}
           value={value}
-          disabled={disabled}
-          onChange={(event) => onChange(event.target.value as T)}
+          aria-disabled={disabled || undefined}
+          onKeyDown={(event) => {
+            if (disabled && event.key !== "Tab" && event.key !== "Escape") event.preventDefault();
+          }}
+          onPointerDown={(event) => {
+            if (disabled) event.preventDefault();
+          }}
+          onClick={(event) => {
+            if (disabled) event.preventDefault();
+          }}
+          onChange={(event) => {
+            if (!disabled) onChange(event.target.value as T);
+          }}
         >
           {options.map((option) => (
             <option key={option} value={option}>
@@ -311,8 +322,13 @@ function Toggle({
       ref={ref}
       label={label}
       checked={checked}
-      disabled={disabled}
-      onChange={(event) => onChange(event.target.checked)}
+      aria-disabled={disabled || undefined}
+      onClick={(event) => {
+        if (disabled) event.preventDefault();
+      }}
+      onChange={(event) => {
+        if (!disabled) onChange(event.target.checked);
+      }}
     />
   );
 }
@@ -636,7 +652,16 @@ function Playground({ kind }: { kind: ComponentId }) {
     preview = (
       <Stack gap={3}>
         {feedback && <Badge>Live announcement</Badge>}
-        <Burst tone={burstTone} size={size} animated={animated} status={feedback}>{showBurst ? message : null}</Burst>
+        <Burst
+          tone={burstTone}
+          size={size}
+          animated={animated && showBurst}
+          style={{ visibility: showBurst ? undefined : "hidden" }}
+          aria-hidden={feedback || undefined}
+        >
+          {message}
+        </Burst>
+        <span className="sr-only" role="status">{feedback && showBurst ? message : ""}</span>
       </Stack>
     );
     const burstProps = [`tone="${burstTone}"`, sizeProp, animated && "animated", feedback && "status"];
@@ -662,7 +687,7 @@ function Playground({ kind }: { kind: ComponentId }) {
       </>
     );
     preview = interactive
-      ? <Sticker {...appearance} onClick={() => setFound(true)}>Star</Sticker>
+      ? <Sticker {...appearance} aria-disabled={found} onClick={() => setFound(true)}>Star</Sticker>
       : <Sticker {...appearance}>Star</Sticker>;
     code = elementCode("Sticker", [
       sizeProp, `rotation="${rotation}"`,

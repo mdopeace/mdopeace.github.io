@@ -81,3 +81,14 @@ update the [Playwright catalog order test](./tests/e2e/playground.spec.ts).
 Every playground control must visibly change the preview, as checked by
 [the Playwright controls tests](./tests/e2e/playground-controls.spec.ts). Disable
 controls in states where they can't apply.
+
+## Animation and accessibility
+
+For every change, honor `prefers-reduced-motion` and keep layout stable during
+animations and transitions. Use one persistent live region per status message.
+Keep controls keyboard reachable with visible focus and give them accurate roles,
+names, and states, including unavailable playground controls. Dialogs must trap
+focus, close on Escape, and restore focus on dismissal. Meet WCAG AA contrast in
+light and dark themes. Test keyboard and reduced-motion behavior with Playwright
+and run `@axe-core/playwright` on affected pages and states in both themes at
+1440 px and 390 px.
