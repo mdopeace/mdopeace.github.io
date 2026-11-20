@@ -58,12 +58,31 @@
   background-color: var(--sticker-fill);
   padding-inline: var(--ui-space-1);
 }
+.contentWithIcon {
+  --sticker-icon-size: 1em;
+  --sticker-icon-offset: calc((var(--sticker-icon-size) + var(--ui-space-1)) / 2);
+  position: relative;
+  display: grid;
+  align-items: center;
+}
+.label {
+  /* Reserve the icon and gap evenly so the label starts centered. */
+  margin-inline: var(--sticker-icon-offset);
+  background-color: var(--sticker-fill);
+  position: relative;
+  inset-inline-start: 0;
+  transition: inset-inline-start var(--ui-fade-normal) var(--ui-ease);
+}
+.sticker[data-found="true"] .label {
+  inset-inline-start: var(--sticker-icon-offset);
+}
 .icon {
   --reduced-transition-duration: var(--ui-fade-fast);
+  position: absolute;
+  inset-inline-start: var(--ui-space-1);
   display: inline-grid;
   grid-template-columns: minmax(0, 1fr);
   overflow: clip;
-  vertical-align: middle;
   margin-inline-end: var(--ui-space-1);
   opacity: 1;
   transition:
@@ -74,7 +93,10 @@
 
 .iconArtwork {
   display: flex;
-  inline-size: max-content;
+  inline-size: var(--sticker-icon-size);
+}
+.iconArtwork > * {
+  max-inline-size: 100%;
 }
 
 .sticker[data-found="false"] .icon {
@@ -101,4 +123,5 @@ button.sticker:focus-visible { outline: 3px solid var(--ui-focus); outline-offse
 @media (prefers-reduced-motion: reduce) {
   .sticker[data-found] { animation-duration: var(--ui-fade-fast); }
   .icon { transition: opacity var(--ui-fade-fast) var(--ui-ease); }
+  .label { transition: none; }
 }
