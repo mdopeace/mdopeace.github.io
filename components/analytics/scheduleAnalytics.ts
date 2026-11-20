@@ -2,7 +2,7 @@ import { setAnalyticsSender, trackAnalytics } from "./events";
 
 function measureEngagement() {
   let visibleSince = document.hidden ? undefined : performance.now();
-  let depth = 0;
+  let depth = scrollPercent();
 
   function reportStay() {
     if (visibleSince === undefined) return;
@@ -16,10 +16,13 @@ function measureEngagement() {
     else visibleSince ??= performance.now();
   }
 
-  function reportScroll() {
+  function scrollPercent() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (max <= 0) return;
-    const percent = (window.scrollY / max) * 100;
+    return max > 0 ? (window.scrollY / max) * 100 : 0;
+  }
+
+  function reportScroll() {
+    const percent = scrollPercent();
     for (const milestone of [25, 50, 75, 100]) {
       if (depth < milestone && percent >= milestone) {
         depth = milestone;

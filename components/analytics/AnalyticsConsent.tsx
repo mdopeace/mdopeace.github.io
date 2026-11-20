@@ -30,22 +30,31 @@ function subscribe(notify: () => void) {
 export default function AnalyticsConsent({ measurementId }: { measurementId: string }) {
   const savedDecision = useSyncExternalStore(subscribe, readDecision, () => undefined);
   const [dismissed, setDismissed] = useState(false);
-  const accepted = savedDecision === "accepted";
+  const [decisionOverride, setDecisionOverride] = useState<Decision | null>(null);
+  const decisionOverrideRef = useRef<Decision | null>(null);
+  const accepted = (decisionOverride ?? savedDecision) === "accepted";
+  const showChoice = Boolean(measurementId && savedDecision);
   const privacyRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (measurementId && accepted) {
-      return scheduleAnalytics(measurementId, () => readDecision() === "accepted");
+      return scheduleAnalytics(
+        measurementId,
+        () => (decisionOverrideRef.current ?? readDecision()) === "accepted",
+      );
     }
   }, [measurementId, accepted]);
 
   function decide(decision: Decision) {
+    let override: Decision | null = null;
     try {
       window.localStorage.setItem(storageKey, decision);
-      window.dispatchEvent(new Event(storageKey));
     } catch {
-      // A blocked store grants no consent.
+      override = "declined";
     }
+    decisionOverrideRef.current = override;
+    setDecisionOverride(override);
+    if (override === null) window.dispatchEvent(new Event(storageKey));
     setDismissed(true);
     queueMicrotask(() => privacyRef.current?.focus());
   }
@@ -61,17 +70,17 @@ export default function AnalyticsConsent({ measurementId }: { measurementId: str
         <Text>May this site use analytics cookies to measure visits and how people explore?</Text>
       </ConsentNote>
       <Text ref={privacyRef} tabIndex={-1} size="caption" tone="muted">
-        Privacy note. If enabled, Google Analytics loads only with your consent and uses
-        Md’s personal analytics property. You can change your choice below, or decline
-        and use the whole site.
+        Privacy note. If enabled, Google Analytics loads only with your consent to count
+        visits and see which sections people explore. You can decline and use the whole site.
+        {showChoice && " You can change your choice below."}
       </Text>
-      {measurementId && savedDecision ? (
+      {showChoice ? (
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => decide(savedDecision === "accepted" ? "declined" : "accepted")}
+          onClick={() => decide(accepted ? "declined" : "accepted")}
         >
-          {savedDecision === "accepted" ? "Turn off analytics" : "Allow analytics"}
+          {accepted ? "Turn off analytics" : "Allow analytics"}
         </Button>
       ) : null}
     </div>
