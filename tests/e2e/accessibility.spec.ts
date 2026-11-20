@@ -45,6 +45,8 @@ for (const theme of themes) {
       await expectTextContrast(star.getByText("Star", { exact: true }));
       await expectAccessible(page, `sticker found · ${tone}`);
     }
+    await page.getByRole("checkbox", { name: "Found", exact: true }).uncheck();
+    await expectAccessible(page, "sticker reset with icon enabled");
 
     await show("ConsentNote");
     await expect(preview.getByRole("region", { name: "Consent notice" })).toBeVisible();
