@@ -229,11 +229,11 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
 ## Comic components
 
 - **SpeechBubble** frames dialogue or captions in a native `div`. Pass
-  `children`, a shared `tone` (default `default`), `size` (default `md`), and
+  `children`, `tone` (`default` by default, `accent`, or `emphasis`), `size` (default `md`), and
   `tail` (`bottom-start` by default, `bottom-end`, `top-start`, or `top-end`).
   Leave room above or below the panel for the tail.
 - **Burst** highlights short captions or feedback. Pass `children`, `size`
-  (default `md`), `tone` (`accent` by default, `default`, `info`, or
+  (default `md`), `tone` (`accent` by default, `default`, or
   `emphasis`), and optional `animated` for entry. Motion follows the OS
   preference. For announcements, mount an empty `<Burst status />` and update
   its children when feedback arrives.
