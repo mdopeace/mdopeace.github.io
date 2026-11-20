@@ -77,6 +77,21 @@ for (const theme of ["light", "dark"] as const) {
   });
 }
 
+test("ConsentNote is narrower in the narrow preview", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ConsentNote", exact: true }).click();
+
+  const notice = page.getByRole("region", { name: "Consent notice" });
+  const previewWidth = page.getByRole("combobox", { name: "Preview width" });
+  await previewWidth.selectOption("wide");
+  const wideWidth = await notice.evaluate((node) => node.getBoundingClientRect().width);
+
+  await previewWidth.selectOption("narrow");
+  await expect.poll(() => notice.evaluate((node) => node.getBoundingClientRect().width))
+    .toBeLessThan(wideWidth);
+});
+
 test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto("/playground/");

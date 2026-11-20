@@ -156,7 +156,7 @@
 
 .widthPreview {
   display: grid;
-  justify-items: center;
+  justify-items: stretch;
   inline-size: 100%;
   min-inline-size: 0;
   padding-block: var(--ui-space-3);
