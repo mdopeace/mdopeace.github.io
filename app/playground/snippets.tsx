@@ -63,10 +63,15 @@ const imports: Record<string, string> = {
   Switch: "@mdopeace/ui/Switch",
   Surface: "@mdopeace/ui/Surface",
   Badge: "@mdopeace/ui/Badge",
+  SpeechBubble: "@mdopeace/ui/SpeechBubble",
+  Burst: "@mdopeace/ui/Burst",
+  Sticker: "@mdopeace/ui/Sticker",
+  ConsentNote: "@mdopeace/ui/ConsentNote",
   Tile: "@mdopeace/ui/Tile",
   Heading: "@mdopeace/ui/Typography",
   Text: "@mdopeace/ui/Typography",
   Grid: "@mdopeace/ui/Layout",
+  Inline: "@mdopeace/ui/Layout",
   Stack: "@mdopeace/ui/Layout",
   Divider: "@mdopeace/ui/Divider",
   Dialog: "@mdopeace/ui/Dialog",
@@ -81,7 +86,10 @@ const imports: Record<string, string> = {
 /** Supply imports and state so copied examples have no undeclared placeholders. */
 export function completeExample(jsx: string, setup = "", client = false) {
   const groups = new Map<string, string[]>();
-  if (setup.includes("useState(")) groups.set("react", ["useState"]);
+  const hooks = ["useState", "useRef"].filter((hook) =>
+    setup.includes(`${hook}(`) || setup.includes(`${hook}<`),
+  );
+  if (hooks.length) groups.set("react", hooks);
   for (const name of new Set(
     [...jsx.matchAll(/<([A-Z]\w*)\b/g)].map((match) => match[1]),
   )) {

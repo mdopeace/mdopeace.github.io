@@ -6,10 +6,17 @@ import {
   renderHook,
   screen,
   waitFor,
+  within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "@mdopeace/ui/Button";
+import { Badge } from "@mdopeace/ui/Badge";
+import { FaHeart } from "react-icons/fa6";
+import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
+import { Burst } from "@mdopeace/ui/Burst";
+import { Sticker } from "@mdopeace/ui/Sticker";
+import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Tile } from "@mdopeace/ui/Tile";
 import { Link } from "@mdopeace/ui/Link";
 import { Switch } from "@mdopeace/ui/Switch";
@@ -34,6 +41,147 @@ function clipboard(writeText: (text: string) => Promise<void>) {
     value: { writeText },
   });
 }
+
+it("sizes an opted-in badge with the same border-box height token as a small control", () => {
+  render(
+    <>
+      <Badge>Regular badge</Badge>
+      <Badge controlSize="sm">Control badge</Badge>
+      <Link href="#details" variant="secondary" size="sm">Details</Link>
+    </>,
+  );
+  const badge = getComputedStyle(screen.getByText("Control badge"));
+  const link = getComputedStyle(screen.getByRole("link", { name: "Details" }));
+  expect(badge.minBlockSize).toBe(link.minHeight);
+  expect(badge.minBlockSize).toBe("var(--control-height)");
+  expect(badge.getPropertyValue("--control-height")).toBe(link.getPropertyValue("--control-height"));
+  expect(badge.getPropertyValue("--control-height")).toBe("var(--ui-control-sm)");
+  expect(badge.boxSizing).toBe("border-box");
+  expect(badge.alignItems).toBe("center");
+  expect(getComputedStyle(screen.getByText("Regular badge")).minBlockSize).toBe("");
+});
+
+describe("comic components", () => {
+  it("renders a long caption with native div attributes and a ref across tail and tone changes", () => {
+    const ref = createRef<HTMLDivElement>();
+    const caption = "AnUnbrokenCaption".repeat(12);
+    const { rerender } = render(
+      <SpeechBubble ref={ref} id="caption" lang="en" tail="top-end" tone="accent">{caption}</SpeechBubble>,
+    );
+    const bubble = screen.getByText(caption);
+    expect(bubble).toBe(ref.current);
+    expect(bubble.tagName).toBe("DIV");
+    expect(bubble.id).toBe("caption");
+    expect(bubble.lang).toBe("en");
+    rerender(<SpeechBubble ref={ref} tail="bottom-start" tone="emphasis">{caption}</SpeechBubble>);
+    expect(screen.getByText(caption)).toBe(bubble);
+    expect(bubble.tabIndex).toBe(-1);
+  });
+
+  it("keeps a feedback status mounted as its message changes and leaves static text silent", () => {
+    const { rerender } = render(<Burst>POW!</Burst>);
+    expect(screen.getByText("POW!")).toBeTruthy();
+    expect(screen.queryByRole("status")).toBeNull();
+    rerender(<Burst status animated />);
+    const status = screen.getByRole("status");
+    expect(status.getAttribute("aria-live")).toBe("polite");
+    expect(status.textContent).toBe("");
+    rerender(<Burst status animated>Copied!</Burst>);
+    expect(screen.getByRole("status")).toBe(status);
+    expect(status.textContent).toBe("Copied!");
+  });
+
+  it("keeps decorative stickers out of the tab order and exposes interactive state and keyboard activation", async () => {
+    const user = userEvent.setup();
+    const click = vi.fn();
+    const ref = createRef<HTMLButtonElement>();
+    const { rerender } = render(
+      <>
+        <Sticker>Decorative star</Sticker>
+        <Sticker ref={ref} onClick={click} aria-label="Collect star"><span aria-hidden>★</span></Sticker>
+      </>,
+    );
+    const decoration = screen.getByText("Decorative star");
+    expect(decoration.getAttribute("aria-hidden")).toBe("true");
+    const button = screen.getByRole("button", { name: "Collect star", description: "Not found" });
+    expect(ref.current).toBe(button);
+    expect(button.tagName).toBe("BUTTON");
+    await user.tab();
+    expect(document.activeElement).toBe(button);
+    await user.keyboard("[Space][Enter]");
+    expect(click).toHaveBeenCalledTimes(2);
+    rerender(<Sticker><a href="#star">Decorative link</a></Sticker>);
+    expect(screen.getByText("Decorative link").closest("[aria-hidden='true']")?.hasAttribute("inert")).toBe(true);
+    rerender(<Sticker ref={ref} found onClick={click} aria-label="Collect star"><span aria-hidden>★</span></Sticker>);
+    expect(screen.getByRole("button", { name: "Collect star", description: "Found" })).toBe(ref.current);
+  });
+
+  it("applies the found appearance while keeping the label and hiding the decorative icon", () => {
+    const sticker = (found: boolean) => (
+      <Sticker found={found} foundTone="emphasis" pattern="grid"
+        icon={<FaHeart role="img" aria-label="Heart" />} onClick={vi.fn()}>
+        Star
+      </Sticker>
+    );
+    const { rerender } = render(sticker(false));
+    const button = screen.getByRole("button", { name: "Star", description: "Not found" });
+    expect(button.getAttribute("data-found")).toBe("false");
+    expect(getComputedStyle(button).borderStyle).toBe("dashed");
+    expect(button.querySelector("svg")?.closest('[aria-hidden="true"]')).toBeTruthy();
+    expect(within(button).queryByRole("img")).toBeNull();
+
+    rerender(sticker(true));
+    expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBe(button);
+    expect(button.getAttribute("data-found")).toBe("true");
+    expect(button.getAttribute("data-found-tone")).toBe("emphasis");
+    expect(button.getAttribute("data-pattern")).toBe("grid");
+    expect(getComputedStyle(button).borderStyle).toBe("solid");
+    expect(button.querySelector("svg")?.closest('[aria-hidden="true"]')).toBeTruthy();
+    expect(within(button).queryByRole("img")).toBeNull();
+    const label = within(button).getByText("Star");
+    expect(label.closest("[hidden], [aria-hidden='true']")).toBeNull();
+    expect(getComputedStyle(label).display).not.toBe("none");
+  });
+
+  it("leaves visibility controlled, exposes both actions and permits tabbing through the page without storage", async () => {
+    const user = userEvent.setup();
+    const accept = vi.fn();
+    const decline = vi.fn();
+    const storageRead = vi.spyOn(localStorage, "getItem");
+    const storageWrite = vi.spyOn(localStorage, "setItem");
+    const storageRemove = vi.spyOn(localStorage, "removeItem");
+    const storageClear = vi.spyOn(localStorage, "clear");
+    const note = (open: boolean) => (
+      <>
+        <button>Before</button>
+        <ConsentNote open={open} onAccept={accept} onDecline={decline}>Allow reminders?</ConsentNote>
+        <button>After</button>
+      </>
+    );
+    const { rerender } = render(note(false));
+    expect(screen.queryByRole("region", { name: "Consent notice" })).toBeNull();
+    rerender(note(true));
+    expect(screen.getByRole("region", { name: "Consent notice" }).textContent).toContain("Allow reminders?");
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Before" }));
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Accept" }));
+    await user.keyboard("[Enter]");
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Decline" }));
+    await user.keyboard("[Space]");
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "After" }));
+    expect(accept).toHaveBeenCalledTimes(1);
+    expect(decline).toHaveBeenCalledTimes(1);
+    rerender(note(false));
+    expect(screen.queryByRole("region")).toBeNull();
+    for (const operation of [storageRead, storageWrite, storageRemove, storageClear]) {
+      expect(operation).not.toHaveBeenCalled();
+    }
+  });
+});
+
 describe("Tile", () => {
   it("supports branded content, decorative indicators and native refs without adding controls", () => {
     const ref = createRef<HTMLSpanElement>();
@@ -102,6 +250,60 @@ describe("navigation and media building blocks", () => {
   });
 });
 describe("component playground", () => {
+  it.each([
+    ["SpeechBubble", "Every good story starts with a little curiosity."],
+    ["Burst", "POW! Copied!"],
+    ["Sticker", "Star"],
+    ["ConsentNote", "Would you like to enable reminders?"],
+  ])("exposes the %s demo and copies its public import", async (name, sample) => {
+    const user = userEvent.setup();
+    const write = vi.fn().mockResolvedValue(undefined);
+    clipboard(write);
+    render(<ComponentPreview />);
+    await user.click(screen.getByRole("button", { name }));
+    expect(within(screen.getByRole("group", { name: "Live preview" })).getByText(sample, { exact: true })).toBeTruthy();
+    if (name === "Burst") {
+      expect(screen.queryByRole("combobox", { name: "Preview width" })).toBeNull();
+    } else {
+      await user.selectOptions(screen.getByLabelText("Preview width"), "narrow");
+    }
+    if (name === "Sticker") {
+      await user.click(screen.getByLabelText("Interactive"));
+      await user.click(screen.getByRole("button", { name: "Star", description: "Not found" }));
+      expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBeTruthy();
+    }
+    if (name === "ConsentNote") {
+      const preview = within(screen.getByRole("group", { name: "Live preview" }));
+      const status = preview.getByRole("status");
+      const openNotice = screen.getByLabelText("Open notice");
+      expect(status.textContent).toBe("");
+      for (const [action, result] of [["Accept", "Accepted"], ["Decline", "Declined"]]) {
+        preview.getByRole("button", { name: action }).focus();
+        await user.keyboard("[Enter]");
+        expect(preview.queryByRole("region", { name: "Consent notice" })).toBeNull();
+        expect(document.activeElement).toBe(openNotice);
+        expect(preview.getByRole("status")).toBe(status);
+        expect(status.textContent).toBe(result);
+        await user.keyboard("[Space]");
+        expect(preview.getByRole("region", { name: "Consent notice" })).toBeTruthy();
+        expect(status.textContent).toBe("");
+      }
+    }
+    if (name === "Burst") {
+      await user.click(screen.getByLabelText("Announce feedback"));
+      await user.click(screen.getByLabelText("Show burst"));
+    }
+    await user.click(screen.getByRole("button", { name: "Copy code" }));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining(`import { ${name} } from "@mdopeace/ui/${name}";`));
+    if (name === "Burst") {
+      const copied = write.mock.calls[0][0];
+      expect(copied).toContain('"use client";');
+      expect(copied).toContain("useState(null");
+      expect(copied).toContain('onClick={() => setMessage("POW! Copied!")}');
+      expect(copied).toMatch(/<Burst\b[^>]*\bstatus\b[^>]*>\s*\{message\}\s*<\/Burst>/);
+    }
+  });
+
   it("exposes Tile presets and includes the public import in copied examples", async () => {
     const user = userEvent.setup();
     const write = vi.fn().mockResolvedValue(undefined);
@@ -411,7 +613,8 @@ it("toggles and persists only light/dark themes", async () => {
   expect(localStorage.getItem("portfolio-theme")).toBe("light");
 });
 
-it("closes through Escape and honors reduced motion without an exit delay", () => {
+it("closes through Escape after the reduced-motion fade", () => {
+  vi.useFakeTimers();
   vi.spyOn(window, "matchMedia").mockReturnValue({
     matches: true,
   } as MediaQueryList);
@@ -423,9 +626,12 @@ it("closes through Escape and honors reduced motion without an exit delay", () =
   fireEvent.keyDown(screen.getByRole("button", { name: "Close details" }), {
     key: "Escape",
   });
+  expect(dialog.open).toBe(true);
+  act(() => vi.advanceTimersByTime(120));
   expect(dialog.open).toBe(false);
   expect(document.activeElement).toBe(trigger);
   expect(document.body.style.overflow).toBe("");
+  vi.useRealTimers();
 });
 
 it("interrupts a dialog exit when the controlled parent reopens it", () => {

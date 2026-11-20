@@ -1,0 +1,63 @@
+.burst {
+  --burst-shape: polygon(0% 28%, 11% 20%, 9% 0%, 28% 12%, 41% 1%, 53% 12%, 71% 0%, 78% 15%, 96% 6%, 91% 25%, 100% 42%, 94% 57%, 100% 76%, 88% 80%, 91% 100%, 72% 88%, 58% 100%, 47% 88%, 29% 100%, 23% 85%, 5% 95%, 10% 73%, 0% 62%, 6% 46%);
+  --burst-bg: var(--ui-accent);
+  --burst-fg: var(--ui-on-accent);
+  --burst-font: var(--ui-font-lg);
+  display: inline-block;
+  box-sizing: border-box;
+  inline-size: max-content;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  color: var(--burst-fg);
+  font: var(--ui-weight-black) var(--burst-font)/var(--ui-leading-caption) var(--ui-mono);
+  text-align: center;
+  overflow-wrap: anywhere;
+  filter: drop-shadow(3px 3px 0 var(--ui-shadow-color));
+}
+
+.burst[data-tone="default"] { --burst-bg: var(--ui-surface); --burst-fg: var(--ui-text); }
+.burst[data-tone="emphasis"] { --burst-bg: var(--ui-emphasis); --burst-fg: var(--ui-on-emphasis); }
+
+.burst[data-size="sm"] { --burst-font: var(--ui-font-sm); }
+.burst[data-size="lg"] { --burst-font: var(--ui-font-title); }
+
+.face {
+  position: relative;
+  isolation: isolate;
+  padding: max(var(--ui-space-4), 20%) max(var(--ui-space-5), 14%);
+}
+
+.face::before,
+.face::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  clip-path: var(--burst-shape);
+  pointer-events: none;
+}
+.face::before { inset: 0; background: var(--ui-border); }
+.face::after { inset: var(--ui-border-strong); background: var(--burst-bg); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .burst[data-animated] .face {
+    animation: enter var(--ui-normal) var(--ui-ease) both;
+  }
+}
+
+@keyframes enter {
+  from { opacity: 0; transform: scale(0.85); }
+}
+
+@media (forced-colors: active) {
+  .burst { --burst-bg: Canvas; color: CanvasText; filter: none; }
+  .face::before { background: CanvasText; forced-color-adjust: none; }
+  .face::after { background: Canvas; forced-color-adjust: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burst[data-animated] .face {
+    --reduced-animation-duration: var(--ui-fade-fast);
+    animation: fade var(--ui-fade-fast) var(--ui-ease);
+  }
+}
+@keyframes fade { from { opacity: 0; } }

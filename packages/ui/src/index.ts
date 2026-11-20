@@ -1,26 +1,44 @@
+// Actions
+export * from "./Button";
+
+// Layout & Style
+export * from "./Layout";
+export * from "./Divider";
+export * from "./Typography";
+export * from "./Surface";
 export * from "./Badge";
 export * from "./Tile";
-export * from "./Button";
-export * from "./Checkbox";
-export * from "./CommandBlock";
-export * from "./CodeExample";
-export * from "./Dialog";
-export * from "./Divider";
-export * from "./ExpandableText";
-export * from "./FeedbackLabel";
-export * from "./Field";
-export * from "./Layout";
-export * from "./Link";
-export * from "./LinkGroup";
-export * from "./Image";
-export * from "./Navbar";
-export * from "./NavbarLinks";
-export * from "./NavigationList";
 export * from "./Section";
-export * from "./Select";
-export * from "./Surface";
-export * from "./Switch";
+
+// Forms
 export * from "./TextInput";
-export * from "./Typography";
+export * from "./Select";
+export * from "./Checkbox";
+export * from "./Switch";
+export * from "./Field";
+
+// Navigation
+export * from "./Link";
+export * from "./NavbarLinks";
+export * from "./Navbar";
+export * from "./NavigationList";
+
+// Media
+export * from "./Image";
+
+// Composition
+export * from "./ExpandableText";
+export * from "./CommandBlock";
+export * from "./LinkGroup";
+export * from "./ConsentNote";
+export * from "./Dialog";
+export * from "./CodeExample";
+export * from "./FeedbackLabel";
+
+// Comic
+export * from "./SpeechBubble";
+export * from "./Burst";
+export * from "./Sticker";
+
 export * from "./tokens";
 export * from "./hooks/useClipboard";

@@ -153,3 +153,38 @@
     padding: 4px;
   }
 }
+
+.widthPreview {
+  display: grid;
+  justify-items: stretch;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding-block: var(--ui-space-3);
+}
+
+.widthPreview[data-width="narrow"] {
+  max-inline-size: min(20rem, 75%);
+}
+
+.stage[data-preview-change] {
+  --reduced-animation-duration: var(--ui-fade-fast);
+  animation: preview-change var(--ui-fade-normal) var(--ui-ease);
+}
+.stage[data-preview-change="0"] { animation-name: preview-change-again; }
+@keyframes preview-change { from { opacity: 0.9; } }
+@keyframes preview-change-again { from { opacity: 0.9; } }
+
+.burstPreview {
+  margin-inline: auto;
+  --reduced-transition-duration: var(--ui-fade-fast);
+  transition: opacity var(--ui-fade-normal) var(--ui-ease), visibility var(--ui-fade-normal);
+}
+.burstPreview[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage[data-preview-change] { animation-duration: var(--ui-fade-fast); }
+  .burstPreview { transition-duration: var(--ui-fade-fast); }
+}

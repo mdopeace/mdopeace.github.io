@@ -45,8 +45,12 @@
   --ui-border-thin: 1px;
   --ui-border-standard: 2px;
   --ui-border-strong: 3px;
-  --ui-fast: 120ms;
-  --ui-normal: 180ms;
+  --ui-rotation-left: -4deg;
+  --ui-rotation-right: 4deg;
+  --ui-fade-fast: 120ms;
+  --ui-fade-normal: 180ms;
+  --ui-fast: var(--ui-fade-fast);
+  --ui-normal: var(--ui-fade-normal);
   --ui-slow: 300ms;
   --ui-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ui-radius-none: 0;

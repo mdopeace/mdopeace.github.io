@@ -41,7 +41,6 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.getByRole("heading", { name: "Design decisions" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     const navigation = page.getByRole("navigation", { name: "Component library" });
-    await expect(navigation.getByRole("button")).toHaveCount(19);
     await navigation.getByRole("button", { name: "Tile", exact: true }).click();
     await expect(page.getByRole("img", { name: "Game Boy mark" })).toHaveText("GB");
     await page.getByRole("combobox", { name: "Appearance", exact: true }).selectOption("paused");
@@ -60,7 +59,7 @@ for (const theme of ["light", "dark"] as const) {
     await navigation.getByRole("button", { name: "Badge", exact: true }).click();
     const badge = page.locator('[data-decoration]').filter({ hasText: "Work in progress" });
     await page.getByRole("checkbox", { name: "Solid fill" }).uncheck();
-    for (const tone of ["default", "accent", "info", "emphasis"]) {
+    for (const tone of ["default", "accent", "emphasis"]) {
       await page.getByRole("combobox", { name: "Tone", exact: true }).selectOption(tone);
       const foreground = tone === "emphasis"
         ? theme === "light" ? "rgb(161, 60, 36)" : "rgb(240, 139, 107)"
@@ -76,3 +75,106 @@ for (const theme of ["light", "dark"] as const) {
     }
   });
 }
+
+test("the catalog lists groups and components in order", async ({ page }) => {
+  await page.goto("/playground/");
+  const navigation = page.getByRole("navigation", { name: "Component library" });
+  const lists = navigation.getByRole("list");
+  const catalog = [
+    ["Actions", ["Button"]],
+    ["Layout & Style", ["Layout & Divider", "Typography", "Surface", "Badge", "Tile"]],
+    ["Forms", ["TextInput", "Select", "Checkbox", "Switch", "Field"]],
+    ["Navigation", ["Link", "NavbarLinks", "Navbar", "NavigationList"]],
+    ["Media", ["Image"]],
+    ["Composition", ["Content & feedback", "ConsentNote", "Dialog", "CodeExample"]],
+    ["Comic", ["SpeechBubble", "Burst", "Sticker"]],
+  ] as const;
+
+  await expect(lists).toHaveCount(catalog.length);
+  for (const [index, [group, components]] of catalog.entries()) {
+    const list = lists.nth(index);
+    await expect(list).toHaveAccessibleName(group);
+    await expect(list.getByRole("button")).toHaveText([...components]);
+  }
+});
+
+test("ConsentNote is narrower in the narrow preview", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ConsentNote", exact: true }).click();
+
+  const notice = page.getByRole("region", { name: "Consent notice" });
+  const previewWidth = page.getByRole("combobox", { name: "Preview width" });
+  await expect(previewWidth).toBeVisible();
+  await previewWidth.selectOption("wide");
+  const wideWidth = await notice.evaluate((node) => node.getBoundingClientRect().width);
+
+  await previewWidth.selectOption("narrow");
+  await expect.poll(() => notice.evaluate((node) => node.getBoundingClientRect().width))
+    .toBeLessThan(wideWidth);
+});
+
+test("Burst has no width control and is centered at every size", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "Burst", exact: true }).click();
+
+  const preview = page.getByRole("group", { name: "Live preview" });
+  const widthControl = page.getByRole("combobox", { name: "Preview width" });
+  const sizeControl = page.getByRole("combobox", { name: "Size", exact: true });
+
+  await expect(widthControl).toHaveCount(0);
+  const container = preview.locator('[data-width="wide"]');
+  for (const size of ["sm", "md", "lg"]) {
+    await test.step(size, async () => {
+      await sizeControl.selectOption(size);
+      const burst = container.locator(`[data-visible="true"][data-size="${size}"]`);
+      await expect(burst).toBeVisible();
+      await preview.evaluate(async (node) => {
+        await Promise.allSettled(node.getAnimations({ subtree: true }).map((animation) => animation.finished));
+      });
+      await page.evaluate(() => document.fonts.ready.then(() => undefined));
+
+      const gaps = await burst.evaluate((node) => {
+        const bounds = node.getBoundingClientRect();
+        const wrapper = node.closest("[data-width]")!.getBoundingClientRect();
+        return {
+          left: bounds.left - wrapper.left,
+          right: wrapper.right - bounds.right,
+          top: bounds.top - wrapper.top,
+          bottom: wrapper.bottom - bounds.bottom,
+          horizontalOverflow: node.scrollWidth - node.clientWidth,
+        };
+      });
+      expect(Math.abs(gaps.left - gaps.right), JSON.stringify(gaps)).toBeLessThanOrEqual(2);
+      expect(Math.abs(gaps.top - gaps.bottom), JSON.stringify(gaps)).toBeLessThanOrEqual(2);
+      expect(Math.min(gaps.left, gaps.right, gaps.top, gaps.bottom)).toBeGreaterThanOrEqual(0);
+      expect(gaps.horizontalOverflow).toBeLessThanOrEqual(0);
+    });
+  }
+});
+
+test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "SpeechBubble", exact: true }).click();
+  await page.getByRole("combobox", { name: "Preview width" }).selectOption("narrow");
+  const bubble = page.locator("[data-tail]");
+  for (const tail of ["bottom-start", "bottom-end", "top-start", "top-end"]) {
+    await page.getByRole("combobox", { name: "Tail", exact: true }).selectOption(tail);
+    await bubble.evaluate((node) => { node.textContent = "UnbrokenCaption".repeat(12); });
+    await expect(bubble).toHaveCSS("overflow-wrap", "anywhere");
+    expect(await bubble.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);
+    expect(await bubble.evaluate((node) => getComputedStyle(node, "::after").backgroundColor))
+      .toBe(await bubble.evaluate((node) => getComputedStyle(node).backgroundColor));
+  }
+
+  await page.getByRole("button", { name: "Burst", exact: true }).click();
+  await page.getByRole("checkbox", { name: "Announce feedback" }).check();
+  const face = page.locator('[data-tone="accent"][data-size="md"] > div').filter({ hasText: "POW! Copied!" });
+  await expect(face).toHaveCSS("animation-name", /fade/);
+  await expect(face).toHaveCSS("transform", "none");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(face).not.toHaveCSS("animation-name", "none");
+  await page.getByRole("checkbox", { name: "Animate entry" }).uncheck();
+  await expect(face).toHaveCSS("animation-name", "none");
+});

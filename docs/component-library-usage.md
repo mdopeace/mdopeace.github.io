@@ -2,7 +2,7 @@
 
 Import components from the local [`@mdopeace/ui` workspace package](../packages/ui/README.md). The [specification](component-library-plan.md) contains the complete prop tables, defaults, token scales and accessibility requirements. Exported prop types live beside each component. No package publishing is required to use the library in this app.
 
-## Layout and surfaces
+## Layout & Style
 
 ```tsx
 import { Grid, Stack } from "@mdopeace/ui/Layout";
@@ -22,6 +22,10 @@ import { Heading, Text } from "@mdopeace/ui/Typography";
 Layout components own gaps. Surface owns padding, border and box shadow. Heading level sets semantics independently from visual size. Colored surfaces pair backgrounds with suitable foregrounds, including muted text. Do not add descendant CSS to change a primitive's visual recipe.
 
 Semantic `as` choices retain their native attributes and ref types. Render explicit `li` children in `ul`/`ol`. Use responsive token objects for layout properties, not raw CSS measurements. `className` and `style` remain escape hatches for exceptional layout and artwork integration.
+
+- Divider: decorative by default; use `decorative={false}` for separator semantics.
+- Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list. Set `controlSize="sm"`, `"md"`, or `"lg"` to align a single-line badge with a Button, button-style Link, or Switch of the same size. The badge keeps its own text size and centers its content vertically.
+- Section: `title`, optional `description`, `size` and children. PortfolioSection adds numbered headings and hash tracking for this app.
 
 ## Actions, navigation and icons
 
@@ -63,7 +67,7 @@ function CopyAddress({ address }: { address: string }) {
 
 There is no copy-specific visual primitive. The hook preserves exact strings, ignores stale request results, clears timers on unmount and leaves failures available until retry/reset. Successful feedback resets after 1400ms by default. CommandBlock supplies this composition for commands; app-specific actions can provide their own feedback copy.
 
-## Switch and Dialog
+## Switch
 
 ```tsx
 <Switch
@@ -71,6 +75,29 @@ There is no copy-specific visual primitive. The hook preserves exact strings, ig
   checked={dark}
   onCheckedChange={setDark}
 />
+```
+
+Switch uses a native checkbox with switch semantics, keyboard operation, form attributes and an input ref. Keep its accessible label stable when toggled. Use controlled `checked` with `onCheckedChange` or uncontrolled `defaultChecked`. The app ThemeToggle supplies theme persistence.
+
+## Composition
+
+### Content & feedback
+
+- ExpandableText: string children, `lines`, required `expandLabel`/`collapseLabel`, optional controlled `open`/`onOpenChange` or `defaultOpen`. It measures overflow and animates the viewport without changing the copied/searchable text.
+- CommandBlock: `code` string, optional `copyLabel`, `successMessage`, `errorMessage`; native div props.
+- LinkGroup: explicit `items` with `href`, `label`, optional `startIcon`, `variant`, `size`, `target` and other Link props. `direction` and `gap` control arrangement; no icon is guessed from a label.
+
+### Inline consent notices
+
+`ConsentNote` displays an inline notice when `open` is true. Pass notice
+content as `children` and handle decisions via `onAccept` and `onDecline`.
+`acceptLabel` and `declineLabel` default to “Accept” and “Decline”. Set
+`aria-label` or `aria-labelledby` to name the notice. The caller controls
+visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`.
+
+### Dialog
+
+```tsx
 <Dialog
   open={open}
   onOpenChange={setOpen}
@@ -82,18 +109,9 @@ There is no copy-specific visual primitive. The hook preserves exact strings, ig
 </Dialog>
 ```
 
-Import Switch and Dialog directly from their matching UI files inside a client component. Use controlled `checked`/`open` with change callbacks, or uncontrolled `defaultChecked`/`defaultOpen`, never both. Switch uses a native checkbox with switch semantics, keyboard operation, form attributes and an input ref. Keep its accessible label stable when toggled. The app ThemeToggle supplies theme persistence; Switch itself knows nothing about themes.
+Import Dialog from its matching UI subpath in a client component. Use controlled `open` with `onOpenChange` or uncontrolled `defaultOpen`.
 
 Dialog uses the browser's native modal behavior and accepts a dialog ref. Put its trigger outside the Dialog, with `aria-haspopup="dialog"` and matching `aria-controls`/`id` where appropriate. Close button, Escape and genuine backdrop gestures request closure. Focus and previous scroll state are restored after exit. State changes remain immediate with reduced motion.
-
-## Content compositions
-
-- Section: `title`, optional `description`, `size` and children. PortfolioSection adds numbered headings and hash tracking for this app.
-- ExpandableText: string children, `lines`, required `expandLabel`/`collapseLabel`, optional controlled `open`/`onOpenChange` or `defaultOpen`. It measures overflow and animates the viewport without changing the copied/searchable text.
-- CommandBlock: `code` string, optional `copyLabel`, `successMessage`, `errorMessage`; native div props.
-- LinkGroup: explicit `items` with `href`, `label`, optional `startIcon`, `variant`, `size`, `target` and other Link props. `direction` and `gap` control arrangement; no icon is guessed from a label.
-- Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list.
-- Divider: decorative by default; use `decorative={false}` for separator semantics.
 
 ## Local validation
 
@@ -163,19 +181,22 @@ The state meanings follow established indicator conventions: [Nintendo's Game Bo
 
 ## Playground building blocks
 
+The [package catalog](../packages/ui/README.md#scope) lists all playground groups and demos in sidebar order.
+
 The public playground is built with the same components it documents. Its catalog navigation, property controls and code examples use shared components; the page frame, catalog data and property-panel compositions remain specific to the playground.
 
 | Component | Contract |
 | --- | --- |
-| Field | Required `label`; optional `description`, `error`, `required`, `controlId`. Its render function supplies the control ID, help/error associations, invalid state and required attribute. |
 | TextInput | Native input props, with `size="sm"`, `"md"` (default), or `"lg"` for 32/40/48px heights. |
 | Select | Native select props and option children; the same size contract as TextInput. |
 | Checkbox | Native checkbox props plus required `label`, optional `description` and `error`. Owns its label and help associations. |
-| NavigationList | Required accessible `label` and grouped `items`; optional `activeId` and `onSelect`. Items with `href` remain native links; local selections use buttons. |
-| CodeExample | Exact `code` string, optional `title`, `description`, `codeLabel`, `language` (`tsx` or `text`) and `border` (`standard` or `none`). Includes copy feedback and keyboard-scrollable source. |
-| Navbar | Required `label`, optional `brand` and `actions` slots; shared surface, spacing and responsive layout. Sticky placement belongs to the app. |
+| Switch | Native checkbox with switch semantics and a stable accessible label. Supports controlled `checked` or uncontrolled `defaultChecked`. |
+| Field | Required `label`; optional `description`, `error`, `required`, `controlId`. Its render function supplies the control ID, help/error associations, invalid state and required attribute. |
 | NavbarLinks | Required `items` (`id`, `label`, `href`); controlled `activeId`, optional `current`, `gap`, `justify` and `onSelect(id, event)`. Owns the sliding underline, text highlight and hover/focus previews. |
+| Navbar | Required `label`, optional `brand` and `actions` slots; shared surface, spacing and responsive layout. Sticky placement belongs to the app. |
+| NavigationList | Required accessible `label` and grouped `items`; optional `activeId` and `onSelect`. Items with `href` remain native links; local selections use buttons. |
 | Image | Required `src`, `alt`, and `width`/`height`, or `fill` in a sized parent. Supports `fit`, `radius`, a loading `placeholder`, `fallback`, and `errorLabel`. Frame classes/styles are separate from `imageClassName` and the native image ref/attributes. |
+| CodeExample | Exact `code` string, optional `title`, `description`, `codeLabel`, `language` (`tsx` or `text`) and `border` (`standard` or `none`). Includes copy feedback and keyboard-scrollable source. |
 
 Import each component from its public subpath, such as `@mdopeace/ui/TextInput`. Field uses a render function so its accessible attributes reach the actual input rather than a wrapper:
 
@@ -185,7 +206,7 @@ Import each component from its public subpath, such as `@mdopeace/ui/TextInput`.
 </Field>
 ```
 
-Use Checkbox directly, since it already owns its label. Native controlled and uncontrolled conventions apply to TextInput, Select and Checkbox; supply either a value/checked state with its change handler or a default value/checked state. Controls retain square borders and immediate focus outlines, with shared color and disabled-state transitions.
+Use Checkbox directly, since it already owns its label. Native controlled and uncontrolled conventions apply to TextInput, Select, Checkbox and Switch; supply either a value/checked state with its change handler or a default value/checked state. Controls retain square borders and immediate focus outlines, with shared color and disabled-state transitions.
 
 NavigationList uses grouped lists inside a labeled navigation landmark. Link items identify the current page; local buttons identify the current selection. Disabled items remain unavailable to activation.
 
@@ -225,3 +246,29 @@ The root repository license reserves rights in portfolio content and branding;
 it explicitly excludes the MIT package from that reservation. Distribution must
 include the package copyright and MIT license notice. The package's `private`
 flag prevents accidental registry publishing; it is not a restriction on MIT reuse.
+
+## Comic
+
+- **SpeechBubble** frames dialogue or captions in a native `div`. Pass
+  `children`, `tone` (`default` by default, `accent`, or `emphasis`), `size` (default `md`), and
+  `tail` (`bottom-start` by default, `bottom-end`, `top-start`, or `top-end`).
+  Leave room above or below the panel for the tail.
+- **Burst** highlights short captions or feedback. Pass `children`, `size`
+  (default `md`), `tone` (`accent` by default, `default`, or
+  `emphasis`), and optional `animated` for entry. Motion follows the OS
+  preference. For announcements, mount an empty `<Burst status />` and update
+  its children when feedback arrives.
+- **Sticker** displays collectible art through `children`. Set `size` (default
+  `md`) and `rotation` (`none` by default, `left`, or `right`). Setting
+  `found` switches the dashed edge to solid. Set `foundTone` to `accent`
+  (the default yellow), `default` (neutral), or `emphasis` (red). Set
+  `pattern` to `none` (the default), `stripes`, `dots`, or `grid`. An
+  optional `icon` appears beside the found label and is hidden from assistive
+  technology. The label sits on an opaque fill when patterned. Supplying
+  `onClick` renders a button with a “Found” or “Not found” description.
+  Give artwork-only buttons an `aria-label` or `aria-labelledby`. Without
+  `onClick`, the sticker is decorative.
+
+Each component supports a React 19 ref and native attributes for its rendered
+element. Import from the matching subpath, such as
+`import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";`.

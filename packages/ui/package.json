@@ -16,99 +16,127 @@
     "**/*.css"
   ],
   "exports": {
-    "./Tile": {
-      "types": "./dist/Tile.d.ts",
-      "import": "./dist/Tile.js"
-    },
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
     "./tokens.css": "./dist/tokens.css",
     "./package.json": "./package.json",
-    "./Badge": {
-      "types": "./dist/Badge.d.ts",
-      "import": "./dist/Badge.js"
-    },
     "./Button": {
       "types": "./dist/Button.d.ts",
       "import": "./dist/Button.js"
-    },
-    "./Checkbox": {
-      "types": "./dist/Checkbox.d.ts",
-      "import": "./dist/Checkbox.js"
-    },
-    "./CommandBlock": {
-      "types": "./dist/CommandBlock.d.ts",
-      "import": "./dist/CommandBlock.js"
-    },
-    "./CodeExample": {
-      "types": "./dist/CodeExample.d.ts",
-      "import": "./dist/CodeExample.js"
-    },
-    "./Dialog": {
-      "types": "./dist/Dialog.d.ts",
-      "import": "./dist/Dialog.js"
-    },
-    "./Divider": {
-      "types": "./dist/Divider.d.ts",
-      "import": "./dist/Divider.js"
-    },
-    "./ExpandableText": {
-      "types": "./dist/ExpandableText.d.ts",
-      "import": "./dist/ExpandableText.js"
-    },
-    "./FeedbackLabel": {
-      "types": "./dist/FeedbackLabel.d.ts",
-      "import": "./dist/FeedbackLabel.js"
-    },
-    "./Field": {
-      "types": "./dist/Field.d.ts",
-      "import": "./dist/Field.js"
-    },
-    "./HighlightedCode": {
-      "types": "./dist/HighlightedCode.d.ts",
-      "import": "./dist/HighlightedCode.js"
     },
     "./Layout": {
       "types": "./dist/Layout.d.ts",
       "import": "./dist/Layout.js"
     },
-    "./Link": {
-      "types": "./dist/Link.d.ts",
-      "import": "./dist/Link.js"
+    "./Divider": {
+      "types": "./dist/Divider.d.ts",
+      "import": "./dist/Divider.js"
     },
-    "./LinkGroup": {
-      "types": "./dist/LinkGroup.d.ts",
-      "import": "./dist/LinkGroup.js"
-    },
-    "./NavigationList": {
-      "types": "./dist/NavigationList.d.ts",
-      "import": "./dist/NavigationList.js"
-    },
-    "./Section": {
-      "types": "./dist/Section.d.ts",
-      "import": "./dist/Section.js"
-    },
-    "./Select": {
-      "types": "./dist/Select.d.ts",
-      "import": "./dist/Select.js"
+    "./Typography": {
+      "types": "./dist/Typography.d.ts",
+      "import": "./dist/Typography.js"
     },
     "./Surface": {
       "types": "./dist/Surface.d.ts",
       "import": "./dist/Surface.js"
     },
-    "./Switch": {
-      "types": "./dist/Switch.d.ts",
-      "import": "./dist/Switch.js"
+    "./Badge": {
+      "types": "./dist/Badge.d.ts",
+      "import": "./dist/Badge.js"
+    },
+    "./Tile": {
+      "types": "./dist/Tile.d.ts",
+      "import": "./dist/Tile.js"
+    },
+    "./Section": {
+      "types": "./dist/Section.d.ts",
+      "import": "./dist/Section.js"
     },
     "./TextInput": {
       "types": "./dist/TextInput.d.ts",
       "import": "./dist/TextInput.js"
     },
-    "./Typography": {
-      "types": "./dist/Typography.d.ts",
-      "import": "./dist/Typography.js"
+    "./Select": {
+      "types": "./dist/Select.d.ts",
+      "import": "./dist/Select.js"
+    },
+    "./Checkbox": {
+      "types": "./dist/Checkbox.d.ts",
+      "import": "./dist/Checkbox.js"
+    },
+    "./Switch": {
+      "types": "./dist/Switch.d.ts",
+      "import": "./dist/Switch.js"
+    },
+    "./Field": {
+      "types": "./dist/Field.d.ts",
+      "import": "./dist/Field.js"
+    },
+    "./Link": {
+      "types": "./dist/Link.d.ts",
+      "import": "./dist/Link.js"
+    },
+    "./NavbarLinks": {
+      "types": "./dist/NavbarLinks.d.ts",
+      "import": "./dist/NavbarLinks.js"
+    },
+    "./Navbar": {
+      "types": "./dist/Navbar.d.ts",
+      "import": "./dist/Navbar.js"
+    },
+    "./NavigationList": {
+      "types": "./dist/NavigationList.d.ts",
+      "import": "./dist/NavigationList.js"
+    },
+    "./Image": {
+      "types": "./dist/Image.d.ts",
+      "import": "./dist/Image.js"
+    },
+    "./ExpandableText": {
+      "types": "./dist/ExpandableText.d.ts",
+      "import": "./dist/ExpandableText.js"
+    },
+    "./CommandBlock": {
+      "types": "./dist/CommandBlock.d.ts",
+      "import": "./dist/CommandBlock.js"
+    },
+    "./LinkGroup": {
+      "types": "./dist/LinkGroup.d.ts",
+      "import": "./dist/LinkGroup.js"
+    },
+    "./ConsentNote": {
+      "types": "./dist/ConsentNote.d.ts",
+      "import": "./dist/ConsentNote.js"
+    },
+    "./Dialog": {
+      "types": "./dist/Dialog.d.ts",
+      "import": "./dist/Dialog.js"
+    },
+    "./HighlightedCode": {
+      "types": "./dist/HighlightedCode.d.ts",
+      "import": "./dist/HighlightedCode.js"
+    },
+    "./CodeExample": {
+      "types": "./dist/CodeExample.d.ts",
+      "import": "./dist/CodeExample.js"
+    },
+    "./FeedbackLabel": {
+      "types": "./dist/FeedbackLabel.d.ts",
+      "import": "./dist/FeedbackLabel.js"
+    },
+    "./SpeechBubble": {
+      "types": "./dist/SpeechBubble.d.ts",
+      "import": "./dist/SpeechBubble.js"
+    },
+    "./Burst": {
+      "types": "./dist/Burst.d.ts",
+      "import": "./dist/Burst.js"
+    },
+    "./Sticker": {
+      "types": "./dist/Sticker.d.ts",
+      "import": "./dist/Sticker.js"
     },
     "./tokens": {
       "types": "./dist/tokens.d.ts",
@@ -121,18 +149,6 @@
     "./hooks/useControllable": {
       "types": "./dist/hooks/useControllable.d.ts",
       "import": "./dist/hooks/useControllable.js"
-    },
-    "./Image": {
-      "types": "./dist/Image.d.ts",
-      "import": "./dist/Image.js"
-    },
-    "./Navbar": {
-      "types": "./dist/Navbar.d.ts",
-      "import": "./dist/Navbar.js"
-    },
-    "./NavbarLinks": {
-      "types": "./dist/NavbarLinks.d.ts",
-      "import": "./dist/NavbarLinks.js"
     }
   },
   "scripts": {
