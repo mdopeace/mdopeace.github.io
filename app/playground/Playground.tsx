@@ -66,7 +66,7 @@ const catalog = [
   {
     id: "consent-note",
     name: "ConsentNote",
-    group: "Comic",
+    group: "Composition",
     description: "An inline notice with two actions.",
     rationale: "The notice stays in the page's reading order and leaves other controls reachable.",
     tip: "Choose either action, then reopen the notice to try again.",
@@ -243,6 +243,7 @@ type ComponentId = (typeof catalog)[number]["id"];
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
 const rotations = ["none", "left", "right"] as const;
 const comicTones = ["default", "accent", "emphasis"] as const;
+const stickerPatterns = ["none", "stripes", "dots", "grid"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 const tones = ["default", "subtle", "accent", "info", "emphasis"] as const;
 const variants = ["primary", "secondary", "ghost", "emphasis"] as const;
@@ -326,6 +327,9 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [feedback, setFeedback] = useState(false);
   const [showBurst, setShowBurst] = useState(true);
   const [found, setFound] = useState(false);
+  const [foundTone, setFoundTone] = useState<(typeof comicTones)[number]>("accent");
+  const [pattern, setPattern] = useState<(typeof stickerPatterns)[number]>("none");
+  const [stickerIcon, setStickerIcon] = useState(false);
   const [interactive, setInteractive] = useState(false);
   const [noteOpen, setNoteOpen] = useState(true);
   const [decision, setDecision] = useState("");
@@ -333,6 +337,7 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [tilePreset, setTilePreset] = useState<"brand" | "off" | "playing" | "paused">("brand");
   const [tileInset, setTileInset] = useState(true);
   const [size, setSize] = useState<Size>("md");
+  const [badgeControlSize, setBadgeControlSize] = useState<Size | "none">("none");
   const [variant, setVariant] = useState<(typeof buttonVariants)[number]>("primary");
   const [linkVariant, setLinkVariant] = useState<Variant | "text" | "nav">(
     "text",
@@ -372,7 +377,9 @@ function Playground({ kind }: { kind: ComponentId }) {
   let controls: ReactNode;
   let preview: ReactNode;
   let code = "";
-  const comic = catalog.some((item) => item.id === kind && item.group === "Comic");
+  const hasWidthPreview = kind === "consent-note" || catalog.some(
+    (item) => item.id === kind && item.group === "Comic",
+  );
   const sizeProp = `size="${size}"`;
   const sizeControl = (
     <Choice label="Size" value={size} options={sizes} onChange={setSize} />
@@ -627,12 +634,15 @@ function Playground({ kind }: { kind: ComponentId }) {
         ].join("\n")
       : elementCode("Burst", burstProps, showBurst ? message : undefined);
   } else if (kind === "sticker") {
-    const appearance = { size, rotation, found };
+    const appearance = { size, rotation, found, foundTone, pattern, icon: stickerIcon ? <FaHeart /> : undefined };
     controls = (
       <>
         <Choice label="Rotation" value={rotation} options={rotations} onChange={setRotation} />
         {sizeControl}
         <Toggle label="Found" checked={found} onChange={setFound} />
+        <Choice label="Found tone" value={foundTone} options={comicTones} onChange={setFoundTone} />
+        <Choice label="Found pattern" value={pattern} options={stickerPatterns} onChange={setPattern} />
+        <Toggle label="Found icon" checked={stickerIcon} onChange={setStickerIcon} />
         <Toggle label="Interactive" checked={interactive} onChange={setInteractive} />
       </>
     );
@@ -642,6 +652,7 @@ function Playground({ kind }: { kind: ComponentId }) {
     code = elementCode("Sticker", [
       sizeProp, `rotation="${rotation}"`,
       interactive ? "found={found}" : found && "found",
+      `foundTone="${foundTone}"`, `pattern="${pattern}"`, stickerIcon && "icon={<FaHeart />}",
       interactive && "onClick={() => setFound(true)}",
     ], "Star");
   } else if (kind === "consent-note") {
@@ -693,8 +704,8 @@ function Playground({ kind }: { kind: ComponentId }) {
       <>
         <Choice
           label="Tone"
-          value={tone === "subtle" ? "default" : tone}
-          options={["default", "accent", "info", "emphasis"] as const}
+          value={tone === "info" || tone === "subtle" ? "default" : tone}
+          options={comicTones}
           onChange={setTone}
         />
         <Choice
@@ -711,14 +722,18 @@ function Playground({ kind }: { kind: ComponentId }) {
         />
         <Toggle label="Solid fill" checked={solid} onChange={setSolid} />
         <Toggle label="Square shape" checked={square} onChange={setSquare} />
+        <Choice label="Control size" value={badgeControlSize} options={["none", ...sizes]} onChange={setBadgeControlSize} />
       </>
     );
-    preview = (
+    const badgeTone = tone === "info" || tone === "subtle" ? "default" : tone;
+    const badgeSize = size === "lg" ? "md" : size;
+    const badge = (
       <Badge
         className={styles.badgePreview}
-        tone={tone === "subtle" ? "default" : tone}
+        tone={badgeTone}
         variant={solid ? "solid" : "outline"}
-        size={size === "lg" ? "md" : size}
+        size={badgeSize}
+        controlSize={badgeControlSize === "none" ? undefined : badgeControlSize}
         shape={square ? "square" : "label"}
         tilt={tilt === "none" ? undefined : tilt}
       >
@@ -729,13 +744,29 @@ function Playground({ kind }: { kind: ComponentId }) {
       "Badge",
       [
         `variant="${solid ? "solid" : "outline"}"`,
-        `tone="${tone}"`,
-        `size="${size}"`,
+        `tone="${badgeTone}"`,
+        `size="${badgeSize}"`,
+        badgeControlSize !== "none" && `controlSize="${badgeControlSize}"`,
         `shape="${square ? "square" : "label"}"`,
         tilt !== "none" && `tilt="${tilt}"`,
       ],
       square ? "GB" : "Work in progress",
     );
+    preview = badge;
+    if (badgeControlSize !== "none") {
+      preview = (
+        <Inline justify="center">
+          {badge}
+          <Link href="#library-main" variant="secondary" size={badgeControlSize}>Link</Link>
+          <Switch aria-label="Example switch" size={badgeControlSize} />
+        </Inline>
+      );
+      code = elementCode("Inline", ['justify="center"'], [
+        code,
+        elementCode("Link", ['href="#library-main"', 'variant="secondary"', `size="${badgeControlSize}"`], "Link"),
+        elementCode("Switch", ['aria-label="Example switch"', `size="${badgeControlSize}"`]),
+      ].join("\n"));
+    }
   } else if (kind === "typography") {
     controls = (
       <>
@@ -1204,7 +1235,7 @@ function Playground({ kind }: { kind: ComponentId }) {
       "navigation",
       "navbar",
       "navbar-links",
-    ].includes(kind) || kind === "consent-note" || (kind === "sticker" && interactive) || (kind === "burst" && feedback),
+    ].includes(kind) || (kind === "badge" && badgeControlSize !== "none") || kind === "consent-note" || (kind === "sticker" && interactive) || (kind === "burst" && feedback),
   );
   return (
     <div className={styles.workbench}>
@@ -1216,7 +1247,7 @@ function Playground({ kind }: { kind: ComponentId }) {
           <Badge>Interactive</Badge>
         </div>
         <div className={styles.stage}>
-          {comic ? <div className={styles.comicPreview} data-width={width} role="group" aria-label="Live preview">{preview}</div> : preview}
+          {hasWidthPreview ? <div className={styles.widthPreview} data-width={width} role="group" aria-label="Live preview">{preview}</div> : preview}
         </div>
       </div>
       <aside className={styles.properties} aria-label="Playground properties">
@@ -1229,7 +1260,7 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
         </Inline>
         <Stack gap={4}>
-          {comic && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} />}
+          {hasWidthPreview && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} />}
           {controls}
         </Stack>
         <Text size="caption" tone="muted">
