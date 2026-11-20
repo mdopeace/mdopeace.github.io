@@ -1,3 +1,5 @@
+import { withBasePath } from "@/lib/withBasePath";
+
 export type ProjectLink = {
   label: string;
   href: string;
@@ -149,7 +151,7 @@ export const projects: Project[] = [
     commands: [],
     links: [
       { label: "Source", icon: "github", href: "https://github.com/mdopeace/mdopeace.github.io" },
-      { label: "Explore playground", icon: "globe", href: "/playground/" },
+      { label: "Explore playground", icon: "globe", href: withBasePath("/playground/") },
     ],
   },
 ];

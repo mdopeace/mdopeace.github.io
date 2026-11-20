@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { withBasePath } from "@/lib/withBasePath";
 import Playground from "./Playground";
 
 const title = "Component Playground · Md Mostafijur Rahman";
 const description =
   "Explore the React building blocks behind my portfolio. Try component variants, test keyboard interactions, and copy working examples.";
+const socialImage = withBasePath("/opengraph-image.png");
 
 export const metadata: Metadata = {
   title,
@@ -14,13 +16,13 @@ export const metadata: Metadata = {
     description,
     url: "https://mdopeace.github.io/playground/",
     type: "website",
-    images: ["/opengraph-image.png"],
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
-    images: ["/opengraph-image.png"],
+    images: [socialImage],
   },
 };
 
