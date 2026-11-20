@@ -28,11 +28,16 @@ export default function Hero() {
               Md Mostafijur <span className="hero-name">Rahman</span>
             </Heading>
           </Stack>
-          <PortfolioSummary />
-          <Text size="lg">
-            I notice the little frictions that get in the way of a good
-            experience—and I like figuring out how to make them disappear.
-          </Text>
+          <Stack gap={3}>
+            <Text size="lg">
+              I notice the little frictions that get in the way of a good
+              experience—and I like figuring out how to make them disappear.
+            </Text>
+            <PortfolioSummary>
+              At Tracxn, I work across the web platform. Outside work, I turn
+              the things I wish existed into small, useful tools.
+            </PortfolioSummary>
+          </Stack>
           <Inline gap={3}>
             <Link variant="primary" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               See what I’ve made

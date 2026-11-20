@@ -7,24 +7,99 @@ declare global {
   }
 }
 
-test("the 60-second summary is in the first viewport and covers the essentials", async ({ page }) => {
+test("the character card opens from the first viewport and covers the essentials", async ({ page }) => {
   await page.goto("/");
-  const summary = page.getByRole("region", { name: "60-second TL;DR" });
-  await expect(summary).toBeInViewport({ ratio: 1 });
-  for (const detail of [
-    "Md Mostafijur Rahman", "software engineer in Bengaluru", "Tracxn",
-    "QuickTodo", "Vidp", "Cookieater", "Component Library",
-  ]) {
-    await expect(summary).toContainText(detail);
+  const copy = page.locator("header#top p").filter({ hasText: /^At Tracxn, I work across the web platform\./ });
+  const trigger = copy.getByRole("button", { name: "See my character card" });
+  await expect(trigger).toBeInViewport();
+  await expect(trigger).toHaveAttribute("type", "button");
+  await expect(trigger).toHaveCSS("text-decoration-line", "underline");
+  await expect(trigger).toHaveCSS("color", await copy.evaluate(el => getComputedStyle(el).color));
+  await trigger.focus();
+  await trigger.press("Enter");
+  const summary = page.getByRole("dialog", { name: "Character Card" });
+  await expect(summary).toBeVisible();
+  await expect(summary.getByRole("button", { name: "Close character card" })).toBeVisible();
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+  const title = summary.getByRole("heading", { level: 2, name: "Character Card" });
+  const fontSize = await title.evaluate(el => parseFloat(getComputedStyle(el).fontSize));
+  const heroFontSize = await page.locator("#top h1").evaluate(el => parseFloat(getComputedStyle(el).fontSize));
+  expect(fontSize).toBeLessThan(heroFontSize);
+  await expect(summary).toHaveCSS("border-top-width", "3px");
+  await expect(summary).toHaveCSS("border-radius", "0px");
+  await expect(summary.locator("dt")).toHaveText(["Class", "Guild / Base", "Powers"]);
+  await expect(summary.locator("dd").nth(0)).toHaveText("Software Engineer");
+  await expect(summary.locator("dd").nth(1)).toHaveText("Tracxn since 2023 · Bengaluru");
+  await expect(summary.locator("dt").nth(1).locator("..")).toHaveCSS("align-items", "center");
+  const powers = summary.getByRole("list", { name: "Powers" }).getByRole("listitem");
+  await expect(powers).toHaveText([
+    "JavaScript", "TypeScript", "React", "Next.js", "Express", "MongoDB", "AWS Lambda", "Swift", "SwiftUI",
+    "+ Learns new powers with AI",
+  ]);
+  expect(await summary.evaluate(el => el.scrollWidth)).toBe(await summary.evaluate(el => el.clientWidth));
+  const projects = summary.getByRole("list", { name: "Selected projects" }).getByRole("listitem");
+  await expect(projects).toHaveCount(3);
+  for (const [index, [name, id, description]] of [
+    ["QuickTodo", "quicktodo", "Mac menu bar to-do app built with SwiftUI."],
+    ["Vidp", "vidp", "Keyboard-driven macOS video player built on libmpv."],
+    ["Cookieater", "cookieater", "Chrome and Firefox extension for editing cookies."],
+  ].entries()) {
+    await expect(projects.nth(index).getByRole("link", { name })).toHaveAttribute("href", `#${id}`);
+    await expect(projects.nth(index).getByText(description, { exact: true })).toBeVisible();
+    await expect(page.locator(`#work article#${id}`).getByRole("heading", { name })).toBeAttached();
   }
-  await expect(summary.getByRole("link", { name: "md.correo.e@gmail.com" }))
+  await expect(summary.getByRole("link", { name: "Email" }))
     .toHaveAttribute("href", "mailto:md.correo.e@gmail.com");
   await expect(summary.getByRole("link", { name: "Telegram" }))
     .toHaveAttribute("href", "https://t.me/mdopeace");
-  await expect(summary.getByRole("link", { name: "Contact" }))
-    .toHaveAttribute("href", "#contact");
-  await expect(summary.getByText(/\bCV\b/)).toHaveCount(0);
+  await expect(summary.getByRole("link", { name: "Contact", exact: true })).toHaveCount(0);
+  await expect(summary.getByRole("link", { name: "View CV", exact: true })).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await expect(summary).not.toBeVisible();
+  await expect(trigger).toBeFocused();
 });
+
+for (const width of [360, 390, 430]) {
+  test(`the character card matches the hero edges at ${width}px`, async ({ page, isMobile }) => {
+    test.skip(!isMobile, "Mobile layout");
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/");
+    await page.getByRole("button", { name: "See my character card" }).click();
+    const dialog = page.getByRole("dialog", { name: "Character Card" });
+    await expect(dialog).toBeVisible();
+    const hero = await page.locator("#top").evaluate(el => {
+      const { left, right } = el.getBoundingClientRect();
+      return { left, right };
+    });
+    const edges = await dialog.evaluate(el => {
+      const { left, right } = el.getBoundingClientRect();
+      return { left, right };
+    });
+    expect(edges).toEqual(hero);
+    expect(await dialog.evaluate(el => el.scrollWidth - el.clientWidth)).toBe(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+  });
+}
+
+for (const method of ["click", "keyboard"] as const) {
+  test(`A project link in the character card closes it and focuses the project via ${method}`, async ({ page }) => {
+    if (method === "click") await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    await page.getByRole("button", { name: "See my character card" }).click();
+    const summary = page.getByRole("dialog", { name: "Character Card" });
+    const link = summary.getByRole("link", { name: "Vidp", exact: true });
+    if (method === "keyboard") {
+      await link.focus();
+      await page.keyboard.press("Enter");
+    } else {
+      await link.click();
+    }
+    await expect(summary).toBeHidden();
+    await expect(page.locator("#work article#vidp")).toBeFocused();
+    await expect(page.locator("#work article#vidp")).toBeInViewport();
+    expect(new URL(page.url()).hash).toBe("");
+  });
+}
 
 test("copy email offers the email link when clipboard writing fails", async ({ page }) => {
   await page.addInitScript(() => {
@@ -145,17 +220,21 @@ for (const theme of ["light", "dark"] as const) {
     await expect(game.getByRole("status")).toContainText("New game started");
   });
 
-  test(`${theme}: the summary and email action pass axe`, async ({ page }) => {
+  test(`${theme}: the character card and email action pass axe`, async ({ page }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     await page.goto("/");
     await page.addScriptTag({ content: axe.source });
-    const violations = await page.evaluate(async () => {
-      const { violations } = await window.axe.run({
-        include: [["[aria-labelledby='portfolio-summary']"], ["#contact"]],
-      });
+    await page.getByRole("button", { name: "See my character card" }).click();
+    const summary = page.getByRole("dialog", { name: "Character Card" });
+    await expect(summary).toBeVisible();
+    const audit = (selector: string) => page.evaluate(async selector => {
+      const { violations } = await window.axe.run(selector);
       return violations.map(({ id, nodes }) => ({ id, targets: nodes.map(node => node.target) }));
-    });
-    expect(violations).toEqual([]);
+    }, selector);
+    expect(await audit("dialog[open]")).toEqual([]);
+    await page.keyboard.press("Escape");
+    await expect(summary).toBeHidden();
+    expect(await audit("#contact")).toEqual([]);
   });
 
 }

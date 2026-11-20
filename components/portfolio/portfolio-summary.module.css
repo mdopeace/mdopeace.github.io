@@ -1,0 +1,143 @@
+.dialog {
+  border-radius: var(--ui-radius-none);
+}
+
+.stats,
+.stats dd,
+.stats ul,
+.projects {
+  margin: 0;
+}
+
+.stats ul,
+.projects {
+  padding: 0;
+  list-style: none;
+}
+
+.identity,
+.base,
+.powers {
+  padding: var(--ui-space-3) var(--ui-space-4);
+}
+
+.identity {
+  position: relative;
+  padding-inline-end: calc(var(--ui-control-lg) + var(--ui-space-6));
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+}
+
+.identity::after {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 35%;
+  background: radial-gradient(var(--ui-on-accent) 1px, transparent 1px) 0 0 / var(--ui-space-1) var(--ui-space-1);
+  mask-image: linear-gradient(to right, transparent, black);
+  opacity: 0.28;
+  pointer-events: none;
+  content: "";
+}
+
+.classValue {
+  font: var(--ui-weight-black) clamp(var(--ui-font-title), 4vw, var(--ui-font-section)) / var(--ui-leading-section) var(--ui-body);
+  letter-spacing: -0.035em;
+}
+
+.classIcon {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 50%;
+  inset-inline-end: var(--ui-space-4);
+  display: grid;
+  place-items: center;
+  width: var(--ui-control-md);
+  height: var(--ui-control-md);
+  border: var(--ui-border-standard) solid var(--ui-on-accent);
+  background: var(--ui-accent);
+  box-shadow: var(--ui-shadow-sm);
+  transform: translateY(-50%) rotate(var(--ui-rotation-right));
+}
+
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-1) var(--ui-space-4);
+  border-block: var(--ui-border-strong) solid var(--ui-border);
+  background: var(--ui-subtle);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+}
+
+.powers .label {
+  margin-block-end: var(--ui-space-2);
+}
+
+.powers .power {
+  padding-inline: var(--ui-space-2);
+  box-shadow: var(--ui-shadow-sm);
+  font-size: var(--ui-font-caption);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.powers .power:not(.specialPower) {
+  --badge-bg: color-mix(in srgb, var(--ui-accent) 26%, light-dark(var(--ui-surface), var(--ui-text)));
+  --badge-fg: var(--ui-on-accent);
+  border-color: var(--ui-on-accent);
+}
+
+.specialPower {
+  gap: var(--ui-space-1);
+  border-radius: var(--ui-radius-none);
+}
+
+.projects .project {
+  position: relative;
+  transform: rotate(calc(var(--ui-rotation-left) / 4));
+}
+
+.projects .project:nth-child(2) {
+  transform: rotate(calc(var(--ui-rotation-right) / 3));
+}
+
+.projects .project[data-project="vidp"] {
+  background-image: linear-gradient(to bottom, var(--ui-accent) var(--ui-space-1), transparent var(--ui-space-1));
+}
+
+.project .projectLink {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ui-space-1);
+  font: var(--ui-weight-black) var(--ui-font-md) / var(--ui-leading-title) var(--ui-mono);
+  text-decoration: none;
+}
+
+.projectLink::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.projectLink:focus-visible {
+  outline: none;
+}
+
+.projectLink:focus-visible::after {
+  outline: var(--ui-border-strong) solid currentColor;
+  outline-offset: calc(-1 * var(--ui-border-strong));
+}
+
+.project .projectSummary {
+  line-height: var(--ui-leading-title);
+}
+
+.projectLink:is(:hover, :focus-visible) > span:first-child {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
