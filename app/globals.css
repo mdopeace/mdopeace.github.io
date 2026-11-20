@@ -693,7 +693,7 @@
     *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: var(--reduced-transition-duration, 0.01ms) !important;
     }
   }
   @media (min-width: 681px) and (max-width: 900px) {

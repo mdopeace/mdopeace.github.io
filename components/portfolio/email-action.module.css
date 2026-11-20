@@ -1,17 +1,79 @@
 .wrap {
-  position: relative;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--ui-space-2, 0.5rem);
+  gap: var(--ui-space-2);
+  --copy-fade: var(--ui-normal);
 }
 
-.wrap > .burst {
-  position: absolute;
-  z-index: 1;
-  inset-inline-start: 0;
-  inset-block-end: calc(100% + var(--ui-space-1));
-  max-inline-size: none;
-  transform: rotate(-3deg);
+.wrap[data-copied] > button.button[data-variant] {
+  /* Keep the hit area fixed while the two faces crossfade. */
+  transform: none;
+  transition: opacity var(--copy-fade) var(--ui-ease);
+}
+
+.wrap[data-copied="true"] > .button {
+  opacity: 0;
+}
+
+.overlay {
+  position: fixed;
+  inset: auto;
+  z-index: var(--ui-layer-announcement);
+  translate: -50% -50%;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--copy-fade) var(--ui-ease),
+    visibility var(--copy-fade);
+}
+
+.wrap[data-copied="true"] > .overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay > .burst {
+  --ui-border: var(--ui-on-accent);
+  --ui-shadow-color: var(--ui-on-accent);
+  white-space: nowrap;
+}
+
+.button:focus-visible ~ .overlay {
+  outline: var(--ui-border-standard) solid var(--ui-focus);
+  outline-offset: var(--ui-space-1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .overlay > .burst {
+    scale: 0.7 0.85;
+    transition: scale var(--ui-normal) var(--ui-ease);
+  }
+
+  .wrap[data-copied="true"] .burst {
+    scale: 1;
+    animation: pop var(--ui-slow) var(--ui-ease);
+  }
+}
+
+@keyframes pop {
+  0% { scale: 0.7 0.85; }
+  35% { scale: 1.08 0.92; }
+  70% { scale: 0.98 1.04; }
+  100% { scale: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap { --copy-fade: 120ms; }
+
+  .button,
+  .overlay {
+    --reduced-transition-duration: var(--copy-fade);
+  }
 }
