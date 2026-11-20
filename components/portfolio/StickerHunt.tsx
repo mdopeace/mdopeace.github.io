@@ -3,14 +3,15 @@
 import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Sticker } from "@mdopeace/ui/Sticker";
+import { LuClapperboard, LuFlame, LuRocket, LuSettings, LuWifi, LuZap } from "react-icons/lu";
 
 const stickers = {
-  spark: { label: "Zap!", rotation: "left" },
-  frame: { label: "Cut!", rotation: "right" },
-  shipped: { label: "Ship it!", rotation: "left" },
-  gear: { label: "Click!", rotation: "right" },
-  simmer: { label: "Pop!", rotation: "left" },
-  signal: { label: "Ping!", rotation: "right" },
+  spark: { label: "Zap!", rotation: "left", foundTone: "accent", pattern: "stripes", Icon: LuZap },
+  frame: { label: "Cut!", rotation: "right", foundTone: "default", pattern: "grid", Icon: LuClapperboard },
+  shipped: { label: "Ship it!", rotation: "left", foundTone: "emphasis", pattern: "none", Icon: LuRocket },
+  gear: { label: "Click!", rotation: "right", foundTone: "accent", pattern: "grid", Icon: LuSettings },
+  simmer: { label: "Pop!", rotation: "left", foundTone: "emphasis", pattern: "dots", Icon: LuFlame },
+  signal: { label: "Ping!", rotation: "right", foundTone: "default", pattern: "stripes", Icon: LuWifi },
 } as const;
 
 type StickerId = keyof typeof stickers;
@@ -84,7 +85,7 @@ function useHunt() {
 export function StickerProgress() {
   const { found } = useHunt();
   return (
-    <Badge role="status" aria-label="Sticker hunt progress">
+    <Badge controlSize="sm" role="status" aria-label="Sticker hunt progress">
       {found.size} of {visibleIds.length} found
     </Badge>
   );
@@ -92,14 +93,15 @@ export function StickerProgress() {
 
 export function HuntSticker({ id }: { id: StickerId }) {
   const { found, collect } = useHunt();
-  const { label, rotation } = stickers[id];
+  const { label, Icon, ...appearance } = stickers[id];
   const collected = found.has(id);
   return (
     <Sticker
       aria-label={`Sticker: ${label}`}
       aria-disabled={collected}
       found={collected}
-      rotation={rotation}
+      {...appearance}
+      icon={<Icon />}
       size="sm"
       onClick={() => collect(id)}
     >
