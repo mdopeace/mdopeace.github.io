@@ -119,12 +119,11 @@ export function Dialog({
       return;
     }
     if (!element.open) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      finishClose();
-      return;
-    }
     element.dataset.closing = "true";
-    const timer = setTimeout(finishClose, 180);
+    const duration = getComputedStyle(element).animationDuration;
+    const milliseconds = parseFloat(duration) * (duration.endsWith("ms") ? 1 : 1000);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = setTimeout(finishClose, Number.isFinite(milliseconds) ? milliseconds : reduced ? 120 : 180);
     return () => clearTimeout(timer);
   }, [isOpen, finishClose]);
   useEffect(

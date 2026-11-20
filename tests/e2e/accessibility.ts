@@ -14,6 +14,12 @@ export async function openForAudit(page: Page, path: string, theme: (typeof them
 
 export async function expectAccessible(page: Page, state: string) {
   await test.step(`axe · ${state}`, async () => {
+    await page.evaluate(async () => {
+      const finite = document.getAnimations().filter(animation =>
+        Number.isFinite(animation.effect?.getComputedTiming().endTime),
+      );
+      await Promise.allSettled(finite.map(animation => animation.finished));
+    });
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();

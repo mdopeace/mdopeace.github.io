@@ -53,3 +53,11 @@
   .face::before { background: CanvasText; forced-color-adjust: none; }
   .face::after { background: Canvas; forced-color-adjust: none; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .burst[data-animated] .face {
+    --reduced-animation-duration: var(--ui-fade-fast);
+    animation: fade var(--ui-fade-fast) var(--ui-ease);
+  }
+}
+@keyframes fade { from { opacity: 0; } }

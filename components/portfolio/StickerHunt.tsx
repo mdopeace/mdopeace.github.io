@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Sticker } from "@mdopeace/ui/Sticker";
+import styles from "./sticker-hunt.module.css";
 import { LuClapperboard, LuFlame, LuRocket, LuSettings, LuWifi, LuZap } from "react-icons/lu";
 
 const stickers = {
@@ -86,7 +87,7 @@ export function StickerProgress() {
   const { found } = useHunt();
   return (
     <Badge controlSize="sm" role="status" aria-atomic="true" aria-label="Sticker hunt progress">
-      {found.size} of {visibleIds.length} found
+      <span key={found.size} className={styles.count}>{found.size} of {visibleIds.length} found</span>
     </Badge>
   );
 }
