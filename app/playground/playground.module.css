@@ -163,5 +163,5 @@
 }
 
 .widthPreview[data-width="narrow"] {
-  max-inline-size: 20rem;
+  max-inline-size: min(20rem, 75%);
 }

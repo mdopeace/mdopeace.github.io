@@ -61,7 +61,7 @@ const catalog = [
     group: "Comic",
     description: "Collectible artwork with optional button behavior.",
     rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
-    tip: "Turn on interaction and press Space or Enter to mark the sticker found.",
+    tip: "Turn on Found to edit the sticker's appearance, or turn on Interactive and press Space or Enter on the sticker to find it.",
   },
   {
     id: "consent-note",
@@ -259,11 +259,13 @@ function Choice<T extends string>({
   value,
   options,
   onChange,
+  disabled,
 }: {
   label: string;
   value: T;
   options: readonly T[];
   onChange: (value: T) => void;
+  disabled?: boolean;
 }) {
   return (
     <Field label={label}>
@@ -271,6 +273,7 @@ function Choice<T extends string>({
         <Select
           {...field}
           value={value}
+          disabled={disabled}
           onChange={(event) => onChange(event.target.value as T)}
         >
           {options.map((option) => (
@@ -287,11 +290,13 @@ function Toggle({
   label,
   checked,
   onChange,
+  disabled,
   ref,
 }: {
   label: string;
   checked: boolean;
   onChange: (value: boolean) => void;
+  disabled?: boolean;
   ref?: Ref<HTMLInputElement>;
 }) {
   return (
@@ -299,6 +304,7 @@ function Toggle({
       ref={ref}
       label={label}
       checked={checked}
+      disabled={disabled}
       onChange={(event) => onChange(event.target.checked)}
     />
   );
@@ -362,6 +368,7 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [dashed, setDashed] = useState(false);
   const [open, setOpen] = useState(false);
   const [lines, setLines] = useState<"2" | "3" | "5">("3");
+  const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
   const [required, setRequired] = useState(false);
   const [invalid, setInvalid] = useState(false);
@@ -378,9 +385,10 @@ function Playground({ kind }: { kind: ComponentId }) {
   const hasWidthPreview = kind === "consent-note" || catalog.some(
     (item) => item.id === kind && item.group === "Comic",
   );
+  const widthDisabled = (kind === "burst" && !showBurst) || (kind === "consent-note" && !noteOpen);
   const sizeProp = `size="${size}"`;
   const sizeControl = (
-    <Choice label="Size" value={size} options={sizes} onChange={setSize} />
+    <Choice label="Size" value={size} options={sizes} onChange={setSize} disabled={kind === "burst" && !showBurst} />
   );
   const variantControl = (
     <Choice
@@ -411,14 +419,15 @@ function Playground({ kind }: { kind: ComponentId }) {
     ], code);
   } else if (kind === "image") {
     controls = <>
-      <Choice label="Fit" value={imageFit} options={["contain", "cover"]} onChange={setImageFit} />
+      <Choice label="Fit" value={imageFit} options={["contain", "cover"]} onChange={setImageFit} disabled={invalid} />
       <Choice label="Radius" value={imageRadius} options={["none", "sm", "md", "full"]} onChange={setImageRadius} />
       <Toggle label="Unavailable source" checked={invalid} onChange={setInvalid} />
     </>;
     const src = invalid ? "data:image/png;base64,invalid" : exampleImage;
-    preview = <Image src={src} alt="A framed UI mark on a yellow background" width={320} height={240} fit={imageFit} radius={imageRadius} loading="eager" />;
-    code = elementCode("Image", ["src={src}", 'alt="A framed UI mark on a yellow background"', "width={320}", "height={240}", `fit="${imageFit}"`, `radius="${imageRadius}"`]);
+    preview = <Image src={src} alt="A framed UI mark on a yellow background" width={320} height={240} fit={imageFit} radius={imageRadius} loading="eager" style={{ background: "var(--ui-surface)" }} />;
+    code = elementCode("Image", ["src={src}", 'alt="A framed UI mark on a yellow background"', "width={320}", "height={240}", `fit="${imageFit}"`, `radius="${imageRadius}"`, 'style={{ background: "var(--ui-surface)" }}']);
   } else if (kind === "button") {
+    const actionLabel = label.trim() || "Action";
     controls = (
       <>
         {variantControl}
@@ -433,9 +442,9 @@ function Playground({ kind }: { kind: ComponentId }) {
             />
           )}
         </Field>
-        <Toggle label="Leading icon" checked={icon} onChange={setIcon} />
+        <Toggle label="Leading icon" checked={icon || iconOnly} onChange={setIcon} disabled={iconOnly} />
         <Toggle label="Icon only" checked={iconOnly} onChange={setIconOnly} />
-        <Toggle label="Disabled" checked={disabled} onChange={setDisabled} />
+        <Toggle label="Disabled" checked={disabled || loading} onChange={setDisabled} disabled={loading} />
         <Toggle label="Loading" checked={loading} onChange={setLoading} />
       </>
     );
@@ -449,16 +458,17 @@ function Playground({ kind }: { kind: ComponentId }) {
           {...(iconOnly
             ? {
                 iconOnly: true as const,
-                "aria-label": label || "Make something",
+                "aria-label": actionLabel,
               }
             : { iconOnly: false as const })}
           startIcon={icon || iconOnly ? <FaHeart /> : undefined}
           onClick={() => setClicks((value) => value + 1)}
         >
-          {iconOnly ? undefined : label || "Make something"}
+          {iconOnly ? undefined : actionLabel}
         </Button>
+        {iconOnly && <Text size="caption" font="mono">Accessible label: {actionLabel}</Text>}
         <Text size="caption" font="mono" role="status">
-          {clicks
+          {loading ? "Loading…" : clicks
             ? `Activated ${clicks} ${clicks === 1 ? "time" : "times"}`
             : "Try hover, press, and keyboard focus"}
         </Text>
@@ -473,10 +483,10 @@ function Playground({ kind }: { kind: ComponentId }) {
         loading && "loading",
         (icon || iconOnly) && "startIcon={<FaHeart />}",
         iconOnly && "iconOnly",
-        iconOnly && `aria-label={${JSON.stringify(label || "Make something")}}`,
+        iconOnly && `aria-label={${JSON.stringify(actionLabel)}}`,
         "onClick={handleClick}",
       ],
-      iconOnly ? undefined : jsxText(label || "Make something"),
+      iconOnly ? undefined : jsxText(actionLabel),
     );
   } else if (kind === "link") {
     controls = (
@@ -609,14 +619,19 @@ function Playground({ kind }: { kind: ComponentId }) {
     const message = "POW! Copied!";
     controls = (
       <>
-        <Choice label="Tone" value={burstTone} options={comicTones} onChange={setBurstTone} />
+        <Choice label="Tone" value={burstTone} options={comicTones} onChange={setBurstTone} disabled={!showBurst} />
         {sizeControl}
-        <Toggle label="Animate entry" checked={animated} onChange={setAnimated} />
+        <Toggle label="Animate entry" checked={animated} onChange={setAnimated} disabled={!showBurst} />
         <Toggle label="Announce feedback" checked={feedback} onChange={setFeedback} />
         <Toggle label="Show burst" checked={showBurst} onChange={setShowBurst} />
       </>
     );
-    preview = <Burst tone={burstTone} size={size} animated={animated} status={feedback}>{showBurst ? message : null}</Burst>;
+    preview = (
+      <Stack gap={3}>
+        {feedback && <Badge>Live announcement</Badge>}
+        <Burst tone={burstTone} size={size} animated={animated} status={feedback}>{showBurst ? message : null}</Burst>
+      </Stack>
+    );
     const burstProps = [`tone="${burstTone}"`, sizeProp, animated && "animated", feedback && "status"];
     code = feedback
       ? [
@@ -633,9 +648,9 @@ function Playground({ kind }: { kind: ComponentId }) {
         <Choice label="Rotation" value={rotation} options={rotations} onChange={setRotation} />
         {sizeControl}
         <Toggle label="Found" checked={found} onChange={setFound} />
-        <Choice label="Found tone" value={foundTone} options={comicTones} onChange={setFoundTone} />
-        <Choice label="Found pattern" value={pattern} options={stickerPatterns} onChange={setPattern} />
-        <Toggle label="Found icon" checked={stickerIcon} onChange={setStickerIcon} />
+        <Choice label="Found tone" value={foundTone} options={comicTones} onChange={setFoundTone} disabled={!found} />
+        <Choice label="Found pattern" value={pattern} options={stickerPatterns} onChange={setPattern} disabled={!found} />
+        <Toggle label="Found icon" checked={stickerIcon} onChange={setStickerIcon} disabled={!found} />
         <Toggle label="Interactive" checked={interactive} onChange={setInteractive} />
       </>
     );
@@ -917,7 +932,7 @@ function Playground({ kind }: { kind: ComponentId }) {
         <Toggle label="Error state" checked={invalid} onChange={setInvalid} />
         <Toggle label="Required" checked={required} onChange={setRequired} />
         <Toggle label="Disabled" checked={disabled} onChange={setDisabled} />
-        <Toggle label="Read only" checked={readOnly} onChange={setReadOnly} />
+        <Toggle label="Read only" checked={readOnly} onChange={setReadOnly} disabled={disabled} />
       </>
     );
     preview = (
@@ -1118,12 +1133,15 @@ function Playground({ kind }: { kind: ComponentId }) {
         value={lines}
         options={["2", "3", "5"] as const}
         onChange={setLines}
+          disabled={expanded}
       />
     );
     preview = (
       <Stack gap={6} className={styles.fill}>
         <ExpandableText
           lines={Number(lines)}
+          open={expanded}
+          onOpenChange={setExpanded}
           expandLabel="Read more"
           collapseLabel="Read less"
         >
@@ -1232,8 +1250,8 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
           <Badge>Interactive</Badge>
         </div>
-        <div className={styles.stage}>
-          {hasWidthPreview ? <div className={styles.widthPreview} data-width={width} role="group" aria-label="Live preview">{preview}</div> : preview}
+        <div className={styles.stage} role="group" aria-label="Live preview">
+          {hasWidthPreview ? <div className={styles.widthPreview} data-width={width}>{preview}</div> : preview}
         </div>
       </div>
       <aside className={styles.properties} aria-label="Playground properties">
@@ -1246,7 +1264,7 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
         </Inline>
         <Stack gap={4}>
-          {hasWidthPreview && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} />}
+          {hasWidthPreview && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} disabled={widthDisabled} />}
           {controls}
         </Stack>
         <Text size="caption" tone="muted">
