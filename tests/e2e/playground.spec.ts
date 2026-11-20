@@ -41,7 +41,6 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.getByRole("heading", { name: "Design decisions" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     const navigation = page.getByRole("navigation", { name: "Component library" });
-    await expect(navigation.getByRole("button")).toHaveCount(23);
     await navigation.getByRole("button", { name: "Tile", exact: true }).click();
     await expect(page.getByRole("img", { name: "Game Boy mark" })).toHaveText("GB");
     await page.getByRole("combobox", { name: "Appearance", exact: true }).selectOption("paused");
@@ -77,6 +76,43 @@ for (const theme of ["light", "dark"] as const) {
   });
 }
 
+test("the catalog lists groups and components in order", async ({ page }) => {
+  await page.goto("/playground/");
+  const navigation = page.getByRole("navigation", { name: "Component library" });
+  const lists = navigation.getByRole("list");
+  const catalog = [
+    ["Actions", ["Button"]],
+    ["Layout & Style", ["Layout & Divider", "Typography", "Surface", "Badge", "Tile"]],
+    ["Forms", ["TextInput", "Select", "Checkbox", "Switch", "Field"]],
+    ["Navigation", ["Link", "NavbarLinks", "Navbar", "NavigationList"]],
+    ["Media", ["Image"]],
+    ["Composition", ["Content & feedback", "ConsentNote", "Dialog", "CodeExample"]],
+    ["Comic", ["SpeechBubble", "Burst", "Sticker"]],
+  ] as const;
+
+  await expect(lists).toHaveCount(catalog.length);
+  for (const [index, [group, components]] of catalog.entries()) {
+    const list = lists.nth(index);
+    await expect(list).toHaveAccessibleName(group);
+    await expect(list.getByRole("button")).toHaveText([...components]);
+  }
+});
+
+test("ConsentNote is narrower in the narrow preview", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ConsentNote", exact: true }).click();
+
+  const notice = page.getByRole("region", { name: "Consent notice" });
+  const previewWidth = page.getByRole("combobox", { name: "Preview width" });
+  await previewWidth.selectOption("wide");
+  const wideWidth = await notice.evaluate((node) => node.getBoundingClientRect().width);
+
+  await previewWidth.selectOption("narrow");
+  await expect.poll(() => notice.evaluate((node) => node.getBoundingClientRect().width))
+    .toBeLessThan(wideWidth);
+});
+
 test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto("/playground/");
@@ -94,7 +130,7 @@ test("comic previews wrap at 320px and honor the browser's motion preference", a
 
   await page.getByRole("button", { name: "Burst", exact: true }).click();
   await page.getByRole("checkbox", { name: "Announce feedback" }).check();
-  const face = page.getByRole("status").filter({ hasText: "POW! Copied!" }).getByText("POW! Copied!");
+  const face = page.locator('[data-tone="accent"][data-size="md"] > div').filter({ hasText: "POW! Copied!" });
   await expect(face).toHaveCSS("animation-name", "none");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(face).not.toHaveCSS("animation-name", "none");

@@ -470,7 +470,7 @@ export default function TetrisGameboy() {
           <Button size="sm" variant="secondary"
             type="button"
             className={`${styles.deviceButton} ${styles.action}`}
-            aria-label="Hard drop piece"
+            aria-label="B, hard drop piece"
             disabled={!stateActive}
             onClick={() => engine.hardDrop()}
           >
@@ -479,7 +479,7 @@ export default function TetrisGameboy() {
           <Button size="sm" variant="secondary"
             type="button"
             className={`${styles.deviceButton} ${styles.action}`}
-            aria-label="Rotate piece"
+            aria-label="A, rotate piece"
             disabled={!stateActive}
             onClick={() => engine.rotate("cw")}
           >
@@ -500,7 +500,7 @@ export default function TetrisGameboy() {
         <Button size="sm" variant="secondary"
           type="button"
           className={`${styles.deviceButton} ${styles.utility} gameboy-small-button`}
-          aria-label="Reset game"
+          aria-label="Select, reset game"
           onClick={() => {
             engine.reset();
             flushEngineInput();
@@ -516,12 +516,12 @@ export default function TetrisGameboy() {
             paused
               ? "Resume game"
               : ready || ended
-                ? "Start game"
+                ? "Start / Pause, start game"
                 : countingDown
-                  ? "Game starting"
+                  ? "Starting…"
                   : isClearing(game)
-                    ? "Finishing line clear"
-                    : "Pause game"
+                    ? "Wait, finishing line clear"
+                    : "Start / Pause, pause game"
           }
           disabled={countingDown || isClearing(game)}
           onClick={togglePause}

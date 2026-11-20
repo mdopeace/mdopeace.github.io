@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@mdopeace/ui/Button";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Text } from "@mdopeace/ui/Typography";
@@ -19,23 +19,31 @@ function readDecision() {
   }
 }
 
-function subscribe(notify: () => void) {
-  window.addEventListener("storage", notify);
-  window.addEventListener(storageKey, notify);
-  return () => {
-    window.removeEventListener("storage", notify);
-    window.removeEventListener(storageKey, notify);
-  };
-}
-
 export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: { measurementId?: string }) {
+  const privacyRef = useRef<HTMLParagraphElement>(null);
+  const promptRef = useRef<HTMLDivElement>(null);
+  const promptDescriptionId = useId();
+  const subscribe = useCallback((notify: () => void) => {
+    function updateFromStorage(event: StorageEvent) {
+      if (event.key !== storageKey && event.key !== null) return;
+      if (promptRef.current?.contains(document.activeElement) && readDecision()) {
+        privacyRef.current?.focus();
+      }
+      notify();
+    }
+    window.addEventListener("storage", updateFromStorage);
+    window.addEventListener(storageKey, notify);
+    return () => {
+      window.removeEventListener("storage", updateFromStorage);
+      window.removeEventListener(storageKey, notify);
+    };
+  }, []);
   const savedDecision = useSyncExternalStore(subscribe, readDecision, () => undefined);
   const [dismissed, setDismissed] = useState(false);
   const [decisionOverride, setDecisionOverride] = useState<Decision | null>(null);
   const decisionOverrideRef = useRef<Decision | null>(null);
   const accepted = (decisionOverride ?? savedDecision) === "accepted";
   const showChoice = Boolean(measurementId && savedDecision);
-  const privacyRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (measurementId && accepted) {
@@ -62,19 +70,21 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
 
   return (
     <div className="analytics-privacy">
-      <ConsentNote
-        open={Boolean(measurementId) && savedDecision === null && !dismissed}
-        aria-label="Analytics cookies"
-        onAccept={() => decide("accepted")}
-        onDecline={() => decide("declined")}
-      >
-        <Text>May this site use analytics cookies to measure visits and how people explore?</Text>
-      </ConsentNote>
       <Text ref={privacyRef} tabIndex={-1} size="caption" tone="muted">
         Privacy note. If enabled, Google Analytics loads only with your consent to count
         visits and see which sections people explore. You can decline and use the whole site.
         {showChoice && " You can change your choice below."}
       </Text>
+      <ConsentNote
+        ref={promptRef}
+        open={Boolean(measurementId) && savedDecision === null && !dismissed}
+        aria-label="Analytics cookies"
+        aria-describedby={promptDescriptionId}
+        onAccept={() => decide("accepted")}
+        onDecline={() => decide("declined")}
+      >
+        <Text id={promptDescriptionId}>May this site use analytics cookies to measure visits and how people explore?</Text>
+      </ConsentNote>
       {showChoice ? (
         <Button
           variant="ghost"
