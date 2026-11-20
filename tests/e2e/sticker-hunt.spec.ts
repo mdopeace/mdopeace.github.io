@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("navbar controls match the small control height", async ({ page, isMobile }) => {
   await page.setViewportSize(isMobile ? { width: 390, height: 844 } : { width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   const nav = page.getByRole("navigation", { name: "Main navigation" });
   const controls = [
     nav.getByRole("status", { name: "Sticker hunt progress" }),

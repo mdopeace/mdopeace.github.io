@@ -1,11 +1,5 @@
 import { expect, test } from "@playwright/test";
-import axe from "axe-core";
-
-declare global {
-  interface Window {
-    axe: typeof axe;
-  }
-}
+import { expectAccessible, openForAudit, themes } from "./accessibility";
 
 test("the character card opens from the first viewport and covers the essentials", async ({ page }) => {
   await page.goto("/");
@@ -115,6 +109,7 @@ test("copy email offers the email link when clipboard writing fails", async ({ p
     .toHaveText("Could not copy. Use Start a conversation to email me.");
   await expect(contact.getByText("POW! Copied!")).toHaveCount(0);
   await expect(copy).toBeEnabled();
+  await expect(copy).toBeFocused();
   await expect(contact.getByRole("link", { name: "Start a conversation" }))
     .toHaveAttribute("href", "mailto:md.correo.e@gmail.com");
 });
@@ -146,12 +141,17 @@ for (const theme of ["light", "dark"] as const) {
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brew tap vidplabs/vidp\nbrew install --cask vidp");
     const contact = page.locator("#contact");
     const copyEmail = contact.getByRole("button", { name: "Copy email" });
+    const actions = await contact.getByRole("button").or(contact.getByRole("link")).all();
     await page.clock.install();
+    await copyEmail.scrollIntoViewIfNeeded();
+    const beforeCopy = await Promise.all(actions.map(action => action.boundingBox()));
     await copyEmail.click();
-    const burst = contact.getByRole("status").filter({ hasText: "POW! Copied!" });
+    const label = contact.getByText("POW! Copied!", { exact: true });
+    const burst = label.locator("..");
     await expect(burst).toBeVisible();
-    await expect(burst).toHaveAttribute("aria-live", "polite");
-    await expect(burst.getByText("Email address copied to clipboard.")).toBeAttached();
+    expect(await Promise.all(actions.map(action => action.boundingBox()))).toEqual(beforeCopy);
+    await expect(burst).toHaveAttribute("aria-hidden", "true");
+    await expect(contact.getByRole("status")).toHaveText("Email address copied to clipboard.");
     await expect(burst.locator(":scope > div")).toHaveCSS("animation-name", "none");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("md.correo.e@gmail.com");
     await page.clock.runFor(1400);
@@ -198,7 +198,7 @@ for (const theme of ["light", "dark"] as const) {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     await page.goto("/");
     const game = page.getByRole("region", { name: "Pocket Tetris game" });
-    const rotate = game.getByRole("button", { name: "Rotate piece", exact: true });
+    const rotate = game.getByRole("button", { name: "A, rotate piece", exact: true });
     await expect(rotate).toBeDisabled();
     await game.getByRole("button", { name: "START GAME", exact: true }).click();
     await expect(rotate).toBeEnabled({ timeout: 10000 });
@@ -206,9 +206,9 @@ for (const theme of ["light", "dark"] as const) {
     expect(await rotate.evaluate(e => getComputedStyle(e).transform)).toBe("none");
     await game.getByRole("button", { name: "Hold piece", exact: true }).click();
     await expect(game.getByRole("status")).toContainText("Piece held");
-    await game.getByRole("button", { name: "Hard drop piece", exact: true }).click();
+    await game.getByRole("button", { name: "B, hard drop piece", exact: true }).click();
     await expect(game.getByRole("status")).toContainText("Piece placed");
-    await game.getByRole("button", { name: "Pause game", exact: true }).click();
+    await game.getByRole("button", { name: "Start / Pause, pause game", exact: true }).click();
     await expect(rotate).toBeDisabled();
     await expect(game.getByRole("button", { name: "RESUME", exact: true })).toBeVisible();
     await game.getByRole("button", { name: "RESUME", exact: true }).click();
@@ -216,25 +216,47 @@ for (const theme of ["light", "dark"] as const) {
     await rotate.focus();
     await page.keyboard.press("Enter");
     await expect(rotate).toBeEnabled();
-    await game.getByRole("button", { name: "Reset game", exact: true }).click();
+    await game.getByRole("button", { name: "Select, reset game", exact: true }).click();
     await expect(game.getByRole("status")).toContainText("New game started");
   });
 
-  test(`${theme}: the character card and email action pass axe`, async ({ page }) => {
-    await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
-    await page.goto("/");
-    await page.addScriptTag({ content: axe.source });
-    await page.getByRole("button", { name: "See my character card" }).click();
-    const summary = page.getByRole("dialog", { name: "Character Card" });
-    await expect(summary).toBeVisible();
-    const audit = (selector: string) => page.evaluate(async selector => {
-      const { violations } = await window.axe.run(selector);
-      return violations.map(({ id, nodes }) => ({ id, targets: nodes.map(node => node.target) }));
-    }, selector);
-    expect(await audit("dialog[open]")).toEqual([]);
-    await page.keyboard.press("Escape");
-    await expect(summary).toBeHidden();
-    expect(await audit("#contact")).toEqual([]);
-  });
+}
 
+for (const theme of themes) {
+  test(`${theme}: Character Card and copy feedback meet WCAG A/AA axe rules`, async ({ page, isMobile }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator.clipboard, "writeText", {
+        value: () => new Promise<void>(resolve => {
+          window.addEventListener("finish-copy", () => resolve(), { once: true });
+        }),
+      });
+    });
+    await openForAudit(page, "/", theme, isMobile);
+    const trigger = page.getByRole("button", { name: "See my character card" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    const dialog = page.getByRole("dialog", { name: "Character Card" });
+    await expect(dialog).toBeVisible();
+    await expectAccessible(page, "Character Card");
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    const contact = page.locator("#contact");
+    const copy = contact.getByRole("button", { name: "Copy email" });
+    const status = contact.getByRole("status");
+    await expect(status).toBeEmpty();
+    await copy.focus();
+    await page.keyboard.press("Enter");
+    await expect(copy).toBeDisabled();
+    await expect(copy).toBeFocused();
+    await page.clock.install();
+    await page.evaluate(() => window.dispatchEvent(new Event("finish-copy")));
+    await expect(status).toHaveText("Email address copied to clipboard.");
+    await expect(copy).toBeFocused();
+    const face = contact.getByText("POW! Copied!", { exact: true });
+    await expect(face).toBeVisible();
+    await expect(face).toHaveCSS("animation-name", "none");
+    await expectAccessible(page, "Contact burst shown");
+  });
 }

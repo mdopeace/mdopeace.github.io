@@ -156,12 +156,12 @@
 
 .widthPreview {
   display: grid;
-  justify-items: center;
+  justify-items: stretch;
   inline-size: 100%;
   min-inline-size: 0;
   padding-block: var(--ui-space-3);
 }
 
 .widthPreview[data-width="narrow"] {
-  max-inline-size: 20rem;
+  max-inline-size: min(20rem, 75%);
 }

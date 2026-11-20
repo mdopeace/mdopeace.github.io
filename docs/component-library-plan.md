@@ -168,6 +168,8 @@ Target WCAG 2.2 Level AA for the resulting app and applicable library behavior. 
 
 ## 4. Generic primitives
 
+The [package catalog](../packages/ui/README.md#scope) lists the public demos in playground order.
+
 Defaults are part of the API. Layout alignment uses `start | center | end | stretch`; justification uses `start | center | end | between`. Button and Link share one appearance recipe.
 
 | Component | Initial public contract and defaults |

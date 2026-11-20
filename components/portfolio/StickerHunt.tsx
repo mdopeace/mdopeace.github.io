@@ -85,7 +85,7 @@ function useHunt() {
 export function StickerProgress() {
   const { found } = useHunt();
   return (
-    <Badge controlSize="sm" role="status" aria-label="Sticker hunt progress">
+    <Badge controlSize="sm" role="status" aria-atomic="true" aria-label="Sticker hunt progress">
       {found.size} of {visibleIds.length} found
     </Badge>
   );

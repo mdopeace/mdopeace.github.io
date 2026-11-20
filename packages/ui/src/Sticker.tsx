@@ -32,19 +32,26 @@ export function Sticker({
     "data-rotation": rotation,
     "data-size": size,
   };
-  const content = found && (pattern !== "none" || icon != null) ? (
+  const content = pattern !== "none" || icon != null ? (
     <span className={styles.content}>
       {icon != null && <span className={styles.icon} aria-hidden="true" inert>{icon}</span>}
       {children}
     </span>
   ) : children;
   if (props.onClick) {
-    const { type = "button", "aria-describedby": describedBy, ...buttonProps } = props;
+    const { type = "button", "aria-describedby": describedBy, onClick, ...buttonProps } = props;
     return (
       <button
         {...buttonProps}
         {...appearance}
         type={type}
+        onClick={(event) => {
+          if (buttonProps["aria-disabled"] === true || buttonProps["aria-disabled"] === "true") {
+            event.preventDefault();
+            return;
+          }
+          onClick(event);
+        }}
         aria-describedby={describedBy ? `${describedBy} ${stateId}` : stateId}
       >
         {content}

@@ -40,62 +40,6 @@ import { elementCode, jsxText, completeExample } from "./snippets";
 
 const catalog = [
   {
-    id: "speech-bubble",
-    name: "SpeechBubble",
-    group: "Comic",
-    description: "A caption with a directional tail.",
-    rationale: "The tail shares the panel's ink and fill. Long words wrap inside the panel.",
-    tip: "Try each tail in the narrow preview.",
-  },
-  {
-    id: "burst",
-    name: "Burst",
-    group: "Comic",
-    description: "A starburst for short captions and feedback.",
-    rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
-    tip: "Hide and show the message to replay its entrance.",
-  },
-  {
-    id: "sticker",
-    name: "Sticker",
-    group: "Comic",
-    description: "Collectible artwork with optional button behavior.",
-    rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
-    tip: "Turn on interaction and press Space or Enter to mark the sticker found.",
-  },
-  {
-    id: "consent-note",
-    name: "ConsentNote",
-    group: "Composition",
-    description: "An inline notice with two actions.",
-    rationale: "The notice stays in the page's reading order and leaves other controls reachable.",
-    tip: "Choose either action, then reopen the notice to try again.",
-  },
-  {
-    id: "navbar",
-    name: "Navbar",
-    group: "Navigation",
-    description: "A shared frame for finding your way.",
-    rationale: "Navbar owns the surface, padding and responsive placement of the brand, links and actions. The consuming page decides where it sits and which destination is current.",
-    tip: "Resize the page. Links move onto their own row on small screens, while the brand and actions stay together.",
-  },
-  {
-    id: "navbar-links",
-    name: "NavbarLinks",
-    group: "Navigation",
-    description: "One moving highlight, clear destinations.",
-    rationale: "The text highlight and underline travel together. Active state is supplied by the consumer, so the same component supports page navigation, section tracking or local demos.",
-    tip: "Hover or focus a destination to preview it. Move away to return to the current destination. Reduced motion keeps feedback immediate.",
-  },
-  {
-    id: "image",
-    name: "Image",
-    group: "Media",
-    description: "Space reserved. Loading considered.",
-    rationale: "Explicit dimensions reserve the frame before loading. A subtle placeholder gives way to the decoded image, and failed images retain their space with a fallback. Project screenshots and logos compose this same foundation.",
-    tip: "Compare contain and cover, try rounded corners, or switch to an unavailable source to see the fallback. Decorative images use an empty alt attribute.",
-  },
-  {
     id: "button",
     name: "Button",
     group: "Actions",
@@ -105,93 +49,48 @@ const catalog = [
     tip: "Tab to the button, then activate it with Enter or Space. Disabled and loading states prevent activation.",
   },
   {
-    id: "link",
-    name: "Link",
-    group: "Actions",
-    description: "Navigation with a familiar visual language.",
-    rationale:
-      "Links retain native anchor behavior. A navigation action can wear the button recipe without losing its semantics.",
-    tip: "Use a link for a destination and a button for an action. External indicators are decorative; the label names the destination.",
-  },
-  {
-    id: "switch",
-    name: "Switch",
-    group: "Actions",
-    description: "A small control for a persistent choice.",
-    rationale:
-      "Button and Switch share 32, 40 and 48px size tokens. The thumb moves and its icon fades, while the accessible checked state updates immediately.",
-    tip: "Focus the switch and press Space. Its name stays constant; checked communicates the changing state.",
-  },
-  {
-    id: "surface",
-    name: "Surface",
-    group: "Foundations",
-    description: "Give content a place to live.",
-    rationale:
-      "Paired foreground and background tokens keep each surface readable in both themes. App panels use 5px depth; nested content stays flat.",
-    tip: "A visual panel is not automatically interactive. Keep static cards still and reserve action feedback for actionable content.",
-  },
-  {
-    id: "typography",
-    name: "Typography",
-    group: "Foundations",
-    description: "A hierarchy that travels with the content.",
-    rationale:
-      "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
-    tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
-  },
-  {
-    id: "tile",
-    name: "Tile",
-    group: "Foundations",
-    description: "A framed face for marks and indicators.",
-    rationale: "A square frame and optional inset edge give text, icons and indicator lights a shared physical finish. Color and content belong to the consumer; Tile adds no interaction or game state.",
-    tip: "Try the GB mark and the three indicator colors. Indicator colors stay fixed across themes. Wrap a tile in a link or button when it needs interaction.",
-  },
-  {
-    id: "badge",
-    name: "Badge",
-    group: "Foundations",
-    description: "Small labels with a little personality.",
-    rationale:
-      "A single primitive covers outlined metadata, solid labels, square marks and tilted stamps. It stays flat because it is not a button.",
-    tip: "Color supports the text; it never replaces it. Decorative chapter numbers can be hidden from assistive technology.",
-  },
-  {
     id: "layout",
     name: "Layout & Divider",
-    group: "Composition",
+    group: "Layout & Style",
     description: "Spacing is part of the system.",
     rationale:
       "Stack, Inline and Grid own arrangement. A shared spacing scale makes compositions consistent without putting margins on every child.",
     tip: "This demo changes columns and gaps without changing its child cards. Responsive layouts can choose different values at each breakpoint.",
   },
   {
-    id: "dialog",
-    name: "Dialog",
-    group: "Composition",
-    description: "A focused space for a short task.",
+    id: "typography",
+    name: "Typography",
+    group: "Layout & Style",
+    description: "A hierarchy that travels with the content.",
     rationale:
-      "Native dialog behavior handles modality. Opening and closing animate while focus and scroll locking remain coordinated.",
-    tip: "Open it, move through its controls with Tab, and close with Escape. Focus returns to the trigger.",
+      "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
+    tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
   },
   {
-    id: "content",
-    name: "Content & feedback",
-    group: "Composition",
-    description: "Useful details, revealed at the right time.",
+    id: "surface",
+    name: "Surface",
+    group: "Layout & Style",
+    description: "Give content a place to live.",
     rationale:
-      "ExpandableText owns disclosure, CommandBlock composes copying from Button and useClipboard, and LinkGroup arranges destinations. Behavior composes from small building blocks.",
-    tip: "Try the disclosure and copy action. Copy feedback reserves its width so the button does not jump when its label changes.",
+      "Paired foreground and background tokens keep each surface readable in both themes. App panels use 5px depth; nested content stays flat.",
+    tip: "A visual panel is not automatically interactive. Keep static cards still and reserve action feedback for actionable content.",
   },
   {
-    id: "field",
-    name: "Field",
-    group: "Forms",
-    description: "Labels and feedback that belong together.",
+    id: "badge",
+    name: "Badge",
+    group: "Layout & Style",
+    description: "Small labels with a little personality.",
     rationale:
-      "Field connects its label, help text and error to a control with stable IDs. It provides the relationship; the child provides the input.",
-    tip: "Focus the input: its name, description and validation state come from the field.",
+      "A single primitive covers outlined metadata, solid labels, square marks and tilted stamps. It stays flat because it is not a button.",
+    tip: "Color supports the text; it never replaces it. Decorative chapter numbers can be hidden from assistive technology.",
+  },
+  {
+    id: "tile",
+    name: "Tile",
+    group: "Layout & Style",
+    description: "A framed face for marks and indicators.",
+    rationale: "A square frame and optional inset edge give text, icons and indicator lights a shared physical finish. Color and content belong to the consumer; Tile adds no interaction or game state.",
+    tip: "Try the GB mark and the three indicator colors. Indicator colors stay fixed across themes. Wrap a tile in a link or button when it needs interaction.",
   },
   {
     id: "input",
@@ -221,13 +120,90 @@ const catalog = [
     tip: "Tab to the checkbox and press Space. Clicking its label also toggles it.",
   },
   {
+    id: "switch",
+    name: "Switch",
+    group: "Forms",
+    description: "A small control for a persistent choice.",
+    rationale:
+      "Button and Switch share 32, 40 and 48px size tokens. The thumb moves and its icon fades, while the accessible checked state updates immediately.",
+    tip: "Focus the switch and press Space. Its name stays constant; checked communicates the changing state.",
+  },
+  {
+    id: "field",
+    name: "Field",
+    group: "Forms",
+    description: "Labels and feedback that belong together.",
+    rationale:
+      "Field connects its label, help text and error to a control with stable IDs. It provides the relationship; the child provides the input.",
+    tip: "Focus the input: its name, description and validation state come from the field.",
+  },
+  {
+    id: "link",
+    name: "Link",
+    group: "Navigation",
+    description: "Navigation with a familiar visual language.",
+    rationale:
+      "Links retain native anchor behavior. A navigation action can wear the button recipe without losing its semantics.",
+    tip: "Use a link for a destination and a button for an action. External indicators are decorative; the label names the destination.",
+  },
+  {
+    id: "navbar-links",
+    name: "NavbarLinks",
+    group: "Navigation",
+    description: "One moving highlight, clear destinations.",
+    rationale: "The text highlight and underline travel together. Active state is supplied by the consumer, so the same component supports page navigation, section tracking or local demos.",
+    tip: "Hover or focus a destination to preview it. Move away to return to the current destination. Reduced motion keeps feedback immediate.",
+  },
+  {
+    id: "navbar",
+    name: "Navbar",
+    group: "Navigation",
+    description: "A shared frame for finding your way.",
+    rationale: "Navbar owns the surface, padding and responsive placement of the brand, links and actions. The consuming page decides where it sits and which destination is current.",
+    tip: "Resize the page. Links move onto their own row on small screens, while the brand and actions stay together.",
+  },
+  {
     id: "navigation",
     name: "NavigationList",
-    group: "Composition",
+    group: "Navigation",
     description: "Find a destination, see where you are.",
     rationale:
       "Grouped navigation supports native links for destinations and buttons for local selections. Active state is exposed with aria-current.",
     tip: "Move between entries with Tab and activate with Enter. Disabled entries are skipped.",
+  },
+  {
+    id: "image",
+    name: "Image",
+    group: "Media",
+    description: "Space reserved. Loading considered.",
+    rationale: "Explicit dimensions reserve the frame before loading. A subtle placeholder gives way to the decoded image, and failed images retain their space with a fallback. Project screenshots and logos compose this same foundation.",
+    tip: "Compare contain and cover, try rounded corners, or switch to an unavailable source to see the fallback. Decorative images use an empty alt attribute.",
+  },
+  {
+    id: "content",
+    name: "Content & feedback",
+    group: "Composition",
+    description: "Useful details, revealed at the right time.",
+    rationale:
+      "ExpandableText owns disclosure, CommandBlock composes copying from Button and useClipboard, and LinkGroup arranges destinations. Behavior composes from small building blocks.",
+    tip: "Try the disclosure and copy action. Copy feedback reserves its width so the button does not jump when its label changes.",
+  },
+  {
+    id: "consent-note",
+    name: "ConsentNote",
+    group: "Composition",
+    description: "An inline notice with two actions.",
+    rationale: "The notice stays in the page's reading order and leaves other controls reachable.",
+    tip: "Choose either action, then reopen the notice to try again.",
+  },
+  {
+    id: "dialog",
+    name: "Dialog",
+    group: "Composition",
+    description: "A focused space for a short task.",
+    rationale:
+      "Native dialog behavior handles modality. Opening and closing animate while focus and scroll locking remain coordinated.",
+    tip: "Open it, move through its controls with Tab, and close with Escape. Focus returns to the trigger.",
   },
   {
     id: "code",
@@ -238,7 +214,38 @@ const catalog = [
       "Syntax highlighting uses escaped React text, never generated HTML. Copying preserves the exact source, including newlines.",
     tip: "The code region can be focused and scrolled. Copy feedback is announced without moving focus.",
   },
+  {
+    id: "speech-bubble",
+    name: "SpeechBubble",
+    group: "Comic",
+    description: "A caption with a directional tail.",
+    rationale: "The tail shares the panel's ink and fill. Long words wrap inside the panel.",
+    tip: "Try each tail in the narrow preview.",
+  },
+  {
+    id: "burst",
+    name: "Burst",
+    group: "Comic",
+    description: "A starburst for short captions and feedback.",
+    rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
+    tip: "Hide and show the message to replay its entrance.",
+  },
+  {
+    id: "sticker",
+    name: "Sticker",
+    group: "Comic",
+    description: "Collectible artwork with optional button behavior.",
+    rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
+    tip: "Turn on Found to edit the sticker's appearance, or turn on Interactive and press Space or Enter on the sticker to find it.",
+  },
 ] as const;
+const catalogGroups = [...new Set(catalog.map((item) => item.group))].map((group) => ({
+  label: group,
+  items: catalog
+    .filter((item) => item.group === group)
+    .map((item) => ({ id: item.id, label: item.name })),
+}));
+
 type ComponentId = (typeof catalog)[number]["id"];
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
 const rotations = ["none", "left", "right"] as const;
@@ -260,11 +267,13 @@ function Choice<T extends string>({
   value,
   options,
   onChange,
+  disabled,
 }: {
   label: string;
   value: T;
   options: readonly T[];
   onChange: (value: T) => void;
+  disabled?: boolean;
 }) {
   return (
     <Field label={label}>
@@ -272,7 +281,19 @@ function Choice<T extends string>({
         <Select
           {...field}
           value={value}
-          onChange={(event) => onChange(event.target.value as T)}
+          aria-disabled={disabled || undefined}
+          onKeyDown={(event) => {
+            if (disabled && event.key !== "Tab" && event.key !== "Escape") event.preventDefault();
+          }}
+          onPointerDown={(event) => {
+            if (disabled) event.preventDefault();
+          }}
+          onClick={(event) => {
+            if (disabled) event.preventDefault();
+          }}
+          onChange={(event) => {
+            if (!disabled) onChange(event.target.value as T);
+          }}
         >
           {options.map((option) => (
             <option key={option} value={option}>
@@ -288,11 +309,13 @@ function Toggle({
   label,
   checked,
   onChange,
+  disabled,
   ref,
 }: {
   label: string;
   checked: boolean;
   onChange: (value: boolean) => void;
+  disabled?: boolean;
   ref?: Ref<HTMLInputElement>;
 }) {
   return (
@@ -300,7 +323,13 @@ function Toggle({
       ref={ref}
       label={label}
       checked={checked}
-      onChange={(event) => onChange(event.target.checked)}
+      aria-disabled={disabled || undefined}
+      onClick={(event) => {
+        if (disabled) event.preventDefault();
+      }}
+      onChange={(event) => {
+        if (!disabled) onChange(event.target.checked);
+      }}
     />
   );
 }
@@ -364,6 +393,7 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [open, setOpen] = useState(false);
   const [dialogTitleSize, setDialogTitleSize] = useState<"dialog" | "feature">("dialog");
   const [lines, setLines] = useState<"2" | "3" | "5">("3");
+  const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
   const [required, setRequired] = useState(false);
   const [invalid, setInvalid] = useState(false);
@@ -380,9 +410,10 @@ function Playground({ kind }: { kind: ComponentId }) {
   const hasWidthPreview = kind === "consent-note" || catalog.some(
     (item) => item.id === kind && item.group === "Comic",
   );
+  const widthDisabled = (kind === "burst" && !showBurst) || (kind === "consent-note" && !noteOpen);
   const sizeProp = `size="${size}"`;
   const sizeControl = (
-    <Choice label="Size" value={size} options={sizes} onChange={setSize} />
+    <Choice label="Size" value={size} options={sizes} onChange={setSize} disabled={kind === "burst" && !showBurst} />
   );
   const variantControl = (
     <Choice
@@ -416,14 +447,15 @@ function Playground({ kind }: { kind: ComponentId }) {
     ], code);
   } else if (kind === "image") {
     controls = <>
-      <Choice label="Fit" value={imageFit} options={["contain", "cover"]} onChange={setImageFit} />
+      <Choice label="Fit" value={imageFit} options={["contain", "cover"]} onChange={setImageFit} disabled={invalid} />
       <Choice label="Radius" value={imageRadius} options={["none", "sm", "md", "full"]} onChange={setImageRadius} />
       <Toggle label="Unavailable source" checked={invalid} onChange={setInvalid} />
     </>;
     const src = invalid ? "data:image/png;base64,invalid" : exampleImage;
-    preview = <Image src={src} alt="A framed UI mark on a yellow background" width={320} height={240} fit={imageFit} radius={imageRadius} loading="eager" />;
-    code = elementCode("Image", ["src={src}", 'alt="A framed UI mark on a yellow background"', "width={320}", "height={240}", `fit="${imageFit}"`, `radius="${imageRadius}"`]);
+    preview = <Image src={src} alt="A framed UI mark on a yellow background" width={320} height={240} fit={imageFit} radius={imageRadius} loading="eager" style={{ background: "var(--ui-surface)" }} />;
+    code = elementCode("Image", ["src={src}", 'alt="A framed UI mark on a yellow background"', "width={320}", "height={240}", `fit="${imageFit}"`, `radius="${imageRadius}"`, 'style={{ background: "var(--ui-surface)" }}']);
   } else if (kind === "button") {
+    const actionLabel = label.trim() || "Action";
     controls = (
       <>
         {variantControl}
@@ -438,11 +470,11 @@ function Playground({ kind }: { kind: ComponentId }) {
             />
           )}
         </Field>
-        <Toggle label="Leading icon" checked={icon} onChange={setIcon} />
+        <Toggle label="Leading icon" checked={icon || iconOnly} onChange={setIcon} disabled={iconOnly} />
         {variant !== "text" && (
           <Toggle label="Icon only" checked={iconOnly} onChange={setIconOnly} />
         )}
-        <Toggle label="Disabled" checked={disabled} onChange={setDisabled} />
+        <Toggle label="Disabled" checked={disabled || loading} onChange={setDisabled} disabled={loading} />
         <Toggle label="Loading" checked={loading} onChange={setLoading} />
       </>
     );
@@ -456,16 +488,17 @@ function Playground({ kind }: { kind: ComponentId }) {
           {...(iconOnly
             ? {
                 iconOnly: true as const,
-                "aria-label": label || "Make something",
+                "aria-label": actionLabel,
               }
             : { iconOnly: false as const })}
           startIcon={icon || iconOnly ? <FaHeart /> : undefined}
           onClick={() => setClicks((value) => value + 1)}
         >
-          {iconOnly ? undefined : label || "Make something"}
+          {iconOnly ? undefined : actionLabel}
         </Button>
+        {iconOnly && <Text size="caption" font="mono">Accessible label: {actionLabel}</Text>}
         <Text size="caption" font="mono" role="status">
-          {clicks
+          {loading ? "Loading…" : clicks
             ? `Activated ${clicks} ${clicks === 1 ? "time" : "times"}`
             : "Try hover, press, and keyboard focus"}
         </Text>
@@ -480,10 +513,10 @@ function Playground({ kind }: { kind: ComponentId }) {
         loading && "loading",
         (icon || iconOnly) && "startIcon={<FaHeart />}",
         iconOnly && "iconOnly",
-        iconOnly && `aria-label={${JSON.stringify(label || "Make something")}}`,
+        iconOnly && `aria-label={${JSON.stringify(actionLabel)}}`,
         "onClick={handleClick}",
       ],
-      iconOnly ? undefined : jsxText(label || "Make something"),
+      iconOnly ? undefined : jsxText(actionLabel),
     );
   } else if (kind === "link") {
     controls = (
@@ -616,14 +649,28 @@ function Playground({ kind }: { kind: ComponentId }) {
     const message = "POW! Copied!";
     controls = (
       <>
-        <Choice label="Tone" value={burstTone} options={comicTones} onChange={setBurstTone} />
+        <Choice label="Tone" value={burstTone} options={comicTones} onChange={setBurstTone} disabled={!showBurst} />
         {sizeControl}
-        <Toggle label="Animate entry" checked={animated} onChange={setAnimated} />
+        <Toggle label="Animate entry" checked={animated} onChange={setAnimated} disabled={!showBurst} />
         <Toggle label="Announce feedback" checked={feedback} onChange={setFeedback} />
         <Toggle label="Show burst" checked={showBurst} onChange={setShowBurst} />
       </>
     );
-    preview = <Burst tone={burstTone} size={size} animated={animated} status={feedback}>{showBurst ? message : null}</Burst>;
+    preview = (
+      <Stack gap={3}>
+        {feedback && <Badge>Live announcement</Badge>}
+        <Burst
+          tone={burstTone}
+          size={size}
+          animated={animated && showBurst}
+          style={{ visibility: showBurst ? undefined : "hidden" }}
+          aria-hidden={feedback || undefined}
+        >
+          {message}
+        </Burst>
+        <span className="sr-only" role="status">{feedback && showBurst ? message : ""}</span>
+      </Stack>
+    );
     const burstProps = [`tone="${burstTone}"`, sizeProp, animated && "animated", feedback && "status"];
     code = feedback
       ? [
@@ -640,14 +687,14 @@ function Playground({ kind }: { kind: ComponentId }) {
         <Choice label="Rotation" value={rotation} options={rotations} onChange={setRotation} />
         {sizeControl}
         <Toggle label="Found" checked={found} onChange={setFound} />
-        <Choice label="Found tone" value={foundTone} options={comicTones} onChange={setFoundTone} />
-        <Choice label="Found pattern" value={pattern} options={stickerPatterns} onChange={setPattern} />
-        <Toggle label="Found icon" checked={stickerIcon} onChange={setStickerIcon} />
+        <Choice label="Found tone" value={foundTone} options={comicTones} onChange={setFoundTone} disabled={!found} />
+        <Choice label="Found pattern" value={pattern} options={stickerPatterns} onChange={setPattern} disabled={!found} />
+        <Toggle label="Found icon" checked={stickerIcon} onChange={setStickerIcon} disabled={!found} />
         <Toggle label="Interactive" checked={interactive} onChange={setInteractive} />
       </>
     );
     preview = interactive
-      ? <Sticker {...appearance} onClick={() => setFound(true)}>Star</Sticker>
+      ? <Sticker {...appearance} aria-disabled={found} onClick={() => setFound(true)}>Star</Sticker>
       : <Sticker {...appearance}>Star</Sticker>;
     code = elementCode("Sticker", [
       sizeProp, `rotation="${rotation}"`,
@@ -931,7 +978,7 @@ function Playground({ kind }: { kind: ComponentId }) {
         <Toggle label="Error state" checked={invalid} onChange={setInvalid} />
         <Toggle label="Required" checked={required} onChange={setRequired} />
         <Toggle label="Disabled" checked={disabled} onChange={setDisabled} />
-        <Toggle label="Read only" checked={readOnly} onChange={setReadOnly} />
+        <Toggle label="Read only" checked={readOnly} onChange={setReadOnly} disabled={disabled} />
       </>
     );
     preview = (
@@ -1132,12 +1179,15 @@ function Playground({ kind }: { kind: ComponentId }) {
         value={lines}
         options={["2", "3", "5"] as const}
         onChange={setLines}
+          disabled={expanded}
       />
     );
     preview = (
       <Stack gap={6} className={styles.fill}>
         <ExpandableText
           lines={Number(lines)}
+          open={expanded}
+          onOpenChange={setExpanded}
           expandLabel="Read more"
           collapseLabel="Read less"
         >
@@ -1246,8 +1296,8 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
           <Badge>Interactive</Badge>
         </div>
-        <div className={styles.stage}>
-          {hasWidthPreview ? <div className={styles.widthPreview} data-width={width} role="group" aria-label="Live preview">{preview}</div> : preview}
+        <div className={styles.stage} role="group" aria-label="Live preview">
+          {hasWidthPreview ? <div className={styles.widthPreview} data-width={width}>{preview}</div> : preview}
         </div>
       </div>
       <aside className={styles.properties} aria-label="Playground properties">
@@ -1260,7 +1310,7 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
         </Inline>
         <Stack gap={4}>
-          {hasWidthPreview && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} />}
+          {hasWidthPreview && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} disabled={widthDisabled} />}
           {controls}
         </Stack>
         <Text size="caption" tone="muted">
@@ -1334,14 +1384,7 @@ export default function ComponentPreview() {
           className={styles.sidebar}
           activeId={active}
           onSelect={(id) => setActive(id as ComponentId)}
-          groups={["Actions", "Foundations", "Forms", "Media", "Navigation", "Composition", "Comic"].map(
-            (group) => ({
-              label: group,
-              items: catalog
-                .filter((item) => item.group === group)
-                .map((item) => ({ id: item.id, label: item.name })),
-            }),
-          )}
+          groups={catalogGroups}
         />
         <main id="library-main" tabIndex={-1} className={styles.main}>
           <Stack gap={6}>

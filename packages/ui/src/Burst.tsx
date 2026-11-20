@@ -16,7 +16,7 @@ export function Burst({
   return (
     <div
       {...props}
-      {...(status ? { role: "status", "aria-live": "polite" } : {})}
+      {...(status ? { role: "status", "aria-live": "polite", "aria-atomic": true } : {})}
       className={cx(styles.burst, className)}
       data-animated={animated || undefined}
       data-tone={tone}
