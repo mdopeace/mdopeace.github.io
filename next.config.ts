@@ -6,7 +6,10 @@ import { GA_MEASUREMENT_ID } from "./components/analytics/config";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const disabledAnalytics = path.join(root, "components/analytics/disabled.ts");
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
+
 const nextConfig: NextConfig = {
+  ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   output: "export",
   transpilePackages: ["@mdopeace/ui"],
   // Directory indexes allow direct visits on GitHub Pages without rewrites.

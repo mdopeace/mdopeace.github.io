@@ -54,6 +54,12 @@ The tests check external links, the project install commands in the exported HTM
 
 GitHub Actions builds and tests the static export, then deploys `out/` to GitHub Pages when changes are pushed to `main`. The deployment workflow can also be started manually from the repository’s Actions tab. GitHub Pages must be configured to use **GitHub Actions** as its deployment source.
 
+## PR previews
+
+GitHub Actions builds a preview for each pull request from this repository and posts its link on the PR. The preview is stored on `gh-pages`, and the deploy workflow publishes it alongside the main site. Closing the PR removes its preview on the next deploy.
+
+Allow about a minute for the preview build. The link becomes usable after the deploy workflow finishes. Previews disable analytics and send a `noindex` directive. They share the production domain under `/pr-preview/`, at `https://mdopeace.github.io/pr-preview/pr-<N>/` for PR number `<N>`.
+
 ## Where to edit content
 
 The building blocks, design tokens, component APIs, and migration order are documented in the [component library specification](docs/component-library-plan.md). See the [usage guide](docs/component-library-usage.md) for examples.
