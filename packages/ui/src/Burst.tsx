@@ -4,7 +4,7 @@ import styles from "./burst.module.css";
 
 export type BurstProps = ComponentPropsWithRef<"div"> & {
   size?: Size;
-  tone?: Extract<Tone, "default" | "accent" | "info" | "emphasis">;
+  tone?: Extract<Tone, "default" | "accent" | "emphasis">;
   animated?: boolean;
   status?: boolean;
 };

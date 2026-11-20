@@ -47,7 +47,7 @@ export function Button({
       aria-busy={loading || undefined}
       data-size={isText ? undefined : size}
       data-variant={variant}
-      data-icon-only={iconOnly}
+      data-icon-only={isText ? undefined : iconOnly}
       className={cx(isText ? styles.link : styles.control, className)}
     >
       <ControlIcon tone={iconTone} size={startIconSize}>{startIcon}</ControlIcon>

@@ -85,7 +85,10 @@ const imports: Record<string, string> = {
 /** Supply imports and state so copied examples have no undeclared placeholders. */
 export function completeExample(jsx: string, setup = "", client = false) {
   const groups = new Map<string, string[]>();
-  if (setup.includes("useState(")) groups.set("react", ["useState"]);
+  const hooks = ["useState", "useRef"].filter((hook) =>
+    setup.includes(`${hook}(`) || setup.includes(`${hook}<`),
+  );
+  if (hooks.length) groups.set("react", hooks);
   for (const name of new Set(
     [...jsx.matchAll(/<([A-Z]\w*)\b/g)].map((match) => match[1]),
   )) {
