@@ -314,3 +314,32 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await expect(button).toHaveCSS("opacity", "1");
   });
 }
+
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`Character Card has an exit animation and copy errors fade with ${reducedMotion} motion`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator.clipboard, "writeText", {
+        value: async () => { throw new Error("Clipboard access denied"); },
+      });
+    });
+    await page.goto("/");
+    const duration = reducedMotion === "reduce" ? "0.12s" : "0.18s";
+    const trigger = page.getByRole("button", { name: "See my character card" });
+    const dialog = page.locator("dialog").filter({ hasText: "Character Card" });
+    await trigger.press("Enter");
+    await expect(dialog).toHaveCSS("animation-duration", duration);
+    if (reducedMotion === "reduce") await expect(dialog).toHaveCSS("transform", "none");
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveAttribute("data-closing", "true");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    const contact = page.locator("#contact");
+    await contact.getByRole("button", { name: "Copy email" }).click();
+    const error = contact.locator('[data-visible="true"]');
+    await expect(error).toHaveText(/Could not copy/);
+    await expect(error).toHaveCSS("transition-property", "opacity, display");
+    expect(await error.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBe(parseFloat(duration));
+  });
+}

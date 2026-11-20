@@ -58,7 +58,9 @@ export function EmailAction({ email }: { email: string }) {
           POW! Copied!
         </Burst>
       </div>
-      {status === "error" && <Text size="caption" aria-hidden="true">{copyError}</Text>}
+      <Text size="caption" aria-hidden="true" className={styles.error} data-visible={status === "error"}>
+        {copyError}
+      </Text>
       <Text size="caption" className="sr-only" role="status">
         {copied ? "Email address copied to clipboard." : status === "error" ? copyError : ""}
       </Text>

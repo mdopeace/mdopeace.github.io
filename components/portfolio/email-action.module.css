@@ -70,10 +70,28 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wrap { --copy-fade: 120ms; }
+  .wrap { --copy-fade: var(--ui-fade-fast); }
 
   .button,
   .overlay {
     --reduced-transition-duration: var(--copy-fade);
   }
+}
+
+
+.error {
+  --reduced-transition-duration: var(--ui-fade-fast);
+  opacity: 1;
+  transition:
+    opacity var(--copy-fade) var(--ui-ease),
+    display var(--copy-fade) allow-discrete;
+}
+
+.error[data-visible="false"] {
+  display: none;
+  opacity: 0;
+}
+
+@starting-style {
+  .error[data-visible="true"] { opacity: 0; }
 }
