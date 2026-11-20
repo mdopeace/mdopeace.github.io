@@ -20,7 +20,7 @@ const scenarios: Record<string, Scenario[]> = {
   Burst: [{
     setup: properties => properties.getByLabel("Show burst").uncheck(),
     check: ["Announce feedback"],
-    unavailable: ["Preview width", "Tone", "Size", "Animate entry"],
+    unavailable: ["Tone", "Size", "Animate entry"],
   }],
   Button: [
     {

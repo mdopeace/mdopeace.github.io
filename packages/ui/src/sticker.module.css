@@ -59,12 +59,29 @@
   padding-inline: var(--ui-space-1);
 }
 .icon {
-  display: inline-flex;
+  --reduced-transition-duration: var(--ui-fade-fast);
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: clip;
   vertical-align: middle;
   margin-inline-end: var(--ui-space-1);
+  opacity: 1;
+  transition:
+    grid-template-columns var(--ui-fade-normal) var(--ui-ease),
+    margin-inline-end var(--ui-fade-normal) var(--ui-ease),
+    opacity var(--ui-fade-normal) var(--ui-ease);
 }
 
-.sticker[data-found="false"] .icon { visibility: hidden; }
+.iconArtwork {
+  display: flex;
+  inline-size: max-content;
+}
+
+.sticker[data-found="false"] .icon {
+  grid-template-columns: minmax(0, 0fr);
+  margin-inline-end: 0;
+  opacity: 0;
+}
 
 button.sticker:enabled:not([aria-disabled="true"]) { cursor: pointer; }
 button.sticker:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
@@ -83,4 +100,5 @@ button.sticker:focus-visible { outline: 3px solid var(--ui-focus); outline-offse
 
 @media (prefers-reduced-motion: reduce) {
   .sticker[data-found] { animation-duration: var(--ui-fade-fast); }
+  .icon { transition: opacity var(--ui-fade-fast) var(--ui-ease); }
 }

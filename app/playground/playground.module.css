@@ -175,6 +175,7 @@
 @keyframes preview-change-again { from { opacity: 0.9; } }
 
 .burstPreview {
+  margin-inline: auto;
   --reduced-transition-duration: var(--ui-fade-fast);
   transition: opacity var(--ui-fade-normal) var(--ui-ease), visibility var(--ui-fade-normal);
 }
