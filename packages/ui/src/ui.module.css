@@ -347,6 +347,12 @@ button.link:disabled {
   background: var(--ui-local-bg, var(--ui-surface));
   color: var(--ui-local-text, var(--ui-text));
 }
+.badge[data-variant="solid"][data-tone="default"] {
+  background: var(--ui-canvas);
+}
+.badge[data-variant="outline"][data-tone="accent"] {
+  box-shadow: inset 0 calc(-1 * var(--ui-border-standard)) var(--ui-accent);
+}
 .badge[data-variant="outline"][data-tone="emphasis"] {
   color: var(--ui-emphasis);
 }
@@ -433,7 +439,7 @@ button.link:disabled {
 .dialog {
   position: fixed;
   inset: 0;
-  width: min(var(--dialog-width), calc(100% - 2rem));
+  width: min(var(--dialog-width), calc(100% - var(--dialog-gutter)));
   max-height: calc(100dvh - 2rem);
   margin: auto;
   padding: 0;
@@ -445,18 +451,15 @@ button.link:disabled {
 }
 .dialog[data-size="sm"] {
   --dialog-width: 32rem;
+  --dialog-gutter: 4rem;
 }
 .dialog[data-size="md"] {
   --dialog-width: 40rem;
+  --dialog-gutter: 3rem;
 }
 .dialog[data-size="lg"] {
   --dialog-width: 52rem;
-}
-@media (width < 40rem) {
-  .dialog {
-    width: min(var(--dialog-width), calc(100% - 2 * var(--ui-space-3)));
-    max-width: none;
-  }
+  --dialog-gutter: 2rem;
 }
 .dialog::backdrop {
   background: rgb(0 0 0 / 0.65);
@@ -509,14 +512,12 @@ button.link:disabled {
 }
 .expandViewport {
   overflow: hidden;
-  transition: height var(--ui-slow) var(--ui-ease);
 }
 .expandText {
   white-space: pre-line;
   font: var(--ui-font-sm)/var(--ui-leading-body) var(--ui-body);
   margin: 0;
   color: var(--ui-local-muted, var(--ui-muted));
-  transition: height var(--ui-slow) var(--ui-ease);
 }
 @keyframes enter {
   from {
@@ -539,8 +540,7 @@ button.link:disabled {
 @media (prefers-reduced-motion: reduce) {
   .control,
   .thumb,
-  .track,
-  .expandViewport {
+  .track {
     transition: none;
   }
   .control:not(:disabled):not([data-variant="ghost"]):is(:hover, :active) {
@@ -837,7 +837,8 @@ button.link:disabled {
 .text[data-variant="eyebrow"][data-size="caption"] { font-size: 0.65rem; }
 .control[data-variant="ghost"] { box-shadow: none; }
 .control[data-variant="emphasis"] { --control-bg: var(--ui-emphasis); --control-fg: var(--ui-on-emphasis); }
-.link[data-variant="nav"] { font-family: var(--ui-body); font-weight: 800; font-size: 0.78rem; text-decoration: none; }
+.link[data-variant="nav"] { font-family: var(--ui-body); font-weight: 800; text-decoration: none; }
+.link[data-variant="nav"][data-size="sm"] { font-size: 0.78rem; }
 
 .badge[data-shape="square"] {
   display: grid;
@@ -849,8 +850,8 @@ button.link:disabled {
   padding: 0;
 }
 .badge[data-shape="square"][data-size="md"] {
-  width: var(--ui-space-10);
-  height: var(--ui-space-10);
+  width: calc(var(--ui-control-md) - 2 * var(--ui-border-standard));
+  height: calc(var(--ui-control-md) - 2 * var(--ui-border-standard));
   padding: 0;
   font-size: var(--ui-font-sm);
 }
@@ -858,6 +859,9 @@ button.link:disabled {
   block-size: auto;
   min-block-size: var(--control-height);
   padding-block: 0;
+}
+.badge[data-shape="square"][data-control-size] {
+  inline-size: var(--control-height);
 }
 
 .text[data-size="xs"] { font-size: var(--ui-font-xs); line-height: 1.55; }
@@ -901,11 +905,12 @@ button.link:disabled {
 .textInput[data-size="lg"], .select[data-size="lg"] { --input-height: var(--ui-control-lg); }
 .textInput:focus-visible, .select:focus-visible, .checkbox input:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
 .textInput[aria-invalid="true"], .select[aria-invalid="true"], .checkbox input[aria-invalid="true"] { border-color: var(--ui-emphasis); }
-.textInput:disabled, .select:disabled, .checkbox:has(input:disabled) { opacity: .65; cursor: not-allowed; }
+.textInput[readonly]:enabled { background: var(--ui-subtle); }
+.textInput:disabled, .select:is(:disabled, [aria-disabled="true"]):not(:focus-visible), .checkbox:has(input:is(:disabled, [aria-disabled="true"])):not(:has(input:focus-visible)) { opacity: .65; cursor: not-allowed; }
 .textInput::placeholder { color: var(--ui-muted); opacity: 1; }
 .checkbox { display: grid; gap: 4px; }
 .checkbox > label { font-family: var(--ui-body); color: var(--ui-local-text, var(--ui-text)); display: flex; align-items: center; gap: 10px; min-height: 32px; font-size: var(--ui-font-sm); cursor: pointer; }
-.checkbox:has(input:disabled) label, .checkbox input:disabled { cursor: not-allowed; }
+.checkbox:has(input:is(:disabled, [aria-disabled="true"])) label, .checkbox input:is(:disabled, [aria-disabled="true"]) { cursor: not-allowed; }
 .checkbox input { appearance: none; flex: none; display: grid; place-content: center; margin: 0; width: 18px; height: 18px; border: 2px solid var(--ui-border); border-radius: 0; background: var(--ui-canvas); color: var(--ui-on-accent); transition: background-color var(--ui-fast); }
 .checkbox input:checked { background: var(--ui-accent); }
 .checkbox input:checked::after { content: ""; width: 5px; height: 9px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }

@@ -16,6 +16,7 @@ export function Checkbox({
   error,
   id,
   className,
+  required,
   "aria-describedby": describedBy,
   ...props
 }: CheckboxProps) {
@@ -36,10 +37,14 @@ export function Checkbox({
           {...props}
           id={controlId}
           type="checkbox"
+          required={required}
           aria-describedby={descriptions}
           aria-invalid={error ? true : props["aria-invalid"]}
         />
-        <span>{label}</span>
+        <span>
+          {label}
+          {required && <span aria-hidden="true"> *</span>}
+        </span>
       </label>
       {description && (
         <p id={`${controlId}-help`} className={styles.fieldHelp}>
