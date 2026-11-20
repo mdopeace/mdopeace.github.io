@@ -146,10 +146,14 @@ for (const theme of ["light", "dark"] as const) {
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brew tap vidplabs/vidp\nbrew install --cask vidp");
     const contact = page.locator("#contact");
     const copyEmail = contact.getByRole("button", { name: "Copy email" });
+    const actions = await contact.getByRole("button").or(contact.getByRole("link")).all();
     await page.clock.install();
+    await copyEmail.scrollIntoViewIfNeeded();
+    const beforeCopy = await Promise.all(actions.map(action => action.boundingBox()));
     await copyEmail.click();
     const burst = contact.getByRole("status").filter({ hasText: "POW! Copied!" });
     await expect(burst).toBeVisible();
+    expect(await Promise.all(actions.map(action => action.boundingBox()))).toEqual(beforeCopy);
     const bounds = await burst.boundingBox();
     expect(bounds).not.toBeNull();
     const { x, y, width, height } = bounds!;

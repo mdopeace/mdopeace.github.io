@@ -14,7 +14,7 @@ export function EmailAction({ email }: { email: string }) {
         status
         animated
         aria-atomic="true"
-        className={status === "success" ? undefined : "sr-only"}
+        className={status === "success" ? styles.burst : "sr-only"}
       >
         {status === "success" && (
           <>

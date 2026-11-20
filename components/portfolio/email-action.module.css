@@ -5,3 +5,13 @@
   align-items: flex-start;
   gap: var(--ui-space-2, 0.5rem);
 }
+
+.wrap > .burst {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 0;
+  inset-block-end: calc(100% + var(--ui-space-1));
+  max-inline-size: none;
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
