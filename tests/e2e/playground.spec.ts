@@ -41,7 +41,6 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.getByRole("heading", { name: "Design decisions" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     const navigation = page.getByRole("navigation", { name: "Component library" });
-    await expect(navigation.getByRole("button")).toHaveCount(23);
     await navigation.getByRole("button", { name: "Tile", exact: true }).click();
     await expect(page.getByRole("img", { name: "Game Boy mark" })).toHaveText("GB");
     await page.getByRole("combobox", { name: "Appearance", exact: true }).selectOption("paused");
@@ -76,6 +75,28 @@ for (const theme of ["light", "dark"] as const) {
     }
   });
 }
+
+test("the catalog lists groups and components in order", async ({ page }) => {
+  await page.goto("/playground/");
+  const navigation = page.getByRole("navigation", { name: "Component library" });
+  const lists = navigation.getByRole("list");
+  const catalog = [
+    ["Actions", ["Button"]],
+    ["Layout & Style", ["Layout & Divider", "Typography", "Surface", "Badge", "Tile"]],
+    ["Forms", ["TextInput", "Select", "Checkbox", "Switch", "Field"]],
+    ["Navigation", ["Link", "NavbarLinks", "Navbar", "NavigationList"]],
+    ["Media", ["Image"]],
+    ["Composition", ["Content & feedback", "ConsentNote", "Dialog", "CodeExample"]],
+    ["Comic", ["SpeechBubble", "Burst", "Sticker"]],
+  ] as const;
+
+  await expect(lists).toHaveCount(catalog.length);
+  for (const [index, [group, components]] of catalog.entries()) {
+    const list = lists.nth(index);
+    await expect(list).toHaveAccessibleName(group);
+    await expect(list.getByRole("button")).toHaveText([...components]);
+  }
+});
 
 test("ConsentNote is narrower in the narrow preview", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });

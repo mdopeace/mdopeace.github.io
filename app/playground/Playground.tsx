@@ -40,62 +40,6 @@ import { elementCode, jsxText, completeExample } from "./snippets";
 
 const catalog = [
   {
-    id: "speech-bubble",
-    name: "SpeechBubble",
-    group: "Comic",
-    description: "A caption with a directional tail.",
-    rationale: "The tail shares the panel's ink and fill. Long words wrap inside the panel.",
-    tip: "Try each tail in the narrow preview.",
-  },
-  {
-    id: "burst",
-    name: "Burst",
-    group: "Comic",
-    description: "A starburst for short captions and feedback.",
-    rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
-    tip: "Hide and show the message to replay its entrance.",
-  },
-  {
-    id: "sticker",
-    name: "Sticker",
-    group: "Comic",
-    description: "Collectible artwork with optional button behavior.",
-    rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
-    tip: "Turn on Found to edit the sticker's appearance, or turn on Interactive and press Space or Enter on the sticker to find it.",
-  },
-  {
-    id: "consent-note",
-    name: "ConsentNote",
-    group: "Composition",
-    description: "An inline notice with two actions.",
-    rationale: "The notice stays in the page's reading order and leaves other controls reachable.",
-    tip: "Choose either action, then reopen the notice to try again.",
-  },
-  {
-    id: "navbar",
-    name: "Navbar",
-    group: "Navigation",
-    description: "A shared frame for finding your way.",
-    rationale: "Navbar owns the surface, padding and responsive placement of the brand, links and actions. The consuming page decides where it sits and which destination is current.",
-    tip: "Resize the page. Links move onto their own row on small screens, while the brand and actions stay together.",
-  },
-  {
-    id: "navbar-links",
-    name: "NavbarLinks",
-    group: "Navigation",
-    description: "One moving highlight, clear destinations.",
-    rationale: "The text highlight and underline travel together. Active state is supplied by the consumer, so the same component supports page navigation, section tracking or local demos.",
-    tip: "Hover or focus a destination to preview it. Move away to return to the current destination. Reduced motion keeps feedback immediate.",
-  },
-  {
-    id: "image",
-    name: "Image",
-    group: "Media",
-    description: "Space reserved. Loading considered.",
-    rationale: "Explicit dimensions reserve the frame before loading. A subtle placeholder gives way to the decoded image, and failed images retain their space with a fallback. Project screenshots and logos compose this same foundation.",
-    tip: "Compare contain and cover, try rounded corners, or switch to an unavailable source to see the fallback. Decorative images use an empty alt attribute.",
-  },
-  {
     id: "button",
     name: "Button",
     group: "Actions",
@@ -105,93 +49,48 @@ const catalog = [
     tip: "Tab to the button, then activate it with Enter or Space. Disabled and loading states prevent activation.",
   },
   {
-    id: "link",
-    name: "Link",
-    group: "Actions",
-    description: "Navigation with a familiar visual language.",
-    rationale:
-      "Links retain native anchor behavior. A navigation action can wear the button recipe without losing its semantics.",
-    tip: "Use a link for a destination and a button for an action. External indicators are decorative; the label names the destination.",
-  },
-  {
-    id: "switch",
-    name: "Switch",
-    group: "Actions",
-    description: "A small control for a persistent choice.",
-    rationale:
-      "Button and Switch share 32, 40 and 48px size tokens. The thumb moves and its icon fades, while the accessible checked state updates immediately.",
-    tip: "Focus the switch and press Space. Its name stays constant; checked communicates the changing state.",
-  },
-  {
-    id: "surface",
-    name: "Surface",
-    group: "Foundations",
-    description: "Give content a place to live.",
-    rationale:
-      "Paired foreground and background tokens keep each surface readable in both themes. App panels use 5px depth; nested content stays flat.",
-    tip: "A visual panel is not automatically interactive. Keep static cards still and reserve action feedback for actionable content.",
-  },
-  {
-    id: "typography",
-    name: "Typography",
-    group: "Foundations",
-    description: "A hierarchy that travels with the content.",
-    rationale:
-      "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
-    tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
-  },
-  {
-    id: "tile",
-    name: "Tile",
-    group: "Foundations",
-    description: "A framed face for marks and indicators.",
-    rationale: "A square frame and optional inset edge give text, icons and indicator lights a shared physical finish. Color and content belong to the consumer; Tile adds no interaction or game state.",
-    tip: "Try the GB mark and the three indicator colors. Indicator colors stay fixed across themes. Wrap a tile in a link or button when it needs interaction.",
-  },
-  {
-    id: "badge",
-    name: "Badge",
-    group: "Foundations",
-    description: "Small labels with a little personality.",
-    rationale:
-      "A single primitive covers outlined metadata, solid labels, square marks and tilted stamps. It stays flat because it is not a button.",
-    tip: "Color supports the text; it never replaces it. Decorative chapter numbers can be hidden from assistive technology.",
-  },
-  {
     id: "layout",
     name: "Layout & Divider",
-    group: "Composition",
+    group: "Layout & Style",
     description: "Spacing is part of the system.",
     rationale:
       "Stack, Inline and Grid own arrangement. A shared spacing scale makes compositions consistent without putting margins on every child.",
     tip: "This demo changes columns and gaps without changing its child cards. Responsive layouts can choose different values at each breakpoint.",
   },
   {
-    id: "dialog",
-    name: "Dialog",
-    group: "Composition",
-    description: "A focused space for a short task.",
+    id: "typography",
+    name: "Typography",
+    group: "Layout & Style",
+    description: "A hierarchy that travels with the content.",
     rationale:
-      "Native dialog behavior handles modality. Opening and closing animate while focus and scroll locking remain coordinated.",
-    tip: "Open it, move through its controls with Tab, and close with Escape. Focus returns to the trigger.",
+      "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
+    tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
   },
   {
-    id: "content",
-    name: "Content & feedback",
-    group: "Composition",
-    description: "Useful details, revealed at the right time.",
+    id: "surface",
+    name: "Surface",
+    group: "Layout & Style",
+    description: "Give content a place to live.",
     rationale:
-      "ExpandableText owns disclosure, CommandBlock composes copying from Button and useClipboard, and LinkGroup arranges destinations. Behavior composes from small building blocks.",
-    tip: "Try the disclosure and copy action. Copy feedback reserves its width so the button does not jump when its label changes.",
+      "Paired foreground and background tokens keep each surface readable in both themes. App panels use 5px depth; nested content stays flat.",
+    tip: "A visual panel is not automatically interactive. Keep static cards still and reserve action feedback for actionable content.",
   },
   {
-    id: "field",
-    name: "Field",
-    group: "Forms",
-    description: "Labels and feedback that belong together.",
+    id: "badge",
+    name: "Badge",
+    group: "Layout & Style",
+    description: "Small labels with a little personality.",
     rationale:
-      "Field connects its label, help text and error to a control with stable IDs. It provides the relationship; the child provides the input.",
-    tip: "Focus the input: its name, description and validation state come from the field.",
+      "A single primitive covers outlined metadata, solid labels, square marks and tilted stamps. It stays flat because it is not a button.",
+    tip: "Color supports the text; it never replaces it. Decorative chapter numbers can be hidden from assistive technology.",
+  },
+  {
+    id: "tile",
+    name: "Tile",
+    group: "Layout & Style",
+    description: "A framed face for marks and indicators.",
+    rationale: "A square frame and optional inset edge give text, icons and indicator lights a shared physical finish. Color and content belong to the consumer; Tile adds no interaction or game state.",
+    tip: "Try the GB mark and the three indicator colors. Indicator colors stay fixed across themes. Wrap a tile in a link or button when it needs interaction.",
   },
   {
     id: "input",
@@ -221,13 +120,90 @@ const catalog = [
     tip: "Tab to the checkbox and press Space. Clicking its label also toggles it.",
   },
   {
+    id: "switch",
+    name: "Switch",
+    group: "Forms",
+    description: "A small control for a persistent choice.",
+    rationale:
+      "Button and Switch share 32, 40 and 48px size tokens. The thumb moves and its icon fades, while the accessible checked state updates immediately.",
+    tip: "Focus the switch and press Space. Its name stays constant; checked communicates the changing state.",
+  },
+  {
+    id: "field",
+    name: "Field",
+    group: "Forms",
+    description: "Labels and feedback that belong together.",
+    rationale:
+      "Field connects its label, help text and error to a control with stable IDs. It provides the relationship; the child provides the input.",
+    tip: "Focus the input: its name, description and validation state come from the field.",
+  },
+  {
+    id: "link",
+    name: "Link",
+    group: "Navigation",
+    description: "Navigation with a familiar visual language.",
+    rationale:
+      "Links retain native anchor behavior. A navigation action can wear the button recipe without losing its semantics.",
+    tip: "Use a link for a destination and a button for an action. External indicators are decorative; the label names the destination.",
+  },
+  {
+    id: "navbar-links",
+    name: "NavbarLinks",
+    group: "Navigation",
+    description: "One moving highlight, clear destinations.",
+    rationale: "The text highlight and underline travel together. Active state is supplied by the consumer, so the same component supports page navigation, section tracking or local demos.",
+    tip: "Hover or focus a destination to preview it. Move away to return to the current destination. Reduced motion keeps feedback immediate.",
+  },
+  {
+    id: "navbar",
+    name: "Navbar",
+    group: "Navigation",
+    description: "A shared frame for finding your way.",
+    rationale: "Navbar owns the surface, padding and responsive placement of the brand, links and actions. The consuming page decides where it sits and which destination is current.",
+    tip: "Resize the page. Links move onto their own row on small screens, while the brand and actions stay together.",
+  },
+  {
     id: "navigation",
     name: "NavigationList",
-    group: "Composition",
+    group: "Navigation",
     description: "Find a destination, see where you are.",
     rationale:
       "Grouped navigation supports native links for destinations and buttons for local selections. Active state is exposed with aria-current.",
     tip: "Move between entries with Tab and activate with Enter. Disabled entries are skipped.",
+  },
+  {
+    id: "image",
+    name: "Image",
+    group: "Media",
+    description: "Space reserved. Loading considered.",
+    rationale: "Explicit dimensions reserve the frame before loading. A subtle placeholder gives way to the decoded image, and failed images retain their space with a fallback. Project screenshots and logos compose this same foundation.",
+    tip: "Compare contain and cover, try rounded corners, or switch to an unavailable source to see the fallback. Decorative images use an empty alt attribute.",
+  },
+  {
+    id: "content",
+    name: "Content & feedback",
+    group: "Composition",
+    description: "Useful details, revealed at the right time.",
+    rationale:
+      "ExpandableText owns disclosure, CommandBlock composes copying from Button and useClipboard, and LinkGroup arranges destinations. Behavior composes from small building blocks.",
+    tip: "Try the disclosure and copy action. Copy feedback reserves its width so the button does not jump when its label changes.",
+  },
+  {
+    id: "consent-note",
+    name: "ConsentNote",
+    group: "Composition",
+    description: "An inline notice with two actions.",
+    rationale: "The notice stays in the page's reading order and leaves other controls reachable.",
+    tip: "Choose either action, then reopen the notice to try again.",
+  },
+  {
+    id: "dialog",
+    name: "Dialog",
+    group: "Composition",
+    description: "A focused space for a short task.",
+    rationale:
+      "Native dialog behavior handles modality. Opening and closing animate while focus and scroll locking remain coordinated.",
+    tip: "Open it, move through its controls with Tab, and close with Escape. Focus returns to the trigger.",
   },
   {
     id: "code",
@@ -238,7 +214,38 @@ const catalog = [
       "Syntax highlighting uses escaped React text, never generated HTML. Copying preserves the exact source, including newlines.",
     tip: "The code region can be focused and scrolled. Copy feedback is announced without moving focus.",
   },
+  {
+    id: "speech-bubble",
+    name: "SpeechBubble",
+    group: "Comic",
+    description: "A caption with a directional tail.",
+    rationale: "The tail shares the panel's ink and fill. Long words wrap inside the panel.",
+    tip: "Try each tail in the narrow preview.",
+  },
+  {
+    id: "burst",
+    name: "Burst",
+    group: "Comic",
+    description: "A starburst for short captions and feedback.",
+    rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
+    tip: "Hide and show the message to replay its entrance.",
+  },
+  {
+    id: "sticker",
+    name: "Sticker",
+    group: "Comic",
+    description: "Collectible artwork with optional button behavior.",
+    rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
+    tip: "Turn on Found to edit the sticker's appearance, or turn on Interactive and press Space or Enter on the sticker to find it.",
+  },
 ] as const;
+const catalogGroups = [...new Set(catalog.map((item) => item.group))].map((group) => ({
+  label: group,
+  items: catalog
+    .filter((item) => item.group === group)
+    .map((item) => ({ id: item.id, label: item.name })),
+}));
+
 type ComponentId = (typeof catalog)[number]["id"];
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
 const rotations = ["none", "left", "right"] as const;
@@ -1338,14 +1345,7 @@ export default function ComponentPreview() {
           className={styles.sidebar}
           activeId={active}
           onSelect={(id) => setActive(id as ComponentId)}
-          groups={["Actions", "Foundations", "Forms", "Media", "Navigation", "Composition", "Comic"].map(
-            (group) => ({
-              label: group,
-              items: catalog
-                .filter((item) => item.group === group)
-                .map((item) => ({ id: item.id, label: item.name })),
-            }),
-          )}
+          groups={catalogGroups}
         />
         <main id="library-main" tabIndex={-1} className={styles.main}>
           <Stack gap={6}>

@@ -90,15 +90,32 @@ version-only PRs, protected auto-merge and recovery behavior.
 
 ## Scope
 
-### Navigation and images
+The playground presents the components in this order. Some demos cover several
+exports together.
 
-`Navbar` composes a navigation surface with optional `brand` and `actions` slots.
-Its child `NavbarLinks` accepts `items` (`id`, `label`, `href`), a controlled
-`activeId`, and an optional `onSelect(id, event)` callback. Native link navigation
-is preserved unless the consumer prevents the event. Use `current="location"`
-for section tracking or the default `"page"` for page destinations. Scroll
-tracking and sticky positioning belong to the application. Hover/focus previews,
-the sliding highlight, responsive arrangement and reduced motion live here.
+| Group | Playground entries |
+| --- | --- |
+| Actions | Button |
+| Layout & Style | Layout & Divider, Typography, Surface, Badge, Tile |
+| Forms | TextInput, Select, Checkbox, Switch, Field |
+| Navigation | Link, NavbarLinks, Navbar, NavigationList |
+| Media | Image |
+| Composition | Content & feedback (ExpandableText, CommandBlock, LinkGroup), ConsentNote, Dialog, CodeExample |
+| Comic | SpeechBubble, Burst, Sticker |
+
+### Navigation
+
+`NavbarLinks` accepts `items` (`id`, `label`, `href`), a controlled `activeId`,
+and an optional `onSelect(id, event)` callback. Native link navigation is
+preserved unless the consumer prevents the event. Use `current="location"`
+for section tracking or the default `"page"` for page destinations. Hover/focus
+previews, the sliding highlight and reduced motion live here.
+
+`Navbar` composes a responsive navigation surface with optional `brand` and
+`actions` slots and can host `NavbarLinks`. Scroll tracking and sticky
+positioning belong to the application.
+
+### Media
 
 `Image` requires `src`, `alt` and numeric `width`/`height`, or `fill` inside a
 positioned, already-sized parent. It reserves space while loading, fades in after
@@ -121,20 +138,20 @@ sections, content, device artwork and game logic stay in the app.
 `ConsentNote` provides a controlled inline notice with accept and decline
 actions. Import it from `@mdopeace/ui/ConsentNote`.
 
-### Comic components
-
-`SpeechBubble` frames speech or captions with a directional tail. `Burst`
-highlights text and can announce feedback. `Sticker` renders decorative
-collectible art or an actionable button. Each is available from a matching
-component subpath.
-
-### Code examples
+#### Code examples
 
 `CodeExample` accepts an optional `maxHeight` for its code area, such as
 `maxHeight={384}` (pixels), `maxHeight="24rem"`, or
 `maxHeight="min(28rem, 60dvh)"`. The default height is unrestricted. Longer
 examples scroll inside the code area while the title, Copy button and description
 remain outside it. Copy always includes the complete code.
+
+### Comic
+
+`SpeechBubble` frames speech or captions with a directional tail. `Burst`
+highlights text and can announce feedback. `Sticker` renders decorative
+collectible art or an actionable button. Each is available from a matching
+component subpath.
 
 Read the repository's [contribution guidelines](https://github.com/mdopeace/mdopeace.github.io/blob/main/CONTRIBUTING.md) and
 [code of conduct](https://github.com/mdopeace/mdopeace.github.io/blob/main/CODE_OF_CONDUCT.md) before proposing changes.
