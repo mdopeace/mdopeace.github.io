@@ -285,6 +285,21 @@
   color: inherit;
   text-decoration-thickness: 2px;
 }
+button.link {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+button.link:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
 .control:focus-visible,
 .link:focus-visible,
 .switch:has(input:focus-visible) {
@@ -434,6 +449,12 @@
 .dialog[data-size="lg"] {
   --dialog-width: 52rem;
 }
+@media (width < 40rem) {
+  .dialog {
+    width: min(var(--dialog-width), calc(100% - 2 * var(--ui-space-3)));
+    max-width: none;
+  }
+}
 .dialog::backdrop {
   background: rgb(0 0 0 / 0.65);
 }
@@ -451,6 +472,9 @@
 }
 .dialogInner {
   padding: var(--ui-space-6);
+}
+.dialogHeader {
+  display: flow-root;
 }
 .dialogClose {
   float: right;

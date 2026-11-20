@@ -5,7 +5,9 @@ export type ProjectLink = {
 };
 
 export type Project = {
+  id: string;
   name: string;
+  summary?: string;
   logo?: string;
   pills: string[];
   tagline: string;
@@ -19,7 +21,9 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "quicktodo",
     name: "QuickTodo",
+    summary: "Mac menu bar to-do app built with SwiftUI.",
     logo: "https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/icon.png",
     shot: "https://raw.githubusercontent.com/mdopeace/quicktodo/main/docs/screenshots/completed.png",
     shotWidth: 692,
@@ -58,7 +62,9 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "vidp",
     name: "Vidp",
+    summary: "Keyboard-driven macOS video player built on libmpv.",
     logo: "https://vidplabs.github.io/icon.png",
     shot: "https://vidplabs.github.io/screenshots/paused.png",
     shotWidth: 640,
@@ -98,7 +104,9 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "cookieater",
     name: "Cookieater",
+    summary: "Chrome and Firefox extension for editing cookies.",
     logo: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/icon.png",
     shot: "https://raw.githubusercontent.com/mdopeace/cookieater/main/docs/screenshots/overview.png",
     shotWidth: 960,
@@ -138,6 +146,7 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "component-library",
     name: "Component Library",
     preview: "component-library",
     pills: ["React", "TypeScript", "Component library"],
