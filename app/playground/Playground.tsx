@@ -241,7 +241,7 @@ const catalog = [
 type ComponentId = (typeof catalog)[number]["id"];
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
 const rotations = ["none", "left", "right"] as const;
-const burstTones = ["default", "accent", "info", "emphasis"] as const;
+const comicTones = ["default", "accent", "emphasis"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 const tones = ["default", "subtle", "accent", "info", "emphasis"] as const;
 const variants = ["primary", "secondary", "ghost", "emphasis"] as const;
@@ -318,7 +318,8 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
   const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
   const [rotation, setRotation] = useState<(typeof rotations)[number]>("left");
-  const [burstTone, setBurstTone] = useState<(typeof burstTones)[number]>("accent");
+  const [burstTone, setBurstTone] = useState<(typeof comicTones)[number]>("accent");
+  const [speechTone, setSpeechTone] = useState<(typeof comicTones)[number]>("default");
   const [animated, setAnimated] = useState(true);
   const [feedback, setFeedback] = useState(false);
   const [showBurst, setShowBurst] = useState(true);
@@ -590,17 +591,17 @@ function Playground({ kind }: { kind: ComponentId }) {
     controls = (
       <>
         <Choice label="Tail" value={tail} options={tails} onChange={setTail} />
-        <Choice label="Tone" value={tone} options={tones} onChange={setTone} />
+        <Choice label="Tone" value={speechTone} options={comicTones} onChange={setSpeechTone} />
         {sizeControl}
       </>
     );
-    preview = <SpeechBubble tail={tail} tone={tone} size={size}>{caption}</SpeechBubble>;
-    code = elementCode("SpeechBubble", [`tail="${tail}"`, `tone="${tone}"`, sizeProp], caption);
+    preview = <SpeechBubble tail={tail} tone={speechTone} size={size}>{caption}</SpeechBubble>;
+    code = elementCode("SpeechBubble", [`tail="${tail}"`, `tone="${speechTone}"`, sizeProp], caption);
   } else if (kind === "burst") {
     const message = "POW! Copied!";
     controls = (
       <>
-        <Choice label="Tone" value={burstTone} options={burstTones} onChange={setBurstTone} />
+        <Choice label="Tone" value={burstTone} options={comicTones} onChange={setBurstTone} />
         {sizeControl}
         <Toggle label="Animate entry" checked={animated} onChange={setAnimated} />
         <Toggle label="Announce feedback" checked={feedback} onChange={setFeedback} />
@@ -657,9 +658,9 @@ function Playground({ kind }: { kind: ComponentId }) {
     code = [
       "<>",
       elementCode("ConsentNote", [
-        "open={open}", "onAccept={() => setOpen(false)}", "onDecline={() => setOpen(false)}",
+        "open={open}", "onAccept={closeNotice}", "onDecline={closeNotice}",
       ], notice),
-      '<Button onClick={() => setOpen(true)}>Open notice</Button>',
+      '<Button ref={reopenRef} onClick={() => setOpen(true)}>Open notice</Button>',
       "</>",
     ].join("\n");
   } else if (kind === "tile") {
@@ -1163,7 +1164,15 @@ function Playground({ kind }: { kind: ComponentId }) {
   if (kind === "sticker" && interactive)
     setup = `const [found, setFound] = useState(${found});`;
   if (kind === "consent-note")
-    setup = `const [open, setOpen] = useState(${noteOpen});`;
+    setup = [
+      `const [open, setOpen] = useState(${noteOpen});`,
+      "const reopenRef = useRef<HTMLButtonElement>(null);",
+      "",
+      "function closeNotice() {",
+      "  setOpen(false);",
+      "  reopenRef.current?.focus();",
+      "}",
+    ].join("\n");
   if (kind === "burst" && feedback)
     setup = "const [message, setMessage] = useState(null as string | null);";
   code = completeExample(

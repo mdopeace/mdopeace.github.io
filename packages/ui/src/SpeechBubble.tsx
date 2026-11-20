@@ -5,7 +5,7 @@ import styles from "./speech-bubble.module.css";
 
 export type SpeechBubbleProps = ComponentPropsWithRef<"div"> & {
   tail?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
-  tone?: Tone;
+  tone?: Extract<Tone, "default" | "accent" | "emphasis">;
   size?: Size;
 };
 
