@@ -91,3 +91,12 @@ Portfolio content and branding are not included in the package.
 
 The [UI release guide](./docs/ui-release.md) explains the App-driven release PR,
 required CI, protected auto-merge and versioned GitHub Release archive.
+
+## Analytics
+
+`npm run build` (and so the GitHub Pages deploy) reads Md’s public, personal GA4
+measurement ID from the committed [`.env.production`](./.env.production). `npm run dev`
+and builds with an empty value (`NEXT_PUBLIC_GA_MEASUREMENT_ID= npm run build`) have no
+analytics at all. Google Analytics loads only after a
+visitor accepts analytics cookies. Keep Enhanced Measurement off in the GA4 web
+stream so the site controls which interaction events are sent.

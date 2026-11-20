@@ -6,7 +6,7 @@ export default defineConfig({
   test: {
     css: { include: /(?:ui|sticker)\.module\.css$/ },
     environment: "jsdom",
-    include: ["tests/ui.test.tsx"],
+    include: ["tests/ui.test.tsx", "tests/analytics-consent.test.tsx"],
     setupFiles: ["./tests/setup.ts"],
   },
 });

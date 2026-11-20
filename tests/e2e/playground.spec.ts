@@ -7,7 +7,7 @@ for (const theme of ["light", "dark"] as const) {
     for (const path of ["/", "/playground/"]) {
       await page.goto(path);
       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
-      const caption = page.getByRole("contentinfo").locator("p");
+      const caption = page.getByRole("contentinfo").locator('p[data-font="mono"]');
       await expect(caption).toHaveAttribute("data-font", "mono");
       await expect(caption).toHaveAttribute("data-size", "caption");
       typography.push(await caption.evaluate(element => {

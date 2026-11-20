@@ -11,6 +11,7 @@ next-env.d.ts
 
 # env & logs
 .env*
+!.env.production
 npm-debug.log*
 
 # os

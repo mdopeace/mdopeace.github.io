@@ -301,6 +301,7 @@
     border: 1px solid #34372a;
   }
   .tetris-overlay {
+    --reduced-transition-duration: var(--ui-fade-fast);
     position: absolute;
     inset: 32px 7px 7px;
     display: grid;
@@ -315,7 +316,10 @@
   @starting-style {
     .tetris-overlay { opacity: 0; }
   }
-  .tetris-overlay-title { animation: tetris-overlay-fade var(--ui-fast) ease; }
+  .tetris-overlay-title {
+    --reduced-animation-duration: var(--ui-fade-fast);
+    animation: tetris-overlay-fade var(--ui-fade-fast) var(--ui-ease);
+  }
   @keyframes tetris-overlay-fade {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -857,6 +861,12 @@
   }
   .page-footer {
     padding-block: var(--ui-space-8);
+  }
+  .analytics-privacy {
+    display: grid;
+    gap: var(--ui-space-3);
+    margin-block-start: var(--ui-space-4);
+    max-inline-size: 42rem;
   }
   @media (max-width: 680px) {
     .footer-layout {

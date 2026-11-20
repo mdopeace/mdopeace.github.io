@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { expectAccessible, openForAudit, themes } from "./accessibility";
 
+const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
 test("the character card opens from the first viewport and covers the essentials", async ({ page }) => {
   await page.goto("/");
   const copy = page.locator("header#top p").filter({ hasText: /^At Tracxn, I work across the web platform\./ });
@@ -94,6 +96,41 @@ for (const method of ["click", "keyboard"] as const) {
     expect(new URL(page.url()).hash).toBe("");
   });
 }
+
+test("production analytics makes Google requests only after Accept", async ({ page }) => {
+  test.skip(!measurementId, "Requires a GA measurement ID");
+
+  const googleRequests: string[] = [];
+  await page.route(url => /(?:^|\.)(?:googletagmanager|google-analytics)\.com$/.test(url.hostname), async route => {
+    googleRequests.push(route.request().url());
+    await route.fulfill({ contentType: "application/javascript", body: "" });
+  });
+
+  const prompt = page.getByRole("region", { name: "Analytics cookies" });
+  await page.goto("/");
+  await expect(prompt).toBeVisible();
+  await prompt.scrollIntoViewIfNeeded();
+  await expect(prompt).toBeInViewport();
+  expect(googleRequests).toEqual([]);
+
+  await prompt.getByRole("button", { name: "Decline", exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Allow analytics", exact: true })).toBeVisible();
+  await expect(prompt).toHaveCount(0);
+  expect(googleRequests).toEqual([]);
+
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await expect(prompt).toBeVisible();
+  expect(googleRequests).toEqual([]);
+
+  const tagUrl = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+  await Promise.all([
+    page.waitForResponse(response => response.url() === tagUrl && response.ok()),
+    prompt.getByRole("button", { name: "Accept", exact: true }).click(),
+  ]);
+  expect(googleRequests).toEqual([tagUrl]);
+});
 
 test("copy email offers the email link when clipboard writing fails", async ({ page }) => {
   await page.addInitScript(() => {

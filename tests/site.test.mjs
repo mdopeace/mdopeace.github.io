@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 
 // Checks read the built page — what ships is what's tested. Run `npm run build` first.
 assert.ok(
@@ -123,4 +123,44 @@ test("support dialog ships both provider links and dialog hooks", () => {
     html.includes("https://buymeacoffee.com/mdopeace"),
     "Buy Me a Coffee link missing",
   );
+});
+
+const analyticsFiles = readdirSync("out", { recursive: true })
+  .filter((file) => typeof file === "string" && /\.(?:html|js|txt)$/.test(file) && statSync(`out/${file}`).isFile());
+import nextEnv from "@next/env";
+
+// Match `next build`: read .env.production unless the variable is already set (even empty).
+nextEnv.loadEnvConfig(process.cwd(), false);
+const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
+test("the default static export contains no GA ID, loader, or command queue", { skip: Boolean(measurementId) }, () => {
+  for (const file of analyticsFiles) {
+    const contents = readFileSync(`out/${file}`, "utf8");
+    assert.doesNotMatch(
+      contents,
+      /["'`]G-[A-Z0-9]{5,}["'`]|googletagmanager\.com|google-analytics\.com|allow_google_signals/,
+      file,
+    );
+  }
+});
+
+test("the production static export ships only Md's GA ID and leaves its HTML free of analytics scripts", { skip: !measurementId }, () => {
+  const productionId = "G-YD5K1KK209";
+  assert.equal(measurementId, productionId);
+
+  let hasBundledId = false;
+  for (const file of analyticsFiles) {
+    const contents = readFileSync(`out/${file}`, "utf8");
+    const ids = [...contents.matchAll(/\bG-[A-Z0-9]{5,}\b/g)].map(([id]) => id);
+    for (const id of ids) assert.equal(id, productionId, `Unexpected GA ID in ${file}`);
+
+    hasBundledId ||= file.endsWith(".js") && ids.includes(productionId);
+    if (file.endsWith(".html")) {
+      assert.doesNotMatch(contents, /<script\b[^>]*\bsrc\s*=\s*[^>]*googletagmanager\.com/i, file);
+      for (const [, script] of contents.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) {
+        assert.doesNotMatch(script, /\bdataLayer\b|\bgtag\s*\(\s*\\?["']config\\?["']/, file);
+      }
+    }
+  }
+  assert.ok(hasBundledId, "Production GA ID missing from built JavaScript");
 });

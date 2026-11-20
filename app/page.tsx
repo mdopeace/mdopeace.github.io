@@ -1,3 +1,4 @@
+import AnalyticsConsent from "@/components/analytics/AnalyticsConsent";
 import Contact from "@/components/sections/Contact";
 import DayJob from "@/components/sections/DayJob";
 import Hero from "@/components/sections/Hero";
@@ -72,6 +73,7 @@ export default function Home() {
             Back to top
           </Link>
         </Inline>
+        <AnalyticsConsent />
       </footer>
     </Container>
   );
