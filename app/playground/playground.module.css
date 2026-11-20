@@ -154,7 +154,7 @@
   }
 }
 
-.comicPreview {
+.widthPreview {
   display: grid;
   justify-items: center;
   inline-size: 100%;
@@ -162,6 +162,6 @@
   padding-block: var(--ui-space-3);
 }
 
-.comicPreview[data-width="narrow"] {
+.widthPreview[data-width="narrow"] {
   max-inline-size: 20rem;
 }

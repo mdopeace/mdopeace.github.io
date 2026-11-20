@@ -71,6 +71,7 @@ const imports: Record<string, string> = {
   Heading: "@mdopeace/ui/Typography",
   Text: "@mdopeace/ui/Typography",
   Grid: "@mdopeace/ui/Layout",
+  Inline: "@mdopeace/ui/Layout",
   Stack: "@mdopeace/ui/Layout",
   Divider: "@mdopeace/ui/Divider",
   Dialog: "@mdopeace/ui/Dialog",

@@ -4,6 +4,9 @@ import styles from "./sticker.module.css";
 
 type StickerAppearance = {
   found?: boolean;
+  foundTone?: "default" | "accent" | "emphasis";
+  pattern?: "none" | "stripes" | "dots" | "grid";
+  icon?: ReactNode;
   rotation?: "none" | "left" | "right";
   size?: Size;
 };
@@ -17,17 +20,26 @@ type InteractiveSticker = Omit<ComponentPropsWithRef<"button">, "onClick" | "chi
 export type StickerProps = StickerAppearance & (DecorativeSticker | InteractiveSticker);
 
 export function Sticker({
-  found = false, rotation = "none", size = "md", className, ...props
+  found = false, foundTone = "accent", pattern = "none", icon,
+  rotation = "none", size = "md", className, children, ...props
 }: StickerProps) {
   const stateId = useId();
   const appearance = {
     className: cx(styles.sticker, className),
     "data-found": found,
+    "data-found-tone": foundTone,
+    "data-pattern": pattern,
     "data-rotation": rotation,
     "data-size": size,
   };
+  const content = found && (pattern !== "none" || icon != null) ? (
+    <span className={styles.content}>
+      {icon != null && <span className={styles.icon} aria-hidden="true" inert>{icon}</span>}
+      {children}
+    </span>
+  ) : children;
   if (props.onClick) {
-    const { type = "button", children, "aria-describedby": describedBy, ...buttonProps } = props;
+    const { type = "button", "aria-describedby": describedBy, ...buttonProps } = props;
     return (
       <button
         {...buttonProps}
@@ -35,10 +47,10 @@ export function Sticker({
         type={type}
         aria-describedby={describedBy ? `${describedBy} ${stateId}` : stateId}
       >
-        {children}
+        {content}
         <span id={stateId} hidden>{found ? "Found" : "Not found"}</span>
       </button>
     );
   }
-  return <span {...props} {...appearance} aria-hidden="true" inert />;
+  return <span {...props} {...appearance} aria-hidden="true" inert>{content}</span>;
 }

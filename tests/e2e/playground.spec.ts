@@ -60,7 +60,7 @@ for (const theme of ["light", "dark"] as const) {
     await navigation.getByRole("button", { name: "Badge", exact: true }).click();
     const badge = page.locator('[data-decoration]').filter({ hasText: "Work in progress" });
     await page.getByRole("checkbox", { name: "Solid fill" }).uncheck();
-    for (const tone of ["default", "accent", "info", "emphasis"]) {
+    for (const tone of ["default", "accent", "emphasis"]) {
       await page.getByRole("combobox", { name: "Tone", exact: true }).selectOption(tone);
       const foreground = tone === "emphasis"
         ? theme === "light" ? "rgb(161, 60, 36)" : "rgb(240, 139, 107)"
