@@ -380,7 +380,10 @@ function Playground({ kind }: { kind: ComponentId }) {
       label="Variant"
       value={variant}
       options={buttonVariants}
-      onChange={setVariant}
+      onChange={(nextVariant) => {
+        setVariant(nextVariant);
+        if (nextVariant === "text") setIconOnly(false);
+      }}
     />
   );
   const toneControl = (
@@ -427,7 +430,9 @@ function Playground({ kind }: { kind: ComponentId }) {
           )}
         </Field>
         <Toggle label="Leading icon" checked={icon} onChange={setIcon} />
-        <Toggle label="Icon only" checked={iconOnly} onChange={setIconOnly} />
+        {variant !== "text" && (
+          <Toggle label="Icon only" checked={iconOnly} onChange={setIconOnly} />
+        )}
         <Toggle label="Disabled" checked={disabled} onChange={setDisabled} />
         <Toggle label="Loading" checked={loading} onChange={setLoading} />
       </>

@@ -47,11 +47,12 @@ it("renders the text Button with link styling and native keyboard activation", a
   render(
     <form onSubmit={onSubmit}>
       <Link href="#details">Details</Link>
-      <Button variant="text" onClick={onClick}>Show details</Button>
+      <Button variant="text" iconOnly aria-label="Show details" onClick={onClick}>Show details</Button>
     </form>,
   );
   const button = screen.getByRole<HTMLButtonElement>("button", { name: "Show details" });
   expect(button.type).toBe("button");
+  expect(button.hasAttribute("data-icon-only")).toBe(false);
   expect(button.className).toBe(screen.getByRole("link", { name: "Details" }).className);
   await user.tab();
   await user.tab();
@@ -330,6 +331,11 @@ describe("component playground", () => {
     const button = screen.getByRole("button", { name: "Make something" });
     expect(button.getAttribute("data-size")).toBe("lg");
     expect(button.getAttribute("data-icon-only")).toBe("true");
+    await user.selectOptions(screen.getByLabelText("Variant"), "text");
+    expect(screen.queryByLabelText("Icon only")).toBeNull();
+    expect(button.textContent).toBe("Make something");
+    await user.selectOptions(screen.getByLabelText("Variant"), "primary");
+    expect(button.getAttribute("data-icon-only")).toBe("false");
     await user.click(button);
     expect(screen.getByText("Activated 1 time")).toBeTruthy();
     await user.click(screen.getByLabelText("Disabled"));
