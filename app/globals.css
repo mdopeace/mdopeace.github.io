@@ -2,6 +2,19 @@
 @import "@mdopeace/ui/tokens.css";
 @import "../styles/theme-motion.css";
 
+/* Limit reduced-motion opt-ins to the element that declares them. */
+@property --reduced-animation-duration {
+  syntax: "<time>";
+  inherits: false;
+  initial-value: 0.01ms;
+}
+
+@property --reduced-transition-duration {
+  syntax: "<time>";
+  inherits: false;
+  initial-value: 0.01ms;
+}
+
 @theme {
   --color-bg: var(--paper);
   --color-panel: var(--card);
@@ -691,9 +704,9 @@
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
+      animation-duration: var(--reduced-animation-duration, 0.01ms) !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: var(--reduced-transition-duration, 0.01ms) !important;
     }
   }
   @media (min-width: 681px) and (max-width: 900px) {

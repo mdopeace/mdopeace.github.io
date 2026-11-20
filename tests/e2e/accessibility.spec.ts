@@ -62,7 +62,8 @@ for (const theme of themes) {
     const last = dialog.getByRole("button", { name: "Got it" });
     await expect(close).toBeFocused();
     await expect(close).toHaveCSS("outline-style", "solid");
-    await expect(dialog).toHaveCSS("animation-name", "none");
+    await expect(dialog).toHaveCSS("animation-name", /fade/);
+    await expect(dialog).toHaveCSS("transform", "none");
     await expectAccessible(page, "playground dialog");
     await page.keyboard.press("Shift+Tab");
     await expect(last).toBeFocused();

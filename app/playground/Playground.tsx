@@ -345,7 +345,7 @@ function Snippet({ code }: { code: string }) {
   );
 }
 
-function Playground({ kind }: { kind: ComponentId }) {
+function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: boolean }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
   const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
   const [rotation, setRotation] = useState<(typeof rotations)[number]>("left");
@@ -354,6 +354,8 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [animated, setAnimated] = useState(true);
   const [feedback, setFeedback] = useState(false);
   const [showBurst, setShowBurst] = useState(true);
+  const [previewChange, setPreviewChange] = useState(animateEntry ? 1 : 0);
+  const fadePreview = () => setPreviewChange(count => count + 1);
   const [found, setFound] = useState(false);
   const [foundTone, setFoundTone] = useState<(typeof comicTones)[number]>("accent");
   const [pattern, setPattern] = useState<(typeof stickerPatterns)[number]>("none");
@@ -485,7 +487,10 @@ function Playground({ kind }: { kind: ComponentId }) {
               }
             : { iconOnly: false as const })}
           startIcon={icon || iconOnly ? <FaHeart /> : undefined}
-          onClick={() => setClicks((value) => value + 1)}
+          onClick={() => {
+            setClicks(value => value + 1);
+            fadePreview();
+          }}
         >
           {iconOnly ? undefined : actionLabel}
         </Button>
@@ -656,8 +661,9 @@ function Playground({ kind }: { kind: ComponentId }) {
           tone={burstTone}
           size={size}
           animated={animated && showBurst}
-          style={{ visibility: showBurst ? undefined : "hidden" }}
-          aria-hidden={feedback || undefined}
+          className={styles.burstPreview}
+          data-visible={showBurst}
+          aria-hidden={feedback || !showBurst || undefined}
         >
           {message}
         </Burst>
@@ -700,6 +706,7 @@ function Playground({ kind }: { kind: ComponentId }) {
     const choose = (label: string) => {
       setDecision(label);
       setNoteOpen(false);
+      fadePreview();
       noticeToggleRef.current?.focus();
     };
     controls = (
@@ -1282,11 +1289,17 @@ function Playground({ kind }: { kind: ComponentId }) {
           </Text>
           <Badge>Interactive</Badge>
         </div>
-        <div className={styles.stage} role="group" aria-label="Live preview">
+        <div
+          className={styles.stage}
+          data-preview-change={previewChange ? previewChange % 2 : undefined}
+          role="group"
+          aria-label="Live preview"
+          onChange={fadePreview}
+        >
           {hasWidthPreview ? <div className={styles.widthPreview} data-width={width}>{preview}</div> : preview}
         </div>
       </div>
-      <aside className={styles.properties} aria-label="Playground properties">
+      <aside className={styles.properties} aria-label="Playground properties" onChange={fadePreview}>
         <Inline justify="between">
           <Heading level={3} size="label">
             Properties
@@ -1369,7 +1382,11 @@ export default function ComponentPreview() {
           label="Component library"
           className={styles.sidebar}
           activeId={active}
-          onSelect={(id) => setActive(id as ComponentId)}
+          onSelect={(id) => {
+            if (id === active) return;
+            setActive(id as ComponentId);
+            setRevision(value => value + 1);
+          }}
           groups={catalogGroups}
         />
         <main id="library-main" tabIndex={-1} className={styles.main}>
@@ -1392,7 +1409,7 @@ export default function ComponentPreview() {
                 Reset example
               </Button>
             </div>
-            <Playground key={`${active}-${revision}`} kind={active} />
+            <Playground key={revision} kind={active} animateEntry={revision > 0} />
             <Grid columns={{ base: 1, md: 2 }} gap={5}>
               <div className={styles.note}>
                 <Text variant="eyebrow">Why this works</Text>

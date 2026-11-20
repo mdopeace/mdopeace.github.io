@@ -159,7 +159,7 @@ describe("comic components", () => {
       </>
     );
     const { rerender } = render(note(false));
-    expect(screen.queryByText("Allow reminders?")).toBeNull();
+    expect(screen.queryByRole("region", { name: "Consent notice" })).toBeNull();
     rerender(note(true));
     expect(screen.getByRole("region", { name: "Consent notice" }).textContent).toContain("Allow reminders?");
     await user.tab();
@@ -609,7 +609,8 @@ it("toggles and persists only light/dark themes", async () => {
   expect(localStorage.getItem("portfolio-theme")).toBe("light");
 });
 
-it("closes through Escape and honors reduced motion without an exit delay", () => {
+it("closes through Escape after the reduced-motion fade", () => {
+  vi.useFakeTimers();
   vi.spyOn(window, "matchMedia").mockReturnValue({
     matches: true,
   } as MediaQueryList);
@@ -621,9 +622,12 @@ it("closes through Escape and honors reduced motion without an exit delay", () =
   fireEvent.keyDown(screen.getByRole("button", { name: "Close details" }), {
     key: "Escape",
   });
+  expect(dialog.open).toBe(true);
+  act(() => vi.advanceTimersByTime(120));
   expect(dialog.open).toBe(false);
   expect(document.activeElement).toBe(trigger);
   expect(document.body.style.overflow).toBe("");
+  vi.useRealTimers();
 });
 
 it("interrupts a dialog exit when the controlled parent reopens it", () => {

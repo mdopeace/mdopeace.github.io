@@ -131,7 +131,8 @@ test("comic previews wrap at 320px and honor the browser's motion preference", a
   await page.getByRole("button", { name: "Burst", exact: true }).click();
   await page.getByRole("checkbox", { name: "Announce feedback" }).check();
   const face = page.locator('[data-tone="accent"][data-size="md"] > div').filter({ hasText: "POW! Copied!" });
-  await expect(face).toHaveCSS("animation-name", "none");
+  await expect(face).toHaveCSS("animation-name", /fade/);
+  await expect(face).toHaveCSS("transform", "none");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(face).not.toHaveCSS("animation-name", "none");
   await page.getByRole("checkbox", { name: "Animate entry" }).uncheck();
