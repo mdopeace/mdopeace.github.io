@@ -33,9 +33,13 @@ export function Sticker({
     "data-size": size,
   };
   const content = pattern !== "none" || icon != null ? (
-    <span className={styles.content}>
-      {icon != null && <span className={styles.icon} aria-hidden="true" inert>{icon}</span>}
-      {children}
+    <span className={cx(styles.content, icon != null && styles.contentWithIcon)}>
+      {icon != null && (
+        <span className={styles.icon} aria-hidden="true" inert>
+          <span className={styles.iconArtwork}>{icon}</span>
+        </span>
+      )}
+      {icon != null ? <span className={styles.label}>{children}</span> : children}
     </span>
   ) : children;
   if (props.onClick) {

@@ -105,12 +105,52 @@ test("ConsentNote is narrower in the narrow preview", async ({ page }) => {
 
   const notice = page.getByRole("region", { name: "Consent notice" });
   const previewWidth = page.getByRole("combobox", { name: "Preview width" });
+  await expect(previewWidth).toBeVisible();
   await previewWidth.selectOption("wide");
   const wideWidth = await notice.evaluate((node) => node.getBoundingClientRect().width);
 
   await previewWidth.selectOption("narrow");
   await expect.poll(() => notice.evaluate((node) => node.getBoundingClientRect().width))
     .toBeLessThan(wideWidth);
+});
+
+test("Burst has no width control and is centered at every size", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "Burst", exact: true }).click();
+
+  const preview = page.getByRole("group", { name: "Live preview" });
+  const widthControl = page.getByRole("combobox", { name: "Preview width" });
+  const sizeControl = page.getByRole("combobox", { name: "Size", exact: true });
+
+  await expect(widthControl).toHaveCount(0);
+  const container = preview.locator('[data-width="wide"]');
+  for (const size of ["sm", "md", "lg"]) {
+    await test.step(size, async () => {
+      await sizeControl.selectOption(size);
+      const burst = container.locator(`[data-visible="true"][data-size="${size}"]`);
+      await expect(burst).toBeVisible();
+      await preview.evaluate(async (node) => {
+        await Promise.allSettled(node.getAnimations({ subtree: true }).map((animation) => animation.finished));
+      });
+      await page.evaluate(() => document.fonts.ready.then(() => undefined));
+
+      const gaps = await burst.evaluate((node) => {
+        const bounds = node.getBoundingClientRect();
+        const wrapper = node.closest("[data-width]")!.getBoundingClientRect();
+        return {
+          left: bounds.left - wrapper.left,
+          right: wrapper.right - bounds.right,
+          top: bounds.top - wrapper.top,
+          bottom: wrapper.bottom - bounds.bottom,
+          horizontalOverflow: node.scrollWidth - node.clientWidth,
+        };
+      });
+      expect(Math.abs(gaps.left - gaps.right), JSON.stringify(gaps)).toBeLessThanOrEqual(2);
+      expect(Math.abs(gaps.top - gaps.bottom), JSON.stringify(gaps)).toBeLessThanOrEqual(2);
+      expect(Math.min(gaps.left, gaps.right, gaps.top, gaps.bottom)).toBeGreaterThanOrEqual(0);
+      expect(gaps.horizontalOverflow).toBeLessThanOrEqual(0);
+    });
+  }
 });
 
 test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
