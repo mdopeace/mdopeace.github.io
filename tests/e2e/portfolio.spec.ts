@@ -150,6 +150,22 @@ for (const theme of ["light", "dark"] as const) {
     await copyEmail.click();
     const burst = contact.getByRole("status").filter({ hasText: "POW! Copied!" });
     await expect(burst).toBeVisible();
+    const bounds = await burst.boundingBox();
+    expect(bounds).not.toBeNull();
+    const { x, y, width, height } = bounds!;
+    expect(height).toBeLessThan(width);
+    expect(await burst.getByText("POW! Copied!", { exact: true })
+      .evaluate(label => label.getClientRects().length)).toBe(1);
+    expect(x).toBeGreaterThanOrEqual(0);
+    expect(x + width).toBeLessThanOrEqual(page.viewportSize()!.width);
+    for (const element of await contact.getByRole("heading")
+      .or(contact.getByRole("button"))
+      .or(contact.getByRole("link", { name: "Start a conversation" }))
+      .all()) {
+      const box = (await element.boundingBox())!;
+      expect(x < box.x + box.width && x + width > box.x &&
+        y < box.y + box.height && y + height > box.y).toBe(false);
+    }
     await expect(burst).toHaveAttribute("aria-live", "polite");
     await expect(burst.getByText("Email address copied to clipboard.")).toBeAttached();
     await expect(burst.locator(":scope > div")).toHaveCSS("animation-name", "none");

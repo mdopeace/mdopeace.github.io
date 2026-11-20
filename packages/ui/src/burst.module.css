@@ -5,6 +5,7 @@
   --burst-font: var(--ui-font-lg);
   display: inline-block;
   box-sizing: border-box;
+  inline-size: max-content;
   min-inline-size: 0;
   max-inline-size: 100%;
   color: var(--burst-fg);

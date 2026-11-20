@@ -5,12 +5,3 @@
   align-items: flex-start;
   gap: var(--ui-space-2, 0.5rem);
 }
-
-.burst {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  bottom: calc(100% - 0.4rem);
-  transform: translateX(-50%);
-  pointer-events: none;
-}
