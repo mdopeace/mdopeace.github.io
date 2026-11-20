@@ -88,8 +88,9 @@ required CI, protected auto-merge and versioned GitHub Release archive.
 
 ## Analytics
 
-The GitHub Pages production build sets `NEXT_PUBLIC_GA_MEASUREMENT_ID` to Md’s
-personal GA4 measurement ID in [deploy.yml](./.github/workflows/deploy.yml).
-PR and default local builds leave it unset. Google Analytics loads only after a
+`npm run build` (and so the GitHub Pages deploy) reads Md’s public, personal GA4
+measurement ID from the committed [`.env.production`](./.env.production). `npm run dev`
+and builds with an empty value (`NEXT_PUBLIC_GA_MEASUREMENT_ID= npm run build`) have no
+analytics at all. Google Analytics loads only after a
 visitor accepts analytics cookies. Keep Enhanced Measurement off in the GA4 web
 stream so the site controls which interaction events are sent.

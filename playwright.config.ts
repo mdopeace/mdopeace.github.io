@@ -1,4 +1,8 @@
 import { defineConfig } from "@playwright/test";
+import { loadEnvConfig } from "@next/env";
+
+// Match `next build`: read .env.production unless the variable is already set (even empty).
+loadEnvConfig(process.cwd(), false);
 
 export default defineConfig({
   testDir: "./tests/e2e",

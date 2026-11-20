@@ -127,6 +127,10 @@ test("support dialog ships both provider links and dialog hooks", () => {
 
 const analyticsFiles = readdirSync("out", { recursive: true })
   .filter((file) => typeof file === "string" && /\.(?:html|js|txt)$/.test(file) && statSync(`out/${file}`).isFile());
+import nextEnv from "@next/env";
+
+// Match `next build`: read .env.production unless the variable is already set (even empty).
+nextEnv.loadEnvConfig(process.cwd(), false);
 const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 test("the default static export contains no GA ID, loader, or command queue", { skip: Boolean(measurementId) }, () => {
