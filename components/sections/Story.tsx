@@ -11,8 +11,8 @@ export default function Story() {
       <Grid as="ol" columns={{ base: 1, md: 3 }} gap={4}>
         <StoryStep title="01 / Notice">
           <Text size="body" tone="muted">
-            It starts with films. And with the search for one worth sitting
-            through. Streaming splits across separate subscriptions, and
+            I’m a cinephile, so it starts with the search for a film worth
+            sitting through. Streaming splits across separate subscriptions, and
             whatever is free is buried in ads and buffering — so I download, and
             watch it dark, on a laptop.
           </Text>

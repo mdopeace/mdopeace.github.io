@@ -868,6 +868,9 @@
   .hero-copy {
     padding: var(--ui-space-6);
   }
+  .hero-summary-copy {
+    letter-spacing: -0.01em;
+  }
   .hero-name {
     color: var(--ui-emphasis);
     text-shadow: none;
@@ -878,6 +881,7 @@
   .project-layout {
     display: grid;
     gap: var(--ui-space-6);
+    scroll-margin-top: 6rem;
   }
   .project-media {
     display: grid;

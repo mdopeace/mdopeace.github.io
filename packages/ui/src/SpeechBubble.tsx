@@ -18,7 +18,7 @@ export function SpeechBubble({
       tone={tone}
       padding={size === "sm" ? 3 : size === "md" ? 4 : 5}
       border="strong"
-      radius="md"
+      radius="none"
       className={cx(styles.bubble, className)}
       data-tail={tail}
       data-size={size}
