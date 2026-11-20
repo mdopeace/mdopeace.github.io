@@ -1,29 +1,22 @@
-/* Animate only after a user chooses a theme, never during initial hydration.
-   Colored surfaces change immediately: interpolating light text to dark text
-   across light/dark emphasis fills can pass through low-contrast midpoints. */
-html[data-theme-transition] body,
-html[data-theme-transition] [data-ui-surface="default"],
-html[data-theme-transition] [data-ui-surface="subtle"] {
-  transition:
-    background-color var(--ui-normal),
-    border-color var(--ui-normal),
-    box-shadow var(--ui-normal);
-}
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --ui-fast: 0ms;
-    --ui-normal: 0ms;
-    --ui-slow: 0ms;
-  }
-}
-
-/* Crossfade complete theme snapshots to avoid mismatched intermediate palettes. */
+/* Crossfade complete snapshots so ink and fill change together. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: var(--ui-normal);
+  --reduced-animation-duration: var(--ui-fade-fast);
+  animation-duration: var(--ui-fade-normal);
   animation-timing-function: var(--ui-ease);
 }
+
+html[data-theme-transition="dark"] body,
+html[data-theme-transition="light"] body {
+  --reduced-animation-duration: var(--ui-fade-fast);
+  animation: theme-dark var(--ui-fade-normal) var(--ui-ease);
+}
+html[data-theme-transition="light"] body { animation-name: theme-light; }
+@keyframes theme-dark { from { opacity: 0.9; } }
+@keyframes theme-light { from { opacity: 0.9; } }
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
-  ::view-transition-new(root) { animation: none; }
+  ::view-transition-new(root),
+  html[data-theme-transition] body { animation-duration: var(--ui-fade-fast); }
 }

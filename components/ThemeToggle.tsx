@@ -18,7 +18,9 @@ function subscribe(notify: () => void) {
 function applyTheme(theme: Theme, animateFallback: boolean) {
   const root = document.documentElement;
   clearTimeout(transitionTimer);
-  if (animateFallback) root.dataset.themeTransition = "true";
+  if (animateFallback) {
+    root.dataset.themeTransition = theme;
+  }
   root.dataset.theme = theme;
   transitionTimer = setTimeout(() => {
     delete root.dataset.themeTransition;
@@ -34,9 +36,7 @@ function applyTheme(theme: Theme, animateFallback: boolean) {
   window.dispatchEvent(new Event("portfolio-theme-change"));
 }
 function chooseTheme(theme: Theme) {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    applyTheme(theme, false);
-  } else if (document.startViewTransition) {
+  if (document.startViewTransition) {
     void document.startViewTransition(() => applyTheme(theme, false)).finished.catch(() => {});
   } else {
     applyTheme(theme, true);
