@@ -10,6 +10,7 @@ import { Link } from "@mdopeace/ui/Link";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { Image } from "@mdopeace/ui/Image";
 import { FaGithub, FaLinkedinIn, FaTelegram } from "react-icons/fa6";
+import { withBasePath } from "@/lib/withBasePath";
 
 const socialLinks = [
   {
@@ -76,7 +77,7 @@ export default function Contact() {
           <div className="contact-thought">
             <Image
               className="contact-thought-image"
-              src="/contact-thought-bubble.webp"
+              src={withBasePath("/contact-thought-bubble.webp")}
               alt=""
               fill
               sizes="(max-width: 800px) 45vw, 230px"
@@ -94,7 +95,7 @@ export default function Contact() {
           >
             <Image
               className="contact-maker-image"
-              src="/contact-maker.webp"
+              src={withBasePath("/contact-maker.webp")}
               alt=""
               fill
               loading="eager"
