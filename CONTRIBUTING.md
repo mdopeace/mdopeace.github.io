@@ -57,3 +57,27 @@ npm run test:package
 Check keyboard behavior, reduced motion, mobile layouts and both themes. Public
 APIs and copied playground examples must stay aligned. Releases and publishing
 are maintainer-controlled actions; preparing an archive does not publish it.
+
+## Playground grouping and order
+
+Keep the groups in this fixed order. New groups require Md's approval.
+
+1. **Actions** — Buttons and other controls that trigger actions.
+2. **Layout & Style** — Layout, dividers, typography, surfaces, badges, and tiles.
+3. **Forms** — Inputs, selection controls, and field wrappers.
+4. **Navigation** — Links, navbars, and navigation lists.
+5. **Media** — Images and other media components.
+6. **Composition** — Content and feedback patterns, notices, dialogs, and code examples.
+7. **Comic** — Speech bubbles, bursts, stickers, and other comic-style components.
+
+Within each group, put simple, standalone pieces before components that wrap or
+combine others.
+
+In the same PR, add every new `@mdopeace/ui` component to the right group in the
+[playground catalog](./app/playground/Playground.tsx) and the
+[UI README table](./packages/ui/README.md), add a playground demo and tests, and
+update the [Playwright catalog order test](./tests/e2e/playground.spec.ts).
+
+Every playground control must visibly change the preview, as checked by
+[the Playwright controls tests](./tests/e2e/playground-controls.spec.ts). Disable
+controls in states where they can't apply.
