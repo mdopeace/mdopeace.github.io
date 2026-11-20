@@ -12,7 +12,7 @@ import { FaXmark } from "react-icons/fa6";
 import { useControllable } from "./hooks/useControllable";
 import { Button } from "./Button";
 import { Stack } from "./Layout";
-import { Heading, Text } from "./Typography";
+import { Heading, Text, type HeadingProps } from "./Typography";
 import { cx, type Size } from "./tokens";
 import styles from "./ui.module.css";
 
@@ -25,6 +25,7 @@ export type DialogProps = Omit<
 > &
   State & {
     title: string;
+    titleSize?: HeadingProps["size"];
     description?: ReactNode;
     closeLabel: string;
     size?: Size;
@@ -69,6 +70,7 @@ export function Dialog({
   defaultOpen = false,
   onOpenChange,
   title,
+  titleSize = "dialog",
   description,
   closeLabel,
   size = "sm",
@@ -183,25 +185,27 @@ export function Dialog({
       }}
     >
       <div className={styles.dialogInner}>
-        <Button
-          className={styles.dialogClose}
-          variant="ghost"
-          iconOnly
-          aria-label={closeLabel}
-          onClick={requestClose}
-          startIcon={<FaXmark />}
-        />
         <Stack gap={6}>
-          <Stack gap={3}>
-            <Heading level={2} size="dialog" id={titleId}>
-              {title}
-            </Heading>
-            {description && (
-              <Text id={descriptionId} tone="muted">
-                {description}
-              </Text>
-            )}
-          </Stack>
+          <div className={styles.dialogHeader}>
+            <Button
+              className={styles.dialogClose}
+              variant="ghost"
+              iconOnly
+              aria-label={closeLabel}
+              onClick={requestClose}
+              startIcon={<FaXmark />}
+            />
+            <Stack gap={3}>
+              <Heading level={2} size={titleSize} id={titleId}>
+                {title}
+              </Heading>
+              {description && (
+                <Text id={descriptionId} tone="muted">
+                  {description}
+                </Text>
+              )}
+            </Stack>
+          </div>
           {children}
         </Stack>
       </div>

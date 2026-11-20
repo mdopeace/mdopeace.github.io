@@ -42,6 +42,28 @@ function clipboard(writeText: (text: string) => Promise<void>) {
   });
 }
 
+it("renders the text Button with link styling and native keyboard activation", async () => {
+  const user = userEvent.setup();
+  const onClick = vi.fn();
+  const onSubmit = vi.fn();
+  render(
+    <form onSubmit={onSubmit}>
+      <Link href="#details">Details</Link>
+      <Button variant="text" iconOnly aria-label="Show details" onClick={onClick}>Show details</Button>
+    </form>,
+  );
+  const button = screen.getByRole<HTMLButtonElement>("button", { name: "Show details" });
+  expect(button.type).toBe("button");
+  expect(button.hasAttribute("data-icon-only")).toBe(false);
+  expect(button.className).toBe(screen.getByRole("link", { name: "Details" }).className);
+  await user.tab();
+  await user.tab();
+  expect(document.activeElement).toBe(button);
+  await user.keyboard("[Space][Enter]");
+  expect(onClick).toHaveBeenCalledTimes(2);
+  expect(onSubmit).not.toHaveBeenCalled();
+});
+
 it("sizes an opted-in badge with the same border-box height token as a small control", () => {
   render(
     <>
@@ -361,6 +383,11 @@ describe("component playground", () => {
     const button = screen.getByRole("button", { name: "Make something" });
     expect(button.getAttribute("data-size")).toBe("lg");
     expect(button.getAttribute("data-icon-only")).toBe("true");
+    await user.selectOptions(screen.getByLabelText("Variant"), "text");
+    expect(screen.queryByLabelText("Icon only")).toBeNull();
+    expect(button.textContent).toBe("Make something");
+    await user.selectOptions(screen.getByLabelText("Variant"), "primary");
+    expect(button.getAttribute("data-icon-only")).toBe("false");
     await user.click(button);
     expect(screen.getByText("Activated 1 time")).toBeTruthy();
     await user.click(screen.getByLabelText("Disabled"));
@@ -556,6 +583,15 @@ it("keeps modal semantics during exit, restores focus and previous scroll state"
   expect(document.body.style.overflow).toBe("clip");
   expect(document.activeElement).toBe(trigger);
   document.body.style.overflow = "";
+});
+it("supports a smaller title while preserving the dialog's accessible name", () => {
+  const { rerender } = render(<Dialog defaultOpen title="Details" closeLabel="Close details" />);
+  const dialog = screen.getByRole("dialog", { name: "Details" });
+  const title = within(dialog).getByRole("heading", { level: 2, name: "Details" });
+  expect(title.getAttribute("data-size")).toBe("dialog");
+  rerender(<Dialog defaultOpen title="Details" titleSize="feature" closeLabel="Close details" />);
+  expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+  expect(title.getAttribute("data-size")).toBe("feature");
 });
 it("restores scrolling and focus after repeated native closes", () => {
   document.body.style.overflow = "clip";

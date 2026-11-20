@@ -288,6 +288,21 @@
   color: inherit;
   text-decoration-thickness: 2px;
 }
+button.link {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+button.link:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
 .control:focus-visible,
 .link:focus-visible,
 .switch:has(input:focus-visible) {
@@ -463,6 +478,9 @@
 }
 .dialogInner {
   padding: var(--ui-space-6);
+}
+.dialogHeader {
+  display: flow-root;
 }
 .dialogClose {
   float: right;

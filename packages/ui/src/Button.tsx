@@ -13,7 +13,7 @@ export type ControlAppearance = {
   endIcon?: ReactNode;
 };
 export type ButtonProps = ComponentPropsWithRef<"button"> &
-  ControlAppearance & { loading?: boolean } & (
+  Omit<ControlAppearance, "variant"> & { variant?: Variant | "text"; loading?: boolean } & (
     ({ iconOnly: true } & AccessibleName) | { iconOnly?: false }
   );
 export function ControlIcon({ children, tone = "inherit", size }: { children: ReactNode; tone?: IconTone; size?: Size }) {
@@ -38,16 +38,17 @@ export function Button({
   className,
   ...props
 }: ButtonProps) {
+  const isText = variant === "text";
   return (
     <button
       {...props}
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      data-size={size}
+      data-size={isText ? undefined : size}
       data-variant={variant}
-      data-icon-only={iconOnly}
-      className={cx(styles.control, className)}
+      data-icon-only={isText ? undefined : iconOnly}
+      className={cx(isText ? styles.link : styles.control, className)}
     >
       <ControlIcon tone={iconTone} size={startIconSize}>{startIcon}</ControlIcon>
       {children}

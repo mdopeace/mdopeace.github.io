@@ -1,6 +1,7 @@
 import Section from "../portfolio/PortfolioSection";
 import { EmailAction } from "../portfolio/EmailAction";
 import SupportDialog from "../portfolio/SupportDialog";
+import { email, telegramHref } from "../portfolio/contactDetails";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
@@ -11,10 +12,6 @@ import { Image } from "@mdopeace/ui/Image";
 import { FaGithub, FaLinkedinIn, FaTelegram } from "react-icons/fa6";
 import { withBasePath } from "@/lib/withBasePath";
 
-// Confirmed Telegram username
-const TELEGRAM_USERNAME = "mdopeace";
-
-const email = "md.correo.e@gmail.com";
 const socialLinks = [
   {
     label: "GitHub",
@@ -28,7 +25,7 @@ const socialLinks = [
   },
   {
     label: "Telegram",
-    href: `https://t.me/${TELEGRAM_USERNAME}`,
+    href: telegramHref,
     startIcon: <FaTelegram />,
   },
 ];

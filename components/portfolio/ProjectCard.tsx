@@ -19,7 +19,7 @@ const icons = {
 };
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <Surface as="article" className="project-layout">
+    <Surface as="article" id={project.id} className="project-layout">
       <Surface
         tone={project.preview === "component-library" ? "subtle" : "info"}
         padding={4}
