@@ -16,10 +16,8 @@ export function ConsentNote({
   open, onAccept, onDecline, acceptLabel = "Accept", declineLabel = "Decline",
   children, className, role = "region", "aria-label": label = "Consent notice", ...props
 }: ConsentNoteProps) {
-  if (!open) return null;
-
   return (
-    <Surface {...props} role={role} aria-label={label} border="strong" className={cx(styles.note, className)}>
+    <Surface {...props} data-open={open} inert={!open} aria-hidden={!open || undefined} role={role} aria-label={label} border="strong" className={cx(styles.note, className)}>
       <div>{children}</div>
       <div className={styles.actions}>
         <Button onClick={onAccept}>{acceptLabel}</Button>

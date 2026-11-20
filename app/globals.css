@@ -2,6 +2,19 @@
 @import "@mdopeace/ui/tokens.css";
 @import "../styles/theme-motion.css";
 
+/* Limit reduced-motion opt-ins to the element that declares them. */
+@property --reduced-animation-duration {
+  syntax: "<time>";
+  inherits: false;
+  initial-value: 0.01ms;
+}
+
+@property --reduced-transition-duration {
+  syntax: "<time>";
+  inherits: false;
+  initial-value: 0.01ms;
+}
+
 @theme {
   --color-bg: var(--paper);
   --color-panel: var(--card);
@@ -288,6 +301,7 @@
     border: 1px solid #34372a;
   }
   .tetris-overlay {
+    --reduced-transition-duration: var(--ui-fade-fast);
     position: absolute;
     inset: 32px 7px 7px;
     display: grid;
@@ -302,7 +316,10 @@
   @starting-style {
     .tetris-overlay { opacity: 0; }
   }
-  .tetris-overlay-title { animation: tetris-overlay-fade var(--ui-fast) ease; }
+  .tetris-overlay-title {
+    --reduced-animation-duration: var(--ui-fade-fast);
+    animation: tetris-overlay-fade var(--ui-fade-fast) var(--ui-ease);
+  }
   @keyframes tetris-overlay-fade {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -691,9 +708,9 @@
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
+      animation-duration: var(--reduced-animation-duration, 0.01ms) !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: var(--reduced-transition-duration, 0.01ms) !important;
     }
   }
   @media (min-width: 681px) and (max-width: 900px) {

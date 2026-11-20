@@ -34,6 +34,10 @@ controls in states where they can't apply.
 
 ## Animation and accessibility
 
+Give every visible UI state change a transition using the shared motion durations
+and easing. Under `prefers-reduced-motion`, use a short opacity fade in place of
+movement or an abrupt swap. Verify computed motion in both modes with Playwright.
+
 For every change, honor `prefers-reduced-motion` and keep layout stable during
 animations and transitions. Use one persistent live region per status message.
 Keep controls keyboard reachable with visible focus and give them accurate roles,

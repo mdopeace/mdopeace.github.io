@@ -1,5 +1,10 @@
 .note {
+  --reduced-transition-duration: var(--ui-fade-fast);
   display: grid;
+  opacity: 1;
+  transition:
+    opacity var(--ui-fade-normal) var(--ui-ease),
+    display var(--ui-fade-normal) allow-discrete;
   gap: var(--ui-space-4);
   min-inline-size: 0;
   overflow-wrap: anywhere;
@@ -9,4 +14,18 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--ui-space-3);
+}
+
+.note[data-open="false"] {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@starting-style {
+  .note[data-open="true"] { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note { transition-duration: var(--ui-fade-fast); }
 }

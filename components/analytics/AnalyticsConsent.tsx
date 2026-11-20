@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@mdopeace/ui/Button";
+import { FeedbackLabel } from "@mdopeace/ui/FeedbackLabel";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Text } from "@mdopeace/ui/Typography";
 import { GA_MEASUREMENT_ID } from "@/components/analytics/config";
 import { scheduleAnalytics } from "@/components/analytics/scheduleAnalytics";
+import styles from "./analytics-consent.module.css";
 
 type Decision = "accepted" | "declined";
 const storageKey = "portfolio-analytics-consent";
@@ -22,11 +24,15 @@ function readDecision() {
 export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: { measurementId?: string }) {
   const privacyRef = useRef<HTMLParagraphElement>(null);
   const promptRef = useRef<HTMLDivElement>(null);
+  const choiceRef = useRef<HTMLButtonElement>(null);
   const promptDescriptionId = useId();
   const subscribe = useCallback((notify: () => void) => {
     function updateFromStorage(event: StorageEvent) {
       if (event.key !== storageKey && event.key !== null) return;
-      if (promptRef.current?.contains(document.activeElement) && readDecision()) {
+      const active = document.activeElement;
+      const decision = readDecision();
+      if ((promptRef.current?.contains(active) && decision) ||
+          (choiceRef.current === active && !decision)) {
         privacyRef.current?.focus();
       }
       notify();
@@ -73,7 +79,9 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
       <Text ref={privacyRef} tabIndex={-1} size="caption" tone="muted">
         Privacy note. If enabled, Google Analytics loads only with your consent to count
         visits and see which sections people explore. You can decline and use the whole site.
-        {showChoice && " You can change your choice below."}
+        <span className={styles.choice} data-visible={showChoice} aria-hidden={!showChoice || undefined}>
+          {" You can change your choice below."}
+        </span>
       </Text>
       <ConsentNote
         ref={promptRef}
@@ -85,15 +93,18 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
       >
         <Text id={promptDescriptionId}>May this site use analytics cookies to measure visits and how people explore?</Text>
       </ConsentNote>
-      {showChoice ? (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => decide(accepted ? "declined" : "accepted")}
-        >
-          {accepted ? "Turn off analytics" : "Allow analytics"}
-        </Button>
-      ) : null}
+      <Button
+        ref={choiceRef}
+        variant="ghost"
+        size="sm"
+        className={styles.choice}
+        data-visible={showChoice}
+        inert={!showChoice}
+        aria-hidden={!showChoice || undefined}
+        onClick={() => decide(accepted ? "declined" : "accepted")}
+      >
+        <FeedbackLabel active={accepted} idle="Allow analytics" feedback="Turn off analytics" />
+      </Button>
     </div>
   );
 }

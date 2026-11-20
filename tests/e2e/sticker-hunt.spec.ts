@@ -66,3 +66,24 @@ test("sticker hunt works with the keyboard when localStorage is blocked", async 
   await expect(sticker).toBeFocused();
   expect(errors).toEqual([]);
 });
+
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`sticker and counter animate with ${reducedMotion} motion`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/");
+    const progress = page.getByRole("status", { name: "Sticker hunt progress" });
+    const sticker = page.getByRole("button", { name: "Sticker: Zap!" });
+    await sticker.focus();
+    const originalProgress = await progress.boundingBox();
+    await sticker.press("Enter");
+    const duration = reducedMotion === "reduce" ? "0.12s" : "0.18s";
+    await expect(sticker).toHaveCSS("animation-name", /reveal/);
+    await expect(sticker).toHaveCSS("animation-duration", duration);
+    const count = progress.getByText("1 of 6 found", { exact: true });
+    await expect(count).toHaveCSS("animation-name", /count/);
+    await expect(count).toHaveCSS("animation-duration", duration);
+    await expect(count).toHaveCSS("transform", "none");
+    await expect(sticker).toBeFocused();
+    expect(await progress.boundingBox()).toEqual(originalProgress);
+  });
+}

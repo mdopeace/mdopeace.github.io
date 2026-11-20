@@ -19,7 +19,7 @@ beforeEach(() => {
 it("does not schedule analytics while consent is pending or declined, including on return", () => {
   const visit = render(<AnalyticsConsent measurementId={testId} />);
   expect(screen.getByRole("region", { name: "Analytics cookies" })).toBeTruthy();
-  expect(screen.queryByText(/You can change your choice below/i)).toBeNull();
+  expect(screen.getByText(/You can change your choice below/i).getAttribute("aria-hidden")).toBe("true");
   expect(idle).not.toHaveBeenCalled();
   expect(tag()).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Decline" }));
@@ -38,7 +38,7 @@ it("hides the consent prompt and never schedules analytics when the measurement 
   expect(screen.queryByRole("button", { name: "Accept" })).toBeNull();
   expect(screen.queryByRole("region", { name: "Analytics cookies" })).toBeNull();
   expect(screen.queryByRole("button", { name: "Turn off analytics" })).toBeNull();
-  expect(screen.queryByText(/You can change your choice below/i)).toBeNull();
+  expect(screen.getByText(/You can change your choice below/i).getAttribute("aria-hidden")).toBe("true");
   expect(idle).not.toHaveBeenCalled();
   expect(tag()).toBeNull();
   expect(queue()).toBeUndefined();

@@ -68,3 +68,19 @@
 
 button.sticker:enabled:not([aria-disabled="true"]) { cursor: pointer; }
 button.sticker:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
+
+/* Fade the entire artwork so the new ink and fill keep their contrast. */
+.sticker[data-found="true"] {
+  --reduced-animation-duration: var(--ui-fade-fast);
+  animation: reveal var(--ui-fade-normal) var(--ui-ease);
+}
+.sticker[data-found="false"] {
+  --reduced-animation-duration: var(--ui-fade-fast);
+  animation: reset var(--ui-fade-normal) var(--ui-ease);
+}
+@keyframes reveal { from { opacity: 0.8; } }
+@keyframes reset { from { opacity: 0.8; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker[data-found] { animation-duration: var(--ui-fade-fast); }
+}

@@ -1,0 +1,17 @@
+.choice[data-visible] {
+  --reduced-transition-duration: var(--ui-fade-fast);
+  opacity: 1;
+  transition:
+    opacity var(--ui-fade-normal) var(--ui-ease),
+    display var(--ui-fade-normal) allow-discrete;
+}
+
+.choice[data-visible="false"] {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@starting-style {
+  .choice[data-visible="true"] { opacity: 0; }
+}
