@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@mdopeace/ui/Button";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Text } from "@mdopeace/ui/Typography";
+import { GA_MEASUREMENT_ID } from "@/components/analytics/config";
 import { scheduleAnalytics } from "@/components/analytics/scheduleAnalytics";
 
 type Decision = "accepted" | "declined";
@@ -27,7 +28,7 @@ function subscribe(notify: () => void) {
   };
 }
 
-export default function AnalyticsConsent({ measurementId }: { measurementId: string }) {
+export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: { measurementId?: string }) {
   const savedDecision = useSyncExternalStore(subscribe, readDecision, () => undefined);
   const [dismissed, setDismissed] = useState(false);
   const [decisionOverride, setDecisionOverride] = useState<Decision | null>(null);

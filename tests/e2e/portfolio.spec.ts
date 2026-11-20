@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import axe from "axe-core";
 
+const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
 declare global {
   interface Window {
     axe: typeof axe;
@@ -100,6 +102,41 @@ for (const method of ["click", "keyboard"] as const) {
     expect(new URL(page.url()).hash).toBe("");
   });
 }
+
+test("production analytics makes Google requests only after Accept", async ({ page }) => {
+  test.skip(!measurementId, "Requires a GA measurement ID");
+
+  const googleRequests: string[] = [];
+  await page.route(url => /(?:^|\.)(?:googletagmanager|google-analytics)\.com$/.test(url.hostname), async route => {
+    googleRequests.push(route.request().url());
+    await route.fulfill({ contentType: "application/javascript", body: "" });
+  });
+
+  const prompt = page.getByRole("region", { name: "Analytics cookies" });
+  await page.goto("/");
+  await expect(prompt).toBeVisible();
+  await prompt.scrollIntoViewIfNeeded();
+  await expect(prompt).toBeInViewport();
+  expect(googleRequests).toEqual([]);
+
+  await prompt.getByRole("button", { name: "Decline", exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Allow analytics", exact: true })).toBeVisible();
+  await expect(prompt).toHaveCount(0);
+  expect(googleRequests).toEqual([]);
+
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await expect(prompt).toBeVisible();
+  expect(googleRequests).toEqual([]);
+
+  const tagUrl = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+  await Promise.all([
+    page.waitForResponse(response => response.url() === tagUrl && response.ok()),
+    prompt.getByRole("button", { name: "Accept", exact: true }).click(),
+  ]);
+  expect(googleRequests).toEqual([tagUrl]);
+});
 
 test("copy email offers the email link when clipboard writing fails", async ({ page }) => {
   await page.addInitScript(() => {
@@ -223,8 +260,12 @@ for (const theme of ["light", "dark"] as const) {
   test(`${theme}: the character card, email action, and analytics notice pass axe`, async ({ page }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     await page.goto("/");
-    // The consent prompt stays hidden until Md provides a measurement ID.
-    await expect(page.getByRole("region", { name: "Analytics cookies" })).toHaveCount(0);
+    const prompt = page.getByRole("region", { name: "Analytics cookies" });
+    if (measurementId) {
+      await expect(prompt).toBeVisible();
+    } else {
+      await expect(prompt).toHaveCount(0);
+    }
     await expect(page.getByText(/Privacy note/i)).toBeVisible();
     await page.addScriptTag({ content: axe.source });
     await page.getByRole("button", { name: "See my character card" }).click();
@@ -239,6 +280,9 @@ for (const theme of ["light", "dark"] as const) {
     await expect(summary).toBeHidden();
     expect(await audit("#contact")).toEqual([]);
     expect(await audit(".analytics-privacy")).toEqual([]);
+    if (measurementId) {
+      expect(await audit('[aria-label="Analytics cookies"]')).toEqual([]);
+    }
   });
 
 }

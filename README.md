@@ -88,7 +88,8 @@ required CI, protected auto-merge and versioned GitHub Release archive.
 
 ## Analytics
 
-Analytics is disabled by default. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` at build time
-to Md’s personal GA4 measurement ID. Leave it unset while the ID is pending.
-Turn off Enhanced Measurement in the GA4 web stream so the site controls which
-interaction events are sent.
+The GitHub Pages production build sets `NEXT_PUBLIC_GA_MEASUREMENT_ID` to Md’s
+personal GA4 measurement ID in [deploy.yml](./.github/workflows/deploy.yml).
+PR and default local builds leave it unset. Google Analytics loads only after a
+visitor accepts analytics cookies. Keep Enhanced Measurement off in the GA4 web
+stream so the site controls which interaction events are sent.

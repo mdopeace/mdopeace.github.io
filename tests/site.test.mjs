@@ -125,10 +125,12 @@ test("support dialog ships both provider links and dialog hooks", () => {
   );
 });
 
-test("the default static export contains no GA ID, loader, or command queue", () => {
-  const files = readdirSync("out", { recursive: true })
-    .filter((file) => typeof file === "string" && /\.(?:html|js|txt)$/.test(file) && statSync(`out/${file}`).isFile());
-  for (const file of files) {
+const analyticsFiles = readdirSync("out", { recursive: true })
+  .filter((file) => typeof file === "string" && /\.(?:html|js|txt)$/.test(file) && statSync(`out/${file}`).isFile());
+const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
+test("the default static export contains no GA ID, loader, or command queue", { skip: Boolean(measurementId) }, () => {
+  for (const file of analyticsFiles) {
     const contents = readFileSync(`out/${file}`, "utf8");
     assert.doesNotMatch(
       contents,
@@ -136,4 +138,25 @@ test("the default static export contains no GA ID, loader, or command queue", ()
       file,
     );
   }
+});
+
+test("the production static export ships only Md's GA ID and leaves its HTML free of analytics scripts", { skip: !measurementId }, () => {
+  const productionId = "G-YD5K1KK209";
+  assert.equal(measurementId, productionId);
+
+  let hasBundledId = false;
+  for (const file of analyticsFiles) {
+    const contents = readFileSync(`out/${file}`, "utf8");
+    const ids = [...contents.matchAll(/\bG-[A-Z0-9]{5,}\b/g)].map(([id]) => id);
+    for (const id of ids) assert.equal(id, productionId, `Unexpected GA ID in ${file}`);
+
+    hasBundledId ||= file.endsWith(".js") && ids.includes(productionId);
+    if (file.endsWith(".html")) {
+      assert.doesNotMatch(contents, /<script\b[^>]*\bsrc\s*=\s*[^>]*googletagmanager\.com/i, file);
+      for (const [, script] of contents.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) {
+        assert.doesNotMatch(script, /\bdataLayer\b|\bgtag\s*\(\s*\\?["']config\\?["']/, file);
+      }
+    }
+  }
+  assert.ok(hasBundledId, "Production GA ID missing from built JavaScript");
 });
