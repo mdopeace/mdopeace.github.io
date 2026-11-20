@@ -245,6 +245,7 @@ const burstTones = ["default", "accent", "info", "emphasis"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 const tones = ["default", "subtle", "accent", "info", "emphasis"] as const;
 const variants = ["primary", "secondary", "ghost", "emphasis"] as const;
+const buttonVariants = [...variants, "text"] as const;
 const navigationItems = [
   { id: "intro", label: "Intro", href: "#intro" },
   { id: "build", label: "Build", href: "#build" },
@@ -330,7 +331,7 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [tilePreset, setTilePreset] = useState<"brand" | "off" | "playing" | "paused">("brand");
   const [tileInset, setTileInset] = useState(true);
   const [size, setSize] = useState<Size>("md");
-  const [variant, setVariant] = useState<Variant>("primary");
+  const [variant, setVariant] = useState<(typeof buttonVariants)[number]>("primary");
   const [linkVariant, setLinkVariant] = useState<Variant | "text" | "nav">(
     "text",
   );
@@ -354,6 +355,7 @@ function Playground({ kind }: { kind: ComponentId }) {
   const [gap, setGap] = useState<"2" | "4" | "6">("4");
   const [dashed, setDashed] = useState(false);
   const [open, setOpen] = useState(false);
+  const [dialogTitleSize, setDialogTitleSize] = useState<"dialog" | "feature">("dialog");
   const [lines, setLines] = useState<"2" | "3" | "5">("3");
   const [value, setValue] = useState("");
   const [required, setRequired] = useState(false);
@@ -377,7 +379,7 @@ function Playground({ kind }: { kind: ComponentId }) {
     <Choice
       label="Variant"
       value={variant}
-      options={variants}
+      options={buttonVariants}
       onChange={setVariant}
     />
   );
@@ -413,7 +415,7 @@ function Playground({ kind }: { kind: ComponentId }) {
     controls = (
       <>
         {variantControl}
-        {sizeControl}
+        {variant !== "text" && sizeControl}
         <Field label="Label">
           {(field) => (
             <TextInput
@@ -459,7 +461,7 @@ function Playground({ kind }: { kind: ComponentId }) {
       "Button",
       [
         `variant="${variant}"`,
-        `size="${size}"`,
+        variant !== "text" && sizeProp,
         disabled && "disabled",
         loading && "loading",
         (icon || iconOnly) && "startIcon={<FaHeart />}",
@@ -838,12 +840,18 @@ function Playground({ kind }: { kind: ComponentId }) {
         elementCode("Divider", [`variant="${dashed ? "dashed" : "solid"}"`]),
     );
   } else if (kind === "dialog") {
-    controls = sizeControl;
+    controls = (
+      <>
+        {sizeControl}
+        <Choice label="Title size" value={dialogTitleSize} options={["dialog", "feature"]} onChange={setDialogTitleSize} />
+      </>
+    );
     preview = (
       <>
         <Button onClick={() => setOpen(true)}>Open example dialog</Button>
         <Dialog
           title="Room for one idea."
+          titleSize={dialogTitleSize}
           description="A short task, without losing your place."
           closeLabel="Close example dialog"
           open={open}
@@ -867,6 +875,7 @@ function Playground({ kind }: { kind: ComponentId }) {
         "onOpenChange={setOpen}",
         `size="${size}"`,
         'title="Room for one idea."',
+        `titleSize="${dialogTitleSize}"`,
         'description="A short task, without losing your place."',
         'closeLabel="Close example dialog"',
       ],
