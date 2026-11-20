@@ -27,6 +27,7 @@ import { Image } from "@mdopeace/ui/Image";
 import { Navbar } from "@mdopeace/ui/Navbar";
 import { NavbarLinks } from "@mdopeace/ui/NavbarLinks";
 import ThemeToggle from "@/components/ThemeToggle";
+import { withBasePath } from "@/lib/withBasePath";
 import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
 
 import type { Size, Tone, Variant, Elevation } from "@mdopeace/ui/tokens";
@@ -1085,7 +1086,7 @@ export default function ComponentPreview() {
       </a>
       <header className={styles.header}>
         <Inline justify="between">
-          <Link href="/" size="sm" startIcon={<FaArrowLeft />}>
+          <Link href={withBasePath("/")} size="sm" startIcon={<FaArrowLeft />}>
             Back to portfolio
           </Link>
           <Inline gap={3}>

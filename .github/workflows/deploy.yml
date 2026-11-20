@@ -9,7 +9,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: pages
+  # A manual dispatch from another ref must not displace a main deploy.
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -22,6 +23,28 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/validate
+      - name: Check for previews branch
+        id: previews
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            test "$?" -eq 2
+          fi
+      - uses: actions/checkout@v4
+        if: steps.previews.outputs.exists == 'true'
+        with:
+          ref: gh-pages
+          path: previews
+          persist-credentials: false
+      - name: Include PR previews in Pages artifact
+        if: steps.previews.outputs.exists == 'true'
+        run: |
+          if [ -d previews/pr-preview ] && [ ! -L previews/pr-preview ]; then
+            cp -R --no-dereference previews/pr-preview out/
+            find out/pr-preview -type l -delete
+            find out/pr-preview -name .git -prune -exec rm -rf {} +
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
