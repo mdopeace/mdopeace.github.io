@@ -1,5 +1,6 @@
 "use client";
 
+import { flushSync } from "react-dom";
 import { useRef, useState, type ReactNode, type Ref } from "react";
 import { FaArrowLeft, FaHeart } from "react-icons/fa6";
 import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
@@ -247,6 +248,12 @@ const catalogGroups = [...new Set(catalog.map((item) => item.group))].map((group
 }));
 
 type ComponentId = (typeof catalog)[number]["id"];
+function hasPreviewWidthControl(kind: ComponentId) {
+  return kind !== "burst" && (kind === "consent-note" || catalog.some(
+    (item) => item.id === kind && item.group === "Comic",
+  ));
+}
+
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
 const rotations = ["none", "left", "right"] as const;
 const comicTones = ["default", "accent", "emphasis"] as const;
@@ -407,10 +414,9 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   let controls: ReactNode;
   let preview: ReactNode;
   let code = "";
-  const hasWidthPreview = kind === "consent-note" || catalog.some(
-    (item) => item.id === kind && item.group === "Comic",
-  );
-  const widthDisabled = (kind === "burst" && !showBurst) || (kind === "consent-note" && !noteOpen);
+  const showWidthControl = hasPreviewWidthControl(kind);
+  const hasWidthPreview = showWidthControl || kind === "burst";
+  const widthDisabled = kind === "consent-note" && !noteOpen;
   const sizeProp = `size="${size}"`;
   const sizeControl = (
     <Choice label="Size" value={size} options={sizes} onChange={setSize} disabled={kind === "burst" && !showBurst} />
@@ -1296,7 +1302,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           aria-label="Live preview"
           onChange={fadePreview}
         >
-          {hasWidthPreview ? <div className={styles.widthPreview} data-width={width}>{preview}</div> : preview}
+          {hasWidthPreview ? <div className={styles.widthPreview} data-width={kind === "burst" ? "wide" : width}>{preview}</div> : preview}
         </div>
       </div>
       <aside className={styles.properties} aria-label="Playground properties" onChange={fadePreview}>
@@ -1309,7 +1315,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           </Text>
         </Inline>
         <Stack gap={4}>
-          {hasWidthPreview && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} disabled={widthDisabled} />}
+          {showWidthControl && <Choice label="Preview width" value={width} options={["narrow", "wide"] as const} onChange={setWidth} disabled={widthDisabled} />}
           {controls}
         </Stack>
         <Text size="caption" tone="muted">
@@ -1384,8 +1390,19 @@ export default function ComponentPreview() {
           activeId={active}
           onSelect={(id) => {
             if (id === active) return;
-            setActive(id as ComponentId);
-            setRevision(value => value + 1);
+            const next = id as ComponentId;
+            const selectComponent = () => {
+              setActive(next);
+              setRevision(value => value + 1);
+            };
+            const togglesBurstWidth =
+              (next === "burst" && hasPreviewWidthControl(active)) ||
+              (active === "burst" && hasPreviewWidthControl(next));
+            if (togglesBurstWidth && document.startViewTransition) {
+              document.startViewTransition(() => flushSync(selectComponent));
+            } else {
+              selectComponent();
+            }
           }}
           groups={catalogGroups}
         />

@@ -262,7 +262,11 @@ describe("component playground", () => {
     render(<ComponentPreview />);
     await user.click(screen.getByRole("button", { name }));
     expect(within(screen.getByRole("group", { name: "Live preview" })).getByText(sample, { exact: true })).toBeTruthy();
-    await user.selectOptions(screen.getByLabelText("Preview width"), "narrow");
+    if (name === "Burst") {
+      expect(screen.queryByRole("combobox", { name: "Preview width" })).toBeNull();
+    } else {
+      await user.selectOptions(screen.getByLabelText("Preview width"), "narrow");
+    }
     if (name === "Sticker") {
       await user.click(screen.getByLabelText("Interactive"));
       await user.click(screen.getByRole("button", { name: "Star", description: "Not found" }));
