@@ -11,6 +11,8 @@ import {
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "@mdopeace/ui/Button";
+import { Badge } from "@mdopeace/ui/Badge";
+import { FaHeart } from "react-icons/fa6";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
 import { Burst } from "@mdopeace/ui/Burst";
 import { Sticker } from "@mdopeace/ui/Sticker";
@@ -60,6 +62,25 @@ it("renders the text Button with link styling and native keyboard activation", a
   await user.keyboard("[Space][Enter]");
   expect(onClick).toHaveBeenCalledTimes(2);
   expect(onSubmit).not.toHaveBeenCalled();
+});
+
+it("sizes an opted-in badge with the same border-box height token as a small control", () => {
+  render(
+    <>
+      <Badge>Regular badge</Badge>
+      <Badge controlSize="sm">Control badge</Badge>
+      <Link href="#details" variant="secondary" size="sm">Details</Link>
+    </>,
+  );
+  const badge = getComputedStyle(screen.getByText("Control badge"));
+  const link = getComputedStyle(screen.getByRole("link", { name: "Details" }));
+  expect(badge.minBlockSize).toBe(link.minHeight);
+  expect(badge.minBlockSize).toBe("var(--control-height)");
+  expect(badge.getPropertyValue("--control-height")).toBe(link.getPropertyValue("--control-height"));
+  expect(badge.getPropertyValue("--control-height")).toBe("var(--ui-control-sm)");
+  expect(badge.boxSizing).toBe("border-box");
+  expect(badge.alignItems).toBe("center");
+  expect(getComputedStyle(screen.getByText("Regular badge")).minBlockSize).toBe("");
 });
 
 describe("comic components", () => {
@@ -115,6 +136,32 @@ describe("comic components", () => {
     expect(screen.getByText("Decorative link").closest("[aria-hidden='true']")?.hasAttribute("inert")).toBe(true);
     rerender(<Sticker ref={ref} found onClick={click} aria-label="Collect star"><span aria-hidden>★</span></Sticker>);
     expect(screen.getByRole("button", { name: "Collect star", description: "Found" })).toBe(ref.current);
+  });
+
+  it("applies the found appearance while keeping the label and hiding the decorative icon", () => {
+    const sticker = (found: boolean) => (
+      <Sticker found={found} foundTone="emphasis" pattern="grid"
+        icon={<FaHeart role="img" aria-label="Heart" />} onClick={vi.fn()}>
+        Star
+      </Sticker>
+    );
+    const { rerender } = render(sticker(false));
+    const button = screen.getByRole("button", { name: "Star", description: "Not found" });
+    expect(button.getAttribute("data-found")).toBe("false");
+    expect(getComputedStyle(button).borderStyle).toBe("dashed");
+    expect(button.querySelector("svg")).toBeNull();
+
+    rerender(sticker(true));
+    expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBe(button);
+    expect(button.getAttribute("data-found")).toBe("true");
+    expect(button.getAttribute("data-found-tone")).toBe("emphasis");
+    expect(button.getAttribute("data-pattern")).toBe("grid");
+    expect(getComputedStyle(button).borderStyle).toBe("solid");
+    expect(button.querySelector("svg")?.closest('[aria-hidden="true"]')).toBeTruthy();
+    expect(within(button).queryByRole("img")).toBeNull();
+    const label = within(button).getByText("Star");
+    expect(label.closest("[hidden], [aria-hidden='true']")).toBeNull();
+    expect(getComputedStyle(label).display).not.toBe("none");
   });
 
   it("leaves visibility controlled, exposes both actions and permits tabbing through the page without storage", async () => {

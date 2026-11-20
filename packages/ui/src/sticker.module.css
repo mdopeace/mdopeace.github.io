@@ -8,7 +8,9 @@
   min-block-size: var(--sticker-target);
   max-inline-size: 100%;
   padding: var(--ui-space-1) var(--ui-space-2);
-  border: var(--ui-border-strong) dashed var(--ui-border);
+  border-width: var(--ui-border-strong);
+  border-style: dashed;
+  border-color: var(--ui-border);
   border-radius: var(--ui-radius-none);
   background: var(--ui-surface);
   color: var(--ui-text);
@@ -24,9 +26,42 @@
 .sticker[data-rotation="left"] { --sticker-rotation: var(--ui-rotation-left); }
 .sticker[data-rotation="right"] { --sticker-rotation: var(--ui-rotation-right); }
 .sticker[data-found="true"] {
+  --sticker-fill: var(--ui-accent);
+  --sticker-ink: var(--ui-on-accent);
+  --sticker-pattern-ink: color-mix(in srgb, var(--sticker-ink) 24%, transparent);
   border-style: solid;
-  background: var(--ui-accent);
-  color: var(--ui-on-accent);
+  background-color: var(--sticker-fill);
+  color: var(--sticker-ink);
+}
+.sticker[data-found="true"][data-found-tone="default"] {
+  --sticker-fill: var(--ui-surface);
+  --sticker-ink: var(--ui-text);
+}
+.sticker[data-found="true"][data-found-tone="emphasis"] {
+  --sticker-fill: var(--ui-emphasis);
+  --sticker-ink: var(--ui-on-emphasis);
+}
+.sticker[data-found="true"][data-pattern="stripes"] {
+  background-image: repeating-linear-gradient(135deg, var(--sticker-pattern-ink) 0 1px, transparent 1px var(--ui-space-2));
+}
+.sticker[data-found="true"][data-pattern="dots"] {
+  background-image: radial-gradient(var(--sticker-pattern-ink) 1px, transparent 1px);
+  background-size: var(--ui-space-2) var(--ui-space-2);
+}
+.sticker[data-found="true"][data-pattern="grid"] {
+  background-image:
+    linear-gradient(var(--sticker-pattern-ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sticker-pattern-ink) 1px, transparent 1px);
+  background-size: var(--ui-space-2) var(--ui-space-2);
+}
+.content {
+  background-color: var(--sticker-fill);
+  padding-inline: var(--ui-space-1);
+}
+.icon {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-inline-end: var(--ui-space-1);
 }
 
 button.sticker:enabled { cursor: pointer; }
