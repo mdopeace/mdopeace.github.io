@@ -34,7 +34,11 @@ export function Sticker({
   };
   const content = pattern !== "none" || icon != null ? (
     <span className={styles.content}>
-      {icon != null && <span className={styles.icon} aria-hidden="true" inert>{icon}</span>}
+      {icon != null && (
+        <span className={styles.icon} aria-hidden="true" inert>
+          <span className={styles.iconArtwork}>{icon}</span>
+        </span>
+      )}
       {children}
     </span>
   ) : children;
