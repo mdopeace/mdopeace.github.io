@@ -9,7 +9,7 @@
   max-inline-size: 100%;
   padding: var(--ui-space-1) var(--ui-space-2);
   border: var(--ui-border-strong) dashed var(--ui-border);
-  border-radius: var(--ui-radius-md);
+  border-radius: var(--ui-radius-none);
   background: var(--ui-surface);
   color: var(--ui-text);
   box-shadow: var(--ui-shadow-md);
