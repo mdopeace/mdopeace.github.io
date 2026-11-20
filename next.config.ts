@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
+
 const nextConfig: NextConfig = {
+  ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   output: "export",
   transpilePackages: ["@mdopeace/ui"],
   // Directory indexes allow direct visits on GitHub Pages without rewrites.
