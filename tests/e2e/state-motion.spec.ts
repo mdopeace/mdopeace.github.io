@@ -33,6 +33,11 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await expect(sticker).toHaveCSS("animation-name", /reveal/);
     await expect(sticker).toHaveCSS("animation-duration", duration);
     await expect(sticker).toBeFocused();
+    const findFeedback = preview.locator("[data-tail]");
+    await expect(findFeedback).toHaveCSS("transition-duration", reducedMotion === "reduce" ? duration : `${duration}, ${duration}`);
+    await expect(findFeedback).toHaveCSS("transform", "none");
+    await expect(findFeedback).toHaveCSS("opacity", "1");
+    await expect(preview.getByRole("status")).toHaveText("You found the star. Look in the next panel.");
     await page.getByLabel("Found icon").check();
     await expect(icon).toHaveCSS("transition-property", reducedMotion === "reduce"
       ? "opacity"

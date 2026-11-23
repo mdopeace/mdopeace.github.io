@@ -34,6 +34,10 @@ export async function expectTextContrast(locator: Locator, backgroundPseudo?: st
   const { ratio, foregroundColor, backgroundColor } = await locator.evaluate(async (element, pseudo) => {
     // Read the resolved styles after the selected tone has been painted.
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const finite = element.getAnimations().filter(animation =>
+      Number.isFinite(animation.effect?.getComputedTiming().endTime),
+    );
+    await Promise.allSettled(finite.map(animation => animation.finished));
     const foregroundColor = getComputedStyle(element).color;
     const backgroundColor = getComputedStyle(element, pseudo).backgroundColor;
     const canvas = document.createElement("canvas");

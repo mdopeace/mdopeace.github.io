@@ -188,3 +188,17 @@
   .stage[data-preview-change] { animation-duration: var(--ui-fade-fast); }
   .burstPreview { transition-duration: var(--ui-fade-fast); }
 }
+
+.stickerFeedback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-3);
+  --reduced-transition-duration: var(--ui-fade-fast);
+  transition: opacity var(--ui-fade-normal) var(--ui-ease), visibility var(--ui-fade-normal) var(--ui-ease);
+}
+
+.stickerFeedback[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+}

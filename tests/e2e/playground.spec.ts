@@ -153,21 +153,93 @@ test("Burst has no width control and is centered at every size", async ({ page }
   }
 });
 
-test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
+test("SpeechBubble variants wrap long text with logical tails in a narrow preview", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto("/playground/");
   await page.getByRole("button", { name: "SpeechBubble", exact: true }).click();
   await page.getByRole("combobox", { name: "Preview width" }).selectOption("narrow");
+  const variant = page.getByRole("combobox", { name: "Variant", exact: true });
+  const direction = page.getByRole("combobox", { name: "Direction" });
+  const tailControl = page.getByRole("combobox", { name: "Tail", exact: true });
   const bubble = page.locator("[data-tail]");
-  for (const tail of ["bottom-start", "bottom-end", "top-start", "top-end"]) {
-    await page.getByRole("combobox", { name: "Tail", exact: true }).selectOption(tail);
-    await bubble.evaluate((node) => { node.textContent = "UnbrokenCaption".repeat(12); });
-    await expect(bubble).toHaveCSS("overflow-wrap", "anywhere");
-    expect(await bubble.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);
-    expect(await bubble.evaluate((node) => getComputedStyle(node, "::after").backgroundColor))
-      .toBe(await bubble.evaluate((node) => getComputedStyle(node).backgroundColor));
-  }
+  await expect(bubble).toHaveAttribute("data-tail", "bottom-start");
 
+  for (const value of ["speech", "shout", "thought", "whisper", "caption"]) {
+    await variant.selectOption(value);
+    await expect(bubble).toHaveAttribute("data-variant", value);
+    await expect(bubble).toHaveCSS("overflow-wrap", "anywhere");
+    const wrapsInside = await bubble.evaluate(node => {
+      const text = [...node.childNodes].find(child => child.nodeType === Node.TEXT_NODE)!;
+      text.textContent = "UnbrokenCaption".repeat(12);
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      const lines = [...range.getClientRects()];
+      const { left, right } = node.getBoundingClientRect();
+      return lines.length > 1 && lines.every(line => line.left >= left && line.right <= right);
+    });
+    expect(wrapsInside).toBe(true);
+  }
+  await expect(bubble).toHaveAttribute("data-tail", "none");
+  await expect(direction).toBeDisabled();
+  const tailStyle = () => bubble.evaluate(async node => {
+    await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const style = getComputedStyle(node, "::after");
+    const seam = getComputedStyle(node, "::before");
+    return { left: style.left, right: style.right, seamLeft: seam.left, seamRight: seam.right };
+  });
+  await tailControl.selectOption("inline-start");
+  await expect(bubble).toHaveAttribute("data-tail", "inline-start");
+  const ltr = await tailStyle();
+  expect(parseFloat(ltr.left)).toBeLessThan(0);
+  await direction.selectOption("rtl");
+  await expect(bubble).toHaveAttribute("dir", "rtl");
+  const rtl = await tailStyle();
+  expect(rtl.right).toBe(ltr.left);
+  expect(rtl.seamRight).toBe(ltr.seamLeft);
+  await tailControl.selectOption("inline-end");
+  await expect(bubble).toHaveAttribute("data-tail", "inline-end");
+  expect((await tailStyle()).left).toBe(ltr.left);
+  for (const tail of ["top-center", "bottom-center"]) {
+    await tailControl.selectOption(tail);
+    await expect(bubble).toHaveAttribute("data-tail", tail);
+    const centered = await bubble.evaluate(async node => {
+      await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      const style = getComputedStyle(node, "::after");
+      return (node.clientWidth - parseFloat(style.width)) / 2 - parseFloat(style.marginLeft);
+    });
+    expect(Math.abs(centered)).toBeLessThan(1);
+    await expect(direction).toBeDisabled();
+  }
+});
+
+test("SpeechBubble controls keep keyboard focus and fade without moving the stage", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "SpeechBubble", exact: true }).click();
+  const variant = page.getByRole("combobox", { name: "Variant", exact: true });
+  const preview = page.getByRole("group", { name: "Live preview" });
+  const stageGeometry = () => preview.evaluate(node => {
+    const { x, y, width, height } = node.getBoundingClientRect();
+    return { x: x + window.scrollX, y: y + window.scrollY, width, height };
+  });
+  const bounds = await stageGeometry();
+  for (const [motion, duration] of [["reduce", "0.12s"], ["no-preference", "0.18s"]] as const) {
+    await page.emulateMedia({ reducedMotion: motion });
+    await variant.focus();
+    await expect(variant).toHaveCSS("outline-style", "solid");
+    await page.keyboard.press("ArrowDown");
+    await expect(variant).toBeFocused();
+    await expect(preview).toHaveCSS("animation-name", /preview-change/);
+    await expect(preview).toHaveCSS("animation-duration", duration);
+    await expect(preview).toHaveCSS("transform", "none");
+    expect(await stageGeometry()).toEqual(bounds);
+  }
+  await expect(preview.locator('[data-variant="thought"]')).toBeVisible();
+  await expect(preview.getByRole("status")).toHaveCount(0);
+});
+
+test("Burst preview honors the browser's motion preference", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/playground/");
   await page.getByRole("button", { name: "Burst", exact: true }).click();
   await page.getByRole("checkbox", { name: "Announce feedback" }).check();
   const face = page.locator('[data-tone="accent"][data-size="md"] > div').filter({ hasText: "POW! Copied!" });

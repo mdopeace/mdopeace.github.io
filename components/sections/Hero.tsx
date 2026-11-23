@@ -18,12 +18,12 @@ export default function Hero() {
     >
       <div className="hero-copy">
         <Stack gap={7}>
-          <Inline gap={4}>
+          <Stack gap={3} align="start">
             <Badge variant="solid" tone="accent" size="md">
               Issue 01 · The maker
             </Badge>
             <HuntSticker id="spark" />
-          </Inline>
+          </Stack>
           <Stack gap={3}>
             <Text variant="eyebrow" tone="muted">
               Software Engineer · Bengaluru

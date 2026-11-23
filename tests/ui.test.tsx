@@ -84,6 +84,22 @@ it("sizes an opted-in badge with the same border-box height token as a small con
 });
 
 describe("comic components", () => {
+  it("defaults to speech with a bottom-start tail and captions to no tail", () => {
+    const { rerender } = render(<SpeechBubble>One idea</SpeechBubble>);
+    const bubble = screen.getByText("One idea");
+    expect(bubble.dataset).toMatchObject({
+      variant: "speech", tail: "bottom-start", size: "md", uiSurface: "default",
+    });
+
+    rerender(<SpeechBubble variant="caption">One idea</SpeechBubble>);
+    expect(bubble.dataset).toMatchObject({ variant: "caption", tail: "none" });
+
+    rerender(<SpeechBubble variant="caption" tail="inline-end" size="sm" dir="rtl">One idea</SpeechBubble>);
+    expect(bubble.dataset).toMatchObject({ variant: "caption", tail: "inline-end", size: "sm" });
+    expect(bubble.dir).toBe("rtl");
+    expect(screen.queryByRole("status")).toBeNull();
+  });
+
   it("renders a long caption with native div attributes and a ref across tail and tone changes", () => {
     const ref = createRef<HTMLDivElement>();
     const caption = "AnUnbrokenCaption".repeat(12);

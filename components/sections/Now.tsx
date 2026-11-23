@@ -2,7 +2,7 @@ import { HuntSticker } from "../portfolio/StickerHunt";
 import { FaAsterisk } from "react-icons/fa6";
 import Section from "../portfolio/PortfolioSection";
 import { Surface } from "@mdopeace/ui/Surface";
-import { Grid, Inline, Stack } from "@mdopeace/ui/Layout";
+import { Grid, Stack } from "@mdopeace/ui/Layout";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Link } from "@mdopeace/ui/Link";
@@ -48,13 +48,12 @@ export default function Now() {
               ideas are still taking shape; I’ll share them here when they’re
               ready.
             </Text>
-            <Inline gap={2}>
+            <HuntSticker id="simmer">
               <Text as="span" variant="eyebrow" tone="muted">
                 Stay curious
               </Text>
               <FaAsterisk aria-hidden="true" />
-              <HuntSticker id="simmer" />
-            </Inline>
+            </HuntSticker>
           </Stack>
         </Surface>
       </Grid>

@@ -4,14 +4,18 @@ import { cx, type Size, type Tone } from "./tokens";
 import styles from "./speech-bubble.module.css";
 
 export type SpeechBubbleProps = ComponentPropsWithRef<"div"> & {
-  tail?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
+  variant?: "speech" | "shout" | "thought" | "whisper" | "caption";
+  tail?: "none" | `${"top" | "bottom"}-${"start" | "center" | "end"}` | "inline-start" | "inline-end";
   tone?: Extract<Tone, "default" | "accent" | "emphasis">;
   size?: Size;
 };
 
 export function SpeechBubble({
-  tail = "bottom-start", tone = "default", size = "md", className, ...props
+  variant = "speech",
+  tail = variant === "caption" ? "none" : "bottom-start",
+  tone = "default", size = "md", className, children, dangerouslySetInnerHTML, ...props
 }: SpeechBubbleProps) {
+  const shaped = variant === "shout" || variant === "thought";
   return (
     <Surface
       {...props}
@@ -20,8 +24,17 @@ export function SpeechBubble({
       border="strong"
       radius="none"
       className={cx(styles.bubble, className)}
+      data-variant={variant}
       data-tail={tail}
       data-size={size}
-    />
+      dangerouslySetInnerHTML={shaped ? undefined : dangerouslySetInnerHTML}
+    >
+      {shaped ? (
+        <>
+          <span className={styles.outline} aria-hidden="true" />
+          {dangerouslySetInnerHTML ? <div dangerouslySetInnerHTML={dangerouslySetInnerHTML} /> : children}
+        </>
+      ) : children}
+    </Surface>
   );
 }

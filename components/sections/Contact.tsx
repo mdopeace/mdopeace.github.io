@@ -4,6 +4,7 @@ import { EmailAction } from "../portfolio/EmailAction";
 import SupportDialog from "../portfolio/SupportDialog";
 import { email, telegramHref } from "../portfolio/contactDetails";
 import { Badge } from "@mdopeace/ui/Badge";
+import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Inline, Stack } from "@mdopeace/ui/Layout";
@@ -59,10 +60,9 @@ export default function Contact() {
             <SupportDialog />
           </Inline>
           <Stack gap={3}>
-            <Inline gap={4}>
+            <HuntSticker id="signal">
               <Text variant="eyebrow">Find me elsewhere</Text>
-              <HuntSticker id="signal" />
-            </Inline>
+            </HuntSticker>
             <LinkGroup
               items={socialLinks.map((link) => ({
                 ...link,
@@ -74,22 +74,11 @@ export default function Contact() {
             />
           </Stack>
         </Stack>
-        <Surface tone="info" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
+        <Surface padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
           <Badge variant="solid" tone="accent" tilt="left" className="contact-stamp">SIGNAL READY</Badge>
-          <div className="contact-thought">
-            <Image
-              className="contact-thought-image"
-              src={withBasePath("/contact-thought-bubble.webp")}
-              alt=""
-              fill
-              sizes="(max-width: 800px) 45vw, 230px"
-            />
-            <span className="contact-thought-label">
-              “What are you
-              <br />
-              building?”
-            </span>
-          </div>
+          <SpeechBubble variant="thought" tail="bottom-start" tone="default" size="sm" className="contact-thought">
+            “What are you building?”
+          </SpeechBubble>
           <div
             className="contact-illustration"
             role="img"

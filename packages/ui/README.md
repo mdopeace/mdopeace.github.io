@@ -101,7 +101,7 @@ exports together.
 | Navigation | Link, NavbarLinks, Navbar, NavigationList |
 | Media | Image |
 | Composition | Content & feedback (ExpandableText, CommandBlock, LinkGroup), ConsentNote, Dialog, CodeExample |
-| Comic | SpeechBubble, Burst, Sticker |
+| Comic | SpeechBubble (speech, shout, thought, whisper, caption), Burst, Sticker |
 
 ### Navigation
 
@@ -148,10 +148,16 @@ remain outside it. Copy always includes the complete code.
 
 ### Comic
 
-`SpeechBubble` frames speech or captions with a directional tail. `Burst`
+`SpeechBubble` renders speech, shout, thought, whisper, and caption panels.
+Tails can sit at the start, center, or end of the top or bottom edge, or at the
+middle of either inline edge. The default tail is `bottom-start`, except for
+`caption`, which defaults to `none`. Pair `size="sm" | "md" | "lg"` with a
+`default` (paper), `accent` (yellow), or `emphasis` (red) tone. `Burst`
 highlights text and can announce feedback. `Sticker` renders decorative
 collectible art or an actionable button. Each is available from a matching
-component subpath.
+component subpath. In the playground, enable **Interactive** on the Sticker
+demo to see a find paired with a nearby SpeechBubble and Burst. The preview
+keeps focus on the sticker and fades in the feedback with reduced motion.
 
 Read the repository's [contribution guidelines](https://github.com/mdopeace/mdopeace.github.io/blob/main/CONTRIBUTING.md) and
 [code of conduct](https://github.com/mdopeace/mdopeace.github.io/blob/main/CODE_OF_CONDUCT.md) before proposing changes.

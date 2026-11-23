@@ -6,7 +6,7 @@ import Now from "@/components/sections/Now";
 import Projects from "@/components/sections/Projects";
 import Story from "@/components/sections/Story";
 import SiteHeader from "@/components/SiteHeader";
-import { StickerHunt } from "@/components/portfolio/StickerHunt";
+import { HuntLog, StickerHunt } from "@/components/portfolio/StickerHunt";
 import { SectionNavigation } from "@/components/portfolio/SectionNavigation";
 import { Container, Inline } from "@mdopeace/ui/Layout";
 import { Link } from "@mdopeace/ui/Link";
@@ -62,6 +62,7 @@ export default function Home() {
           <DayJob />
           <Now />
           <Contact />
+          <HuntLog />
         </main>
       </StickerHunt>
       <footer className="page-footer">

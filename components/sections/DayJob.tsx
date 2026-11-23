@@ -7,7 +7,7 @@ import { Badge } from "@mdopeace/ui/Badge";
 
 const toolkit = [
   { title: "Web interfaces", label: "01 / Build the interface", tone: "subtle", tools: "JavaScript · TypeScript · React · Next.js · Astro · CSS · SCSS" },
-  { title: "Backend & data", label: "02 / Connect the pieces", tone: "info", tools: "Express · MongoDB · AWS Lambda" },
+  { title: "Backend & data", label: "02 / Connect the pieces", tone: "default", tools: "Express · MongoDB · AWS Lambda" },
   { title: "Native Mac apps", label: "03 / Make it feel at home", tone: "default", tools: "Swift · SwiftUI · AppKit · mpv · OpenGL" },
   { title: "Developer tooling", label: "04 / Keep it shipping", tone: "subtle", tools: "Build tooling · Release automation · App updates · Browser extensions" },
 ] as const;

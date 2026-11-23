@@ -5,6 +5,13 @@ for (const theme of themes) {
   test(`${theme}: home and support dialog meet WCAG A/AA axe rules`, async ({ page, isMobile }) => {
     await openForAudit(page, "/", theme, isMobile);
     await expectAccessible(page, "home");
+    const thought = page.locator('.contact-thought[data-variant="thought"]');
+    await expect(thought).toHaveAttribute("data-tail", "bottom-start");
+    await expect(thought).toHaveCSS("animation-name", "none");
+    await expectTextContrast(thought.locator('[aria-hidden="true"]'), "::after");
+    await expect(page.locator(".contact-art")).toHaveAttribute("data-ui-surface", "default");
+    await expect(page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Backend & data" }) }))
+      .toHaveAttribute("data-ui-surface", "default");
     await page.getByRole("button", { name: "Support my work" }).click();
     await expect(page.getByRole("dialog", { name: "Fuel the next build" })).toBeVisible();
     await expectAccessible(page, "support dialog");
@@ -21,15 +28,25 @@ for (const theme of themes) {
       await show(name);
       await expectAccessible(page, name);
     }
-    for (const name of ["SpeechBubble", "Burst"]) {
-      await show(name);
-      const text = preview.getByText(name === "Burst" ? "POW! Copied!" : /Every good story/);
+    await show("SpeechBubble");
+    const bubble = preview.locator("[data-tail]");
+    const toneControl = page.getByLabel("Tone", { exact: true });
+    for (const variant of ["speech", "shout", "thought", "whisper", "caption"]) {
+      await page.getByLabel("Variant", { exact: true }).selectOption(variant);
+      const shaped = variant === "thought" || variant === "shout";
       for (const tone of ["default", "accent", "emphasis"]) {
-        await page.getByLabel("Tone", { exact: true }).selectOption(tone);
-        await expectTextContrast(text, name === "Burst" ? "::after" : undefined);
+        await toneControl.selectOption(tone);
+        await expect(bubble).toHaveAttribute("data-ui-surface", tone);
+        await expectTextContrast(shaped ? bubble.locator('[aria-hidden="true"]') : bubble, shaped ? "::after" : undefined);
       }
-      await expectAccessible(page, name);
+      await expectAccessible(page, `SpeechBubble · ${variant}`);
     }
+    await show("Burst");
+    for (const tone of ["default", "accent", "emphasis"]) {
+      await toneControl.selectOption(tone);
+      await expectTextContrast(preview.getByText("POW! Copied!"), "::after");
+    }
+    await expectAccessible(page, "Burst");
     await show("Sticker");
     await page.getByRole("checkbox", { name: "Interactive", exact: true }).check();
     const star = preview.getByRole("button", { name: "Star" });

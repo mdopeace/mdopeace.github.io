@@ -8,7 +8,7 @@ import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
-import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
+import { SpeechBubble, type SpeechBubbleProps } from "@mdopeace/ui/SpeechBubble";
 import { Burst } from "@mdopeace/ui/Burst";
 import { Sticker } from "@mdopeace/ui/Sticker";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
@@ -219,9 +219,9 @@ const catalog = [
     id: "speech-bubble",
     name: "SpeechBubble",
     group: "Comic",
-    description: "A caption with a directional tail.",
-    rationale: "The tail shares the panel's ink and fill. Long words wrap inside the panel.",
-    tip: "Try each tail in the narrow preview.",
+    description: "Five comic panels for dialogue, thoughts, and captions.",
+    rationale: "The outline and tail share the panel's ink and fill. Long words wrap inside.",
+    tip: "Try a side tail in right-to-left reading direction.",
   },
   {
     id: "burst",
@@ -237,7 +237,7 @@ const catalog = [
     group: "Comic",
     description: "Collectible artwork with optional button behavior.",
     rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
-    tip: "Turn on Found to edit the sticker's appearance, or turn on Interactive and press Space or Enter on the sticker to find it.",
+    tip: "Turn on Interactive and press Space or Enter on the sticker to reveal nearby feedback. Turn on Found to edit its appearance.",
   },
 ] as const;
 const catalogGroups = [...new Set(catalog.map((item) => item.group))].map((group) => ({
@@ -254,7 +254,11 @@ function hasPreviewWidthControl(kind: ComponentId) {
   ));
 }
 
-const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
+const bubbleVariants = ["speech", "shout", "thought", "whisper", "caption"] as const;
+const tails = [
+  "none", "bottom-start", "bottom-center", "bottom-end",
+  "top-start", "top-center", "top-end", "inline-start", "inline-end",
+] as const satisfies readonly NonNullable<SpeechBubbleProps["tail"]>[];
 const rotations = ["none", "left", "right"] as const;
 const comicTones = ["default", "accent", "emphasis"] as const;
 const stickerPatterns = ["none", "stripes", "dots", "grid"] as const;
@@ -355,7 +359,9 @@ function Snippet({ code }: { code: string }) {
 
 function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: boolean }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
-  const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
+  const [bubbleVariant, setBubbleVariant] = useState<(typeof bubbleVariants)[number]>("speech");
+  const [tail, setTail] = useState<SpeechBubbleProps["tail"]>();
+  const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   const [rotation, setRotation] = useState<(typeof rotations)[number]>("left");
   const [burstTone, setBurstTone] = useState<(typeof comicTones)[number]>("accent");
   const [speechTone, setSpeechTone] = useState<(typeof comicTones)[number]>("default");
@@ -647,15 +653,24 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     );
   } else if (kind === "speech-bubble") {
     const caption = "Every good story starts with a little curiosity.";
+    const bubbleTail = tail ?? (bubbleVariant === "caption" ? "none" : "bottom-start");
     controls = (
       <>
-        <Choice label="Tail" value={tail} options={tails} onChange={setTail} />
+        <Choice label="Variant" value={bubbleVariant} options={bubbleVariants} onChange={(next) => {
+          setBubbleVariant(next);
+          setTail(undefined);
+        }} />
+        <Choice label="Tail" value={bubbleTail} options={tails} onChange={setTail} />
+        <Choice label="Direction" value={direction} options={["ltr", "rtl"] as const} onChange={setDirection} disabled={bubbleTail === "none" || bubbleTail.endsWith("-center")} />
         <Choice label="Tone" value={speechTone} options={comicTones} onChange={setSpeechTone} />
         {sizeControl}
       </>
     );
-    preview = <SpeechBubble tail={tail} tone={speechTone} size={size}>{caption}</SpeechBubble>;
-    code = elementCode("SpeechBubble", [`tail="${tail}"`, `tone="${speechTone}"`, sizeProp], caption);
+    preview = <SpeechBubble variant={bubbleVariant} tail={tail} tone={speechTone} size={size} dir={direction}>{caption}</SpeechBubble>;
+    code = elementCode("SpeechBubble", [
+      `variant="${bubbleVariant}"`, ...(tail ? [`tail="${tail}"`] : []),
+      `tone="${speechTone}"`, sizeProp, ...(direction === "rtl" ? ['dir="rtl"'] : []),
+    ], caption);
   } else if (kind === "burst") {
     const message = "POW! Copied!";
     controls = (
@@ -705,15 +720,39 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
         <Toggle label="Interactive" checked={interactive} onChange={setInteractive} />
       </>
     );
-    preview = interactive
-      ? <Sticker {...appearance} aria-disabled={found} onClick={() => setFound(true)}>Star</Sticker>
-      : <Sticker {...appearance}>Star</Sticker>;
+    const showFind = interactive && found;
+    const findMessage = "You found the star. Look in the next panel.";
+    preview = (
+      <Stack gap={3} align="start">
+        {interactive
+          ? <Sticker {...appearance} aria-disabled={found} onClick={() => setFound(true)}>Star</Sticker>
+          : <Sticker {...appearance}>Star</Sticker>}
+        <SpeechBubble size="sm" tail="top-start" className={styles.stickerFeedback} data-visible={showFind} inert={!showFind}>
+          <Burst size="sm" animated={showFind} aria-hidden="true">Found!</Burst>
+          <Text size="sm">{findMessage}</Text>
+        </SpeechBubble>
+        <span className="sr-only" role="status" aria-atomic="true">{showFind ? findMessage : ""}</span>
+      </Stack>
+    );
     code = elementCode("Sticker", [
       sizeProp, `rotation="${rotation}"`,
       interactive ? "found={found}" : found && "found",
       `foundTone="${foundTone}"`, `pattern="${pattern}"`, stickerIcon && "icon={<FaHeart />}",
-      interactive && "onClick={() => setFound(true)}",
+      interactive && "aria-disabled={found}", interactive && "onClick={() => setFound(true)}",
     ], "Star");
+    if (interactive) {
+      code = elementCode("Stack", ["gap={3}", 'align="start"'], [
+        code,
+        elementCode("SpeechBubble", [
+          'size="sm"', 'tail="top-start"', 'inert={!found}',
+          'style={{ opacity: found ? 1 : 0, visibility: found ? "visible" : "hidden", transition: "opacity var(--ui-fade-fast) var(--ui-ease), visibility var(--ui-fade-fast)" }}',
+        ], [
+          '<Burst size="sm" animated={found} aria-hidden="true">Found!</Burst>',
+          `<Text size="sm">${findMessage}</Text>`,
+        ].join("\n")),
+        `<span role="status" aria-atomic="true" style={{ position: "absolute", clipPath: "inset(50%)" }}>{found ? ${JSON.stringify(findMessage)} : ""}</span>`,
+      ].join("\n"));
+    }
   } else if (kind === "consent-note") {
     const notice = "Would you like to enable reminders?";
     const choose = (label: string) => {

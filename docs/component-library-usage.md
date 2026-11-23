@@ -249,10 +249,16 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
 
 ## Comic
 
-- **SpeechBubble** frames dialogue or captions in a native `div`. Pass
-  `children`, `tone` (`default` by default, `accent`, or `emphasis`), `size` (default `md`), and
-  `tail` (`bottom-start` by default, `bottom-end`, `top-start`, or `top-end`).
-  Leave room above or below the panel for the tail.
+- **SpeechBubble** frames dialogue or captions in a native `div`. Its
+  `variant` accepts `speech` (default), `shout` (jagged), `thought` (angular
+  cloud with a two-bubble trail), `whisper` (dashed), or `caption` (square).
+  Choose `tone="default"` (paper), `accent` (yellow), or `emphasis` (red) and
+  `size="sm"`, `md` (default), or `lg`. Use `tail="none"`, a
+  `top-*` or `bottom-*` tail ending in `start`, `center`, or `end`, or
+  `inline-start` and `inline-end` for mid-edge tails. Logical positions
+  follow reading direction. The tail defaults to `bottom-start`, except on a
+  `caption`, where it defaults to `none`. Leave space on the selected edge
+  for the decorative tail.
 - **Burst** highlights short captions or feedback. Pass `children`, `size`
   (default `md`), `tone` (`accent` by default, `default`, or
   `emphasis`), and optional `animated` for entry. Motion follows the OS
