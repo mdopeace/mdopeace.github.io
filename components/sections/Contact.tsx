@@ -1,4 +1,3 @@
-import { HuntSticker } from "../portfolio/StickerHunt";
 import Section from "../portfolio/PortfolioSection";
 import { EmailAction } from "../portfolio/EmailAction";
 import SupportDialog from "../portfolio/SupportDialog";
@@ -61,7 +60,6 @@ export default function Contact() {
           <Stack gap={3}>
             <Inline gap={4}>
               <Text variant="eyebrow">Find me elsewhere</Text>
-              <HuntSticker id="signal" />
             </Inline>
             <LinkGroup
               items={socialLinks.map((link) => ({

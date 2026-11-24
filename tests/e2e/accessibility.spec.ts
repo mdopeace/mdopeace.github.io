@@ -30,24 +30,6 @@ for (const theme of themes) {
       }
       await expectAccessible(page, name);
     }
-    await show("Sticker");
-    await page.getByRole("checkbox", { name: "Interactive", exact: true }).check();
-    const star = preview.getByRole("button", { name: "Star" });
-    await expectAccessible(page, "sticker available");
-    await star.focus();
-    await page.keyboard.press("Enter");
-    await expect(star).toBeFocused();
-    await expect(star).toBeDisabled();
-    for (const tone of ["default", "accent", "emphasis"]) {
-      await page.getByLabel("Found tone").selectOption(tone);
-      await page.getByLabel("Found pattern").selectOption("grid");
-      await page.getByLabel("Found icon").check();
-      await expectTextContrast(star.getByText("Star", { exact: true }));
-      await expectAccessible(page, `sticker found · ${tone}`);
-    }
-    await page.getByRole("checkbox", { name: "Found", exact: true }).uncheck();
-    await expectAccessible(page, "sticker reset with icon enabled");
-
     await show("ConsentNote");
     await expect(preview.getByRole("region", { name: "Consent notice" })).toBeVisible();
     await expectAccessible(page, "consent notice");

@@ -1,9 +1,0 @@
-.count {
-  --reduced-animation-duration: var(--ui-fade-fast);
-  animation: count var(--ui-fade-normal) var(--ui-ease);
-  font-variant-numeric: tabular-nums;
-}
-
-@keyframes count {
-  from { opacity: 0.7; }
-}

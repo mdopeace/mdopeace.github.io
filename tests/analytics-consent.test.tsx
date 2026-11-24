@@ -68,9 +68,9 @@ it("waits for idle after accepting and starts sending events only after the scri
   expect(queue()).toEqual([]);
   fireEvent.load(script!);
   expect(queue()?.map((entry) => entry[0])).toEqual(["js", "config"]);
-  trackAnalytics("sticker_found");
+  trackAnalytics("tetris_play");
   expect(queue()?.map((entry) => Array.from(entry)).at(-1)).toEqual([
-    "event", "sticker_found", undefined,
+    "event", "tetris_play", undefined,
   ]);
 });
 

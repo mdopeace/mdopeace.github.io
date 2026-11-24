@@ -87,7 +87,7 @@ test("the catalog lists groups and components in order", async ({ page }) => {
     ["Navigation", ["Link", "NavbarLinks", "Navbar", "NavigationList"]],
     ["Media", ["Image"]],
     ["Composition", ["Content & feedback", "ConsentNote", "Dialog", "CodeExample"]],
-    ["Comic", ["SpeechBubble", "Burst", "Sticker"]],
+    ["Comic", ["SpeechBubble", "Burst"]],
   ] as const;
 
   await expect(lists).toHaveCount(catalog.length);

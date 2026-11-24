@@ -258,16 +258,6 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
   `emphasis`), and optional `animated` for entry. Motion follows the OS
   preference. For announcements, mount an empty `<Burst status />` and update
   its children when feedback arrives.
-- **Sticker** displays collectible art through `children`. Set `size` (default
-  `md`) and `rotation` (`none` by default, `left`, or `right`). Setting
-  `found` switches the dashed edge to solid. Set `foundTone` to `accent`
-  (the default yellow), `default` (neutral), or `emphasis` (red). Set
-  `pattern` to `none` (the default), `stripes`, `dots`, or `grid`. An
-  optional `icon` appears beside the found label and is hidden from assistive
-  technology. The label sits on an opaque fill when patterned. Supplying
-  `onClick` renders a button with a “Found” or “Not found” description.
-  Give artwork-only buttons an `aria-label` or `aria-labelledby`. Without
-  `onClick`, the sticker is decorative.
 
 Each component supports a React 19 ref and native attributes for its rendered
 element. Import from the matching subpath, such as

@@ -23,41 +23,6 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await page.getByLabel("Show burst").check();
     await expect(artwork).toHaveCSS("opacity", "1");
 
-    await pick("Sticker");
-    await page.getByLabel("Rotation").selectOption("none");
-    await page.getByLabel("Interactive", { exact: true }).check();
-    const sticker = preview.getByRole("button", { name: "Star" });
-    const found = page.getByRole("checkbox", { name: "Found", exact: true });
-    const icon = sticker.locator('[aria-hidden="true"][inert]');
-    await sticker.press("Enter");
-    await expect(sticker).toHaveCSS("animation-name", /reveal/);
-    await expect(sticker).toHaveCSS("animation-duration", duration);
-    await expect(sticker).toBeFocused();
-    await page.getByLabel("Found icon").check();
-    await expect(icon).toHaveCSS("transition-property", reducedMotion === "reduce"
-      ? "opacity"
-      : "grid-template-columns, margin-inline-end, opacity");
-    await expect(icon).toHaveCSS("transition-duration", reducedMotion === "reduce"
-      ? duration
-      : `${duration}, ${duration}, ${duration}`);
-
-    await found.uncheck();
-    await expect(icon).toHaveCSS("width", "0px");
-    await expect(icon).toHaveCSS("margin-inline-end", "0px");
-    await expect(icon).toHaveCSS("opacity", "0");
-    const labelOffset = await icon.evaluate(element => {
-      const label = document.createRange();
-      label.selectNode(element.nextSibling!);
-      const bounds = label.getBoundingClientRect();
-      const content = element.parentElement!.getBoundingClientRect();
-      return (bounds.left + bounds.right - content.left - content.right) / 2;
-    });
-    expect(Math.abs(labelOffset)).toBeLessThan(0.5);
-
-    await sticker.press("Enter");
-    await expect(icon).toHaveCSS("opacity", "1");
-    expect((await icon.boundingBox())!.width).toBeGreaterThan(0);
-
     await pick("ConsentNote");
     const notice = preview.locator("[data-open]");
     await notice.getByRole("button", { name: "Decline" }).click();

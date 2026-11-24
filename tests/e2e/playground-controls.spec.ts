@@ -58,10 +58,6 @@ const scenarios: Record<string, Scenario[]> = {
     setup: properties => properties.getByLabel("Variant").selectOption("nav"),
     check: ["Size"],
   }],
-  Sticker: [{
-    setup: properties => properties.getByLabel("Found", { exact: true }).check(),
-    check: ["Found tone", "Found pattern", "Found icon"],
-  }],
   TextInput: [{
     setup: properties => properties.getByLabel("Disabled").check(),
     unavailable: ["Read only"],

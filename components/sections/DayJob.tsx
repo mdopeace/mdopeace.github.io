@@ -1,4 +1,3 @@
-import { HuntSticker } from "../portfolio/StickerHunt";
 import Section from "../portfolio/PortfolioSection";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Grid, Inline, Stack } from "@mdopeace/ui/Layout";
@@ -39,7 +38,6 @@ export default function DayJob() {
         <Stack gap={4}>
           <Inline justify="between" gap={3}>
             <Text variant="eyebrow">Things I work with</Text>
-            <HuntSticker id="gear" />
           </Inline>
           <Grid columns={{ base: 1, md: 2 }} gap={5}>
             {toolkit.map(({ title, label, tone, tools }) => (

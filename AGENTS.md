@@ -18,7 +18,7 @@ Keep the groups in this fixed order. New groups require Md's approval.
 4. **Navigation** — Links, navbars, and navigation lists.
 5. **Media** — Images and other media components.
 6. **Composition** — Content and feedback patterns, notices, dialogs, and code examples.
-7. **Comic** — Speech bubbles, bursts, stickers, and other comic-style components.
+7. **Comic** — Speech bubbles, bursts, and other comic-style components.
 
 Within each group, put simple, standalone pieces before components that wrap or
 combine others.
