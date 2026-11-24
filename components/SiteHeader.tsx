@@ -1,4 +1,3 @@
-import { StickerProgress } from "./portfolio/StickerHunt";
 import ThemeToggle from "./ThemeToggle";
 import { Navbar } from "@mdopeace/ui/Navbar";
 import { Link } from "@mdopeace/ui/Link";
@@ -18,7 +17,7 @@ export default function SiteHeader() {
             <span className="brand-wordmark">Md</span>
           </Link>
       }
-      actions={<><StickerProgress /><ThemeToggle /></>}
+      actions={<ThemeToggle />}
     >
       <SectionLinks />
     </Navbar>

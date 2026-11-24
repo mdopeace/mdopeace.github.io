@@ -12,10 +12,8 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "@mdopeace/ui/Button";
 import { Badge } from "@mdopeace/ui/Badge";
-import { FaHeart } from "react-icons/fa6";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
 import { Burst } from "@mdopeace/ui/Burst";
-import { Sticker } from "@mdopeace/ui/Sticker";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Tile } from "@mdopeace/ui/Tile";
 import { Link } from "@mdopeace/ui/Link";
@@ -111,58 +109,6 @@ describe("comic components", () => {
     rerender(<Burst status animated>Copied!</Burst>);
     expect(screen.getByRole("status")).toBe(status);
     expect(status.textContent).toBe("Copied!");
-  });
-
-  it("keeps decorative stickers out of the tab order and exposes interactive state and keyboard activation", async () => {
-    const user = userEvent.setup();
-    const click = vi.fn();
-    const ref = createRef<HTMLButtonElement>();
-    const { rerender } = render(
-      <>
-        <Sticker>Decorative star</Sticker>
-        <Sticker ref={ref} onClick={click} aria-label="Collect star"><span aria-hidden>★</span></Sticker>
-      </>,
-    );
-    const decoration = screen.getByText("Decorative star");
-    expect(decoration.getAttribute("aria-hidden")).toBe("true");
-    const button = screen.getByRole("button", { name: "Collect star", description: "Not found" });
-    expect(ref.current).toBe(button);
-    expect(button.tagName).toBe("BUTTON");
-    await user.tab();
-    expect(document.activeElement).toBe(button);
-    await user.keyboard("[Space][Enter]");
-    expect(click).toHaveBeenCalledTimes(2);
-    rerender(<Sticker><a href="#star">Decorative link</a></Sticker>);
-    expect(screen.getByText("Decorative link").closest("[aria-hidden='true']")?.hasAttribute("inert")).toBe(true);
-    rerender(<Sticker ref={ref} found onClick={click} aria-label="Collect star"><span aria-hidden>★</span></Sticker>);
-    expect(screen.getByRole("button", { name: "Collect star", description: "Found" })).toBe(ref.current);
-  });
-
-  it("applies the found appearance while keeping the label and hiding the decorative icon", () => {
-    const sticker = (found: boolean) => (
-      <Sticker found={found} foundTone="emphasis" pattern="grid"
-        icon={<FaHeart role="img" aria-label="Heart" />} onClick={vi.fn()}>
-        Star
-      </Sticker>
-    );
-    const { rerender } = render(sticker(false));
-    const button = screen.getByRole("button", { name: "Star", description: "Not found" });
-    expect(button.getAttribute("data-found")).toBe("false");
-    expect(getComputedStyle(button).borderStyle).toBe("dashed");
-    expect(button.querySelector("svg")?.closest('[aria-hidden="true"]')).toBeTruthy();
-    expect(within(button).queryByRole("img")).toBeNull();
-
-    rerender(sticker(true));
-    expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBe(button);
-    expect(button.getAttribute("data-found")).toBe("true");
-    expect(button.getAttribute("data-found-tone")).toBe("emphasis");
-    expect(button.getAttribute("data-pattern")).toBe("grid");
-    expect(getComputedStyle(button).borderStyle).toBe("solid");
-    expect(button.querySelector("svg")?.closest('[aria-hidden="true"]')).toBeTruthy();
-    expect(within(button).queryByRole("img")).toBeNull();
-    const label = within(button).getByText("Star");
-    expect(label.closest("[hidden], [aria-hidden='true']")).toBeNull();
-    expect(getComputedStyle(label).display).not.toBe("none");
   });
 
   it("leaves visibility controlled, exposes both actions and permits tabbing through the page without storage", async () => {
@@ -275,7 +221,6 @@ describe("component playground", () => {
   it.each([
     ["SpeechBubble", "Every good story starts with a little curiosity."],
     ["Burst", "POW! Copied!"],
-    ["Sticker", "Star"],
     ["ConsentNote", "Would you like to enable reminders?"],
   ])("exposes the %s demo and copies its public import", async (name, sample) => {
     const user = userEvent.setup();
@@ -288,11 +233,6 @@ describe("component playground", () => {
       expect(screen.queryByRole("combobox", { name: "Preview width" })).toBeNull();
     } else {
       await user.selectOptions(screen.getByLabelText("Preview width"), "narrow");
-    }
-    if (name === "Sticker") {
-      await user.click(screen.getByLabelText("Interactive"));
-      await user.click(screen.getByRole("button", { name: "Star", description: "Not found" }));
-      expect(screen.getByRole("button", { name: "Star", description: "Found" })).toBeTruthy();
     }
     if (name === "ConsentNote") {
       const preview = within(screen.getByRole("group", { name: "Live preview" }));

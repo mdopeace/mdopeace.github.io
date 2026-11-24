@@ -134,10 +134,6 @@
       "types": "./dist/Burst.d.ts",
       "import": "./dist/Burst.js"
     },
-    "./Sticker": {
-      "types": "./dist/Sticker.d.ts",
-      "import": "./dist/Sticker.js"
-    },
     "./tokens": {
       "types": "./dist/tokens.d.ts",
       "import": "./dist/tokens.js"

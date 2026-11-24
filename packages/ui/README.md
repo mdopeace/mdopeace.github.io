@@ -101,7 +101,7 @@ exports together.
 | Navigation | Link, NavbarLinks, Navbar, NavigationList |
 | Media | Image |
 | Composition | Content & feedback (ExpandableText, CommandBlock, LinkGroup), ConsentNote, Dialog, CodeExample |
-| Comic | SpeechBubble, Burst, Sticker |
+| Comic | SpeechBubble, Burst |
 
 ### Navigation
 
@@ -149,9 +149,8 @@ remain outside it. Copy always includes the complete code.
 ### Comic
 
 `SpeechBubble` frames speech or captions with a directional tail. `Burst`
-highlights text and can announce feedback. `Sticker` renders decorative
-collectible art or an actionable button. Each is available from a matching
-component subpath.
+highlights text and can announce feedback. Both are available from matching
+component subpaths.
 
 Read the repository's [contribution guidelines](https://github.com/mdopeace/mdopeace.github.io/blob/main/CONTRIBUTING.md) and
 [code of conduct](https://github.com/mdopeace/mdopeace.github.io/blob/main/CODE_OF_CONDUCT.md) before proposing changes.

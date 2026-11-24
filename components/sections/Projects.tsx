@@ -1,5 +1,4 @@
-import { HuntSticker } from "../portfolio/StickerHunt";
-import { Inline, Stack } from "@mdopeace/ui/Layout";
+import { Stack } from "@mdopeace/ui/Layout";
 import { projects } from "@/data/projects";
 import ProjectCard from "../portfolio/ProjectCard";
 import Section from "../portfolio/PortfolioSection";
@@ -11,9 +10,6 @@ export default function Projects() {
         {projects.map((project) => (
           <ProjectCard key={project.name} project={project} />
         ))}
-        <Inline justify="end">
-          <HuntSticker id="shipped" />
-        </Inline>
       </Stack>
     </Section>
   );

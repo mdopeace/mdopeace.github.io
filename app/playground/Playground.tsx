@@ -10,7 +10,6 @@ import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
 import { Burst } from "@mdopeace/ui/Burst";
-import { Sticker } from "@mdopeace/ui/Sticker";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Tile } from "@mdopeace/ui/Tile";
 import { Button } from "@mdopeace/ui/Button";
@@ -231,14 +230,6 @@ const catalog = [
     rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
     tip: "Hide and show the message to replay its entrance.",
   },
-  {
-    id: "sticker",
-    name: "Sticker",
-    group: "Comic",
-    description: "Collectible artwork with optional button behavior.",
-    rationale: "A solid edge distinguishes the found sticker from the dashed outline.",
-    tip: "Turn on Found to edit the sticker's appearance, or turn on Interactive and press Space or Enter on the sticker to find it.",
-  },
 ] as const;
 const catalogGroups = [...new Set(catalog.map((item) => item.group))].map((group) => ({
   label: group,
@@ -255,9 +246,7 @@ function hasPreviewWidthControl(kind: ComponentId) {
 }
 
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
-const rotations = ["none", "left", "right"] as const;
 const comicTones = ["default", "accent", "emphasis"] as const;
-const stickerPatterns = ["none", "stripes", "dots", "grid"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 const tones = ["default", "subtle", "accent", "info", "emphasis"] as const;
 const variants = ["primary", "secondary", "ghost", "emphasis"] as const;
@@ -356,7 +345,6 @@ function Snippet({ code }: { code: string }) {
 function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: boolean }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
   const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
-  const [rotation, setRotation] = useState<(typeof rotations)[number]>("left");
   const [burstTone, setBurstTone] = useState<(typeof comicTones)[number]>("accent");
   const [speechTone, setSpeechTone] = useState<(typeof comicTones)[number]>("default");
   const [animated, setAnimated] = useState(true);
@@ -364,11 +352,6 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   const [showBurst, setShowBurst] = useState(true);
   const [previewChange, setPreviewChange] = useState(animateEntry ? 1 : 0);
   const fadePreview = () => setPreviewChange(count => count + 1);
-  const [found, setFound] = useState(false);
-  const [foundTone, setFoundTone] = useState<(typeof comicTones)[number]>("accent");
-  const [pattern, setPattern] = useState<(typeof stickerPatterns)[number]>("none");
-  const [stickerIcon, setStickerIcon] = useState(false);
-  const [interactive, setInteractive] = useState(false);
   const [noteOpen, setNoteOpen] = useState(true);
   const [decision, setDecision] = useState("");
   const noticeToggleRef = useRef<HTMLInputElement>(null);
@@ -692,28 +675,6 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           "</>",
         ].join("\n")
       : elementCode("Burst", burstProps, showBurst ? message : undefined);
-  } else if (kind === "sticker") {
-    const appearance = { size, rotation, found, foundTone, pattern, icon: stickerIcon ? <FaHeart /> : undefined };
-    controls = (
-      <>
-        <Choice label="Rotation" value={rotation} options={rotations} onChange={setRotation} />
-        {sizeControl}
-        <Toggle label="Found" checked={found} onChange={setFound} />
-        <Choice label="Found tone" value={foundTone} options={comicTones} onChange={setFoundTone} disabled={!found} />
-        <Choice label="Found pattern" value={pattern} options={stickerPatterns} onChange={setPattern} disabled={!found} />
-        <Toggle label="Found icon" checked={stickerIcon} onChange={setStickerIcon} disabled={!found} />
-        <Toggle label="Interactive" checked={interactive} onChange={setInteractive} />
-      </>
-    );
-    preview = interactive
-      ? <Sticker {...appearance} aria-disabled={found} onClick={() => setFound(true)}>Star</Sticker>
-      : <Sticker {...appearance}>Star</Sticker>;
-    code = elementCode("Sticker", [
-      sizeProp, `rotation="${rotation}"`,
-      interactive ? "found={found}" : found && "found",
-      `foundTone="${foundTone}"`, `pattern="${pattern}"`, stickerIcon && "icon={<FaHeart />}",
-      interactive && "onClick={() => setFound(true)}",
-    ], "Star");
   } else if (kind === "consent-note") {
     const notice = "Would you like to enable reminders?";
     const choose = (label: string) => {
@@ -1270,8 +1231,6 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     setup = `const [activeId, setActiveId] = useState("overview");\n\nconst groups = [\n  { label: "Getting started", items: [\n    { id: "overview", label: "Overview" },\n    { id: "principles", label: "Principles" },\n  ] },\n  { label: "Build", items: [\n    { id: "components", label: "Components", disabled: ${disabled} },\n  ] },\n];`;
   if (kind === "code")
     setup = `const example = ${JSON.stringify('<Button variant="primary">Make something</Button>')};`;
-  if (kind === "sticker" && interactive)
-    setup = `const [found, setFound] = useState(${found});`;
   if (kind === "consent-note")
     setup = [
       `const [open, setOpen] = useState(${noteOpen});`,
@@ -1298,7 +1257,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       "navigation",
       "navbar",
       "navbar-links",
-    ].includes(kind) || (kind === "badge" && badgeControlSize !== "none") || kind === "consent-note" || (kind === "sticker" && interactive) || (kind === "burst" && feedback),
+    ].includes(kind) || (kind === "badge" && badgeControlSize !== "none") || kind === "consent-note" || (kind === "burst" && feedback),
   );
   return (
     <div className={styles.workbench}>

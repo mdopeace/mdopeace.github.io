@@ -38,7 +38,6 @@ export * from "./FeedbackLabel";
 // Comic
 export * from "./SpeechBubble";
 export * from "./Burst";
-export * from "./Sticker";
 
 export * from "./tokens";
 export * from "./hooks/useClipboard";
