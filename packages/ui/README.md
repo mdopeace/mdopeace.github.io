@@ -101,7 +101,7 @@ exports together.
 | Navigation | Link, NavbarLinks, Navbar, NavigationList |
 | Media | Image |
 | Composition | Content & feedback (ExpandableText, CommandBlock, LinkGroup), ConsentNote, Dialog, CodeExample |
-| Comic | SpeechBubble, Burst |
+| Comic | SpeechBubble, Burst, ComicPanel, ComicStrip |
 
 ### Navigation
 
@@ -149,8 +149,11 @@ remain outside it. Copy always includes the complete code.
 ### Comic
 
 `SpeechBubble` frames speech or captions with a directional tail. `Burst`
-highlights text and can announce feedback. Both are available from matching
-component subpaths.
+highlights text and can announce feedback. `ComicPanel` frames `media` or
+`children` with an optional `caption`. Its `video` option plays a silent loop
+with a pause control and a still poster for reduced motion. `ComicStrip`
+arranges three panels in a row at container widths of 32rem or more and stacks
+them below that. All four are available from matching component subpaths.
 
 Read the repository's [contribution guidelines](https://github.com/mdopeace/mdopeace.github.io/blob/main/CONTRIBUTING.md) and
 [code of conduct](https://github.com/mdopeace/mdopeace.github.io/blob/main/CODE_OF_CONDUCT.md) before proposing changes.

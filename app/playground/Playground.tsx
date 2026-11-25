@@ -10,6 +10,8 @@ import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
 import { Burst } from "@mdopeace/ui/Burst";
+import { ComicPanel } from "@mdopeace/ui/ComicPanel";
+import { ComicStrip } from "@mdopeace/ui/ComicStrip";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Tile } from "@mdopeace/ui/Tile";
 import { Button } from "@mdopeace/ui/Button";
@@ -229,6 +231,22 @@ const catalog = [
     description: "A starburst for short captions and feedback.",
     rationale: "The outline and shadow follow the shape, and feedback can be announced without moving focus.",
     tip: "Hide and show the message to replay its entrance.",
+  },
+  {
+    id: "comic-panel",
+    name: "ComicPanel",
+    group: "Comic",
+    description: "An inked frame for artwork or story content with an optional caption.",
+    rationale: "The native figure associates a caption with its panel. Media and ordinary content can share the frame.",
+    tip: "Try the narrow preview to see how the artwork and caption fit.",
+  },
+  {
+    id: "comic-strip",
+    name: "ComicStrip",
+    group: "Comic",
+    description: "Three panels that read across or down as space allows.",
+    rationale: "The panels keep their reading order. The clip has a pause control and shows a still when reduced motion is enabled.",
+    tip: "Try the narrow preview or use Animate panel to pause the loop.",
   },
 ] as const;
 const catalogGroups = [...new Set(catalog.map((item) => item.group))].map((group) => ({
@@ -675,6 +693,46 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           "</>",
         ].join("\n")
       : elementCode("Burst", burstProps, showBurst ? message : undefined);
+  } else if (kind === "comic-panel" || kind === "comic-strip") {
+    const still = {
+      src: withBasePath("/playground/comic-spark.webp"),
+      width: 432,
+      height: 240,
+    };
+    const stillAlt = "A red lightning bolt inside a starburst";
+    const video = {
+      src: withBasePath("/playground/paper-plane.webm"),
+      poster: withBasePath("/playground/paper-plane.webp"),
+      alt: "A paper plane glides past a yellow sun",
+      width: 432,
+      height: 240,
+    };
+    const spark = <ComicPanel media={<Image {...still} alt={stillAlt} imageClassName={styles.comicStill} />} caption="1. Find a spark" />;
+    const stillCode = elementCode("ComicPanel", [
+      'caption="1. Find a spark"',
+      `media={${elementCode("Image", Object.entries({ ...still, alt: stillAlt }).map(([prop, value]) =>
+        `${prop}={${JSON.stringify(value)}}`,
+      ))}}`,
+    ]);
+    if (kind === "comic-panel") {
+      preview = <div className={styles.comicPanelSample}>{spark}</div>;
+      code = stillCode;
+    } else {
+      preview = (
+        <ComicStrip role="group" aria-label="Paper plane story">
+          {spark}
+          <ComicPanel video={video} caption="2. Take flight" />
+          <ComicPanel caption="3. Keep exploring">
+            <SpeechBubble tone="emphasis">Where to next?</SpeechBubble>
+          </ComicPanel>
+        </ComicStrip>
+      );
+      code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"'], [
+        stillCode,
+        elementCode("ComicPanel", ['caption="2. Take flight"', `video={${JSON.stringify(video, null, 2)}}`]),
+        elementCode("ComicPanel", ['caption="3. Keep exploring"'], '<SpeechBubble tone="emphasis">Where to next?</SpeechBubble>'),
+      ].join("\n"));
+    }
   } else if (kind === "consent-note") {
     const notice = "Would you like to enable reminders?";
     const choose = (label: string) => {

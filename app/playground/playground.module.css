@@ -166,6 +166,12 @@
   max-inline-size: min(20rem, 75%);
 }
 
+.comicPanelSample {
+  inline-size: 100%;
+  max-inline-size: 27rem;
+  justify-self: center;
+}
+
 .stage[data-preview-change] {
   --reduced-animation-duration: var(--ui-fade-fast);
   animation: preview-change var(--ui-fade-normal) var(--ui-ease);
@@ -187,4 +193,8 @@
 @media (prefers-reduced-motion: reduce) {
   .stage[data-preview-change] { animation-duration: var(--ui-fade-fast); }
   .burstPreview { transition-duration: var(--ui-fade-fast); }
+  .comicStill.comicStill {
+    --reduced-transition-duration: var(--ui-fade-fast);
+    transition: opacity var(--ui-fade-fast) var(--ui-ease);
+  }
 }

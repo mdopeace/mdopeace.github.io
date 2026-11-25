@@ -1,0 +1,111 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  margin: 0;
+  border: var(--ui-border-strong) solid var(--ui-border);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-lg);
+  overflow-wrap: anywhere;
+}
+
+.body {
+  padding: var(--ui-space-3);
+}
+
+.panel > img,
+.panel > picture > img {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.caption {
+  margin-block-start: auto;
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-block-start: var(--ui-border-standard) solid var(--ui-border);
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+  font: var(--ui-weight-bold) var(--ui-font-sm)/var(--ui-leading-caption) var(--ui-mono);
+}
+
+.strip {
+  container-type: inline-size;
+  min-inline-size: 0;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ui-space-5);
+}
+
+@container (min-width: 32rem) {
+  .panels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.videoFrame {
+  position: relative;
+  background: var(--ui-subtle);
+}
+
+.poster {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity var(--ui-normal) var(--ui-ease);
+}
+
+.video[data-playing] {
+  opacity: 1;
+}
+
+.playback {
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-block-start: var(--ui-border-standard) solid var(--ui-border);
+}
+
+.playbackButton {
+  max-inline-size: 100%;
+}
+
+.playbackButton[aria-disabled="true"][data-variant] {
+  cursor: not-allowed;
+}
+
+.playbackButton[aria-disabled="true"][data-variant]:not(:focus-visible) {
+  opacity: 0.65;
+}
+
+.playbackButton[aria-disabled="true"][data-variant]:is(:hover, :active) {
+  transform: none;
+  box-shadow: var(--ui-shadow-md);
+}
+
+.status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    --reduced-transition-duration: var(--ui-fade-fast);
+    transition-duration: var(--ui-fade-fast);
+  }
+}

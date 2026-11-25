@@ -134,6 +134,14 @@
       "types": "./dist/Burst.d.ts",
       "import": "./dist/Burst.js"
     },
+    "./ComicPanel": {
+      "types": "./dist/ComicPanel.d.ts",
+      "import": "./dist/ComicPanel.js"
+    },
+    "./ComicStrip": {
+      "types": "./dist/ComicStrip.d.ts",
+      "import": "./dist/ComicStrip.js"
+    },
     "./tokens": {
       "types": "./dist/tokens.d.ts",
       "import": "./dist/tokens.js"

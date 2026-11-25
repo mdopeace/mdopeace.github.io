@@ -14,6 +14,8 @@ import { Button } from "@mdopeace/ui/Button";
 import { Badge } from "@mdopeace/ui/Badge";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
 import { Burst } from "@mdopeace/ui/Burst";
+import { ComicPanel } from "@mdopeace/ui/ComicPanel";
+import { ComicStrip } from "@mdopeace/ui/ComicStrip";
 import { ConsentNote } from "@mdopeace/ui/ConsentNote";
 import { Tile } from "@mdopeace/ui/Tile";
 import { Link } from "@mdopeace/ui/Link";
@@ -82,6 +84,86 @@ it("sizes an opted-in badge with the same border-box height token as a small con
 });
 
 describe("comic components", () => {
+  it("keeps panel media, children and optional native captions in reading order", () => {
+    const panelRef = createRef<HTMLElement>();
+    const stripRef = createRef<HTMLDivElement>();
+    const onClick = vi.fn();
+    render(
+      <ComicStrip ref={stripRef} role="group" aria-label="Three beats" id="story">
+        <ComicPanel ref={panelRef} lang="en" onClick={onClick}
+          media={<span role="img" aria-label="A spark" />} caption="First beat">
+          <a href="#story">Read again</a>
+        </ComicPanel>
+        <ComicPanel caption={<strong>Second beat</strong>}>The plot thickens.</ComicPanel>
+        <ComicPanel>End of story.</ComicPanel>
+      </ComicStrip>,
+    );
+
+    const strip = screen.getByRole("group", { name: "Three beats" });
+    expect(strip).toBe(stripRef.current);
+    expect(strip.id).toBe("story");
+    const panels = within(strip).getAllByRole("figure");
+    expect(panels).toHaveLength(3);
+    expect(panels[0]).toBe(panelRef.current);
+    expect(panels[0].lang).toBe("en");
+    expect(panels[0].lastElementChild?.tagName).toBe("FIGCAPTION");
+    expect(panels[0].lastElementChild?.textContent).toBe("First beat");
+    expect(panels[0].firstElementChild).toBe(screen.getByRole("img", { name: "A spark" }));
+    expect(panels[1].textContent).toBe("The plot thickens.Second beat");
+    expect(panels[2].querySelector("figcaption")).toBeNull();
+    fireEvent.click(within(panels[0]).getByRole("link", { name: "Read again" }));
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it("uses the named still without loading or starting video under reduced motion", async () => {
+    const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue();
+    const user = userEvent.setup();
+    const { container } = render(<ComicPanel video={{
+      src: "/loop.webm", poster: "/still.webp", width: 320, height: 180, alt: "A paper plane",
+    }} />);
+    const frame = screen.getByRole("img", { name: "A paper plane" });
+    const poster = frame.querySelector("img")!;
+    const video = container.querySelector("video")!;
+    expect(poster.getAttribute("src")).toBe("/still.webp");
+    expect([poster.width, poster.height]).toEqual([320, 180]);
+    expect(video.hasAttribute("src")).toBe(false);
+    expect(video.autoplay).toBe(false);
+    const button = screen.getByRole("button", { name: "Animate panel" });
+    expect(button.getAttribute("aria-disabled")).toBe("true");
+    await user.tab();
+    expect(document.activeElement).toBe(button);
+    await user.keyboard("[Space][Enter]");
+    expect(play).not.toHaveBeenCalled();
+    expect(screen.getByRole("status").textContent).toBe("Showing the still image.");
+  });
+
+  it("leaves retryable autoplay failures paused and preserves the status node on a media error", async () => {
+    vi.spyOn(window, "matchMedia").mockReturnValue({
+      matches: true, addEventListener() {}, removeEventListener() {},
+    } as unknown as MediaQueryList);
+    const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockRejectedValue(new Error("Autoplay blocked"));
+    vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {});
+    const user = userEvent.setup();
+    const { container } = render(<ComicPanel video={{
+      src: "/loop.webm", poster: "/still.webp", width: 320, height: 180, alt: "A paper plane",
+      labels: { playback: "Animate the plane", unavailable: "The plane is grounded." },
+    }} />);
+    const button = screen.getByRole("button", { name: "Animate the plane" });
+    const status = screen.getByRole("status");
+    expect(status.textContent).toBe("Video paused.");
+    expect(button.getAttribute("aria-disabled")).toBeNull();
+    expect(play).toHaveBeenCalledOnce();
+    await user.click(button);
+    expect(play).toHaveBeenCalledTimes(2);
+
+    fireEvent.error(container.querySelector("video")!);
+    expect(screen.getByRole("status")).toBe(status);
+    expect(status.textContent).toBe("The plane is grounded.");
+    expect(button.getAttribute("aria-disabled")).toBe("true");
+    await user.click(button);
+    expect(play).toHaveBeenCalledTimes(2);
+  });
+
   it("renders a long caption with native div attributes and a ref across tail and tone changes", () => {
     const ref = createRef<HTMLDivElement>();
     const caption = "AnUnbrokenCaption".repeat(12);
