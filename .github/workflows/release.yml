@@ -57,7 +57,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 26
       - name: Create release PR and wait for protected auto-merge
         id: prepare
         env:
