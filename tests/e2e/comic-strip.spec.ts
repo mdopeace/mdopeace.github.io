@@ -116,12 +116,28 @@ test("the clip fades between playing and still states without moving its frame",
 });
 
 for (const theme of themes) {
-  test(`${theme}: panel and strip states pass axe`, async ({ page, isMobile }) => {
+  test(`${theme}: panel fits both preview widths and comic states pass axe`, async ({ page, isMobile }) => {
     await openForAudit(page, "/playground/", theme, isMobile);
     const preview = page.getByRole("group", { name: "Live preview" });
     await page.getByRole("button", { name: "ComicPanel", exact: true }).click();
+    const panel = preview.getByRole("figure");
+    const artwork = panel.getByRole("img");
+    const widthControl = page.getByLabel("Preview width");
     await expectTextContrast(preview.locator("figcaption"));
-    await expectAccessible(page, "comic panel");
+    for (const width of ["wide", "narrow"]) {
+      await widthControl.selectOption(width);
+      const container = preview.locator(`[data-width="${width}"]`);
+      const containerBox = (await container.boundingBox())!;
+      const panelBox = (await panel.boundingBox())!;
+      const artworkBox = (await artwork.boundingBox())!;
+      expect(panelBox.x).toBeGreaterThanOrEqual(containerBox.x);
+      expect(panelBox.x + panelBox.width).toBeLessThanOrEqual(containerBox.x + containerBox.width);
+      expect(artworkBox.x).toBeGreaterThan(panelBox.x);
+      expect(artworkBox.x + artworkBox.width).toBeLessThan(panelBox.x + panelBox.width);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+      await expectAccessible(page, `comic panel with ${width} preview`);
+    }
+    await widthControl.selectOption("wide");
     await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
     const playback = preview.getByRole("button", { name: "Animate panel" });
     await expectTextContrast(playback);
@@ -139,5 +155,62 @@ for (const theme of themes) {
     await expect(playback).toHaveAccessibleDescription("Video unavailable. Showing the still image.");
     await expect(preview.getByRole("status")).toBeVisible();
     await expectAccessible(page, "comic strip with an unavailable video");
+  });
+
+  test(`${theme}: playback status stays AA throughout its animation`, async ({ page, isMobile }) => {
+    await openForAudit(page, "/playground/", theme, isMobile);
+    // Keep the animation seekable even if it finishes before the test samples it.
+    await page.addStyleTag({ content: '[role="status"] > span { animation-fill-mode: both; }' });
+    await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
+    const strip = page.getByRole("group", { name: "Paper plane story" });
+    const playback = strip.getByRole("button", { name: "Animate panel" });
+    const status = strip.getByRole("status");
+
+    const expectAnimatedContrast = async () => {
+      const lowestRatio = await status.locator("span").evaluate(message => {
+        const [animation] = message.getAnimations();
+        const duration = Number(animation.effect!.getComputedTiming().duration);
+        const surface = getComputedStyle(message.closest("figure")!).backgroundColor;
+        const context = document.createElement("canvas").getContext("2d")!;
+        const luminance = () => {
+          const channels = Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3), value => {
+            const channel = value / 255;
+            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+          });
+          return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+        };
+        const paint = (color: string) => {
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+        };
+
+        animation.pause();
+        const ratios = Array.from({ length: 21 }, (_, index) => {
+          animation.currentTime = duration * index / 20;
+          const style = getComputedStyle(message);
+          paint(surface);
+          context.globalAlpha = Number(style.opacity);
+          paint(style.backgroundColor);
+          const background = luminance();
+          paint(style.color);
+          const foreground = luminance();
+          context.globalAlpha = 1;
+          return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+        });
+        animation.finish();
+        return Math.min(...ratios);
+      });
+      expect(lowestRatio).toBeGreaterThanOrEqual(4.5);
+    };
+
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await expect(status).toHaveText("Video playing.");
+    await playback.click();
+    await expect(status).toHaveText("Video paused.");
+    await expectAnimatedContrast();
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(status).toHaveText("Showing the still image.");
+    await expectAnimatedContrast();
   });
 }
