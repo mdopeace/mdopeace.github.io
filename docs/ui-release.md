@@ -82,7 +82,7 @@ Release and Pages jobs use different job names. Do not skip CI for App/bot PRs.
 by PR CI, Pages builds and release publishing. It runs pinned/checksummed
 actionlint, ESLint, release protocol
 tests, component tests, the static build, exported-page/link checks, browser
-tests and the independently installed package test on Node 22.
+tests and the independently installed package test on Node 26.
 
 Local checks:
 

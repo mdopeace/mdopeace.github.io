@@ -25,7 +25,7 @@ The interface includes semantic landmarks, visible keyboard focus, a skip link, 
 
 ## Run locally
 
-Use Node.js 20 or newer, then install dependencies and start the development server:
+Use Node.js 26 LTS (`nvm use`) before installing dependencies and starting the development server.
 
 ```sh
 npm ci
