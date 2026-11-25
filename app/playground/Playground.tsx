@@ -707,7 +707,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       width: 432,
       height: 240,
     };
-    const spark = <ComicPanel media={<Image {...still} alt={stillAlt} imageClassName={styles.comicStill} />} caption="1. Find a spark" />;
+    const spark = <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark" />;
     const stillCode = elementCode("ComicPanel", [
       'caption="1. Find a spark"',
       `media={${elementCode("Image", Object.entries({ ...still, alt: stillAlt }).map(([prop, value]) =>

@@ -264,8 +264,9 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
   renders a `figcaption` after the content. Size images with intrinsic dimensions
   so space is reserved before they load.
 - **ComicStrip** renders a native `div` containing three panels in reading order.
-  It uses equal columns at container widths of at least 32rem and stacks below that.
-  Gutters use the shared spacing scale.
+  It uses equal columns at container widths of at least 32rem and stacks below
+  that. Gutters use the shared spacing scale. Give the strip a group name when it
+  helps readers identify the story.
 
 Each component supports a React 19 ref and native attributes for its rendered
 element. Import from the matching subpath, such as
@@ -273,11 +274,12 @@ element. Import from the matching subpath, such as
 
 For a short silent loop, use `video` in place of `media`. Supply `src`,
 `poster`, `width`, `height`, and `alt` describing the clip and still. Use an
-empty `alt` for decorative media. The poster reserves space and stays visible
-when paused, with reduced motion, or if playback fails. Otherwise the clip
-autoplays muted and loops. The **Animate panel** toggle supports keyboard
-play and pause, and remains discoverable but unavailable with reduced motion.
-Set `video.labels` to localize the toggle (`playback`) and status messages
+empty `alt` for decorative media. The poster reserves space and shows when
+paused, with reduced motion, or if playback fails. The clip loads when motion
+is first allowed, attempts to autoplay muted, and loops. The **Animate panel**
+toggle supports keyboard play and pause. Its status below the button explains
+when reduced motion or a media failure makes the toggle unavailable. Set
+`video.labels` to localize the toggle (`playback`) and status messages
 (`playing`, `paused`, `still`, `unavailable`).
 
 ```tsx
@@ -307,4 +309,5 @@ import { Image } from "@mdopeace/ui/Image";
 ```
 
 The playground example uses original local artwork in `public/playground/`,
-including a three-second clip and its first frame as the poster.
+including a three-second clip and its first frame as the poster. Copy these files
+to your app's public assets or replace the sample URLs with your own.

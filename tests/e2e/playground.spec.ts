@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { catalog } from "./playground-catalog";
 
 for (const theme of ["light", "dark"] as const) {
   test(`${theme}: portfolio and playground footers share caption typography`, async ({ page }) => {
@@ -80,16 +81,6 @@ test("the catalog lists groups and components in order", async ({ page }) => {
   await page.goto("/playground/");
   const navigation = page.getByRole("navigation", { name: "Component library" });
   const lists = navigation.getByRole("list");
-  const catalog = [
-    ["Actions", ["Button"]],
-    ["Layout & Style", ["Layout & Divider", "Typography", "Surface", "Badge", "Tile"]],
-    ["Forms", ["TextInput", "Select", "Checkbox", "Switch", "Field"]],
-    ["Navigation", ["Link", "NavbarLinks", "Navbar", "NavigationList"]],
-    ["Media", ["Image"]],
-    ["Composition", ["Content & feedback", "ConsentNote", "Dialog", "CodeExample"]],
-    ["Comic", ["SpeechBubble", "Burst", "ComicPanel", "ComicStrip"]],
-  ] as const;
-
   await expect(lists).toHaveCount(catalog.length);
   for (const [index, [group, components]] of catalog.entries()) {
     const list = lists.nth(index);

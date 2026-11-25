@@ -193,8 +193,4 @@
 @media (prefers-reduced-motion: reduce) {
   .stage[data-preview-change] { animation-duration: var(--ui-fade-fast); }
   .burstPreview { transition-duration: var(--ui-fade-fast); }
-  .comicStill.comicStill {
-    --reduced-transition-duration: var(--ui-fade-fast);
-    transition: opacity var(--ui-fade-fast) var(--ui-ease);
-  }
 }

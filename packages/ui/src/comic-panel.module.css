@@ -4,6 +4,7 @@
   min-inline-size: 0;
   margin: 0;
   border: var(--ui-border-strong) solid var(--ui-border);
+  border-radius: var(--ui-radius-none);
   background: var(--ui-surface);
   color: var(--ui-text);
   box-shadow: var(--ui-shadow-lg);
@@ -73,11 +74,15 @@
 }
 
 .playback {
+  display: grid;
+  justify-items: start;
+  gap: var(--ui-space-2);
   padding: var(--ui-space-2) var(--ui-space-3);
   border-block-start: var(--ui-border-standard) solid var(--ui-border);
 }
 
 .playbackButton {
+  min-inline-size: 0;
   max-inline-size: 100%;
 }
 
@@ -95,17 +100,42 @@
 }
 
 .status {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
+  font: var(--ui-font-caption)/var(--ui-leading-caption) var(--ui-body);
+}
+
+.status > span {
+  grid-area: 1 / 1;
+}
+
+.statusSize {
+  visibility: hidden;
+}
+
+.statusMessage {
+  display: block;
+  --reduced-animation-duration: var(--ui-fade-fast);
+  animation: playback-status var(--ui-fade-normal) var(--ui-ease);
+}
+
+@keyframes playback-status {
+  from { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .video {
     --reduced-transition-duration: var(--ui-fade-fast);
     transition-duration: var(--ui-fade-fast);
+  }
+
+  .statusMessage {
+    animation-duration: var(--ui-fade-fast);
+  }
+
+  .playbackButton.playbackButton[data-variant]:is(:hover, :active) {
+    transform: none;
+    box-shadow: var(--ui-shadow-md);
   }
 }

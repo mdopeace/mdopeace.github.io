@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "./Button";
 import styles from "./comic-panel.module.css";
 
@@ -29,8 +29,16 @@ function subscribe(onChange: () => void) {
 const motionAllowed = () => window.matchMedia(motionQuery).matches;
 const serverMotionAllowed = () => false;
 
+const defaultStatus = {
+  playing: "Video playing.",
+  paused: "Video paused.",
+  still: "Showing the still image.",
+  unavailable: "Video unavailable. Showing the still image.",
+};
+
 export function ComicVideo({ src, poster, alt, width, height, labels }: ComicPanelVideo) {
   const motion = useSyncExternalStore(subscribe, motionAllowed, serverMotionAllowed);
+  const statusId = useId();
   const video = useRef<HTMLVideoElement>(null);
   const manuallyPaused = useRef(false);
   const [playing, setPlaying] = useState(false);
@@ -39,17 +47,22 @@ export function ComicVideo({ src, poster, alt, width, height, labels }: ComicPan
   useEffect(() => {
     const element = video.current;
     if (!motion || !element) return;
+    // Keep the loaded frame for the fade and reuse the resource on resume.
+    if (!element.hasAttribute("src")) element.src = src;
     if (!manuallyPaused.current && !element.error) {
       void element.play().catch(() => { /* Manual playback remains available if autoplay is blocked. */ });
     }
     return () => element.pause();
-  }, [motion]);
+  }, [motion, src]);
 
   const running = motion && playing && !failed;
-  const status = !motion ? (labels?.still ?? "Showing the still image.")
-    : failed ? (labels?.unavailable ?? "Video unavailable. Showing the still image.")
-    : running ? (labels?.playing ?? "Video playing.")
-    : (labels?.paused ?? "Video paused.");
+  const status = !motion ? "still" : failed ? "unavailable" : running ? "playing" : "paused";
+  const messages = {
+    playing: labels?.playing ?? defaultStatus.playing,
+    paused: labels?.paused ?? defaultStatus.paused,
+    still: labels?.still ?? defaultStatus.still,
+    unavailable: labels?.unavailable ?? defaultStatus.unavailable,
+  };
 
   return (
     <div>
@@ -60,7 +73,6 @@ export function ComicVideo({ src, poster, alt, width, height, labels }: ComicPan
         {/* A silent clip and its poster share the text alternative above. */}
         <video
           ref={video}
-          src={motion ? src : undefined}
           muted
           loop
           playsInline
@@ -77,9 +89,10 @@ export function ComicVideo({ src, poster, alt, width, height, labels }: ComicPan
         <Button
           className={styles.playbackButton}
           size="sm"
-          variant={running ? "primary" : "secondary"}
+          variant="secondary"
           aria-pressed={running}
           aria-disabled={!motion || failed || undefined}
+          aria-describedby={statusId}
           onClick={() => {
             const element = video.current;
             if (!motionAllowed() || !motion || failed || !element) return;
@@ -90,7 +103,13 @@ export function ComicVideo({ src, poster, alt, width, height, labels }: ComicPan
         >
           {labels?.playback ?? "Animate panel"}
         </Button>
-        <span className={styles.status} role="status">{status}</span>
+        <div className={styles.status}>
+          {/* Reserve space for the longest localized state, including when it wraps. */}
+          {Object.entries(messages).map(([state, message]) => (
+            <span key={state} className={styles.statusSize} aria-hidden="true">{message}</span>
+          ))}
+          <span id={statusId} role="status"><span key={status} className={styles.statusMessage}>{messages[status]}</span></span>
+        </div>
       </div>
     </div>
   );

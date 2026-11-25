@@ -1,4 +1,5 @@
 import { expect, test, type Locator } from "@playwright/test";
+import { catalog } from "./playground-catalog";
 
 type Scenario = {
   setup: (properties: Locator, preview: Locator) => Promise<unknown>;
@@ -153,48 +154,50 @@ async function auditControl(control: Locator, preview: Locator, component: strin
   await set(original);
 }
 
-test("each catalog property changes the rendered preview", async ({ page }) => {
-  test.setTimeout(120_000);
-  await page.goto("/playground/");
-  await page.evaluate(() => document.fonts.ready.then(() => undefined));
-  const catalog = page.getByRole("navigation", { name: "Component library" });
-  const components = await catalog.getByRole("button").allTextContents();
-  const properties = page.getByRole("complementary", { name: "Playground properties" });
-  const preview = page.locator('[role="group"][aria-label="Live preview"]');
-  const reset = page.getByRole("button", { name: "Reset example" });
-  expect(components.length).toBeGreaterThan(0);
+for (const [group, components] of catalog) {
+  test(`${group} properties change the rendered preview`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await page.goto("/playground/");
+    await page.evaluate(() => document.fonts.ready.then(() => undefined));
+    const groupList = page.getByRole("navigation", { name: "Component library" })
+      .getByRole("list", { name: group, exact: true });
+    const properties = page.getByRole("complementary", { name: "Playground properties" });
+    const preview = page.locator('[role="group"][aria-label="Live preview"]');
+    const reset = page.getByRole("button", { name: "Reset example" });
+    await expect(groupList.getByRole("button")).toHaveText([...components]);
 
-  for (const component of components) {
-    await test.step(component, async () => {
-      await catalog.getByRole("button", { name: component, exact: true }).click();
-      await reset.click();
-      await page.emulateMedia({ reducedMotion: component === "Burst" ? "no-preference" : "reduce" });
-      const labels = await properties.locator("select, input, textarea").evaluateAll(
-        controls => controls.map(control => (control as HTMLInputElement).labels?.[0]?.textContent?.trim() ?? ""),
-      );
-      expect(labels.length).toBeGreaterThan(0);
-      expect(labels).not.toContain("");
-      const unchecked = new Set(labels);
-      for (const label of labels) {
-        const control = properties.getByLabel(label, { exact: true });
-        if (await control.isDisabled()) continue;
-        await test.step(label, () => auditControl(control, preview, component, label));
-        unchecked.delete(label);
-      }
-      for (const scenario of scenarios[component] ?? []) {
+    for (const component of components) {
+      await test.step(component, async () => {
+        await groupList.getByRole("button", { name: component, exact: true }).click();
         await reset.click();
-        await scenario.setup(properties, preview);
-        for (const label of scenario.unavailable ?? []) {
-          await expect(properties.getByLabel(label, { exact: true })).toBeDisabled();
-        }
-        for (const label of scenario.check ?? []) {
+        await page.emulateMedia({ reducedMotion: component === "Burst" ? "no-preference" : "reduce" });
+        const labels = await properties.locator("select, input, textarea").evaluateAll(
+          controls => controls.map(control => (control as HTMLInputElement).labels?.[0]?.textContent?.trim() ?? ""),
+        );
+        expect(labels.length).toBeGreaterThan(0);
+        expect(labels).not.toContain("");
+        const unchecked = new Set(labels);
+        for (const label of labels) {
           const control = properties.getByLabel(label, { exact: true });
-          await expect(control).toBeEnabled();
+          if (await control.isDisabled()) continue;
           await test.step(label, () => auditControl(control, preview, component, label));
           unchecked.delete(label);
         }
-      }
-      expect([...unchecked], `${component} has properties with no enabled test case`).toEqual([]);
-    });
-  }
-});
+        for (const scenario of scenarios[component] ?? []) {
+          await reset.click();
+          await scenario.setup(properties, preview);
+          for (const label of scenario.unavailable ?? []) {
+            await expect(properties.getByLabel(label, { exact: true })).toBeDisabled();
+          }
+          for (const label of scenario.check ?? []) {
+            const control = properties.getByLabel(label, { exact: true });
+            await expect(control).toBeEnabled();
+            await test.step(label, () => auditControl(control, preview, component, label));
+            unchecked.delete(label);
+          }
+        }
+        expect([...unchecked], `${component} has properties with no enabled test case`).toEqual([]);
+      });
+    }
+  });
+}
