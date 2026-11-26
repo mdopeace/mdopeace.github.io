@@ -1,6 +1,7 @@
 QuickTodo, Vidp, and Cookieater screenshots and logos come from their original
 repositories and are distributed under the MIT license below. The Component
-Library preview is a capture of this portfolio and follows its repository license.
+Library result is a capture of this portfolio. The problem and idea illustrations
+use this portfolio's design tokens. All three follow its repository license.
 
 https://github.com/mdopeace/quicktodo/tree/main/docs
 https://github.com/vidplabs/vidplabs.github.io
