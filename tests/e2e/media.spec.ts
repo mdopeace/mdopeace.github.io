@@ -2,10 +2,10 @@ import { expect, test, type Locator } from "@playwright/test";
 import { expectAccessible, openForAudit, themes } from "./accessibility";
 
 const projects = [
-  { id: "quicktodo", href: "https://mdopeace.github.io/quicktodo/", stills: 3 },
-  { id: "vidp", href: "https://vidplabs.github.io/", stills: 3 },
-  { id: "cookieater", href: "https://mdopeace.github.io/cookieater/", stills: 3 },
-  { id: "component-library", href: "/playground/", stills: 1 },
+  { id: "quicktodo", name: "QuickTodo", href: "https://mdopeace.github.io/quicktodo/", stills: 3 },
+  { id: "vidp", name: "Vidp", href: "https://vidplabs.github.io/", stills: 3 },
+  { id: "cookieater", name: "Cookieater", href: "https://mdopeace.github.io/cookieater/", stills: 3 },
+  { id: "component-library", name: "Component Library", href: "/playground/", stills: 1 },
 ] as const;
 
 function documentBounds(frames: Locator) {
@@ -21,9 +21,9 @@ for (const theme of themes) {
     const work = page.locator("#work");
     await expect(work.locator("article")).toHaveCount(projects.length);
 
-    for (const { id, href, stills } of projects) {
+    for (const { id, name, href, stills } of projects) {
       const project = work.locator(`article#${id}`);
-      const strip = project.getByRole("group", { name: "Project comic strip" });
+      const strip = project.getByRole("group", { name: `${name} comic strip` });
       await expect(strip).toHaveCount(1);
       await expect(strip.locator("figure")).toHaveCount(3);
       const captions = strip.locator("figure > figcaption");

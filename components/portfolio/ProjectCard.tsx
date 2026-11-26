@@ -47,7 +47,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             ))}
           </Inline>
         </Inline>
-        <ComicStrip role="group" aria-label="Project comic strip">
+        <ComicStrip role="group" aria-label={`${project.name} comic strip`}>
           {stages.map(([stage, label]) => {
             const { still, caption } = project.strip[stage];
             return (
