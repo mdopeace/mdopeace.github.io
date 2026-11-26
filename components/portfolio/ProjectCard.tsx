@@ -4,7 +4,6 @@ import { ComicPanel } from "@mdopeace/ui/ComicPanel";
 import { ComicStrip } from "@mdopeace/ui/ComicStrip";
 import { CommandBlock } from "@mdopeace/ui/CommandBlock";
 import { Image } from "@mdopeace/ui/Image";
-import { Link } from "@mdopeace/ui/Link";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { ExpandableText } from "@mdopeace/ui/ExpandableText";
 import { Badge } from "@mdopeace/ui/Badge";
@@ -61,6 +60,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                     width={still.width}
                     height={still.height}
                     className={styles.still}
+                    imageClassName={styles.stillImage}
                   />
                 )}
                 caption={<><strong className={styles.stage}>{label}</strong>{" "}{caption}</>}
@@ -68,12 +68,17 @@ export default function ProjectCard({ project }: { project: Project }) {
             );
           })}
         </ComicStrip>
-        <Inline gap={3}>
-          <Link href={project.tryHref} variant="primary" aria-label={`Try it: ${project.name}`} endIcon={<FaArrowRightLong />}>
-            Try it
-          </Link>
-          <LinkGroup
-            items={project.links.map(({ icon, ...item }) => {
+        <LinkGroup
+          items={[
+            {
+              label: "Try it",
+              href: project.tryHref,
+              variant: "primary",
+              size: "sm",
+              "aria-label": `Try it: ${project.name}`,
+              endIcon: <FaArrowRightLong />,
+            },
+            ...project.links.map(({ icon, ...item }) => {
               const Icon = icons[icon];
               return {
                 ...item,
@@ -81,10 +86,10 @@ export default function ProjectCard({ project }: { project: Project }) {
                 variant: "secondary",
                 size: "sm",
                 externalIndicator: true,
-              };
-            })}
-          />
-        </Inline>
+              } as const;
+            }),
+          ]}
+        />
         <Stack gap={2}>
           <Text variant="eyebrow" size="caption">
             The thinking behind it

@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useControllable } from "./hooks/useControllable";
 import { Button } from "./Button";
+import { FeedbackLabel } from "./FeedbackLabel";
 import { cx } from "./tokens";
 import styles from "./ui.module.css";
 
@@ -77,6 +78,7 @@ export function ExpandableText({
     <div {...props} className={cx(styles.expand, className)}>
       <div
         className={styles.expandViewport}
+        data-expanded={expanded}
         style={
           metrics
             ? { height: expanded ? metrics.full : metrics.clamp }
@@ -98,7 +100,7 @@ export function ExpandableText({
             aria-expanded={expanded}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? collapseLabel : expandLabel}
+            <FeedbackLabel active={expanded} idle={expandLabel} feedback={collapseLabel} />
           </Button>
         </div>
       )}

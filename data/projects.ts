@@ -172,8 +172,14 @@ export const projects: Project[] = [
     name: "Component Library",
     pills: ["React", "TypeScript", "Component library"],
     strip: {
-      problem: { caption: "This portfolio needs components that look and behave consistently from page to page." },
-      idea: { caption: "Build a small library with shared tokens, keyboard support, light and dark themes, and reduced motion." },
+      problem: {
+        caption: "This portfolio needs components that look and behave consistently from page to page.",
+        still: { src: "/projects/component-library-problem.webp", width: 600, height: 500, alt: "Three differently styled View buttons illustrate inconsistent controls across Home, Work, and About." },
+      },
+      idea: {
+        caption: "Build a small library with shared tokens, keyboard support, light and dark themes, and reduced motion.",
+        still: { src: "/projects/component-library-idea.webp", width: 600, height: 500, alt: "A shared tokens board lists 32, 40, and 48 pixel controls, light and dark themes, and keyboard and motion settings." },
+      },
       result: {
         caption: "Those components power this site. Try their variants in the playground and copy working React examples.",
         still: { src: "/projects/component-library-preview.webp", width: 391, height: 283, alt: "Square badges, a bold heading, and a dotted backdrop demonstrate the shared comic style." },

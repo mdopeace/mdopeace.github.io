@@ -374,8 +374,16 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await trigger.press("Enter");
     await expect(dialog).toHaveCSS("animation-duration", duration);
     if (reducedMotion === "reduce") await expect(dialog).toHaveCSS("transform", "none");
+    await dialog.evaluate(element => {
+      element.addEventListener("animationstart", event => {
+        if (event.target !== element || !element.hasAttribute("data-closing")) return;
+        const animation = element.getAnimations().find(item => item instanceof CSSAnimation && item.animationName === (event as AnimationEvent).animationName);
+        const keyframes = (animation?.effect as KeyframeEffect | null)?.getKeyframes();
+        if (keyframes) element.setAttribute("data-exit-opacity", String(keyframes.at(-1)?.opacity));
+      });
+    });
     await page.keyboard.press("Escape");
-    await expect(dialog).toHaveAttribute("data-closing", "true");
+    await expect(dialog).toHaveAttribute("data-exit-opacity", "0");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
 

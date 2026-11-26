@@ -471,10 +471,10 @@ button.link:disabled {
   animation: fade var(--ui-normal);
 }
 .dialog[data-closing="true"] {
-  animation: enter var(--ui-normal) ease-in reverse;
+  animation: exit var(--ui-normal) var(--ui-ease) both;
 }
 .dialog[data-closing="true"]::backdrop {
-  animation: fade var(--ui-normal) reverse;
+  animation: fadeOut var(--ui-normal) var(--ui-ease) both;
 }
 .dialogInner {
   padding: var(--ui-space-6);
@@ -512,6 +512,7 @@ button.link:disabled {
 }
 .expandViewport {
   overflow: hidden;
+  transition: height var(--ui-slow) var(--ui-ease);
 }
 .expandText {
   white-space: pre-line;
@@ -532,6 +533,12 @@ button.link:disabled {
 @keyframes fadeOut {
   to { opacity: 0; }
 }
+@keyframes exit {
+  to {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
 @keyframes fade {
   from {
     opacity: 0;
@@ -541,6 +548,14 @@ button.link:disabled {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .expandViewport {
+    --reduced-animation-duration: var(--ui-fade-fast);
+    transition: none;
+    animation: fade var(--ui-fade-fast) var(--ui-ease);
+  }
+  .expandViewport[data-expanded="false"] {
+    animation-name: fadeCollapsedText;
+  }
   .control,
   .track {
     --reduced-transition-duration: var(--ui-fade-fast);
@@ -568,7 +583,11 @@ button.link:disabled {
   .dialog[open][data-closing="true"],
   .dialog[open][data-closing="true"]::backdrop {
     animation-name: fadeOut;
+    animation-fill-mode: both;
   }
+}
+@keyframes fadeCollapsedText {
+  from { opacity: 0; }
 }
 @media (forced-colors: active) {
   .surface,

@@ -5,7 +5,7 @@ const projects = [
   { id: "quicktodo", name: "QuickTodo", href: "https://mdopeace.github.io/quicktodo/", stills: 3 },
   { id: "vidp", name: "Vidp", href: "https://vidplabs.github.io/", stills: 3 },
   { id: "cookieater", name: "Cookieater", href: "https://mdopeace.github.io/cookieater/", stills: 3 },
-  { id: "component-library", name: "Component Library", href: "/playground/", stills: 1 },
+  { id: "component-library", name: "Component Library", href: "/playground/", stills: 3 },
 ] as const;
 
 function documentBounds(frames: Locator) {
@@ -29,7 +29,24 @@ for (const theme of themes) {
       const captions = strip.locator("figure > figcaption");
       await expect(captions).toHaveText([/^Problem\s+\S/, /^Idea\s+\S/, /^Result\s+\S/]);
       for (const caption of await captions.all()) await expect(caption).toBeVisible();
-      await expect(project.getByRole("link", { name: `Try it: ${name}`, exact: true })).toHaveAttribute("href", href);
+      const bounds = await documentBounds(captions);
+      if (isMobile) {
+        expect(bounds[1].y).toBeGreaterThan(bounds[0].y + bounds[0].height);
+        expect(bounds[2].y).toBeGreaterThan(bounds[1].y + bounds[1].height);
+      } else {
+        for (const caption of bounds.slice(1)) {
+          expect(Math.abs(caption.height - bounds[0].height)).toBeLessThanOrEqual(1);
+          expect(Math.abs(caption.y - bounds[0].y)).toBeLessThanOrEqual(1);
+        }
+      }
+      const tryIt = project.getByRole("link", { name: `Try it: ${name}`, exact: true });
+      await expect(tryIt).toHaveAttribute("href", href);
+      await expect(tryIt).toHaveAttribute("data-variant", "primary");
+      const source = project.getByRole("link", { name: /^Source/ });
+      const siblingHeight = await source.evaluate(link => getComputedStyle(link).height);
+      await expect(tryIt).toHaveCSS("height", siblingHeight);
+      const [tryBounds, sourceBounds] = await documentBounds(tryIt.or(source));
+      expect(Math.abs(tryBounds.y - sourceBounds.y)).toBeLessThanOrEqual(1);
       const images = strip.locator("figure img");
       await expect(images).toHaveCount(stills);
       const sources = new Set();
@@ -37,6 +54,7 @@ for (const theme of themes) {
         await expect(image).toHaveAttribute("src", /\/projects\/[^/]+\.webp$/);
         await expect(image).toHaveAttribute("loading", "lazy");
         await expect(image).toHaveAttribute("alt", /\S/);
+        expect(await image.evaluate(element => parseFloat(getComputedStyle(element).paddingInlineStart))).toBeGreaterThan(0);
         sources.add(await image.getAttribute("src"));
       }
       expect(sources.size).toBe(stills);
@@ -45,6 +63,15 @@ for (const theme of themes) {
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await expectAccessible(page, "project comic strips");
+
+    const vidp = work.locator("#vidp");
+    const more = vidp.getByRole("button", { name: "Read more" });
+    const less = vidp.getByRole("button", { name: "Read less" });
+    await more.press("Enter");
+    await expect(less).toBeFocused();
+    await expectAccessible(page, "expanded project text");
+    await page.keyboard.press("Enter");
+    await expect(more).toBeFocused();
   });
 }
 
@@ -62,7 +89,7 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
       await page.goto("/", { waitUntil: "domcontentloaded" });
       await page.evaluate(() => document.fonts.ready);
       const frames = page.locator("#work figure [data-image-state]");
-      await expect(frames).toHaveCount(10);
+      await expect(frames).toHaveCount(projects.reduce((total, project) => total + project.stills, 0));
       await expect(frames.first()).toHaveAttribute("data-image-state", "loading");
       const before = await documentBounds(frames);
       for (const { width, height } of before) {
@@ -102,7 +129,7 @@ test("a failed project logo retains its space", async ({ page }) => {
   await expect(logo).toHaveAttribute("data-image-state", "error");
   await expect(logo).toHaveCSS("width", "32px");
   await expect(logo).toHaveCSS("height", "32px");
-  await expect(logo).toHaveCSS("border-radius", "0px");
+  await expect(logo).toHaveCSS("border-radius", "8px");
   await expect(logo).toHaveAttribute("aria-hidden", "true");
 });
 
