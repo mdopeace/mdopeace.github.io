@@ -182,7 +182,7 @@ export const projects: Project[] = [
       },
       result: {
         caption: "Those components power this site. Try their variants in the playground and copy working React examples.",
-        still: { src: "/projects/component-library-preview.webp", width: 391, height: 283, alt: "Square badges, a bold heading, and a dotted backdrop demonstrate the shared comic style." },
+        still: { src: "/projects/component-library-preview.webp", width: 600, height: 500, alt: "A This Site tag, the headline Built once. Used everywhere., and three tiles showing a button, a badge, and a card." },
       },
     },
     paragraphs: [

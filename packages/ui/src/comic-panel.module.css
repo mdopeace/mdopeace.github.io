@@ -110,21 +110,14 @@
 
 .status > span {
   grid-area: 1 / 1;
-}
-
-.statusSize {
+  opacity: 0;
   visibility: hidden;
+  transition: opacity var(--ui-fade-normal) var(--ui-ease), visibility var(--ui-fade-normal);
 }
 
-.statusMessage {
-  display: block;
-  --reduced-animation-duration: var(--ui-fade-fast);
-  animation: playback-status var(--ui-fade-normal) var(--ui-ease);
-}
-
-@keyframes playback-status {
-  /* Fade the highlight while keeping the live status text opaque. */
-  from { background-color: var(--ui-subtle); }
+.status > [data-active="true"] {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -133,8 +126,9 @@
     transition-duration: var(--ui-fade-fast);
   }
 
-  .statusMessage {
-    animation-duration: var(--ui-fade-fast);
+  .status > span {
+    --reduced-transition-duration: var(--ui-fade-fast);
+    transition-duration: var(--ui-fade-fast);
   }
 
   .playbackButton.playbackButton[data-variant]:is(:hover, :active) {
