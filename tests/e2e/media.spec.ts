@@ -91,6 +91,11 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
       const frames = page.locator("#work figure [data-image-state]");
       await expect(frames).toHaveCount(projects.reduce((total, project) => total + project.stills, 0));
       await expect(frames.first()).toHaveAttribute("data-image-state", "loading");
+      const expanders = page.locator("#work [data-expanded]");
+      await expect(expanders).toHaveCount(projects.length);
+      for (const expander of await expanders.all()) {
+        await expect(expander).toHaveCSS("height", /px$/);
+      }
       const before = await documentBounds(frames);
       for (const { width, height } of before) {
         expect(width).toBeGreaterThan(0);

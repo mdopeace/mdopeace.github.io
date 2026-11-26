@@ -1,7 +1,7 @@
 "use client";
 import {
-  useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ComponentPropsWithRef,
@@ -48,7 +48,7 @@ export function ExpandableText({
   } | null>(null);
   const content = useRef<HTMLParagraphElement>(null);
   const id = useId();
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = content.current;
     if (!element) return;
     const measure = () => {
