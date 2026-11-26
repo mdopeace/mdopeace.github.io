@@ -1,0 +1,216 @@
+import { expect, test } from "@playwright/test";
+import { expectAccessible, expectTextContrast, openForAudit, themes } from "./accessibility";
+
+test("the strip preserves panel reading order as it reflows", async ({ page, isMobile }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
+  const strip = page.getByRole("group", { name: "Paper plane story" });
+  const captions = strip.locator("figcaption");
+  await expect(captions).toHaveText(["1. Find a spark", "2. Take flight", "3. Keep exploring"]);
+  const positions = () => strip.getByRole("figure").evaluateAll(panels =>
+    panels.map(panel => ({ x: panel.getBoundingClientRect().x, y: panel.getBoundingClientRect().y })),
+  );
+  const expectStack = async () => {
+    const [first, second, third] = await positions();
+    expect(first.x).toBe(second.x);
+    expect(second.x).toBe(third.x);
+    expect(first.y).toBeLessThan(second.y);
+    expect(second.y).toBeLessThan(third.y);
+  };
+
+  if (isMobile) {
+    await expectStack();
+  } else {
+    const [first, second, third] = await positions();
+    expect(first.y).toBe(second.y);
+    expect(second.y).toBe(third.y);
+    expect(first.x).toBeLessThan(second.x);
+    expect(second.x).toBeLessThan(third.x);
+  }
+  await page.getByLabel("Preview width").selectOption("narrow");
+  await expectStack();
+  await expect(captions).toHaveText(["1. Find a spark", "2. Take flight", "3. Keep exploring"]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(() => innerWidth));
+});
+
+test("the clip fades between playing and still states without moving its frame", async ({ page }) => {
+  const requests: string[] = [];
+  await page.route("**/paper-plane.webm", route => route.continue());
+  page.on("request", request => {
+    if (request.url().endsWith("/paper-plane.webm")) requests.push(request.url());
+  });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
+  const strip = page.getByRole("group", { name: "Paper plane story" });
+  const frame = strip.getByRole("img", { name: "A paper plane glides past a yellow sun" });
+  const spark = strip.getByRole("img", { name: "A red lightning bolt inside a starburst" });
+  const video = frame.locator("video");
+  const poster = frame.locator("img");
+  const playback = strip.getByRole("button", { name: "Animate panel" });
+  const status = strip.getByRole("status");
+  await expect(status).toHaveCount(1);
+  await expect(status).toBeVisible();
+  await expect(status).toHaveText("Showing the still image.");
+  await expect(status.locator("span")).toHaveCSS("animation-duration", "0.12s");
+  await expect(spark).toHaveCSS("transition-property", "opacity");
+  await expect(spark).toHaveCSS("transition-duration", "0.12s");
+  await expect.poll(() => poster.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBe(432);
+  await expect(video).not.toHaveAttribute("src");
+  await expect(video).toHaveCSS("opacity", "0");
+  await expect(video).toHaveCSS("transition-property", "opacity");
+  await expect(video).toHaveCSS("transition-duration", "0.12s");
+  await expect(video).toHaveCSS("transform", "none");
+  await expect(playback).toBeDisabled();
+  await playback.focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  await expect(playback).toBeFocused();
+  await expect(playback).toHaveCSS("outline-style", "solid");
+  await playback.hover({ force: true });
+  await expect(playback).toHaveCSS("transform", "none");
+  await page.keyboard.press("Space");
+  await expect(playback).toHaveAttribute("aria-pressed", "false");
+  expect(requests).toHaveLength(0);
+  const before = await frame.boundingBox();
+  const stripBefore = await strip.boundingBox();
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(video).toHaveJSProperty("muted", true);
+  await expect(video).toHaveJSProperty("loop", true);
+  await expect(video).toHaveJSProperty("paused", false);
+  await expect(video).toHaveCSS("transition-duration", "0.18s");
+  await expect(spark).toHaveCSS("transition-duration", "0.18s");
+  await expect(video).toHaveCSS("opacity", "1");
+  await expect(status).toHaveText("Video playing.");
+  await expect(status.locator("span")).toHaveCSS("animation-duration", "0.18s");
+  await expect(playback).toHaveAttribute("aria-pressed", "true");
+  expect(await video.evaluate(node => (node as HTMLVideoElement).duration)).toBeCloseTo(3);
+  const loadedRequests = requests.length;
+  const background = await playback.evaluate(button => getComputedStyle(button).backgroundColor);
+
+  await page.keyboard.press("Space");
+  await expect(video).toHaveJSProperty("paused", true);
+  await expect(video).toHaveCSS("opacity", "0");
+  await expect(playback).toBeFocused();
+  await expect(playback).toHaveCSS("background-color", background);
+  await expect(status).toHaveText("Video paused.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(status).toHaveText("Showing the still image.");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(status).toHaveText("Video paused.");
+  await expect(video).toHaveJSProperty("paused", true);
+  await page.keyboard.press("Enter");
+  await expect(video).toHaveCSS("opacity", "1");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(video).toHaveJSProperty("paused", true);
+  await expect(video).toHaveCSS("opacity", "0");
+  await expect(playback).toBeDisabled();
+  await expect(playback).toBeFocused();
+  await expect(status).toHaveText("Showing the still image.");
+  expect(await frame.boundingBox()).toEqual(before);
+  expect(await strip.boundingBox()).toEqual(stripBefore);
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(status).toHaveText("Video playing.");
+  expect(requests).toHaveLength(loadedRequests);
+});
+
+for (const theme of themes) {
+  test(`${theme}: panel fits both preview widths and comic states pass axe`, async ({ page, isMobile }) => {
+    await openForAudit(page, "/playground/", theme, isMobile);
+    const preview = page.getByRole("group", { name: "Live preview" });
+    await page.getByRole("button", { name: "ComicPanel", exact: true }).click();
+    const panel = preview.getByRole("figure");
+    const artwork = panel.getByRole("img");
+    const widthControl = page.getByLabel("Preview width");
+    await expectTextContrast(preview.locator("figcaption"));
+    for (const width of ["wide", "narrow"]) {
+      await widthControl.selectOption(width);
+      const container = preview.locator(`[data-width="${width}"]`);
+      const containerBox = (await container.boundingBox())!;
+      const panelBox = (await panel.boundingBox())!;
+      const artworkBox = (await artwork.boundingBox())!;
+      expect(panelBox.x).toBeGreaterThanOrEqual(containerBox.x);
+      expect(panelBox.x + panelBox.width).toBeLessThanOrEqual(containerBox.x + containerBox.width);
+      expect(artworkBox.x).toBeGreaterThan(panelBox.x);
+      expect(artworkBox.x + artworkBox.width).toBeLessThan(panelBox.x + panelBox.width);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+      await expectAccessible(page, `comic panel with ${width} preview`);
+    }
+    await widthControl.selectOption("wide");
+    await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
+    const playback = preview.getByRole("button", { name: "Animate panel" });
+    await expectTextContrast(playback);
+    await expectAccessible(page, "comic strip with reduced motion");
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await expect(playback).toHaveAttribute("aria-pressed", "true");
+    await expectAccessible(page, "comic strip with video playing");
+    await playback.click();
+    await expect(playback).toHaveAttribute("aria-pressed", "false");
+    await expectAccessible(page, "comic strip with video paused");
+
+    await page.route("**/paper-plane.webm", route => route.abort());
+    await page.getByRole("button", { name: "Reset example" }).click();
+    await expect(playback).toBeDisabled();
+    await expect(playback).toHaveAccessibleDescription("Video unavailable. Showing the still image.");
+    await expect(preview.getByRole("status")).toBeVisible();
+    await expectAccessible(page, "comic strip with an unavailable video");
+  });
+
+  test(`${theme}: playback status stays AA throughout its animation`, async ({ page, isMobile }) => {
+    await openForAudit(page, "/playground/", theme, isMobile);
+    // Keep the animation seekable even if it finishes before the test samples it.
+    await page.addStyleTag({ content: '[role="status"] > span { animation-fill-mode: both; }' });
+    await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
+    const strip = page.getByRole("group", { name: "Paper plane story" });
+    const playback = strip.getByRole("button", { name: "Animate panel" });
+    const status = strip.getByRole("status");
+
+    const expectAnimatedContrast = async () => {
+      const lowestRatio = await status.locator("span").evaluate(message => {
+        const [animation] = message.getAnimations();
+        const duration = Number(animation.effect!.getComputedTiming().duration);
+        const surface = getComputedStyle(message.closest("figure")!).backgroundColor;
+        const context = document.createElement("canvas").getContext("2d")!;
+        const luminance = () => {
+          const channels = Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3), value => {
+            const channel = value / 255;
+            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+          });
+          return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+        };
+        const paint = (color: string) => {
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+        };
+
+        animation.pause();
+        const ratios = Array.from({ length: 21 }, (_, index) => {
+          animation.currentTime = duration * index / 20;
+          const style = getComputedStyle(message);
+          paint(surface);
+          context.globalAlpha = Number(style.opacity);
+          paint(style.backgroundColor);
+          const background = luminance();
+          paint(style.color);
+          const foreground = luminance();
+          context.globalAlpha = 1;
+          return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+        });
+        animation.finish();
+        return Math.min(...ratios);
+      });
+      expect(lowestRatio).toBeGreaterThanOrEqual(4.5);
+    };
+
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await expect(status).toHaveText("Video playing.");
+    await playback.click();
+    await expect(status).toHaveText("Video paused.");
+    await expectAnimatedContrast();
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(status).toHaveText("Showing the still image.");
+    await expectAnimatedContrast();
+  });
+}

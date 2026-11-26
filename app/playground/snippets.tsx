@@ -65,6 +65,8 @@ const imports: Record<string, string> = {
   Badge: "@mdopeace/ui/Badge",
   SpeechBubble: "@mdopeace/ui/SpeechBubble",
   Burst: "@mdopeace/ui/Burst",
+  ComicPanel: "@mdopeace/ui/ComicPanel",
+  ComicStrip: "@mdopeace/ui/ComicStrip",
   ConsentNote: "@mdopeace/ui/ConsentNote",
   Tile: "@mdopeace/ui/Tile",
   Heading: "@mdopeace/ui/Typography",

@@ -258,7 +258,56 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
   `emphasis`), and optional `animated` for entry. Motion follows the OS
   preference. For announcements, mount an empty `<Burst status />` and update
   its children when feedback arrives.
+- **ComicPanel** renders a native `figure` with square corners, a strong ink
+  outline and a hard shadow. Use `children` for ordinary content and optional
+  `media` for a sized image or other media above it. `caption` is optional and
+  renders a `figcaption` after the content. Size images with intrinsic dimensions
+  so space is reserved before they load.
+- **ComicStrip** renders a native `div` containing three panels in reading order.
+  It uses equal columns at container widths of at least 32rem and stacks below
+  that. Gutters use the shared spacing scale. Give the strip a group name when it
+  helps readers identify the story.
 
 Each component supports a React 19 ref and native attributes for its rendered
 element. Import from the matching subpath, such as
 `import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";`.
+
+For a short silent loop, use `video` in place of `media`. Supply `src`,
+`poster`, `width`, `height`, and `alt` describing the clip and still. Use an
+empty `alt` for decorative media. The poster reserves space and shows when
+paused, with reduced motion, or if playback fails. The clip loads when motion
+is first allowed, attempts to autoplay muted, and loops. The **Animate panel**
+toggle supports keyboard play and pause. Its status below the button explains
+when reduced motion or a media failure makes the toggle unavailable. Set
+`video.labels` to localize the toggle (`playback`) and status messages
+(`playing`, `paused`, `still`, `unavailable`).
+
+```tsx
+import { ComicPanel } from "@mdopeace/ui/ComicPanel";
+import { ComicStrip } from "@mdopeace/ui/ComicStrip";
+import { Image } from "@mdopeace/ui/Image";
+
+<ComicStrip role="group" aria-label="Paper plane story">
+  <ComicPanel
+    caption="1. Find a spark"
+    media={<Image src="/playground/comic-spark.webp" alt="A red lightning bolt" width={432} height={240} />}
+  />
+  <ComicPanel
+    caption="2. Take flight"
+    video={{
+      src: "/playground/paper-plane.webm",
+      poster: "/playground/paper-plane.webp",
+      alt: "A paper plane glides past a yellow sun",
+      width: 432,
+      height: 240,
+    }}
+  />
+  <ComicPanel caption="3. Keep exploring">
+    <p>Where to next?</p>
+  </ComicPanel>
+</ComicStrip>
+```
+
+The playground example uses original local artwork in `public/playground/`,
+including a three-second clip and its first frame as the poster. Copy these files
+to your app's public assets or replace the sample URLs with your own.

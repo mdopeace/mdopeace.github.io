@@ -156,6 +156,7 @@
 
 .widthPreview {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: stretch;
   inline-size: 100%;
   min-inline-size: 0;
@@ -164,6 +165,12 @@
 
 .widthPreview[data-width="narrow"] {
   max-inline-size: min(20rem, 75%);
+}
+
+.comicPanelSample {
+  inline-size: 100%;
+  max-inline-size: 27rem;
+  justify-self: center;
 }
 
 .stage[data-preview-change] {

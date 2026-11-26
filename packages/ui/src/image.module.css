@@ -56,6 +56,9 @@
 }
 @keyframes pulse { from { opacity: .35; } to { opacity: .7; } }
 @media (prefers-reduced-motion: reduce) {
-  .image { transition: none; }
+  .image {
+    --reduced-transition-duration: var(--ui-fade-fast);
+    transition-duration: var(--ui-fade-fast);
+  }
   .frame[data-image-state="loading"]::before { animation: none; }
 }
