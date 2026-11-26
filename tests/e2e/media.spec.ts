@@ -29,7 +29,7 @@ for (const theme of themes) {
       const captions = strip.locator("figure > figcaption");
       await expect(captions).toHaveText([/^Problem\s+\S/, /^Idea\s+\S/, /^Result\s+\S/]);
       for (const caption of await captions.all()) await expect(caption).toBeVisible();
-      await expect(project.getByRole("link", { name: "Try it", exact: true })).toHaveAttribute("href", href);
+      await expect(project.getByRole("link", { name: `Try it: ${name}`, exact: true })).toHaveAttribute("href", href);
       const images = strip.locator("figure img");
       await expect(images).toHaveCount(stills);
       const sources = new Set();

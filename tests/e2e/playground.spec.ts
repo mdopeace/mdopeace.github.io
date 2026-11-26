@@ -34,7 +34,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(footer.getByRole("link")).toHaveCount(1);
     await expect(footer.getByRole("link", { name: "Back to top" })).toHaveAttribute("href", "#top");
     const project = page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Component Library", exact: true }) });
-    const tryIt = project.getByRole("link", { name: "Try it", exact: true });
+    const tryIt = project.getByRole("link", { name: "Try it: Component Library", exact: true });
     await expect(tryIt).toHaveAttribute("href", "/playground/");
     await tryIt.focus();
     await expect(tryIt).toHaveCSS("outline-style", "solid");

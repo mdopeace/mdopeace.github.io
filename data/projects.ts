@@ -90,7 +90,7 @@ export const projects: Project[] = [
       },
       idea: {
         caption: "Build with AppKit, mpv, and OpenGL. Drop in a file or open it from Finder.",
-        still: { src: "/projects/vidp-overlay.webp", width: 600, height: 377, alt: "Playback controls and the title overlay a lunar scene." },
+        still: { src: "/projects/vidp-overlay.webp", width: 600, height: 377, alt: "A lunar scene with the episode title For All Mankind overlaid in the corner." },
       },
       result: {
         caption: "A keyboard-driven player I use every day, with macOS Now Playing and automatic updates.",
@@ -131,7 +131,7 @@ export const projects: Project[] = [
     strip: {
       problem: {
         caption: "You need a quick way to inspect or edit cookies for the site you’re on.",
-        still: { src: "/projects/cookieater-empty-state.webp", width: 600, height: 500, alt: "The cookie list reports that the current site has no cookies." },
+        still: { src: "/projects/cookieater-empty-state.webp", width: 600, height: 500, alt: "Cookieater shows an empty list for example.com, with search and an Add a Cookie action." },
       },
       idea: {
         caption: "Open a small Chrome or Firefox extension that works on the current site.",

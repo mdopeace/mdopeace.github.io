@@ -69,7 +69,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           })}
         </ComicStrip>
         <Inline gap={3}>
-          <Link href={project.tryHref} variant="primary" aria-describedby={titleId} endIcon={<FaArrowRightLong />}>
+          <Link href={project.tryHref} variant="primary" aria-label={`Try it: ${project.name}`} endIcon={<FaArrowRightLong />}>
             Try it
           </Link>
           <LinkGroup
