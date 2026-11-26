@@ -895,20 +895,6 @@
   .hero-art.gameboy-stage {
     border-top: 3px solid var(--ui-border);
   }
-  .project-layout {
-    display: grid;
-    gap: var(--ui-space-6);
-    scroll-margin-top: 6rem;
-  }
-  .project-media {
-    display: grid;
-    place-items: center;
-    align-self: center;
-    width: 100%;
-  }
-  .project-copy {
-    align-self: center;
-  }
   .brand-wordmark {
     text-transform: none;
   }
@@ -925,9 +911,6 @@
     .hero-art.gameboy-stage {
       border-top: 0;
       border-left: 3px solid var(--ui-border);
-    }
-    .project-layout {
-      grid-template-columns: 0.82fr 1.18fr;
     }
   }
 }
@@ -947,8 +930,6 @@
     mask-image: linear-gradient(90deg, transparent 35%, #000);
   }
   .hero-name { display: block; text-shadow: 3px 3px 0 var(--ui-border); }
-  .project-layout { gap: var(--ui-space-5); }
-  .project-media { max-width: 390px; min-height: 220px; margin-inline: auto; }
   .workbench-card { position: relative; }
   .workbench-copy { padding-top: var(--ui-space-10); }
   .workbench-stamp { position: absolute; top: 1.25rem; right: 1.25rem; }

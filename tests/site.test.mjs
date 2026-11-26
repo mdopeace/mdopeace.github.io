@@ -50,7 +50,7 @@ test("the page links to Telegram and omits WhatsApp", () => {
 test("the playground ships as a public directory route with portfolio links", () => {
   const playground = readFileSync("out/playground/index.html", "utf8");
   assert.match(html, /href="\/playground\/"/);
-  assert.ok(html.includes("Explore playground"));
+  assert.match(html, />Try it</);
   assert.ok(playground.includes("Small parts. A shared language."));
   assert.ok(playground.includes("Design decisions"));
   assert.match(playground, /rel="canonical" href="https:\/\/mdopeace.github.io\/playground\/"/);

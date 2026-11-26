@@ -1,9 +1,0 @@
-.preview {
-  min-width: 0;
-  width: 100%;
-  background-image: radial-gradient(
-    color-mix(in srgb, var(--ui-text) 17%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: 12px 12px;
-}

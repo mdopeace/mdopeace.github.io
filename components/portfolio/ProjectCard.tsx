@@ -1,49 +1,44 @@
 import type { Project } from "@/data/projects";
-import { FaChrome, FaFirefoxBrowser, FaGithub, FaGlobe, FaTag } from "react-icons/fa6";
+import { FaArrowRightLong, FaChrome, FaFirefoxBrowser, FaGithub, FaTag } from "react-icons/fa6";
+import { ComicPanel } from "@mdopeace/ui/ComicPanel";
+import { ComicStrip } from "@mdopeace/ui/ComicStrip";
 import { CommandBlock } from "@mdopeace/ui/CommandBlock";
+import { Image } from "@mdopeace/ui/Image";
+import { Link } from "@mdopeace/ui/Link";
 import { LinkGroup } from "@mdopeace/ui/LinkGroup";
 import { ExpandableText } from "@mdopeace/ui/ExpandableText";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Surface } from "@mdopeace/ui/Surface";
 import { Stack, Inline } from "@mdopeace/ui/Layout";
 import { Heading, Text } from "@mdopeace/ui/Typography";
-import ComponentLibraryPreview from "./ComponentLibraryPreview";
-import ProjectImage from "./ProjectImage";
+import { withBasePath } from "@/lib/withBasePath";
 import ProjectLogo from "./ProjectLogo";
+import styles from "./project-media.module.css";
+
 const icons = {
   github: FaGithub,
   tag: FaTag,
-  globe: FaGlobe,
   chrome: FaChrome,
   firefox: FaFirefoxBrowser,
 };
+
+const stages = [
+  ["problem", "Problem"],
+  ["idea", "Idea"],
+  ["result", "Result"],
+] as const;
+
 export default function ProjectCard({ project }: { project: Project }) {
+  const titleId = `${project.id}-title`;
+
   return (
-    <Surface as="article" id={project.id} className="project-layout">
-      <Surface
-        tone={project.preview === "component-library" ? "subtle" : "info"}
-        padding={4}
-        elevation="none"
-        className="project-media"
-      >
-        {project.preview === "component-library" ? (
-          <ComponentLibraryPreview />
-        ) : (
-          <ProjectImage
-            src={project.shot}
-            alt={project.shotAlt}
-            width={project.shotWidth}
-            height={project.shotHeight}
-            loading={project.name === "QuickTodo" ? "eager" : "lazy"}
-          />
-        )}
-      </Surface>
-      <Stack gap={4} className="project-copy">
+    <Surface as="article" id={project.id} className={styles.project} aria-labelledby={titleId}>
+      <Stack gap={5}>
         <Inline gap={3}>
           {project.logo && (
-            <ProjectLogo src={project.logo} />
+            <ProjectLogo src={withBasePath(project.logo)} />
           )}
-          <Heading level={3} size="card">{project.name}</Heading>
+          <Heading id={titleId} level={3} size="card">{project.name}</Heading>
           <Inline as="ul" gap={2}>
             {project.pills.map((pill) => (
               <li key={pill}>
@@ -52,12 +47,44 @@ export default function ProjectCard({ project }: { project: Project }) {
             ))}
           </Inline>
         </Inline>
-        <Stack gap={2}>
-          <Text variant="eyebrow" size="caption">
-            Why I built it
-          </Text>
-          <Text variant="callout" tone="muted">{project.tagline}</Text>
-        </Stack>
+        <ComicStrip role="group" aria-label="Project comic strip">
+          {stages.map(([stage, label]) => {
+            const { still, caption } = project.strip[stage];
+            return (
+              <ComicPanel
+                key={stage}
+                className={styles.panel}
+                media={still && (
+                  <Image
+                    src={withBasePath(still.src)}
+                    alt={still.alt}
+                    width={still.width}
+                    height={still.height}
+                    className={styles.still}
+                  />
+                )}
+                caption={<><strong className={styles.stage}>{label}</strong>{" "}{caption}</>}
+              />
+            );
+          })}
+        </ComicStrip>
+        <Inline gap={3}>
+          <Link href={project.tryHref} variant="primary" aria-describedby={titleId} endIcon={<FaArrowRightLong />}>
+            Try it
+          </Link>
+          <LinkGroup
+            items={project.links.map(({ icon, ...item }) => {
+              const Icon = icons[icon];
+              return {
+                ...item,
+                startIcon: <Icon />,
+                variant: "secondary",
+                size: "sm",
+                externalIndicator: true,
+              };
+            })}
+          />
+        </Inline>
         <Stack gap={2}>
           <Text variant="eyebrow" size="caption">
             The thinking behind it
@@ -69,18 +96,6 @@ export default function ProjectCard({ project }: { project: Project }) {
         {project.commands.length > 0 && (
           <CommandBlock code={project.commands.join("\n")} />
         )}
-        <LinkGroup
-          items={project.links.map(({ icon, ...item }) => {
-            const Icon = icons[icon];
-            return {
-              ...item,
-              startIcon: <Icon />,
-              variant: "secondary",
-              size: "sm",
-              externalIndicator: true,
-            };
-          })}
-        />
       </Stack>
     </Surface>
   );
