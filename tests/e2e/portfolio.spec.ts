@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { expectAccessible, openForAudit, themes } from "./accessibility";
+import { expectAccessible, expectTextContrast, openForAudit, themes } from "./accessibility";
 
 const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -290,6 +290,13 @@ for (const theme of themes) {
     const dialog = page.getByRole("dialog", { name: "Character Card" });
     await expect(dialog).toBeVisible();
     await expectAccessible(page, "Character Card");
+    const powerBadges = dialog.getByRole("list", { name: "Powers" }).locator("li > span");
+    await expect(powerBadges).toHaveCount(10);
+    await expect(powerBadges.last()).toHaveText("+ Learns new powers with AI");
+    for (const badge of await powerBadges.all()) {
+      await expect(badge).toBeVisible();
+      await expectTextContrast(badge);
+    }
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
