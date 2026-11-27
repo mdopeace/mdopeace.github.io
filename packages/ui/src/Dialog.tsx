@@ -21,7 +21,7 @@ type State =
   | { open?: never; defaultOpen?: boolean };
 export type DialogProps = Omit<
   ComponentPropsWithRef<"dialog">,
-  "open" | "title" | "aria-labelledby" | "aria-describedby"
+  "open" | "title" | "aria-labelledby"
 > &
   State & {
     title: string;
@@ -72,6 +72,7 @@ export function Dialog({
   title,
   titleSize = "dialog",
   description,
+  "aria-describedby": describedBy,
   closeLabel,
   size = "sm",
   children,
@@ -144,7 +145,7 @@ export function Dialog({
       data-size={size}
       className={cx(styles.dialog, className)}
       aria-labelledby={titleId}
-      aria-describedby={description ? descriptionId : undefined}
+      aria-describedby={description ? descriptionId : describedBy}
       onKeyDown={(event) => {
         onKeyDown?.(event);
         if (event.defaultPrevented) return;

@@ -49,12 +49,13 @@ it("renders the text Button with link styling and native keyboard activation", a
   render(
     <form onSubmit={onSubmit}>
       <Link href="#details">Details</Link>
-      <Button variant="text" iconOnly aria-label="Show details" onClick={onClick}>Show details</Button>
+      <Button variant="text" size="sm" iconOnly aria-label="Show details" onClick={onClick}>Show details</Button>
     </form>,
   );
   const button = screen.getByRole<HTMLButtonElement>("button", { name: "Show details" });
   expect(button.type).toBe("button");
   expect(button.hasAttribute("data-icon-only")).toBe(false);
+  expect(button.dataset.size).toBe("sm");
   expect(button.className).toBe(screen.getByRole("link", { name: "Details" }).className);
   await user.tab();
   await user.tab();
@@ -94,7 +95,7 @@ describe("comic components", () => {
           media={<span role="img" aria-label="A spark" />} caption="First beat">
           <a href="#story">Read again</a>
         </ComicPanel>
-        <ComicPanel caption={<strong>Second beat</strong>}>The plot thickens.</ComicPanel>
+        <ComicPanel border="standard" caption={<strong>Second beat</strong>}>The plot thickens.</ComicPanel>
         <ComicPanel>End of story.</ComicPanel>
       </ComicStrip>,
     );
@@ -106,6 +107,14 @@ describe("comic components", () => {
     expect(panels).toHaveLength(3);
     expect(panels[0]).toBe(panelRef.current);
     expect(panels[0].lang).toBe("en");
+    for (const panel of panels) {
+      expect(panel.tagName).toBe("FIGURE");
+      expect(panel.getAttribute("data-ui-surface")).toBe("default");
+      expect(panel.style.getPropertyValue("--elevation")).toBe("var(--ui-shadow-lg)");
+    }
+    expect(panels.map(panel => panel.style.getPropertyValue("--border-width"))).toEqual([
+      "var(--ui-border-strong)", "var(--ui-border-standard)", "var(--ui-border-strong)",
+    ]);
     expect(panels[0].lastElementChild?.tagName).toBe("FIGCAPTION");
     expect(panels[0].lastElementChild?.textContent).toBe("First beat");
     expect(panels[0].firstElementChild).toBe(screen.getByRole("img", { name: "A spark" }));

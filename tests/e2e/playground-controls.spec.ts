@@ -40,7 +40,7 @@ const scenarios: Record<string, Scenario[]> = {
   ],
   ConsentNote: [{
     setup: properties => properties.getByLabel("Open notice").uncheck(),
-    unavailable: ["Preview width"],
+    unavailable: ["Preview width", "Layout", "Saved status"],
   }],
   "Content & feedback": [{
     setup: (_, preview) => preview.getByRole("button", { name: "Read more" }).click(),
@@ -134,6 +134,10 @@ async function auditControl(control: Locator, preview: Locator, component: strin
   const seen = new Map<string, Awaited<ReturnType<typeof snapshot>>>();
   // Measure the badge itself. Its size-matched reference controls also resize.
   const target = component === "Badge" && label === "Control size" ? "[data-decoration]" : undefined;
+  const stackedCaptions = component === "ComicStrip" && label === "Align captions"
+    && await preview.locator("figure").evaluateAll(panels =>
+      panels.every(panel => panel.getBoundingClientRect().x === panels[0].getBoundingClientRect().x),
+    );
   for (const choice of choices) {
     await set(choice);
     // A modal makes its own properties inert. Open it at each selected size.
@@ -143,7 +147,7 @@ async function auditControl(control: Locator, preview: Locator, component: strin
     for (const [previous, before] of seen) {
       const description = `${component} / ${label}: ${JSON.stringify(previous)} → ${JSON.stringify(choice)}`;
       expect.soft(current.dom !== before.dom, `${description} / DOM`).toBe(true);
-      expect.soft(current.rendered !== before.rendered, `${description} / rendered output`).toBe(true);
+      expect.soft(current.rendered !== before.rendered, `${description} / rendered output`).toBe(!stackedCaptions);
     }
     seen.set(choice, current);
     if (component === "Dialog") {
@@ -180,7 +184,20 @@ for (const [group, components] of catalog) {
         for (const label of labels) {
           const control = properties.getByLabel(label, { exact: true });
           if (await control.isDisabled()) continue;
-          await test.step(label, () => auditControl(control, preview, component, label));
+          await test.step(label, async () => {
+            const viewport = page.viewportSize();
+            // Dialog sizes are equal on phones and differ at wider widths.
+            if (component === "Dialog" && label === "Size" && viewport && viewport.width < 640) {
+              await page.setViewportSize({ ...viewport, width: 768 });
+              try {
+                await auditControl(control, preview, component, label);
+              } finally {
+                await page.setViewportSize(viewport);
+              }
+            } else {
+              await auditControl(control, preview, component, label);
+            }
+          });
           unchecked.delete(label);
         }
         for (const scenario of scenarios[component] ?? []) {

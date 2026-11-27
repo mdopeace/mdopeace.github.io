@@ -150,7 +150,9 @@ remain outside it. Copy always includes the complete code.
 
 `SpeechBubble` frames speech or captions with a directional tail. `Burst`
 highlights text and can announce feedback. `ComicPanel` frames `media` or
-`children` with an optional `caption`. Its `video` option plays a silent loop
+`children` with an optional `caption`. Its `border` defaults to `"strong"`;
+use `border="standard"` for a lighter frame when nesting a panel in a card.
+Its `video` option plays a silent loop
 with a pause control and a still poster for reduced motion. `ComicStrip`
 arranges three panels in a row at container widths of 32rem or more and stacks
 them below that. All four are available from matching component subpaths.

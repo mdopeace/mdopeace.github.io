@@ -21,11 +21,14 @@ import { Heading, Text } from "@mdopeace/ui/Typography";
 
 Layout components own gaps. Surface owns padding, border and box shadow. Heading level sets semantics independently from visual size. Colored surfaces pair backgrounds with suitable foregrounds, including muted text. Do not add descendant CSS to change a primitive's visual recipe.
 
+Use `Surface texture="halftone"` for a decorative fade in a single corner, or `texture="halftone-soft"` behind supporting copy. Use `texture="paper"` for an even print grain across a panel, or `texture="paper-soft"` for a lighter, more widely spaced grain behind artwork. Leave texture off where an untextured frame helps a screenshot stand out.
+
 Semantic `as` choices retain their native attributes and ref types. Render explicit `li` children in `ul`/`ol`. Use responsive token objects for layout properties, not raw CSS measurements. `className` and `style` remain escape hatches for exceptional layout and artwork integration.
 
-- Divider: decorative by default; use `decorative={false}` for separator semantics.
+- Divider: decorative by default; use `decorative={false}` for separator semantics. Use `tone="muted"` for a quieter divider between supporting sections, with either the solid or dashed variant.
+- Heading: use `size="display"` for a large headline with room to breathe, or `size="display-compact"` for a tighter composition, such as a headline beside an illustration. Both preserve the selected semantic level. Omit `weight` to use the size's default, or choose `bold` or `black` for more emphasis.
 - Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list. Set `controlSize="sm"`, `"md"`, or `"lg"` to align a single-line badge with a Button, button-style Link, or Switch of the same size. The badge keeps its own text size and centers its content vertically.
-- Section: `title`, optional `description`, `size` and children. PortfolioSection adds numbered headings and hash tracking for this app.
+- Section: `title`, optional `description`, `size`, token-based responsive `contentGap` (default `8`) and `padding` (defaults to the selected size), and children. PortfolioSection adds numbered headings and hash tracking for this app.
 
 ## Actions, navigation and icons
 
@@ -93,7 +96,7 @@ Switch uses a native checkbox with switch semantics, keyboard operation, form at
 content as `children` and handle decisions via `onAccept` and `onDecline`.
 `acceptLabel` and `declineLabel` default to “Accept” and “Decline”. Set
 `aria-label` or `aria-labelledby` to name the notice. The caller controls
-visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`.
+visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`. Use `layout="bar"` for compact responsive placement. For a saved choice, place a short, explicit status `Badge` above the notice text. Include its ID in the notice’s accessible description. The consuming app owns any fixed positioning and must keep underlying content reachable.
 
 ### Dialog
 
@@ -110,6 +113,10 @@ visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`.
 ```
 
 Import Dialog from its matching UI subpath in a client component. Use controlled `open` with `onOpenChange` or uncontrolled `defaultOpen`.
+
+For a description inside a custom layout, link its ID with `aria-describedby` instead of passing the built-in `description`.
+
+On phones, all sizes align to the standard page gutter. The `size` prop changes the width on larger screens.
 
 Dialog uses the browser's native modal behavior and accepts a dialog ref. Put its trigger outside the Dialog, with `aria-haspopup="dialog"` and matching `aria-controls`/`id` where appropriate. Close button, Escape and genuine backdrop gestures request closure. Focus and previous scroll state are restored after exit. State changes remain immediate with reduced motion.
 
@@ -261,12 +268,15 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
 - **ComicPanel** renders a native `figure` with square corners, a strong ink
   outline and a hard shadow. Use `children` for ordinary content and optional
   `media` for a sized image or other media above it. `caption` is optional and
-  renders a `figcaption` after the content. Size images with intrinsic dimensions
+  renders a `figcaption` after the content. Add `captionTitle` to separate a
+  short label from the regular-weight description. Size images with intrinsic dimensions
   so space is reserved before they load.
 - **ComicStrip** renders a native `div` containing three panels in reading order.
   It uses equal columns at container widths of at least 32rem and stacks below
-  that. Gutters use the shared spacing scale. Give the strip a group name when it
-  helps readers identify the story.
+  that. Gutters use the shared spacing scale. Enable `alignCaptions` to align
+  media, body and caption rows when the panels are side by side. Stacked panels
+  keep their natural height. Give the strip a group name when it helps readers
+  identify the story.
 
 Each component supports a React 19 ref and native attributes for its rendered
 element. Import from the matching subpath, such as

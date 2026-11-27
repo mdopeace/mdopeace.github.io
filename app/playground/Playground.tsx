@@ -5,7 +5,7 @@ import { useRef, useState, type ReactNode, type Ref } from "react";
 import { FaArrowLeft, FaHeart } from "react-icons/fa6";
 import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
 import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
-import { Surface } from "@mdopeace/ui/Surface";
+import { Surface, type SurfaceProps } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
@@ -40,6 +40,8 @@ import type { Size, Tone, Variant, Elevation } from "@mdopeace/ui/tokens";
 import styles from "./playground.module.css";
 import { elementCode, jsxText, completeExample } from "./snippets";
 
+const typographyHeadingSizes = ["card", "feature", "display", "display-compact"] as const;
+
 const catalog = [
   {
     id: "button",
@@ -66,7 +68,7 @@ const catalog = [
     description: "A hierarchy that travels with the content.",
     rationale:
       "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
-    tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
+    tip: "Choose the heading level from the document structure. Compare Display with Display Compact for a narrower layout.",
   },
   {
     id: "surface",
@@ -362,6 +364,7 @@ function Snippet({ code }: { code: string }) {
 
 function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: boolean }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
+  const [comicBorder, setComicBorder] = useState<"standard" | "strong">("strong");
   const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
   const [burstTone, setBurstTone] = useState<(typeof comicTones)[number]>("accent");
   const [speechTone, setSpeechTone] = useState<(typeof comicTones)[number]>("default");
@@ -394,13 +397,21 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   const [square, setSquare] = useState(false);
   const [tilt, setTilt] = useState<"none" | "left" | "right">("none");
   const [font, setFont] = useState<"body" | "mono">("body");
+  const [alignComicCaptions, setAlignComicCaptions] = useState(false);
+  const [showComicCaptionTitle, setShowComicCaptionTitle] = useState(false);
+  const [headingSize, setHeadingSize] = useState<(typeof typographyHeadingSizes)[number]>("card");
+  const [headingWeight, setHeadingWeight] = useState<"default" | "bold" | "black">("default");
+  const [surfaceTexture, setSurfaceTexture] = useState<"none" | NonNullable<SurfaceProps["texture"]>>("none");
   const [textSize, setTextSize] = useState<"caption" | "sm" | "md" | "lg">(
     "md",
   );
   const [columns, setColumns] = useState<"1" | "2" | "3">("2");
   const [gap, setGap] = useState<"2" | "4" | "6">("4");
   const [dashed, setDashed] = useState(false);
+  const [dividerTone, setDividerTone] = useState<"default" | "muted">("default");
   const [open, setOpen] = useState(false);
+  const [consentStatus, setConsentStatus] = useState<"none" | "on" | "off">("none");
+  const [consentLayout, setConsentLayout] = useState<"stacked" | "bar">("stacked");
   const [dialogTitleSize, setDialogTitleSize] = useState<"dialog" | "feature">("dialog");
   const [lines, setLines] = useState<"2" | "3" | "5">("3");
   const [expanded, setExpanded] = useState(false);
@@ -468,7 +479,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         {variantControl}
-        {variant !== "text" && sizeControl}
+        {sizeControl}
         <Field label="Label">
           {(field) => (
             <TextInput
@@ -520,7 +531,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       "Button",
       [
         `variant="${variant}"`,
-        variant !== "text" && sizeProp,
+        sizeProp,
         disabled && "disabled",
         loading && "loading",
         (icon || iconOnly) && "startIcon={<FaHeart />}",
@@ -602,6 +613,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         {toneControl}
+        <Choice label="Surface texture" value={surfaceTexture} options={["none", "halftone", "halftone-soft", "paper", "paper-soft"] as const} onChange={setSurfaceTexture} />
         <Choice
           label="Elevation"
           value={elevation}
@@ -613,6 +625,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     preview = (
       <Surface
         tone={tone}
+        texture={surfaceTexture === "none" ? undefined : surfaceTexture}
         elevation={elevation}
         padding={6}
         className={styles.sample}
@@ -634,7 +647,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     );
     code = elementCode(
       "Surface",
-      [`tone="${tone}"`, `elevation="${elevation}"`, "padding={6}"],
+      [`tone="${tone}"`, `elevation="${elevation}"`, "padding={6}", surfaceTexture !== "none" && `texture="${surfaceTexture}"`],
       elementCode(
         "Stack",
         ["gap={3}"],
@@ -713,46 +726,65 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       height: 240,
     };
     const exploreAlt = "A compass with its needle pointing toward a new heading";
-    const spark = <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark" />;
+    controls = (
+      <>
+        <Choice label="Panel border" value={comicBorder} options={["standard", "strong"] as const} onChange={setComicBorder} />
+        {kind === "comic-strip" && <Toggle label="Align captions" checked={alignComicCaptions} onChange={setAlignComicCaptions} />}
+        {kind === "comic-panel" && <Toggle label="Caption title" checked={showComicCaptionTitle} onChange={setShowComicCaptionTitle} />}
+      </>
+    );
+    const borderProp = `border="${comicBorder}"`;
+    const sparkLabel = "1. Find a spark";
+    const sparkCaption = showComicCaptionTitle ? "Start with one observation worth drawing." : sparkLabel;
     const imageProps = (asset: typeof still, alt: string) =>
       elementCode("Image", Object.entries({ ...asset, alt }).map(([prop, value]) =>
         `${prop}={${JSON.stringify(value)}}`,
       ));
     const stillCode = elementCode("ComicPanel", [
-      'caption="1. Find a spark"',
+      ...(showComicCaptionTitle ? [`captionTitle=${JSON.stringify(sparkLabel)}`] : []),
+      `caption=${JSON.stringify(sparkCaption)}`,
+      borderProp,
       `media={${imageProps(still, stillAlt)}}`,
     ]);
     const sparkStripCode = elementCode("ComicPanel", [
       'caption="1. Find a spark"',
+      borderProp,
       `media={${imageProps(still, stillAlt)}}`,
     ], '<SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>');
     const exploreCode = elementCode("ComicPanel", [
       'caption="3. Keep exploring"',
+      borderProp,
       `media={${imageProps(explore, exploreAlt)}}`,
     ], '<SpeechBubble tone="emphasis">Where to next?</SpeechBubble>');
     if (kind === "comic-panel") {
-      preview = <div className={styles.comicPanelSample}>{spark}</div>;
+      preview = (
+        <div className={styles.comicPanelSample}>
+          <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />}
+            captionTitle={showComicCaptionTitle ? sparkLabel : undefined} caption={sparkCaption} />
+        </div>
+      );
       code = stillCode;
     } else {
       preview = (
-        <ComicStrip role="group" aria-label="Paper plane story">
-          <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark">
+        <ComicStrip role="group" aria-label="Paper plane story" alignCaptions={alignComicCaptions}>
+          <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark">
             <SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>
           </ComicPanel>
-          <ComicPanel video={video} caption="2. Take flight" />
-          <ComicPanel media={<Image {...explore} alt={exploreAlt} />} caption="3. Keep exploring">
+          <ComicPanel border={comicBorder} video={video} caption="2. Take flight" />
+          <ComicPanel border={comicBorder} media={<Image {...explore} alt={exploreAlt} />} caption="3. Keep exploring">
             <SpeechBubble tone="emphasis">Where to next?</SpeechBubble>
           </ComicPanel>
         </ComicStrip>
       );
-      code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"'], [
+      code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"', ...(alignComicCaptions ? ["alignCaptions"] : [])], [
         sparkStripCode,
-        elementCode("ComicPanel", ['caption="2. Take flight"', `video={${JSON.stringify(video, null, 2)}}`]),
+        elementCode("ComicPanel", ['caption="2. Take flight"', borderProp, `video={${JSON.stringify(video, null, 2)}}`]),
         exploreCode,
       ].join("\n"));
     }
   } else if (kind === "consent-note") {
     const notice = "Would you like to enable reminders?";
+    const statusLabel = `Reminders are ${consentStatus}`;
     const choose = (label: string) => {
       setDecision(label);
       setNoteOpen(false);
@@ -760,22 +792,34 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       noticeToggleRef.current?.focus();
     };
     controls = (
-      <Toggle ref={noticeToggleRef} label="Open notice" checked={noteOpen} onChange={(next) => {
-        setNoteOpen(next);
-        setDecision("");
-      }} />
+      <>
+        <Toggle ref={noticeToggleRef} label="Open notice" checked={noteOpen} onChange={(next) => {
+          setNoteOpen(next);
+          setDecision("");
+        }} />
+        <Choice label="Layout" value={consentLayout} options={["stacked", "bar"] as const} onChange={setConsentLayout} disabled={!noteOpen} />
+        <Choice label="Saved status" value={consentStatus} options={["none", "on", "off"] as const} onChange={setConsentStatus} disabled={!noteOpen} />
+      </>
     );
     preview = (
       <Stack gap={4}>
-        <ConsentNote open={noteOpen} onAccept={() => choose("Accepted")} onDecline={() => choose("Declined")}>{notice}</ConsentNote>
+        <ConsentNote open={noteOpen} layout={consentLayout} onAccept={() => choose("Accepted")} onDecline={() => choose("Declined")}>
+          <Stack gap={1} align="start">
+            {consentStatus !== "none" && <Badge>{statusLabel}</Badge>}
+            <Text size="sm">{notice}</Text>
+          </Stack>
+        </ConsentNote>
         <Text role="status">{decision}</Text>
       </Stack>
     );
     code = [
       "<>",
       elementCode("ConsentNote", [
-        "open={open}", "onAccept={closeNotice}", "onDecline={closeNotice}",
-      ], notice),
+        "open={open}", `layout="${consentLayout}"`, "onAccept={closeNotice}", "onDecline={closeNotice}",
+      ], elementCode("Stack", ["gap={1}", 'align="start"'], [
+        ...(consentStatus !== "none" ? [elementCode("Badge", [], statusLabel)] : []),
+        elementCode("Text", ['size="sm"'], notice),
+      ].join("\n"))),
       '<Button ref={reopenRef} onClick={() => setOpen(true)}>Open notice</Button>',
       "</>",
     ].join("\n");
@@ -868,6 +912,13 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         <Choice
+          label="Heading size"
+          value={headingSize}
+          options={typographyHeadingSizes}
+          onChange={setHeadingSize}
+        />
+        <Choice label="Heading weight" value={headingWeight} options={["default", "bold", "black"] as const} onChange={setHeadingWeight} />
+        <Choice
           label="Text size"
           value={textSize}
           options={["caption", "sm", "md", "lg"] as const}
@@ -884,7 +935,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     preview = (
       <Stack gap={4} className={styles.sample}>
         <Text variant="eyebrow">An idea worth making</Text>
-        <Heading level={3} size="feature">
+        <Heading level={3} size={headingSize} weight={headingWeight === "default" ? undefined : headingWeight}>
           Make the useful thing.
         </Heading>
         <Text size={textSize} font={font}>
@@ -899,7 +950,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     code =
       elementCode(
         "Heading",
-        ["level={3}", 'size="feature"'],
+        ["level={3}", `size="${headingSize}"`, ...(headingWeight === "default" ? [] : [`weight="${headingWeight}"`])],
         "Make the useful thing.",
       ) +
       "\n\n" +
@@ -924,6 +975,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           onChange={setGap}
         />
         <Toggle label="Dashed divider" checked={dashed} onChange={setDashed} />
+        <Choice label="Divider tone" value={dividerTone} options={["default", "muted"] as const} onChange={setDividerTone} />
       </>
     );
     preview = (
@@ -948,7 +1000,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
             </Surface>
           ))}
         </Grid>
-        <Divider variant={dashed ? "dashed" : "solid"} />
+        <Divider variant={dashed ? "dashed" : "solid"} tone={dividerTone} />
       </Stack>
     );
     code = elementCode(
@@ -972,13 +1024,14 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           .join("\n"),
       ) +
         "\n" +
-        elementCode("Divider", [`variant="${dashed ? "dashed" : "solid"}"`]),
+        elementCode("Divider", [`variant="${dashed ? "dashed" : "solid"}"`, `tone="${dividerTone}"`]),
     );
   } else if (kind === "dialog") {
     controls = (
       <>
         {sizeControl}
         <Choice label="Title size" value={dialogTitleSize} options={["dialog", "feature"]} onChange={setDialogTitleSize} />
+        <Text size="caption" tone="muted">On phones, all sizes align to the page edges.</Text>
       </>
     );
     preview = (
@@ -1336,7 +1389,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     ].includes(kind) || (kind === "badge" && badgeControlSize !== "none") || kind === "consent-note" || (kind === "burst" && feedback),
   );
   return (
-    <div className={styles.workbench}>
+    <Surface padding={0} className={styles.workbench}>
       <div className={styles.demoColumn}>
         <div className={styles.stageHeader}>
           <Text size="caption" font="mono">
@@ -1372,7 +1425,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
         </Text>
       </aside>
       <Snippet code={code} />
-    </div>
+    </Surface>
   );
 }
 

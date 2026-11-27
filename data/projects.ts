@@ -15,20 +15,25 @@ type ProjectStill = {
 
 type ProjectPanel = {
   caption: string;
-  still?: ProjectStill;
+  still: ProjectStill;
 };
+
+type ProjectStrip = { problem: ProjectPanel; idea: ProjectPanel; result: ProjectPanel };
 
 export type Project = {
   id: string;
   name: string;
   summary?: string;
+  modalPitch?: string;
+  blurb: string;
+  cover: keyof ProjectStrip;
   logo?: string;
   pills: string[];
   paragraphs: string[];
   commands: string[];
   tryHref: string;
   links: ProjectLink[];
-  strip: { problem: ProjectPanel; idea: ProjectPanel; result: ProjectPanel };
+  strip: ProjectStrip;
 };
 
 export const projects: Project[] = [
@@ -36,6 +41,8 @@ export const projects: Project[] = [
     id: "quicktodo",
     name: "QuickTodo",
     summary: "Mac menu bar to-do app built with SwiftUI.",
+    blurb: "Catch tasks in the Mac menu bar before they slip away, then see what you finished by day.",
+    cover: "result",
     logo: "/projects/quicktodo-logo.webp",
     pills: ["macOS 13+", "Intel or Apple Silicon"],
     strip: {
@@ -81,6 +88,8 @@ export const projects: Project[] = [
     id: "vidp",
     name: "Vidp",
     summary: "Keyboard-driven macOS video player built on libmpv.",
+    blurb: "A native Mac player for the files you already have. Drop in a video and control playback from the keyboard.",
+    cover: "idea",
     logo: "/projects/vidp-logo.webp",
     pills: ["macOS 26+", "Apple Silicon"],
     strip: {
@@ -126,6 +135,8 @@ export const projects: Project[] = [
     id: "cookieater",
     name: "Cookieater",
     summary: "Chrome and Firefox extension for editing cookies.",
+    blurb: "Inspect and edit the current site’s cookies from a small browser popup. Everything stays local.",
+    cover: "idea",
     logo: "/projects/cookieater-logo.webp",
     pills: ["Browser Extension", "Manifest V3"],
     strip: {
@@ -170,6 +181,9 @@ export const projects: Project[] = [
   {
     id: "component-library",
     name: "Component Library",
+    modalPitch: "Reusable React components that power this portfolio.",
+    blurb: "The reusable React components behind this portfolio. Try their variants and copy working examples in the playground.",
+    cover: "result",
     pills: ["React", "TypeScript", "Component library"],
     strip: {
       problem: {

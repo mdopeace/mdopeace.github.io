@@ -72,7 +72,7 @@ export default function Contact() {
             />
           </Stack>
         </Stack>
-        <Surface tone="info" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
+        <Surface tone="info" texture="paper-soft" padding={0} style={{ padding: "2.8rem 0.5rem 0.6rem" }} className="contact-art">
           <Badge variant="solid" tone="accent" tilt="left" className="contact-stamp">SIGNAL READY</Badge>
           <div className="contact-thought">
             <Image

@@ -5,12 +5,20 @@ const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 test("the character card opens from the first viewport and covers the essentials", async ({ page }) => {
   await page.goto("/");
-  const copy = page.locator("header#top p").filter({ hasText: /^At Tracxn, I work across the web platform\./ });
-  const trigger = copy.getByRole("button", { name: "See my character card" });
+  const actions = page.locator("#top .hero-actions");
+  const trigger = actions.getByRole("button", { name: "See my character card" });
   await expect(trigger).toBeInViewport();
+  for (const action of [
+    actions.getByRole("link", { name: "See my work", exact: true }),
+    trigger,
+    actions.getByRole("link", { name: "How I think", exact: true }),
+  ]) {
+    await expect(action).toHaveAttribute("data-size", "lg");
+    await expect(action).toHaveCSS("height", "48px");
+  }
   await expect(trigger).toHaveAttribute("type", "button");
-  await expect(trigger).toHaveCSS("text-decoration-line", "underline");
-  await expect(trigger).toHaveCSS("color", await copy.evaluate(el => getComputedStyle(el).color));
+  await expect(trigger).toHaveAttribute("data-variant", "secondary");
+  await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   await trigger.focus();
   await trigger.press("Enter");
   const summary = page.getByRole("dialog", { name: "Character Card" });
@@ -55,24 +63,40 @@ test("the character card opens from the first viewport and covers the essentials
   await expect(trigger).toBeFocused();
 });
 
-for (const width of [360, 390, 430]) {
-  test(`the character card matches the hero edges at ${width}px`, async ({ page, isMobile }) => {
+for (const width of [320, 390, 430]) {
+  test(`portfolio dialogs match the page edges at ${width}px`, async ({ page, isMobile }) => {
     test.skip(!isMobile, "Mobile layout");
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/");
-    await page.getByRole("button", { name: "See my character card" }).click();
-    const dialog = page.getByRole("dialog", { name: "Character Card" });
-    await expect(dialog).toBeVisible();
     const hero = await page.locator("#top").evaluate(el => {
       const { left, right } = el.getBoundingClientRect();
       return { left, right };
     });
-    const edges = await dialog.evaluate(el => {
-      const { left, right } = el.getBoundingClientRect();
-      return { left, right };
-    });
-    expect(edges).toEqual(hero);
-    expect(await dialog.evaluate(el => el.scrollWidth - el.clientWidth)).toBe(0);
+    for (const [triggerName, name] of [
+      ["See my character card", "Character Card"],
+      ["View project: Vidp", "Vidp"],
+      ["View project: QuickTodo", "QuickTodo"],
+      ["View project: Cookieater", "Cookieater"],
+      ["View project: Component Library", "Component Library"],
+      ["Support my work", "Fuel the next build"],
+    ]) {
+      const trigger = page.getByRole("button", { name: triggerName, exact: true });
+      await trigger.press("Enter");
+      const dialog = page.getByRole("dialog", { name, exact: true });
+      await expect(dialog).toBeVisible();
+      const measured = await dialog.evaluate(el => {
+        const { left, right } = el.getBoundingClientRect();
+        return { edges: { left, right }, overflow: el.scrollWidth - el.clientWidth };
+      });
+      expect(measured.edges).toEqual(hero);
+      expect(measured.overflow).toBe(0);
+      await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+      await expect(dialog.getByRole("button", { name: /^Close/ })).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
   });
 }
@@ -97,39 +121,96 @@ for (const method of ["click", "keyboard"] as const) {
   });
 }
 
-test("production analytics makes Google requests only after Accept", async ({ page }) => {
-  test.skip(!measurementId, "Requires a GA measurement ID");
+test("the Evolving stamp sits to the right of the workbench label", async ({ page, isMobile }) => {
+  await page.setViewportSize({ width: isMobile ? 320 : 1280, height: 844 });
+  await page.goto("/#now");
+  const note = page.locator("#now article").filter({ hasText: "On the workbench" });
+  const label = note.getByText("On the workbench · 01", { exact: true });
+  const stamp = note.getByText("Evolving", { exact: true });
+  const [labelBox, stampBox, cardBox] = await Promise.all([label.boundingBox(), stamp.boundingBox(), note.boundingBox()]);
+  expect(labelBox).not.toBeNull();
+  expect(stampBox).not.toBeNull();
+  expect(cardBox).not.toBeNull();
+  expect(stampBox!.x).toBeGreaterThan(labelBox!.x + labelBox!.width);
+  expect(stampBox!.x + stampBox!.width).toBeLessThan(cardBox!.x + cardBox!.width);
+  expect(Math.abs((stampBox!.y + stampBox!.height / 2) - (labelBox!.y + labelBox!.height / 2))).toBeLessThan(2);
+});
 
+test("Experience role and toolkit share a lower edge only when side by side", async ({ page, isMobile }) => {
+  await page.setViewportSize({ width: isMobile ? 390 : 1280, height: 844 });
+  await page.goto("/#experience");
+  const experience = page.locator("#experience");
+  const role = experience.getByRole("heading", { name: "Software Engineer", exact: true }).locator("xpath=ancestor::article");
+  const toolkit = experience.locator(".toolkit-tiles");
+  const caption = experience.locator(".toolkit-caption");
+  const [left, right, note] = await Promise.all([role.boundingBox(), toolkit.boundingBox(), caption.boundingBox()]);
+  if (!left || !right || !note) throw new Error("Missing Experience layout");
+  if (isMobile) {
+    expect(right.y - left.y - left.height).toBeCloseTo(24);
+  } else {
+    expect(left.y).toBeCloseTo(right.y);
+    expect(left.y + left.height).toBeCloseTo(right.y + right.height);
+  }
+  expect(note.y - right.y - right.height).toBeCloseTo(16);
+  expect(note.x).toBeCloseTo(left.x);
+  expect(note.x + note.width).toBeCloseTo(right.x + right.width);
+});
+
+test("analytics makes no Google requests until accepted and stops on withdrawal", async ({ page, context }) => {
+  test.skip(!measurementId, "Requires a GA measurement ID");
+  const key = "portfolio-analytics-consent";
   const googleRequests: string[] = [];
   await page.route(url => /(?:^|\.)(?:googletagmanager|google-analytics)\.com$/.test(url.hostname), async route => {
     googleRequests.push(route.request().url());
-    await route.fulfill({ contentType: "application/javascript", body: "" });
+    await route.fulfill({
+      contentType: "application/javascript",
+      body: `document.cookie="_ga=preview; Path=/"; document.cookie="_ga_${measurementId!.slice(2)}=preview; Path=/";`,
+    });
   });
-
   const prompt = page.getByRole("region", { name: "Analytics cookies" });
+  const settings = page.getByRole("button", { name: "Privacy settings" });
   await page.goto("/");
-  await expect(prompt).toBeVisible();
-  await prompt.scrollIntoViewIfNeeded();
-  await expect(prompt).toBeInViewport();
+  await expect(prompt).toBeInViewport({ ratio: 1 });
   expect(googleRequests).toEqual([]);
+  expect((await context.cookies()).filter(cookie => cookie.name.startsWith("_ga"))).toEqual([]);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBeNull();
 
   await prompt.getByRole("button", { name: "Decline", exact: true }).click();
   await page.reload();
-  await expect(page.getByRole("button", { name: "Allow analytics", exact: true })).toBeVisible();
+  await expect(settings).toBeVisible();
   await expect(prompt).toHaveCount(0);
   expect(googleRequests).toEqual([]);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBe("declined");
 
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await expect(prompt).toBeVisible();
-  expect(googleRequests).toEqual([]);
-
+  await settings.click();
+  await expect(prompt).toBeFocused();
+  const statusBadge = prompt.locator("[data-variant=outline][data-tone=default]:has(+ p)");
+  await expect(statusBadge).toHaveText("Analytics is off");
+  await expect(statusBadge).toBeVisible();
+  await expect(prompt).toHaveAccessibleDescription(/^Analytics is off Allow/);
   const tagUrl = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
   await Promise.all([
     page.waitForResponse(response => response.url() === tagUrl && response.ok()),
     prompt.getByRole("button", { name: "Accept", exact: true }).click(),
   ]);
+  await expect.poll(async () => (await context.cookies()).some(cookie => cookie.name === "_ga")).toBe(true);
   expect(googleRequests).toEqual([tagUrl]);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBe("accepted");
+  await Promise.all([page.waitForResponse(tagUrl), page.reload()]);
+  await expect(prompt).toHaveCount(0);
+  expect(googleRequests).toEqual([tagUrl, tagUrl]);
+
+  await settings.click();
+  await expect(statusBadge).toHaveText("Analytics is on");
+  await expect(statusBadge).toBeVisible();
+  await expect(prompt).toHaveAccessibleDescription(/^Analytics is on Allow/);
+  await prompt.getByRole("button", { name: "Decline", exact: true }).click();
+  await expect(settings).toBeFocused();
+  await expect.poll(async () => (await context.cookies()).filter(cookie => cookie.name.startsWith("_ga"))).toEqual([]);
+  expect(await page.evaluate(id => Reflect.get(window, `ga-disable-${id}`), measurementId)).toBe(true);
+  await page.reload();
+  await expect(prompt).toHaveCount(0);
+  expect(googleRequests).toEqual([tagUrl, tagUrl]);
 });
 
 test("copy email offers the email link when clipboard writing fails", async ({ page }) => {
@@ -170,12 +251,12 @@ for (const theme of ["light", "dark"] as const) {
     expect(new URL(page.url()).hash).toBe("");
     await expect(page.locator("#work")).toBeFocused();
     const project = page.locator("#work article").filter({ has: page.getByRole("heading", { name: "Vidp", exact: true }) });
-    await project.getByRole("button", { name: "Read more" }).click();
-    await expect(project.getByRole("button", { name: "Read less" })).toHaveAttribute("aria-expanded", "true");
-    await project.getByRole("button", { name: "Read less" }).click();
+    await project.getByRole("button", { name: "View project: Vidp" }).click();
     await project.getByRole("button", { name: "Copy", exact: true }).click();
     await expect(project.getByRole("status")).toHaveText("Copied to clipboard.");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brew tap vidplabs/vidp\nbrew install --cask vidp");
+    await page.keyboard.press("Escape");
+    await expect(project.getByRole("dialog")).toBeHidden();
     const contact = page.locator("#contact");
     const copyEmail = contact.getByRole("button", { name: "Copy email" });
     const actions = await contact.getByRole("button").or(contact.getByRole("link")).all();
@@ -212,7 +293,10 @@ for (const theme of ["light", "dark"] as const) {
     await support.click();
     const dialog = page.getByRole("dialog", { name: "Fuel the next build" });
     await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole("link", { name: "GitHub Sponsors" })).toBeVisible();
+    await expect(dialog).toHaveAccessibleDescription("Choose the way that works best for you. Every bit helps keep useful ideas moving.");
+    await expect(dialog.locator('[data-texture="halftone-soft"]')).toHaveCount(1);
+    await expect(dialog.getByRole("link", { name: "GitHub Sponsors" })).toHaveAttribute("href", "https://github.com/sponsors/mdopeace");
+    await expect(dialog.getByRole("link", { name: "Buy Me a Coffee" })).toHaveAttribute("href", "https://buymeacoffee.com/mdopeace");
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
     await expect(support).toBeFocused();
@@ -289,6 +373,10 @@ for (const theme of themes) {
     await page.keyboard.press("Enter");
     const dialog = page.getByRole("dialog", { name: "Character Card" });
     await expect(dialog).toBeVisible();
+    const divider = dialog.locator('[data-orientation="horizontal"][data-tone="muted"]');
+    await expect(divider).toHaveCSS("border-top-style", "dashed");
+    const chapterInk = await page.locator("#work").evaluate(section => getComputedStyle(section).borderBottomColor);
+    await expect(divider).toHaveCSS("border-top-color", chapterInk);
     await expectAccessible(page, "Character Card");
     const powerBadges = dialog.getByRole("list", { name: "Powers" }).locator("li > span");
     await expect(powerBadges).toHaveCount(10);
@@ -316,6 +404,9 @@ for (const theme of themes) {
     const face = contact.getByText("POW! Copied!", { exact: true });
     await expect(face).toBeVisible();
     await expect(face).toHaveCSS("animation-name", "none");
+    const themeInk = await copy.evaluate(el => getComputedStyle(el).borderTopColor);
+    await expect(face.locator("..")).toHaveCSS("filter", `drop-shadow(${themeInk} 3px 3px 0px)`);
+    await expect.poll(() => face.evaluate(el => getComputedStyle(el, "::before").backgroundColor)).toBe(themeInk);
     await expectAccessible(page, "Contact burst shown");
   });
 }
@@ -401,3 +492,34 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     expect(await error.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBe(parseFloat(duration));
   });
 }
+test("modal interiors use lighter borders and shadows than their frames", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "See my character card" }).click();
+  const character = page.getByRole("dialog", { name: "Character Card" });
+  await expect(character).toHaveCSS("border-top-width", "3px");
+  await expect(character).toHaveCSS("box-shadow", /5px 5px 0px 0px/);
+  const innerCards = character.locator("[data-ui-surface]");
+  await expect(innerCards).toHaveCount(4);
+  for (const card of await innerCards.all()) {
+    await expect(card).toHaveCSS("border-top-width", "2px");
+    await expect(card).toHaveCSS("box-shadow", /3px 3px 0px 0px/);
+  }
+  const guild = character.locator("dl > div").filter({ hasText: "Guild / Base" });
+  await expect(guild).toHaveCSS("border-top-width", "1px");
+  await expect(guild).toHaveCSS("border-bottom-width", "1px");
+  await page.keyboard.press("Escape");
+  await expect(character).toBeHidden();
+
+  await page.getByRole("button", { name: "Support my work" }).click();
+  const support = page.getByRole("dialog", { name: "Fuel the next build" });
+  await expect(support).toHaveCSS("box-shadow", /5px 5px 0px 0px/);
+  const intro = support.locator('[data-texture="halftone-soft"]');
+  await expect(intro).toHaveCSS("border-top-width", "2px");
+  await expect(intro).toHaveCSS("box-shadow", "none");
+  const options = support.locator("[data-ui-surface]").filter({ has: page.getByRole("link") });
+  await expect(options).toHaveCount(2);
+  for (const option of await options.all()) {
+    await expect(option).toHaveCSS("border-top-width", "2px");
+    await expect(option).toHaveCSS("box-shadow", /3px 3px 0px 0px/);
+  }
+});

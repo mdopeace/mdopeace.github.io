@@ -19,7 +19,7 @@ beforeEach(() => {
 it("does not schedule analytics while consent is pending or declined, including on return", () => {
   const visit = render(<AnalyticsConsent measurementId={testId} />);
   expect(screen.getByRole("region", { name: "Analytics cookies" })).toBeTruthy();
-  expect(screen.getByText(/You can change your choice below/i).getAttribute("aria-hidden")).toBe("true");
+  expect(screen.getByRole("button", { name: "Privacy settings" })).toBeTruthy();
   expect(idle).not.toHaveBeenCalled();
   expect(tag()).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Decline" }));
@@ -37,8 +37,7 @@ it("hides the consent prompt and never schedules analytics when the measurement 
   render(<AnalyticsConsent measurementId="" />);
   expect(screen.queryByRole("button", { name: "Accept" })).toBeNull();
   expect(screen.queryByRole("region", { name: "Analytics cookies" })).toBeNull();
-  expect(screen.queryByRole("button", { name: "Turn off analytics" })).toBeNull();
-  expect(screen.getByText(/You can change your choice below/i).getAttribute("aria-hidden")).toBe("true");
+  expect(screen.queryByRole("button", { name: "Privacy settings" })).toBeNull();
   expect(idle).not.toHaveBeenCalled();
   expect(tag()).toBeNull();
   expect(queue()).toBeUndefined();
@@ -74,20 +73,22 @@ it("waits for idle after accepting and starts sending events only after the scri
   ]);
 });
 
-it("lets a visitor withdraw consent and moves focus to the privacy note", async () => {
+it("reopens the notice from Privacy settings and clears analytics cookies on withdrawal", async () => {
   render(<AnalyticsConsent measurementId={testId} />);
   fireEvent.click(screen.getByRole("button", { name: "Accept" }));
   expect(localStorage.getItem(storageKey)).toBe("accepted");
   expect(idle).toHaveBeenCalledTimes(1);
-  const privacy = screen.getByText(/Privacy note/i);
-  expect(privacy.textContent).toContain("You can change your choice below.");
+  const settings = screen.getByRole("button", { name: "Privacy settings" });
   await act(async () => {});
-  expect(document.activeElement).toBe(privacy);
-  fireEvent.click(screen.getByRole("button", { name: "Turn off analytics" }));
+  expect(document.activeElement).toBe(settings);
+  document.cookie = "_ga=test; Path=/";
+  document.cookie = "_ga_TEST123456=test; Path=/";
+  fireEvent.click(settings);
+  fireEvent.click(screen.getByRole("button", { name: "Decline" }));
   expect(localStorage.getItem(storageKey)).toBe("declined");
-  expect(screen.getByRole("button", { name: "Allow analytics" })).toBeTruthy();
+  expect(document.cookie).not.toMatch(/_ga/);
   await act(async () => {});
-  expect(document.activeElement).toBe(privacy);
+  expect(document.activeElement).toBe(settings);
 });
 
 it("stops active tracking when withdrawal cannot be saved", () => {
@@ -100,15 +101,17 @@ it("stops active tracking when withdrawal cannot be saved", () => {
   fireEvent.load(tag()!);
   now.mockReturnValue(2000);
 
-  fireEvent.click(screen.getByRole("button", { name: "Turn off analytics" }));
+  fireEvent.click(screen.getByRole("button", { name: "Privacy settings" }));
+  fireEvent.click(screen.getByRole("button", { name: "Decline" }));
   expect(localStorage.getItem(storageKey)).toBe("accepted");
   expect(tag()).toBeNull();
   trackAnalytics("tetris_play");
   expect(queue()?.map((entry) => entry[0])).toEqual(["js", "config"]);
 
-  fireEvent.click(screen.getByRole("button", { name: "Allow analytics" }));
+  fireEvent.click(screen.getByRole("button", { name: "Privacy settings" }));
+  fireEvent.click(screen.getByRole("button", { name: "Accept" }));
   expect(idle).toHaveBeenCalledTimes(1);
-  expect(screen.getByRole("button", { name: "Allow analytics" })).toBeTruthy();
+  expect(screen.getByRole("button", { name: "Privacy settings" })).toBeTruthy();
 });
 
 it("reports only scroll milestones beyond the depth at tracking start", () => {

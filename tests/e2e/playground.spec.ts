@@ -1,7 +1,118 @@
 import { expect, test } from "@playwright/test";
 import { catalog } from "./playground-catalog";
 
+test("Dialog sizes share the same page gutters on phones", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "Dialog", exact: true }).click();
+  const sizes = page.getByRole("combobox", { name: "Size", exact: true });
+  const trigger = page.getByRole("button", { name: "Open example dialog" });
+  const dialog = page.getByRole("dialog", { name: "Room for one idea." });
+  for (const size of ["sm", "md", "lg"]) {
+    await sizes.selectOption(size);
+    await trigger.click();
+    await expect(dialog).toHaveCSS("width", "366px");
+    await expect(dialog).toHaveAttribute("data-size", size);
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+  }
+});
+
+test("Surface previews corner and paper textures and generates usage", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "Surface", exact: true }).click();
+  const stage = page.getByRole("group", { name: "Live preview" });
+  await expect(stage.locator('[data-texture="halftone"]')).toHaveCount(0);
+  const texture = page.getByRole("combobox", { name: "Surface texture" });
+  await texture.selectOption("halftone");
+  const surface = stage.locator('[data-texture="halftone"]');
+  await expect(surface).toBeVisible();
+  expect(await surface.evaluate(element => getComputedStyle(element, "::before").backgroundImage)).toContain("radial-gradient");
+  await expect(page.getByLabel("Usage example", { exact: true })).toContainText('texture="halftone"');
+  await texture.selectOption("halftone-soft");
+  const soft = stage.locator('[data-texture="halftone-soft"]');
+  await expect(soft).toBeVisible();
+  await expect.poll(() => soft.evaluate(element => getComputedStyle(element, "::before").opacity)).toBe("0.12");
+  await expect(page.getByLabel("Usage example", { exact: true })).toContainText('texture="halftone-soft"');
+  for (const [paper, spacing] of [["paper", "6px"], ["paper-soft", "7px"]]) {
+    await texture.selectOption(paper);
+    const sample = stage.locator(`[data-texture="${paper}"]`);
+    await expect(sample).toHaveCSS("background-image", /radial-gradient/);
+    await expect(sample).toHaveCSS("background-size", `${spacing} ${spacing}`);
+    await expect(page.getByLabel("Usage example", { exact: true })).toContainText(`texture="${paper}"`);
+  }
+});
+
+test("Typography previews both display sizes and updates the usage example", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "Typography", exact: true }).click();
+  const heading = page.getByRole("group", { name: "Live preview" })
+    .getByRole("heading", { level: 3, name: "Make the useful thing." });
+  const size = page.getByRole("combobox", { name: "Heading size", exact: true });
+  const code = page.getByLabel("Usage example", { exact: true });
+  const fontSize = () => heading.evaluate(element => parseFloat(getComputedStyle(element).fontSize));
+  const feature = await fontSize();
+  await size.selectOption("display");
+  await expect(heading).toHaveAttribute("data-size", "display");
+  await expect(code).toContainText('size="display"');
+  await expect.poll(fontSize).toBeGreaterThan(feature);
+  const display = await fontSize();
+  await size.selectOption("display-compact");
+  await expect(heading).toHaveAttribute("data-size", "display-compact");
+  await expect(code).toContainText('size="display-compact"');
+  await expect.poll(fontSize).toBeLessThan(display);
+  const weight = page.getByRole("combobox", { name: "Heading weight", exact: true });
+  await weight.selectOption("bold");
+  await expect(heading).toHaveCSS("font-weight", "700");
+  await expect(code).toContainText('weight="bold"');
+  await weight.selectOption("black");
+  await expect(heading).toHaveCSS("font-weight", "900");
+  await weight.selectOption("default");
+  await expect(code).not.toContainText("weight=");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("raised buttons use shared padding and icon gaps at each size", async ({ page }) => {
+  await page.goto("/playground/");
+  const preview = page.getByRole("group", { name: "Live preview" });
+  const button = preview.getByRole("button", { name: "Make something" });
+  const size = page.getByRole("combobox", { name: "Size", exact: true });
+  for (const [value, padding, gap] of [
+    ["sm", "4px 8px", "8px"],
+    ["md", "8px 12px", "12px"],
+    ["lg", "12px 16px", "12px"],
+  ]) {
+    await size.selectOption(value);
+    await expect(button).toHaveCSS("padding", padding);
+    await expect(button).toHaveCSS("gap", gap);
+  }
+});
+
 for (const theme of ["light", "dark"] as const) {
+  test(`${theme}: code frames stay flat and Burst matches raised Button depth`, async ({ page }) => {
+    await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
+    await page.goto("/playground/");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    const catalog = page.getByRole("navigation", { name: "Component library" });
+    const preview = page.getByRole("group", { name: "Live preview" });
+    await expect(preview.getByRole("button", { name: "Make something" })).toHaveCSS("box-shadow", /3px 3px 0px 0px/);
+
+    await catalog.getByRole("button", { name: "Burst", exact: true }).click();
+    await expect(preview.locator('[data-visible="true"][data-size]')).toHaveCSS("filter", /drop-shadow\(.*3px 3px 0px\)/);
+
+    await catalog.getByRole("button", { name: "CodeExample", exact: true }).click();
+    const demo = preview.locator('[data-ui-surface][data-border="standard"]');
+    const snippet = page.locator('[data-ui-surface][data-border="none"]').filter({
+      has: page.getByLabel("Usage example", { exact: true }),
+    });
+    await expect(demo).toHaveCSS("box-shadow", "none");
+    await expect(demo).toHaveCSS("border-top-width", "2px");
+    await expect(demo).toHaveCSS("padding", "16px");
+    await expect(snippet).toHaveCSS("box-shadow", "none");
+    await expect(snippet).toHaveCSS("border-top-width", "1px");
+    await expect(snippet).toHaveCSS("border-inline-start-width", "0px");
+  });
+
   test(`${theme}: portfolio and playground footers share caption typography`, async ({ page }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     const typography = [];
@@ -34,7 +145,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(footer.getByRole("link")).toHaveCount(1);
     await expect(footer.getByRole("link", { name: "Back to top" })).toHaveAttribute("href", "#top");
     const project = page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Component Library", exact: true }) });
-    const tryIt = project.getByRole("link", { name: "Try it: Component Library", exact: true });
+    const tryIt = project.getByRole("link", { name: "Explore the playground", exact: true });
     await expect(tryIt).toHaveAttribute("href", "/playground/");
     await tryIt.focus();
     await expect(tryIt).toHaveCSS("outline-style", "solid");

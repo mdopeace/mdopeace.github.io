@@ -12,7 +12,7 @@
   font: var(--ui-weight-black) var(--burst-font)/var(--ui-leading-caption) var(--ui-mono);
   text-align: center;
   overflow-wrap: anywhere;
-  filter: drop-shadow(3px 3px 0 var(--ui-shadow-color));
+  filter: drop-shadow(var(--ui-shadow-md-offset) var(--ui-shadow-md-offset) 0 var(--ui-shadow-color));
 }
 
 .burst[data-tone="default"] { --burst-bg: var(--ui-surface); --burst-fg: var(--ui-text); }

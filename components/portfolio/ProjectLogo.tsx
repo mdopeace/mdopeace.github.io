@@ -3,6 +3,10 @@ import { Image } from "@mdopeace/ui/Image";
 import styles from "./project-media.module.css";
 
 /** Adjacent project headings already name the app, so its logo is decorative. */
-export default function ProjectLogo({ src }: { src: string }) {
-  return <Image src={src} alt="" width={32} height={32} radius="md" className={styles.logo} fallback={<FaImage />} />;
+export default function ProjectLogo({ src, compact = false }: { src: string; compact?: boolean }) {
+  const size = compact ? 24 : 32;
+  return (
+    <Image src={src} alt="" width={size} height={size}
+      radius={compact ? "none" : "md"} className={compact ? undefined : styles.logo} fallback={<FaImage />} />
+  );
 }

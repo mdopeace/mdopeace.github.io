@@ -1,15 +1,7 @@
 .example {
-  box-sizing: border-box;
   display: grid;
-  gap: 12px;
-  padding: 16px;
+  gap: var(--ui-space-3);
   min-width: 0;
-  border: 2px solid var(--ui-border);
-  background: var(--ui-surface);
-  color: var(--ui-text);
-}
-.example[data-border="none"] {
-  border: none;
 }
 .example pre {
   box-sizing: border-box;
@@ -84,7 +76,7 @@
 .example pre {
   background: var(--ui-canvas);
   border: 1px solid color-mix(in srgb, var(--ui-border) 30%, transparent);
-  padding: 16px;
+  padding: var(--ui-space-4);
   font-size: 0.8125rem;
   tab-size: 2;
 }

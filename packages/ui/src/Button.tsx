@@ -25,7 +25,7 @@ export function ControlIcon({ children, tone = "inherit", size }: { children: Re
 }
 export function Button({
   variant = "primary",
-  size = "md",
+  size: requestedSize,
   iconTone = "inherit",
   loading = false,
   iconOnly = false,
@@ -39,13 +39,14 @@ export function Button({
   ...props
 }: ButtonProps) {
   const isText = variant === "text";
+  const size = requestedSize ?? (isText ? undefined : "md");
   return (
     <button
       {...props}
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      data-size={isText ? undefined : size}
+      data-size={size}
       data-variant={variant}
       data-icon-only={isText ? undefined : iconOnly}
       className={cx(isText ? styles.link : styles.control, className)}

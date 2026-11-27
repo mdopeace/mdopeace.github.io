@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { FeedbackLabel } from "./FeedbackLabel";
 import { Inline } from "./Layout";
 import { Text } from "./Typography";
+import { Surface } from "./Surface";
 import { HighlightedCode } from "./HighlightedCode";
 import { cx } from "./tokens";
 import styles from "./code-example.module.css";
@@ -34,8 +35,11 @@ export function CodeExample({
 }: CodeExampleProps) {
   const { copy, status } = useClipboard();
   return (
-    <div
+    <Surface
       {...props}
+      border={border}
+      elevation="none"
+      padding={4}
       data-border={border}
       className={cx(styles.example, className)}
     >
@@ -75,6 +79,6 @@ export function CodeExample({
             ? "Copy failed. Select the example to copy it manually."
             : ""}
       </span>
-    </div>
+    </Surface>
   );
 }

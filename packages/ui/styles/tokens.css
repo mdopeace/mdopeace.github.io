@@ -27,6 +27,8 @@
   --ui-font-title: 1.5rem;
   --ui-font-section: clamp(1.8rem, 4vw, 2.7rem);
   --ui-font-display: clamp(3rem, 8vw, 6.5rem);
+  /* Grow on phones without a size jump when a layout goes to two columns. */
+  --ui-font-display-compact: clamp(2.15rem, max(min(3.45rem, 0.25rem + 10.6vw), 5.65vw), 5.25rem);
   --ui-leading-caption: 1.5;
   --ui-leading-body: 1.7;
   --ui-leading-lg: 1.75;
@@ -43,6 +45,7 @@
   --ui-icon-md: 1.25rem;
   --ui-icon-lg: 1.5rem;
   --ui-border-thin: 1px;
+  --ui-divider-muted: color-mix(in srgb, var(--ui-border) 42%, transparent);
   --ui-border-standard: 2px;
   --ui-border-strong: 3px;
   --ui-rotation-left: -4deg;
@@ -77,7 +80,8 @@
   --ui-space-20: 5rem;
   --ui-shadow-none: none;
   --ui-shadow-sm: 2px 2px 0 var(--ui-shadow-color);
-  --ui-shadow-md: 3px 3px 0 var(--ui-shadow-color);
+  --ui-shadow-md-offset: 3px;
+  --ui-shadow-md: var(--ui-shadow-md-offset) var(--ui-shadow-md-offset) 0 var(--ui-shadow-color);
   --ui-shadow-lg: 5px 5px 0 var(--ui-shadow-color);
   --ui-shadow-xl: 8px 8px 0 var(--ui-shadow-color);
 }

@@ -14,13 +14,13 @@ const toolkit = [
 export default function DayJob() {
   return (
     <Section label="Experience & toolkit" id="experience" index="03">
-      <Stack gap={6}>
-        <Surface as="article" padding={{ base: 6, sm: 8 }}>
+      <Grid gap={6} className="experience-layout">
+        <Surface as="article" tone="info" texture="halftone-soft" padding={{ base: 6, sm: 8 }}>
           <Stack gap={6}>
             <Inline justify="between" gap={4}>
               <Stack gap={3} align="start">
-              <Badge variant="solid" tone="accent">01 · Tracxn</Badge>
-              <Heading level={3}>Software Engineer</Heading>
+                <Badge variant="solid" tone="accent">01 · Tracxn</Badge>
+                <Heading level={3}>Software Engineer</Heading>
               </Stack>
               <Text variant="eyebrow" tone="muted">
                 Bengaluru · Jan 2023 — now
@@ -35,26 +35,26 @@ export default function DayJob() {
             </Text>
           </Stack>
         </Surface>
-        <Stack gap={4}>
-          <Inline justify="between" gap={3}>
+        <Stack gap={4} className="toolkit-column">
+          <Stack gap={4} className="toolkit-tiles">
             <Text variant="eyebrow">Things I work with</Text>
-          </Inline>
-          <Grid columns={{ base: 1, md: 2 }} gap={5}>
-            {toolkit.map(({ title, label, tone, tools }) => (
-              <Surface key={title} as="article" tone={tone} padding={{ base: 6, sm: 8 }}>
-                <Stack gap={3}>
-                  <Text variant="eyebrow">{label}</Text>
-                  <Heading level={3} size="card">{title}</Heading>
-                  <Text size="sm">{tools}</Text>
-                </Stack>
-              </Surface>
-            ))}
-          </Grid>
-          <Text size="caption" font="mono" tone="muted">
+            <Grid columns={{ base: 1, md: 2 }} gap={4}>
+              {toolkit.map(({ title, label, tone, tools }) => (
+                <Surface key={title} as="article" tone={tone} padding={4}>
+                  <Stack gap={3}>
+                    <Text variant="eyebrow">{label}</Text>
+                    <Heading level={3} size="card">{title}</Heading>
+                    <Text size="sm">{tools}</Text>
+                  </Stack>
+                </Surface>
+              ))}
+            </Grid>
+          </Stack>
+          <Text size="caption" font="mono" tone="muted" className="toolkit-caption">
             From shared platform foundations to small tools with a sharp purpose.
           </Text>
         </Stack>
-      </Stack>
+      </Grid>
     </Section>
   );
 }

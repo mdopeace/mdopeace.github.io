@@ -56,6 +56,7 @@
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
     scroll-padding-top: 96px;
+    scroll-padding-bottom: calc(var(--consent-clearance, 0px) + var(--ui-space-4) + env(safe-area-inset-bottom));
   }
   body {
     background-color: var(--paper);
@@ -67,6 +68,7 @@
     color: var(--ink);
     font-size: 16px;
     line-height: 1.55;
+    padding-block-end: var(--consent-clearance, 0px);
     -webkit-font-smoothing: antialiased;
   }
   a {
@@ -107,18 +109,11 @@
 }
 
 @layer components {
-  .halftone {
-    background-image: radial-gradient(
-      color-mix(in srgb, var(--ink) 24%, transparent) 0.7px,
-      transparent 0.7px
-    );
-    background-size: 6px 6px;
-  }
   .site-nav {
     position: sticky;
-    top: 12px;
+    top: var(--ui-space-3);
     z-index: 20;
-    margin-top: 14px;
+    margin-top: var(--ui-space-3);
   }
   .hero-art {
     position: relative;
@@ -126,14 +121,11 @@
     display: grid;
     place-items: center;
     min-height: 410px;
-    background: var(--accent);
   }
   .hero-art.gameboy-stage {
     min-width: 0;
     min-height: clamp(480px, 72vh, 640px);
-    padding: 0;
     place-items: stretch;
-    background: var(--accent);
   }
   .gameboy {
     /* The yellow device is a light surface even in dark mode. */
@@ -549,7 +541,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
     align-items: center;
-    gap: clamp(2rem, 6vw, 5rem);
+    gap: var(--ui-space-8);
   }
   .contact-art {
     position: relative;
@@ -557,11 +549,6 @@
     min-height: 365px;
     overflow: hidden;
     place-items: end center;
-    background-image: radial-gradient(
-      color-mix(in srgb, var(--ink) 18%, transparent) 0.7px,
-      transparent 0.7px
-    );
-    background-size: 7px 7px;
   }
   .contact-stamp {
     position: absolute;
@@ -829,7 +816,6 @@
     }
     .contact-grid {
       grid-template-columns: 1fr;
-      gap: 2rem;
     }
     .contact-art {
       min-height: 330px;
@@ -862,12 +848,6 @@
   .page-footer {
     padding-block: var(--ui-space-8);
   }
-  .analytics-privacy {
-    display: grid;
-    gap: var(--ui-space-3);
-    margin-block-start: var(--ui-space-4);
-    max-inline-size: 42rem;
-  }
   @media (max-width: 680px) {
     .footer-layout {
       flex-direction: column;
@@ -882,42 +862,23 @@
     margin-top: var(--ui-space-8);
     overflow: hidden;
   }
-  .hero-copy {
-    padding: var(--ui-space-6);
-  }
   .hero-summary-copy {
     letter-spacing: -0.01em;
-  }
-  .hero-name {
-    color: var(--ui-emphasis);
-    text-shadow: none;
-  }
-  .hero-art.gameboy-stage {
-    border-top: 3px solid var(--ui-border);
   }
   .brand-wordmark {
     text-transform: none;
   }
 
-  @media (min-width: 40rem) {
-    .hero-copy {
-      padding: var(--ui-space-10);
-    }
-  }
   @media (min-width: 48rem) {
     .hero-layout {
       grid-template-columns: 1.15fr 0.85fr;
-    }
-    .hero-art.gameboy-stage {
-      border-top: 0;
-      border-left: 3px solid var(--ui-border);
     }
   }
 }
 
 @layer components {
-  .portfolio-section { border-bottom-color: color-mix(in srgb, var(--ui-border) 42%, transparent); }
-  .hero-layout { position: relative; isolation: isolate; margin-top: 1.75rem; }
+  .portfolio-section { border-bottom-color: var(--ui-divider-muted); }
+  .hero-layout { position: relative; isolation: isolate; margin-top: var(--ui-space-7); }
   .hero-layout::before {
     content: "";
     position: absolute;
@@ -929,14 +890,91 @@
     opacity: 0.38;
     mask-image: linear-gradient(90deg, transparent 35%, #000);
   }
-  .hero-name { display: block; text-shadow: 3px 3px 0 var(--ui-border); }
-  .workbench-card { position: relative; }
-  .workbench-copy { padding-top: var(--ui-space-10); }
-  .workbench-stamp { position: absolute; top: 1.25rem; right: 1.25rem; }
-  @media (min-width: 48rem) {
-    .experience-layout { grid-template-columns: 1fr 0.8fr; }
+  .hero-name {
+    display: block;
+    color: var(--ui-emphasis);
+    letter-spacing: -0.015em;
+    text-shadow: var(--ui-shadow-sm);
   }
-  @media (min-width: 64rem) {
-    .hero-copy { padding: var(--ui-space-12); }
+}
+
+/* Issue layout: keep the page order, but vary the size of each spread. */
+#top.hero-layout {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: var(--ui-space-4);
+  overflow: visible;
+}
+#top.hero-layout::before { content: none; }
+#top .hero-copy {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+}
+#top .hero-copy p { max-inline-size: 55ch; }
+#top .gameboy-stage {
+  align-items: center;
+  min-height: 0;
+}
+/* Match the surrounding frames, not the size of the handheld inside. */
+#top .gameboy {
+  height: auto;
+  max-inline-size: 29rem;
+  justify-self: center;
+}
+#top .tetris-board { height: clamp(125px, 18vw, 165px); }
+#top .gameboy-controls { min-height: 0; padding-block: 0.4rem; }
+#top .tetris-hud { gap: var(--ui-space-1); }
+#top .tetris-preview { width: 36px; }
+
+/* The page scroll padding already clears the sticky navigation at this overview. */
+#work { scroll-margin-top: 0; }
+
+@media (min-width: 48rem) {
+  /* Keep the column spacing in sync for both illustrated splits. */
+  #top.hero-layout,
+  .contact-grid {
+    gap: var(--ui-space-5);
   }
+  #top.hero-layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+  #story .story-spread { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.35fr); }
+  #experience .experience-layout {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    row-gap: var(--ui-space-4);
+  }
+  #experience .toolkit-column { display: contents; }
+  #experience .toolkit-tiles {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+  #experience .toolkit-caption { grid-column: 1 / -1; }
+  #now .workbench-layout { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+}
+@media (min-width: 64rem) {
+  .hero-name { text-shadow: var(--ui-shadow-md); }
+  #top.hero-layout,
+  .contact-grid { gap: var(--ui-space-6); }
+}
+@media (min-width: 80rem) {
+  #top.hero-layout,
+  .contact-grid { gap: var(--ui-space-8); }
+}
+@media (max-width: 56.25rem) {
+  #top .gameboy-controls { gap: var(--ui-space-2); padding-inline: 0; }
+  #top .gameboy-speaker { display: none; }
+  #top .gameboy-dpad { flex: 0 0 auto; }
+}
+
+@media (max-width: 47.99rem) {
+  #top .gameboy { max-inline-size: calc(22rem - 2 * var(--ui-border-strong)); }
+}
+
+#top .tetris-hud span { line-height: 1.25; }
+#top .gameboy-instructions { margin-block-start: 0.35rem; }
+#top .gameboy-instructions > span { line-height: 1.35; }
+
+@media (max-width: 47.99rem) {
+  #top .gameboy-ab { max-width: 102px; }
 }

@@ -4,13 +4,15 @@ import styles from "./ui.module.css";
 
 export type HeadingProps = ComponentPropsWithRef<"h2"> & {
   level: 1 | 2 | 3 | 4 | 5 | 6;
-  size?: "title" | "section" | "display" | "card" | "label" | "feature" | "statement" | "dialog";
+  size?: "title" | "section" | "display" | "display-compact" | "card" | "label" | "feature" | "statement" | "dialog";
   tone?: "default" | "muted" | "emphasis";
+  weight?: "bold" | "black";
 };
 export function Heading({
   level,
   size = "title",
   tone = "default",
+  weight,
   className,
   ...props
 }: HeadingProps): ReactElement {
@@ -18,6 +20,7 @@ export function Heading({
     ...props,
     "data-size": size,
     "data-tone": tone,
+    "data-weight": weight,
     className: cx(styles.heading, className),
   });
 }

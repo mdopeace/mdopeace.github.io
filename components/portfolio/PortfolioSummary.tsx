@@ -1,8 +1,8 @@
 "use client";
 
-import { useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type MouseEvent } from "react";
 import { Badge } from "@mdopeace/ui/Badge";
-import { Button, ControlIcon } from "@mdopeace/ui/Button";
+import { Button, ControlIcon, type ButtonProps } from "@mdopeace/ui/Button";
 import { Dialog } from "@mdopeace/ui/Dialog";
 import { Divider } from "@mdopeace/ui/Divider";
 import { Grid, Inline, Stack } from "@mdopeace/ui/Layout";
@@ -29,7 +29,7 @@ const projectTones: Record<string, SurfaceProps["tone"]> = {
   cookieater: "emphasis",
 };
 
-export function PortfolioSummary({ children }: { children: ReactNode }) {
+export function PortfolioSummary({ triggerSize }: { triggerSize?: ButtonProps["size"] }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const destination = useRef<HTMLElement | null>(null);
@@ -44,17 +44,15 @@ export function PortfolioSummary({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <Text size="sm" tone="muted" className="hero-summary-copy">
-        {children}{" "}
-        <Button
-          variant="text"
-          aria-haspopup="dialog"
-          aria-controls={id}
-          onClick={() => setOpen(true)}
-        >
-          See my character card
-        </Button>
-      </Text>
+      <Button
+        variant="secondary"
+        size={triggerSize}
+        aria-haspopup="dialog"
+        aria-controls={id}
+        onClick={() => setOpen(true)}
+      >
+        See my character card
+      </Button>
       <Dialog
         id={id}
         open={open}
@@ -71,7 +69,7 @@ export function PortfolioSummary({ children }: { children: ReactNode }) {
         className={styles.dialog}
       >
         <Stack gap={{ base: 3, sm: 6 }}>
-          <Surface padding={0} border="strong" elevation="md">
+          <Surface padding={0} elevation="md">
             <dl className={styles.stats}>
               <div className={styles.identity}>
                 <dt>
@@ -121,7 +119,6 @@ export function PortfolioSummary({ children }: { children: ReactNode }) {
                   key={projectId}
                   data-project={projectId}
                   tone={projectTones[projectId]}
-                  border="strong"
                   elevation="md"
                   padding={{ base: 2, sm: 3 }}
                   className={styles.project}
@@ -140,7 +137,7 @@ export function PortfolioSummary({ children }: { children: ReactNode }) {
               ))}
             </Grid>
           </Stack>
-          <Divider variant="dashed" />
+          <Divider variant="dashed" tone="muted" />
           <Inline gap={3}>
             <Link href={`mailto:${email}`} variant="primary" startIcon={<FaEnvelope focusable="false" />} startIconSize="sm">Email</Link>
             <Link href={telegramHref} variant="secondary" startIcon={<FaTelegram focusable="false" />} startIconSize="sm">Telegram</Link>

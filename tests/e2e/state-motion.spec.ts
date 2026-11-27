@@ -1,13 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 for (const reducedMotion of ["no-preference", "reduce"] as const) {
-  test(`project text expands and collapses with ${reducedMotion} motion`, async ({ page }) => {
+  test(`Playground text expands and collapses with ${reducedMotion} motion`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion });
-    await page.goto("/");
-    const project = page.locator("#vidp");
-    const viewport = project.locator("[data-expanded]");
-    const more = project.getByRole("button", { name: "Read more" });
-    const less = project.getByRole("button", { name: "Read less" });
+    await page.goto("/playground/");
+    await page.getByRole("button", { name: "Content & feedback", exact: true }).click();
+    const preview = page.getByRole("group", { name: "Live preview" });
+    const viewport = preview.locator("[data-expanded]");
+    const more = preview.getByRole("button", { name: "Read more" });
+    const less = preview.getByRole("button", { name: "Read less" });
     await expect(more).toBeVisible();
     const reduced = reducedMotion === "reduce";
     await expect(viewport).toHaveCSS("transition-property", reduced ? "none" : "height");
@@ -44,7 +45,7 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     test.skip(hasTouch, "Requires a hover pointer");
     await page.emulateMedia({ reducedMotion });
     await page.goto("/");
-    const link = page.getByRole("link", { name: "Try it: QuickTodo" });
+    const link = page.getByRole("button", { name: "View project: QuickTodo" });
     await expect(link).toHaveCSS("transition-duration", reducedMotion === "reduce" ? "0.12s" : "0.12s, 0.12s, 0.12s, 0.12s");
     await link.hover();
     if (reducedMotion === "reduce") {

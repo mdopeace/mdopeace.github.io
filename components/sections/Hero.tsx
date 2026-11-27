@@ -8,15 +8,9 @@ import { Badge } from "@mdopeace/ui/Badge";
 import { Link } from "@mdopeace/ui/Link";
 export default function Hero() {
   return (
-    <Surface
-      as="header"
-      id="top"
-      padding={0}
-      border="strong"
-      className="hero-layout"
-    >
-      <div className="hero-copy">
-        <Stack gap={7}>
+    <header id="top" className="hero-layout">
+      <Surface padding={{ base: 5, md: 6, lg: 8 }} border="strong" texture="halftone-soft" className="hero-copy">
+        <Stack gap={{ base: 4, md: 5, lg: 7 }}>
           <Inline gap={4}>
             <Badge variant="solid" tone="accent" size="md">
               Issue 01 · The maker
@@ -26,7 +20,7 @@ export default function Hero() {
             <Text variant="eyebrow" tone="muted">
               Software Engineer · Bengaluru
             </Text>
-            <Heading level={1} size="display">
+            <Heading level={1} size="display-compact">
               Md Mostafijur <span className="hero-name">Rahman</span>
             </Heading>
           </Stack>
@@ -35,24 +29,25 @@ export default function Hero() {
               I notice the little frictions that get in the way of a good
               experience—and I like figuring out how to make them disappear.
             </Text>
-            <PortfolioSummary>
+            <Text size="sm" tone="muted" className="hero-summary-copy">
               At Tracxn, I work across the web platform. Outside work, I turn
               the things I wish existed into small, useful tools.
-            </PortfolioSummary>
+            </Text>
           </Stack>
-          <Inline gap={3}>
-            <Link variant="primary" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
-              See what I’ve made
+          <Inline gap={3} className="hero-actions">
+            <Link variant="primary" size="lg" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+              See my work
             </Link>
-            <Link variant="secondary" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+            <PortfolioSummary triggerSize="lg" />
+            <Link variant="secondary" size="lg" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               How I think
             </Link>
           </Inline>
         </Stack>
-      </div>
-      <div className="hero-art gameboy-stage">
+      </Surface>
+      <Surface tone="accent" padding={0} border="strong" className="hero-art gameboy-stage">
         <TetrisGameboy />
-      </div>
-    </Surface>
+      </Surface>
+    </header>
   );
 }
