@@ -136,6 +136,26 @@ test("the Evolving stamp sits to the right of the workbench label", async ({ pag
   expect(Math.abs((stampBox!.y + stampBox!.height / 2) - (labelBox!.y + labelBox!.height / 2))).toBeLessThan(2);
 });
 
+test("Experience role and toolkit share a lower edge only when side by side", async ({ page, isMobile }) => {
+  await page.setViewportSize({ width: isMobile ? 390 : 1280, height: 844 });
+  await page.goto("/#experience");
+  const experience = page.locator("#experience");
+  const role = experience.getByRole("heading", { name: "Software Engineer", exact: true }).locator("xpath=ancestor::article");
+  const toolkit = experience.locator(".toolkit-tiles");
+  const caption = experience.locator(".toolkit-caption");
+  const [left, right, note] = await Promise.all([role.boundingBox(), toolkit.boundingBox(), caption.boundingBox()]);
+  if (!left || !right || !note) throw new Error("Missing Experience layout");
+  if (isMobile) {
+    expect(right.y - left.y - left.height).toBeCloseTo(24);
+  } else {
+    expect(left.y).toBeCloseTo(right.y);
+    expect(left.y + left.height).toBeCloseTo(right.y + right.height);
+  }
+  expect(note.y - right.y - right.height).toBeCloseTo(16);
+  expect(note.x).toBeCloseTo(left.x);
+  expect(note.x + note.width).toBeCloseTo(right.x + right.width);
+});
+
 test("production analytics makes Google requests only after Accept", async ({ page }) => {
   test.skip(!measurementId, "Requires a GA measurement ID");
 

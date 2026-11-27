@@ -912,9 +912,6 @@
     letter-spacing: -0.015em;
     text-shadow: var(--ui-shadow-sm);
   }
-  @media (min-width: 48rem) {
-    .experience-layout { grid-template-columns: 1fr 0.8fr; }
-  }
 }
 
 /* Issue layout: keep the page order, but vary the size of each spread. */
@@ -946,10 +943,6 @@
 #top .tetris-hud { gap: var(--ui-space-1); }
 #top .tetris-preview { width: 36px; }
 
-#experience .experience-layout {
-  display: grid;
-  align-items: start;
-}
 /* The page scroll padding already clears the sticky navigation at this overview. */
 #work { scroll-margin-top: 0; }
 
@@ -963,7 +956,16 @@
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   }
   #story .story-spread { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.35fr); }
-  #experience .experience-layout { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
+  #experience .experience-layout {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    row-gap: var(--ui-space-4);
+  }
+  #experience .toolkit-column { display: contents; }
+  #experience .toolkit-tiles {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+  #experience .toolkit-caption { grid-column: 1 / -1; }
   #now .workbench-layout { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
 }
 @media (min-width: 64rem) {
