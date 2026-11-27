@@ -106,6 +106,12 @@ describe("comic components", () => {
     expect(panels).toHaveLength(3);
     expect(panels[0]).toBe(panelRef.current);
     expect(panels[0].lang).toBe("en");
+    for (const panel of panels) {
+      expect(panel.tagName).toBe("FIGURE");
+      expect(panel.getAttribute("data-ui-surface")).toBe("default");
+      expect(panel.style.getPropertyValue("--elevation")).toBe("var(--ui-shadow-lg)");
+      expect(panel.style.getPropertyValue("--border-width")).toBe("var(--ui-border-strong)");
+    }
     expect(panels[0].lastElementChild?.tagName).toBe("FIGCAPTION");
     expect(panels[0].lastElementChild?.textContent).toBe("First beat");
     expect(panels[0].firstElementChild).toBe(screen.getByRole("img", { name: "A spark" }));

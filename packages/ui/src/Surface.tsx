@@ -10,7 +10,7 @@ import {
 } from "./tokens";
 import styles from "./ui.module.css";
 
-type Tag = "div" | "article" | "section" | "li" | "header";
+type Tag = "div" | "article" | "section" | "li" | "header" | "figure";
 export type SurfaceProps<T extends Tag = "div"> = Omit<
   ComponentPropsWithRef<T>,
   "as"

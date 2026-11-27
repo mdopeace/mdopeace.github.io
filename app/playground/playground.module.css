@@ -38,9 +38,6 @@
 }
 .workbench {
   display: grid;
-  border: 2px solid var(--ui-border);
-  background: var(--ui-surface);
-  box-shadow: var(--ui-shadow-lg);
   min-width: 0;
 }
 .demoColumn {

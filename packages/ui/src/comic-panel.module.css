@@ -1,15 +1,9 @@
 .panel {
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-inline-size: 0;
   max-inline-size: 100%;
   margin: 0;
-  border: var(--ui-border-strong) solid var(--ui-border);
-  border-radius: var(--ui-radius-none);
-  background: var(--ui-surface);
-  color: var(--ui-text);
-  box-shadow: var(--ui-shadow-lg);
   overflow-wrap: anywhere;
 }
 

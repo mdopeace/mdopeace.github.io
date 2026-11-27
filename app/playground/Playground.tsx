@@ -1336,7 +1336,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     ].includes(kind) || (kind === "badge" && badgeControlSize !== "none") || kind === "consent-note" || (kind === "burst" && feedback),
   );
   return (
-    <div className={styles.workbench}>
+    <Surface padding={0} className={styles.workbench}>
       <div className={styles.demoColumn}>
         <div className={styles.stageHeader}>
           <Text size="caption" font="mono">
@@ -1372,7 +1372,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
         </Text>
       </aside>
       <Snippet code={code} />
-    </div>
+    </Surface>
   );
 }
 

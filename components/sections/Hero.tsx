@@ -9,7 +9,7 @@ import { Link } from "@mdopeace/ui/Link";
 export default function Hero() {
   return (
     <header id="top" className="hero-layout">
-      <Surface padding={0} border="strong" elevation="md" className="hero-copy">
+      <Surface padding={0} border="strong" className="hero-copy">
         <Stack gap={7}>
           <Inline gap={4}>
             <Badge variant="solid" tone="accent" size="md">
@@ -45,9 +45,9 @@ export default function Hero() {
           </Inline>
         </Stack>
       </Surface>
-      <div className="hero-art gameboy-stage">
+      <Surface tone="accent" padding={0} border="strong" className="hero-art gameboy-stage">
         <TetrisGameboy />
-      </div>
+      </Surface>
     </header>
   );
 }
