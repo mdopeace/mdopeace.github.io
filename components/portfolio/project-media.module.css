@@ -13,7 +13,7 @@
 }
 
 @container (min-width: 32rem) {
-  .panel:has(> .still + figcaption) {
+  .panel:where(:has(> .still + figcaption)) {
     display: grid;
     grid-row: span 2;
     grid-template-rows: subgrid;
@@ -53,4 +53,55 @@
 
 .logo {
   background: var(--ui-canvas);
+}
+
+.featureStrip .panel,
+.compactStrip .panel {
+  grid-row: auto;
+  grid-template-rows: none;
+}
+
+.featureStrip .still,
+.compactStrip .still {
+  aspect-ratio: 16 / 10;
+}
+
+.featureStrip .panel:not(:last-child) {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 0.55fr) minmax(0, 1fr);
+}
+
+.featureStrip .panel:not(:last-child) > .still {
+  height: 100%;
+  min-height: 5rem;
+  aspect-ratio: auto;
+}
+
+.featureStrip .panel:not(:last-child) > figcaption {
+  display: grid;
+  align-content: center;
+  margin-block-start: 0;
+  border-block-start: 0;
+  border-inline-start: var(--ui-border-standard) solid var(--ui-border);
+}
+
+@container (min-width: 32rem) {
+  .featureStrip > div {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .featureStrip .panel:last-child {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .featureStrip .panel:last-child > .still { flex: 1; }
+}
+
+@media (min-width: 48rem) {
+  @container (min-width: 17rem) {
+    .compactStrip > div { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
 }

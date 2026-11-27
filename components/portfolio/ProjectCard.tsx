@@ -29,9 +29,17 @@ const stages = [
 
 export default function ProjectCard({ project }: { project: Project }) {
   const titleId = `${project.id}-title`;
+  const featured = project.id === "quicktodo" || project.id === "vidp";
+  const playground = project.id === "component-library";
 
   return (
-    <Surface as="article" id={project.id} className={styles.project} aria-labelledby={titleId}>
+    <Surface
+      as="article"
+      id={project.id}
+      className={styles.project}
+      data-work-size={featured ? "feature" : "companion"}
+      aria-labelledby={titleId}
+    >
       <Stack gap={5}>
         <Inline gap={3}>
           {project.logo && (
@@ -46,7 +54,13 @@ export default function ProjectCard({ project }: { project: Project }) {
             ))}
           </Inline>
         </Inline>
-        <ComicStrip role="group" aria-label={`${project.name} comic strip`}>
+        {playground && (
+          <Text size="body" tone="muted">
+            The shared building blocks behind this portfolio. Try the components,
+            change their settings, and copy working React examples in the playground.
+          </Text>
+        )}
+        <ComicStrip className={featured ? styles.featureStrip : styles.compactStrip} role="group" aria-label={`${project.name} comic strip`}>
           {stages.map(([stage, label]) => {
             const { still, caption } = project.strip[stage];
             return (
@@ -71,11 +85,11 @@ export default function ProjectCard({ project }: { project: Project }) {
         <LinkGroup
           items={[
             {
-              label: "Try it",
+              label: playground ? "Explore the playground" : "Try it",
               href: project.tryHref,
               variant: "primary",
               size: "sm",
-              "aria-label": `Try it: ${project.name}`,
+              "aria-label": playground ? "Explore the playground" : `Try it: ${project.name}`,
               endIcon: <FaArrowRightLong />,
             },
             ...project.links.map(({ icon, ...item }) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type MouseEvent } from "react";
 import { Badge } from "@mdopeace/ui/Badge";
 import { Button, ControlIcon } from "@mdopeace/ui/Button";
 import { Dialog } from "@mdopeace/ui/Dialog";
@@ -29,7 +29,7 @@ const projectTones: Record<string, SurfaceProps["tone"]> = {
   cookieater: "emphasis",
 };
 
-export function PortfolioSummary({ children }: { children: ReactNode }) {
+export function PortfolioSummary() {
   const [open, setOpen] = useState(false);
   const id = useId();
   const destination = useRef<HTMLElement | null>(null);
@@ -44,17 +44,14 @@ export function PortfolioSummary({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <Text size="sm" tone="muted" className="hero-summary-copy">
-        {children}{" "}
-        <Button
-          variant="text"
-          aria-haspopup="dialog"
-          aria-controls={id}
-          onClick={() => setOpen(true)}
-        >
-          See my character card
-        </Button>
-      </Text>
+      <Button
+        variant="secondary"
+        aria-haspopup="dialog"
+        aria-controls={id}
+        onClick={() => setOpen(true)}
+      >
+        See my character card
+      </Button>
       <Dialog
         id={id}
         open={open}
