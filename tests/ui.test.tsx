@@ -134,7 +134,7 @@ describe("comic components", () => {
     expect(document.activeElement).toBe(button);
     await user.keyboard("[Space][Enter]");
     expect(play).not.toHaveBeenCalled();
-    expect(screen.getByRole("status").textContent).toBe("Showing the still image.");
+    expect(screen.getByRole("status").querySelector("[data-active='true']")?.textContent).toBe("Showing the still image.");
   });
 
   it("leaves retryable autoplay failures paused and preserves the status node on a media error", async () => {
@@ -150,7 +150,7 @@ describe("comic components", () => {
     }} />);
     const button = screen.getByRole("button", { name: "Animate the plane" });
     const status = screen.getByRole("status");
-    expect(status.textContent).toBe("Video paused.");
+    expect(status.querySelector("[data-active='true']")?.textContent).toBe("Video paused.");
     expect(button.getAttribute("aria-disabled")).toBeNull();
     expect(play).toHaveBeenCalledOnce();
     await user.click(button);
@@ -158,7 +158,7 @@ describe("comic components", () => {
 
     fireEvent.error(container.querySelector("video")!);
     expect(screen.getByRole("status")).toBe(status);
-    expect(status.textContent).toBe("The plane is grounded.");
+    expect(status.querySelector("[data-active='true']")?.textContent).toBe("The plane is grounded.");
     expect(button.getAttribute("aria-disabled")).toBe("true");
     await user.click(button);
     expect(play).toHaveBeenCalledTimes(2);

@@ -94,8 +94,8 @@
 }
 
 .powers .power:not(.specialPower) {
-  --badge-bg: color-mix(in srgb, var(--ui-accent) 26%, light-dark(var(--ui-surface), var(--ui-text)));
   --badge-fg: var(--ui-on-accent);
+  background-color: color-mix(in srgb, var(--ui-accent) 26%, light-dark(var(--ui-surface), var(--ui-text)));
   border-color: var(--ui-on-accent);
 }
 

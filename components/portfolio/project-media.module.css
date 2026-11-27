@@ -1,8 +1,56 @@
-.screenshot.screenshot {
-  width: min(100%, 320px, calc(360px * var(--image-ratio)));
-  border: var(--ui-border-standard) solid var(--ui-border);
-  background: var(--ui-border);
+.project {
+  scroll-margin-top: 6rem;
 }
+
+.panel > .still {
+  width: 100%;
+  aspect-ratio: 6 / 5;
+  background: var(--ui-canvas);
+}
+
+.still > .stillImage {
+  padding: var(--ui-space-3);
+}
+
+@container (min-width: 32rem) {
+  .panel:has(> .still + figcaption) {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  .panel > .still + figcaption {
+    margin-block-start: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project :is(a, button)[data-variant]:not([data-variant="ghost"], [aria-disabled="true"], :disabled):is(:hover, :active) {
+    box-shadow: var(--ui-shadow-md);
+    opacity: 0.86;
+  }
+
+  .project button[data-variant="ghost"] {
+    transition-property: opacity, background-color;
+  }
+}
+
+.panel > figcaption:only-child {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  margin-block-start: 0;
+  border-block-start: 0;
+}
+
+.stage {
+  display: block;
+  margin-block-end: var(--ui-space-1);
+  text-transform: uppercase;
+}
+
 .logo {
   background: var(--ui-canvas);
 }

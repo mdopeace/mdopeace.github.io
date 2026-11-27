@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { expectAccessible, openForAudit, themes } from "./accessibility";
+import { expectAccessible, expectTextContrast, openForAudit, themes } from "./accessibility";
 
 const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -290,6 +290,13 @@ for (const theme of themes) {
     const dialog = page.getByRole("dialog", { name: "Character Card" });
     await expect(dialog).toBeVisible();
     await expectAccessible(page, "Character Card");
+    const powerBadges = dialog.getByRole("list", { name: "Powers" }).locator("li > span");
+    await expect(powerBadges).toHaveCount(10);
+    await expect(powerBadges.last()).toHaveText("+ Learns new powers with AI");
+    for (const badge of await powerBadges.all()) {
+      await expect(badge).toBeVisible();
+      await expectTextContrast(badge);
+    }
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
@@ -367,8 +374,22 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await trigger.press("Enter");
     await expect(dialog).toHaveCSS("animation-duration", duration);
     if (reducedMotion === "reduce") await expect(dialog).toHaveCSS("transform", "none");
+    const close = dialog.getByRole("button", { name: "Close character card" });
+    await expect(close).toHaveCSS(
+      "transition-property",
+      reducedMotion === "reduce" ? "opacity, background-color" : "transform, box-shadow, opacity, background-color",
+    );
+    await expect.poll(() => close.evaluate(el => getComputedStyle(el).transitionDuration.split(",")[0].trim())).toBe("0.12s");
+    await dialog.evaluate(element => {
+      element.addEventListener("animationstart", event => {
+        if (event.target !== element || !element.hasAttribute("data-closing")) return;
+        const animation = element.getAnimations().find(item => item instanceof CSSAnimation && item.animationName === (event as AnimationEvent).animationName);
+        const keyframes = (animation?.effect as KeyframeEffect | null)?.getKeyframes();
+        if (keyframes) element.setAttribute("data-exit-opacity", String(keyframes.at(-1)?.opacity));
+      });
+    });
     await page.keyboard.press("Escape");
-    await expect(dialog).toHaveAttribute("data-closing", "true");
+    await expect(dialog).toHaveAttribute("data-exit-opacity", "0");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
 

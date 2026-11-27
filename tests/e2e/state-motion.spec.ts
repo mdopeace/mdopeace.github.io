@@ -1,6 +1,60 @@
 import { expect, test } from "@playwright/test";
 
 for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`project text expands and collapses with ${reducedMotion} motion`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/");
+    const project = page.locator("#vidp");
+    const viewport = project.locator("[data-expanded]");
+    const more = project.getByRole("button", { name: "Read more" });
+    const less = project.getByRole("button", { name: "Read less" });
+    await expect(more).toBeVisible();
+    const reduced = reducedMotion === "reduce";
+    await expect(viewport).toHaveCSS("transition-property", reduced ? "none" : "height");
+    await expect(viewport).toHaveCSS(reduced ? "animation-duration" : "transition-duration", reduced ? "0.12s" : "0.3s");
+    await viewport.evaluate(element => {
+      const record = (event: Event) => {
+        if (event.target !== element) return;
+        if (event instanceof AnimationEvent) element.setAttribute("data-motion-ended", event.animationName);
+        if (event instanceof TransitionEvent) element.setAttribute("data-motion-ended", event.propertyName);
+      };
+      element.addEventListener("animationend", record);
+      element.addEventListener("transitionend", record);
+    });
+    const collapsedHeight = await viewport.evaluate(element => element.clientHeight);
+    for (const expanded of [true, false]) {
+      await viewport.evaluate(element => element.removeAttribute("data-motion-ended"));
+      await (expanded ? more : less).click();
+      await expect(expanded ? less : more).toHaveAttribute("aria-expanded", String(expanded));
+      if (reduced) {
+        await expect(viewport).toHaveCSS("animation-duration", "0.12s");
+        const fade = await viewport.evaluate(element => getComputedStyle(element).animationName);
+        expect(fade).toMatch(/fade/i);
+        await expect(viewport).toHaveAttribute("data-motion-ended", fade);
+      } else {
+        await expect(viewport).toHaveAttribute("data-motion-ended", "height");
+      }
+      const height = await viewport.evaluate(element => element.clientHeight);
+      if (expanded) expect(height).toBeGreaterThan(collapsedHeight);
+      else expect(height).toBe(collapsedHeight);
+    }
+  });
+
+  test(`project links respond to hover with ${reducedMotion} motion`, async ({ page, hasTouch }) => {
+    test.skip(hasTouch, "Requires a hover pointer");
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/");
+    const link = page.getByRole("link", { name: "Try it: QuickTodo" });
+    await expect(link).toHaveCSS("transition-duration", reducedMotion === "reduce" ? "0.12s" : "0.12s, 0.12s, 0.12s, 0.12s");
+    await link.hover();
+    if (reducedMotion === "reduce") {
+      await expect(link).toHaveCSS("opacity", "0.86");
+      await expect(link).toHaveCSS("transform", "none");
+    } else {
+      await expect(link).toHaveCSS("transform", "matrix(1, 0, 0, 1, 1, 1)");
+    }
+  });
+
   test(`comic and playground state changes animate with ${reducedMotion}`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion });
     await page.goto("/playground/");

@@ -707,30 +707,48 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       width: 432,
       height: 240,
     };
+    const explore = {
+      src: withBasePath("/playground/comic-explore.webp"),
+      width: 432,
+      height: 240,
+    };
+    const exploreAlt = "A compass with its needle pointing toward a new heading";
     const spark = <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark" />;
+    const imageProps = (asset: typeof still, alt: string) =>
+      elementCode("Image", Object.entries({ ...asset, alt }).map(([prop, value]) =>
+        `${prop}={${JSON.stringify(value)}}`,
+      ));
     const stillCode = elementCode("ComicPanel", [
       'caption="1. Find a spark"',
-      `media={${elementCode("Image", Object.entries({ ...still, alt: stillAlt }).map(([prop, value]) =>
-        `${prop}={${JSON.stringify(value)}}`,
-      ))}}`,
+      `media={${imageProps(still, stillAlt)}}`,
     ]);
+    const sparkStripCode = elementCode("ComicPanel", [
+      'caption="1. Find a spark"',
+      `media={${imageProps(still, stillAlt)}}`,
+    ], '<SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>');
+    const exploreCode = elementCode("ComicPanel", [
+      'caption="3. Keep exploring"',
+      `media={${imageProps(explore, exploreAlt)}}`,
+    ], '<SpeechBubble tone="emphasis">Where to next?</SpeechBubble>');
     if (kind === "comic-panel") {
       preview = <div className={styles.comicPanelSample}>{spark}</div>;
       code = stillCode;
     } else {
       preview = (
         <ComicStrip role="group" aria-label="Paper plane story">
-          {spark}
+          <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark">
+            <SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>
+          </ComicPanel>
           <ComicPanel video={video} caption="2. Take flight" />
-          <ComicPanel caption="3. Keep exploring">
+          <ComicPanel media={<Image {...explore} alt={exploreAlt} />} caption="3. Keep exploring">
             <SpeechBubble tone="emphasis">Where to next?</SpeechBubble>
           </ComicPanel>
         </ComicStrip>
       );
       code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"'], [
-        stillCode,
+        sparkStripCode,
         elementCode("ComicPanel", ['caption="2. Take flight"', `video={${JSON.stringify(video, null, 2)}}`]),
-        elementCode("ComicPanel", ['caption="3. Keep exploring"'], '<SpeechBubble tone="emphasis">Where to next?</SpeechBubble>'),
+        exploreCode,
       ].join("\n"));
     }
   } else if (kind === "consent-note") {

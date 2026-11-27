@@ -50,8 +50,10 @@ test("the clip fades between playing and still states without moving its frame",
   const status = strip.getByRole("status");
   await expect(status).toHaveCount(1);
   await expect(status).toBeVisible();
-  await expect(status).toHaveText("Showing the still image.");
-  await expect(status.locator("span")).toHaveCSS("animation-duration", "0.12s");
+  await expect(status).toHaveText("Showing the still image.", { useInnerText: true });
+  const activeStatus = status.locator("[data-active='true']");
+  await expect(activeStatus).toHaveCSS("transition-property", "opacity, visibility");
+  await expect.poll(() => activeStatus.evaluate(el => getComputedStyle(el).transitionDuration.split(",")[0].trim())).toBe("0.12s");
   await expect(spark).toHaveCSS("transition-property", "opacity");
   await expect(spark).toHaveCSS("transition-duration", "0.12s");
   await expect.poll(() => poster.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBe(432);
@@ -81,8 +83,8 @@ test("the clip fades between playing and still states without moving its frame",
   await expect(video).toHaveCSS("transition-duration", "0.18s");
   await expect(spark).toHaveCSS("transition-duration", "0.18s");
   await expect(video).toHaveCSS("opacity", "1");
-  await expect(status).toHaveText("Video playing.");
-  await expect(status.locator("span")).toHaveCSS("animation-duration", "0.18s");
+  await expect(status).toHaveText("Video playing.", { useInnerText: true });
+  await expect.poll(() => activeStatus.evaluate(el => getComputedStyle(el).transitionDuration.split(",")[0].trim())).toBe("0.18s");
   await expect(playback).toHaveAttribute("aria-pressed", "true");
   expect(await video.evaluate(node => (node as HTMLVideoElement).duration)).toBeCloseTo(3);
   const loadedRequests = requests.length;
@@ -93,11 +95,11 @@ test("the clip fades between playing and still states without moving its frame",
   await expect(video).toHaveCSS("opacity", "0");
   await expect(playback).toBeFocused();
   await expect(playback).toHaveCSS("background-color", background);
-  await expect(status).toHaveText("Video paused.");
+  await expect(status).toHaveText("Video paused.", { useInnerText: true });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(status).toHaveText("Showing the still image.");
+  await expect(status).toHaveText("Showing the still image.", { useInnerText: true });
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect(status).toHaveText("Video paused.");
+  await expect(status).toHaveText("Video paused.", { useInnerText: true });
   await expect(video).toHaveJSProperty("paused", true);
   await page.keyboard.press("Enter");
   await expect(video).toHaveCSS("opacity", "1");
@@ -106,12 +108,12 @@ test("the clip fades between playing and still states without moving its frame",
   await expect(video).toHaveCSS("opacity", "0");
   await expect(playback).toBeDisabled();
   await expect(playback).toBeFocused();
-  await expect(status).toHaveText("Showing the still image.");
+  await expect(status).toHaveText("Showing the still image.", { useInnerText: true });
   expect(await frame.boundingBox()).toEqual(before);
   expect(await strip.boundingBox()).toEqual(stripBefore);
 
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect(status).toHaveText("Video playing.");
+  await expect(status).toHaveText("Video playing.", { useInnerText: true });
   expect(requests).toHaveLength(loadedRequests);
 });
 
@@ -160,57 +162,57 @@ for (const theme of themes) {
   test(`${theme}: playback status stays AA throughout its animation`, async ({ page, isMobile }) => {
     await openForAudit(page, "/playground/", theme, isMobile);
     // Keep the animation seekable even if it finishes before the test samples it.
-    await page.addStyleTag({ content: '[role="status"] > span { animation-fill-mode: both; }' });
     await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
     const strip = page.getByRole("group", { name: "Paper plane story" });
     const playback = strip.getByRole("button", { name: "Animate panel" });
     const status = strip.getByRole("status");
+    const activeStatus = status.locator("[data-active='true']");
 
-    const expectAnimatedContrast = async () => {
-      const lowestRatio = await status.locator("span").evaluate(message => {
-        const [animation] = message.getAnimations();
-        const duration = Number(animation.effect!.getComputedTiming().duration);
-        const surface = getComputedStyle(message.closest("figure")!).backgroundColor;
+    const expectStatusFade = async (duration: string) => {
+      await expect(activeStatus).toHaveCSS("opacity", "1");
+      await expect(activeStatus).toHaveCSS("transition-property", "opacity, visibility");
+      await expect.poll(() => activeStatus.evaluate(el => getComputedStyle(el).transitionDuration.split(",")[0].trim())).toBe(duration);
+      const ratio = await activeStatus.evaluate(message => {
+        const color = getComputedStyle(message).color;
+        const background = getComputedStyle(message.closest("figure")!).backgroundColor;
         const context = document.createElement("canvas").getContext("2d")!;
-        const luminance = () => {
-          const channels = Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3), value => {
-            const channel = value / 255;
-            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+        const luminance = (value: string) => {
+          context.fillStyle = value;
+          context.fillRect(0, 0, 1, 1);
+          const channels = Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3), channel => {
+            const linear = channel / 255;
+            return linear <= 0.04045 ? linear / 12.92 : ((linear + 0.055) / 1.055) ** 2.4;
           });
           return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
         };
-        const paint = (color: string) => {
-          context.fillStyle = color;
-          context.fillRect(0, 0, 1, 1);
-        };
-
-        animation.pause();
-        const ratios = Array.from({ length: 21 }, (_, index) => {
-          animation.currentTime = duration * index / 20;
-          const style = getComputedStyle(message);
-          paint(surface);
-          context.globalAlpha = Number(style.opacity);
-          paint(style.backgroundColor);
-          const background = luminance();
-          paint(style.color);
-          const foreground = luminance();
-          context.globalAlpha = 1;
-          return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
-        });
-        animation.finish();
-        return Math.min(...ratios);
+        const foreground = luminance(color);
+        const surface = luminance(background);
+        return (Math.max(foreground, surface) + 0.05) / (Math.min(foreground, surface) + 0.05);
       });
-      expect(lowestRatio).toBeGreaterThanOrEqual(4.5);
+      expect(ratio).toBeGreaterThanOrEqual(4.5);
+    };
+
+    const statusBox = async () => {
+      const [message, panel] = await Promise.all([status.boundingBox(), strip.boundingBox()]);
+      return {
+        width: message!.width,
+        height: message!.height,
+        x: message!.x - panel!.x,
+        y: message!.y - panel!.y,
+      };
     };
 
     await page.emulateMedia({ reducedMotion: "no-preference" });
-    await expect(status).toHaveText("Video playing.");
+    await expect(status).toHaveText("Video playing.", { useInnerText: true });
+    const before = await statusBox();
     await playback.click();
-    await expect(status).toHaveText("Video paused.");
-    await expectAnimatedContrast();
+    await expect(status).toHaveText("Video paused.", { useInnerText: true });
+    expect(await statusBox()).toEqual(before);
+    await expectStatusFade("0.18s");
 
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await expect(status).toHaveText("Showing the still image.");
-    await expectAnimatedContrast();
+    await expect(status).toHaveText("Showing the still image.", { useInnerText: true });
+    expect(await statusBox()).toEqual(before);
+    await expectStatusFade("0.12s");
   });
 }

@@ -103,12 +103,11 @@ export function ComicVideo({ src, poster, alt, width, height, labels }: ComicPan
         >
           {labels?.playback ?? "Animate panel"}
         </Button>
-        <div className={styles.status}>
-          {/* Reserve space for the longest localized state, including when it wraps. */}
+        <div className={styles.status} id={statusId} role="status">
+          {/* Every message stays in the grid so swaps crossfade without a layout shift. */}
           {Object.entries(messages).map(([state, message]) => (
-            <span key={state} className={styles.statusSize} aria-hidden="true">{message}</span>
+            <span key={state} data-active={state === status ? "true" : "false"} aria-hidden={state !== status || undefined}>{message}</span>
           ))}
-          <span id={statusId} role="status"><span key={status} className={styles.statusMessage}>{messages[status]}</span></span>
         </div>
       </div>
     </div>
