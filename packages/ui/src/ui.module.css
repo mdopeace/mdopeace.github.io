@@ -559,7 +559,7 @@ button.link:disabled {
   .control,
   .track {
     --reduced-transition-duration: var(--ui-fade-fast);
-    transition: opacity var(--ui-fade-fast) var(--ui-ease);
+    transition: opacity var(--ui-fade-fast) var(--ui-ease), background-color var(--ui-fade-fast) var(--ui-ease);
   }
   .thumb {
     transition: none;

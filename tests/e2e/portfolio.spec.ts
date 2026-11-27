@@ -374,6 +374,12 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await trigger.press("Enter");
     await expect(dialog).toHaveCSS("animation-duration", duration);
     if (reducedMotion === "reduce") await expect(dialog).toHaveCSS("transform", "none");
+    const close = dialog.getByRole("button", { name: "Close character card" });
+    await expect(close).toHaveCSS(
+      "transition-property",
+      reducedMotion === "reduce" ? "opacity, background-color" : "transform, box-shadow, opacity, background-color",
+    );
+    await expect.poll(() => close.evaluate(el => getComputedStyle(el).transitionDuration.split(",")[0].trim())).toBe("0.12s");
     await dialog.evaluate(element => {
       element.addEventListener("animationstart", event => {
         if (event.target !== element || !element.hasAttribute("data-closing")) return;
