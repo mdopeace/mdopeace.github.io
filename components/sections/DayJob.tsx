@@ -15,7 +15,7 @@ export default function DayJob() {
   return (
     <Section label="Experience & toolkit" id="experience" index="03">
       <Grid gap={6} className="experience-layout">
-        <Surface as="article" tone="info" padding={{ base: 6, sm: 8 }}>
+        <Surface as="article" tone="info" texture="halftone-soft" padding={{ base: 6, sm: 8 }}>
           <Stack gap={6}>
             <Inline justify="between" gap={4}>
               <Stack gap={3} align="start">

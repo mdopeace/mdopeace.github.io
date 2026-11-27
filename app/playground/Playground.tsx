@@ -5,7 +5,7 @@ import { useRef, useState, type ReactNode, type Ref } from "react";
 import { FaArrowLeft, FaHeart } from "react-icons/fa6";
 import { PiMoonStarsBold, PiSunBold } from "react-icons/pi";
 import { Container, Grid, Inline, Stack } from "@mdopeace/ui/Layout";
-import { Surface } from "@mdopeace/ui/Surface";
+import { Surface, type SurfaceProps } from "@mdopeace/ui/Surface";
 import { Heading, Text } from "@mdopeace/ui/Typography";
 import { Badge } from "@mdopeace/ui/Badge";
 import { SpeechBubble } from "@mdopeace/ui/SpeechBubble";
@@ -401,7 +401,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   const [showComicCaptionTitle, setShowComicCaptionTitle] = useState(false);
   const [headingSize, setHeadingSize] = useState<(typeof typographyHeadingSizes)[number]>("card");
   const [headingWeight, setHeadingWeight] = useState<"default" | "bold" | "black">("default");
-  const [surfaceTexture, setSurfaceTexture] = useState<"none" | "halftone" | "halftone-soft">("none");
+  const [surfaceTexture, setSurfaceTexture] = useState<"none" | NonNullable<SurfaceProps["texture"]>>("none");
   const [textSize, setTextSize] = useState<"caption" | "sm" | "md" | "lg">(
     "md",
   );
@@ -611,7 +611,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         {toneControl}
-        <Choice label="Halftone texture" value={surfaceTexture} options={["none", "halftone", "halftone-soft"] as const} onChange={setSurfaceTexture} />
+        <Choice label="Surface texture" value={surfaceTexture} options={["none", "halftone", "halftone-soft", "paper", "paper-soft"] as const} onChange={setSurfaceTexture} />
         <Choice
           label="Elevation"
           value={elevation}

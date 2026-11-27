@@ -9,7 +9,7 @@ import { Link } from "@mdopeace/ui/Link";
 export default function Hero() {
   return (
     <header id="top" className="hero-layout">
-      <Surface padding={{ base: 5, md: 6, lg: 8 }} border="strong" className="hero-copy">
+      <Surface padding={{ base: 5, md: 6, lg: 8 }} border="strong" texture="halftone-soft" className="hero-copy">
         <Stack gap={{ base: 4, md: 5, lg: 7 }}>
           <Inline gap={4}>
             <Badge variant="solid" tone="accent" size="md">

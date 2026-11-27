@@ -1,6 +1,7 @@
 import Section from "../portfolio/PortfolioSection";
 
 import { Grid } from "@mdopeace/ui/Layout";
+import { Surface } from "@mdopeace/ui/Surface";
 import { Text } from "@mdopeace/ui/Typography";
 import { StoryStep } from "../portfolio/StoryStep";
 
@@ -21,9 +22,11 @@ export default function Story() {
             Which made the player the bottleneck. None of them felt like they
             belonged on a Mac.
           </Text>
-          <Text size="lg" weight="bold">
-            So I built one that did. Native, keyboard driven, mine.
-          </Text>
+          <Surface padding={3} elevation="sm">
+            <Text size="sm" font="mono" weight="bold">
+              So I built one that did. Native, keyboard driven, mine.
+            </Text>
+          </Surface>
         </StoryStep>
         <StoryStep title="03 / Refine" tone="subtle">
           <Text size="body" tone="muted">

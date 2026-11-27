@@ -18,7 +18,7 @@ export type SurfaceProps<T extends Tag = "div"> = Omit<
   as?: T;
   tone?: Tone;
   variant?: "solid" | "soft";
-  texture?: "halftone" | "halftone-soft";
+  texture?: "halftone" | "halftone-soft" | "paper" | "paper-soft";
   interactive?: boolean;
   padding?: Responsive<Space>;
   elevation?: Elevation;

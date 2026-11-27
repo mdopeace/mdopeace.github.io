@@ -837,6 +837,13 @@ button.link:disabled {
 }
 .surface[data-texture="halftone"] { --surface-halftone-opacity: 0.22; }
 .surface[data-texture="halftone-soft"] { --surface-halftone-opacity: 0.12; }
+.surface:is([data-texture="paper"], [data-texture="paper-soft"]) {
+  --paper-ink: color-mix(in srgb, var(--ui-text) var(--paper-strength), transparent);
+  background-image: radial-gradient(var(--paper-ink) 0.7px, transparent 0.7px);
+  background-size: var(--paper-grid) var(--paper-grid);
+}
+.surface[data-texture="paper"] { --paper-strength: 24%; --paper-grid: 6px; }
+.surface[data-texture="paper-soft"] { --paper-strength: 18%; --paper-grid: 7px; }
 .surface[data-interactive="true"] {
   transition: transform var(--ui-fast), box-shadow var(--ui-fast);
 }

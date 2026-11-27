@@ -18,12 +18,12 @@ test("Dialog sizes share the same page gutters on phones", async ({ page }) => {
   }
 });
 
-test("Surface previews the optional halftone and generates usage", async ({ page }) => {
+test("Surface previews corner and paper textures and generates usage", async ({ page }) => {
   await page.goto("/playground/");
   await page.getByRole("button", { name: "Surface", exact: true }).click();
   const stage = page.getByRole("group", { name: "Live preview" });
   await expect(stage.locator('[data-texture="halftone"]')).toHaveCount(0);
-  const texture = page.getByRole("combobox", { name: "Halftone texture" });
+  const texture = page.getByRole("combobox", { name: "Surface texture" });
   await texture.selectOption("halftone");
   const surface = stage.locator('[data-texture="halftone"]');
   await expect(surface).toBeVisible();
@@ -34,6 +34,13 @@ test("Surface previews the optional halftone and generates usage", async ({ page
   await expect(soft).toBeVisible();
   await expect.poll(() => soft.evaluate(element => getComputedStyle(element, "::before").opacity)).toBe("0.12");
   await expect(page.getByLabel("Usage example", { exact: true })).toContainText('texture="halftone-soft"');
+  for (const [paper, spacing] of [["paper", "6px"], ["paper-soft", "7px"]]) {
+    await texture.selectOption(paper);
+    const sample = stage.locator(`[data-texture="${paper}"]`);
+    await expect(sample).toHaveCSS("background-image", /radial-gradient/);
+    await expect(sample).toHaveCSS("background-size", `${spacing} ${spacing}`);
+    await expect(page.getByLabel("Usage example", { exact: true })).toContainText(`texture="${paper}"`);
+  }
 });
 
 test("Typography previews both display sizes and updates the usage example", async ({ page }) => {

@@ -21,7 +21,7 @@ import { Heading, Text } from "@mdopeace/ui/Typography";
 
 Layout components own gaps. Surface owns padding, border and box shadow. Heading level sets semantics independently from visual size. Colored surfaces pair backgrounds with suitable foregrounds, including muted text. Do not add descendant CSS to change a primitive's visual recipe.
 
-Use `Surface texture="halftone"` for a decorative fade in a single corner, or `texture="halftone-soft"` behind supporting copy. Leave it off where an untextured frame helps a screenshot stand out.
+Use `Surface texture="halftone"` for a decorative fade in a single corner, or `texture="halftone-soft"` behind supporting copy. Use `texture="paper"` for an even print grain across a panel, or `texture="paper-soft"` for a lighter, more widely spaced grain behind artwork. Leave texture off where an untextured frame helps a screenshot stand out.
 
 Semantic `as` choices retain their native attributes and ref types. Render explicit `li` children in `ul`/`ol`. Use responsive token objects for layout properties, not raw CSS measurements. `className` and `style` remain escape hatches for exceptional layout and artwork integration.
 
