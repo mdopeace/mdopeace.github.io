@@ -2,6 +2,30 @@ import { expect, test } from "@playwright/test";
 import { catalog } from "./playground-catalog";
 
 for (const theme of ["light", "dark"] as const) {
+  test(`${theme}: code frames stay flat and Burst matches raised Button depth`, async ({ page }) => {
+    await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
+    await page.goto("/playground/");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    const catalog = page.getByRole("navigation", { name: "Component library" });
+    const preview = page.getByRole("group", { name: "Live preview" });
+    await expect(preview.getByRole("button", { name: "Make something" })).toHaveCSS("box-shadow", /3px 3px 0px 0px/);
+
+    await catalog.getByRole("button", { name: "Burst", exact: true }).click();
+    await expect(preview.locator('[data-visible="true"][data-size]')).toHaveCSS("filter", /drop-shadow\(.*3px 3px 0px\)/);
+
+    await catalog.getByRole("button", { name: "CodeExample", exact: true }).click();
+    const demo = preview.locator('[data-ui-surface][data-border="standard"]');
+    const snippet = page.locator('[data-ui-surface][data-border="none"]').filter({
+      has: page.getByLabel("Usage example", { exact: true }),
+    });
+    await expect(demo).toHaveCSS("box-shadow", "none");
+    await expect(demo).toHaveCSS("border-top-width", "2px");
+    await expect(demo).toHaveCSS("padding", "16px");
+    await expect(snippet).toHaveCSS("box-shadow", "none");
+    await expect(snippet).toHaveCSS("border-top-width", "1px");
+    await expect(snippet).toHaveCSS("border-inline-start-width", "0px");
+  });
+
   test(`${theme}: portfolio and playground footers share caption typography`, async ({ page }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
     const typography = [];

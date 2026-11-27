@@ -77,7 +77,8 @@
   --ui-space-20: 5rem;
   --ui-shadow-none: none;
   --ui-shadow-sm: 2px 2px 0 var(--ui-shadow-color);
-  --ui-shadow-md: 3px 3px 0 var(--ui-shadow-color);
+  --ui-shadow-md-offset: 3px;
+  --ui-shadow-md: var(--ui-shadow-md-offset) var(--ui-shadow-md-offset) 0 var(--ui-shadow-color);
   --ui-shadow-lg: 5px 5px 0 var(--ui-shadow-color);
   --ui-shadow-xl: 8px 8px 0 var(--ui-shadow-color);
 }

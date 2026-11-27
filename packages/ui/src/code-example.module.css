@@ -1,15 +1,7 @@
 .example {
-  box-sizing: border-box;
   display: grid;
   gap: 12px;
-  padding: 16px;
   min-width: 0;
-  border: 2px solid var(--ui-border);
-  background: var(--ui-surface);
-  color: var(--ui-text);
-}
-.example[data-border="none"] {
-  border: none;
 }
 .example pre {
   box-sizing: border-box;
