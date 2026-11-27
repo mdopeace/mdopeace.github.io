@@ -271,7 +271,10 @@ for (const theme of ["light", "dark"] as const) {
     await support.click();
     const dialog = page.getByRole("dialog", { name: "Fuel the next build" });
     await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole("link", { name: "GitHub Sponsors" })).toBeVisible();
+    await expect(dialog).toHaveAccessibleDescription("Choose the way that works best for you. Every bit helps keep useful ideas moving.");
+    await expect(dialog.locator('[data-texture="halftone-soft"]')).toHaveCount(1);
+    await expect(dialog.getByRole("link", { name: "GitHub Sponsors" })).toHaveAttribute("href", "https://github.com/sponsors/mdopeace");
+    await expect(dialog.getByRole("link", { name: "Buy Me a Coffee" })).toHaveAttribute("href", "https://buymeacoffee.com/mdopeace");
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
     await expect(support).toBeFocused();
@@ -488,7 +491,10 @@ test("modal interiors use lighter borders and shadows than their frames", async 
   await page.getByRole("button", { name: "Support my work" }).click();
   const support = page.getByRole("dialog", { name: "Fuel the next build" });
   await expect(support).toHaveCSS("box-shadow", /5px 5px 0px 0px/);
-  const options = support.locator("[data-ui-surface]");
+  const intro = support.locator('[data-texture="halftone-soft"]');
+  await expect(intro).toHaveCSS("border-top-width", "2px");
+  await expect(intro).toHaveCSS("box-shadow", "none");
+  const options = support.locator("[data-ui-surface]").filter({ has: page.getByRole("link") });
   await expect(options).toHaveCount(2);
   for (const option of await options.all()) {
     await expect(option).toHaveCSS("border-top-width", "2px");

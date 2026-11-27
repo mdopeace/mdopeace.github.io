@@ -114,6 +114,8 @@ visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`.
 
 Import Dialog from its matching UI subpath in a client component. Use controlled `open` with `onOpenChange` or uncontrolled `defaultOpen`.
 
+For a description inside a custom layout, link its ID with `aria-describedby` instead of passing the built-in `description`.
+
 On phones, all sizes align to the standard page gutter. The `size` prop changes the width on larger screens.
 
 Dialog uses the browser's native modal behavior and accepts a dialog ref. Put its trigger outside the Dialog, with `aria-haspopup="dialog"` and matching `aria-controls`/`id` where appropriate. Close button, Escape and genuine backdrop gestures request closure. Focus and previous scroll state are restored after exit. State changes remain immediate with reduced motion.
