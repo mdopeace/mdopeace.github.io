@@ -61,6 +61,6 @@
 .indicator.indicator.indicator[data-state="playing"] { --indicator-light: var(--indicator-on); }
 .indicator.indicator.indicator[data-state="paused"] { --indicator-light: var(--indicator-paused); }
 @media (max-width: 680px) {
-  .action.action.action { width: 40px; height: 40px; }
+  .action.action.action { width: 44px; height: 44px; }
   .hold.hold.hold { width: 100%; height: auto; }
 }
