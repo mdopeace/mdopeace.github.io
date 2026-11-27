@@ -40,6 +40,8 @@ import type { Size, Tone, Variant, Elevation } from "@mdopeace/ui/tokens";
 import styles from "./playground.module.css";
 import { elementCode, jsxText, completeExample } from "./snippets";
 
+const typographyHeadingSizes = ["feature", "display", "display-compact"] as const;
+
 const catalog = [
   {
     id: "button",
@@ -66,7 +68,7 @@ const catalog = [
     description: "A hierarchy that travels with the content.",
     rationale:
       "Heading semantics and visual size are separate. Body text carries the story; mono labels carry compact metadata.",
-    tip: "Choose heading levels from the document structure, then choose their visual size. Small text is for supporting information.",
+    tip: "Choose the heading level from the document structure. Compare Display with Display Compact for a narrower layout.",
   },
   {
     id: "surface",
@@ -395,6 +397,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   const [square, setSquare] = useState(false);
   const [tilt, setTilt] = useState<"none" | "left" | "right">("none");
   const [font, setFont] = useState<"body" | "mono">("body");
+  const [headingSize, setHeadingSize] = useState<(typeof typographyHeadingSizes)[number]>("feature");
   const [textSize, setTextSize] = useState<"caption" | "sm" | "md" | "lg">(
     "md",
   );
@@ -874,6 +877,12 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         <Choice
+          label="Heading size"
+          value={headingSize}
+          options={typographyHeadingSizes}
+          onChange={setHeadingSize}
+        />
+        <Choice
           label="Text size"
           value={textSize}
           options={["caption", "sm", "md", "lg"] as const}
@@ -890,7 +899,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     preview = (
       <Stack gap={4} className={styles.sample}>
         <Text variant="eyebrow">An idea worth making</Text>
-        <Heading level={3} size="feature">
+        <Heading level={3} size={headingSize}>
           Make the useful thing.
         </Heading>
         <Text size={textSize} font={font}>
@@ -905,7 +914,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     code =
       elementCode(
         "Heading",
-        ["level={3}", 'size="feature"'],
+        ["level={3}", `size="${headingSize}"`],
         "Make the useful thing.",
       ) +
       "\n\n" +

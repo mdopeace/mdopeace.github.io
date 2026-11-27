@@ -27,6 +27,8 @@
   --ui-font-title: 1.5rem;
   --ui-font-section: clamp(1.8rem, 4vw, 2.7rem);
   --ui-font-display: clamp(3rem, 8vw, 6.5rem);
+  /* Grow on phones without a size jump when a layout goes to two columns. */
+  --ui-font-display-compact: clamp(2.15rem, max(min(3.45rem, 0.25rem + 10.6vw), 5.65vw), 5.25rem);
   --ui-leading-caption: 1.5;
   --ui-leading-body: 1.7;
   --ui-leading-lg: 1.75;

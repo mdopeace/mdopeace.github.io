@@ -1,6 +1,27 @@
 import { expect, test } from "@playwright/test";
 import { catalog } from "./playground-catalog";
 
+test("Typography previews both display sizes and updates the usage example", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "Typography", exact: true }).click();
+  const heading = page.getByRole("group", { name: "Live preview" })
+    .getByRole("heading", { level: 3, name: "Make the useful thing." });
+  const size = page.getByRole("combobox", { name: "Heading size", exact: true });
+  const code = page.getByLabel("Usage example", { exact: true });
+  const fontSize = () => heading.evaluate(element => parseFloat(getComputedStyle(element).fontSize));
+  const feature = await fontSize();
+  await size.selectOption("display");
+  await expect(heading).toHaveAttribute("data-size", "display");
+  await expect(code).toContainText('size="display"');
+  await expect.poll(fontSize).toBeGreaterThan(feature);
+  const display = await fontSize();
+  await size.selectOption("display-compact");
+  await expect(heading).toHaveAttribute("data-size", "display-compact");
+  await expect(code).toContainText('size="display-compact"');
+  await expect.poll(fontSize).toBeLessThan(display);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test("raised buttons use shared padding and icon gaps at each size", async ({ page }) => {
   await page.goto("/playground/");
   const preview = page.getByRole("group", { name: "Live preview" });

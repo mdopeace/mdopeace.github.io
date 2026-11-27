@@ -1,5 +1,42 @@
 import { expect, test } from "@playwright/test";
 
+test("hero name stays on two lines without shrinking at the tablet breakpoint", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "The test sets its own viewport.");
+  const title = page.getByRole("heading", { level: 1 });
+  const surname = title.locator(".hero-name");
+  const sizes = new Map<number, number>();
+  for (const width of [320, 390, 430, 767, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    await expect(surname).toHaveCSS("text-shadow", width < 1024 ? /2px 2px 0px/ : /3px 3px 0px/);
+    const metrics = await title.evaluate(heading => {
+      const surname = heading.querySelector(".hero-name")!;
+      const style = getComputedStyle(heading);
+      const surnameStyle = getComputedStyle(surname);
+      return {
+        size: parseFloat(style.fontSize),
+        lineHeight: parseFloat(style.lineHeight),
+        height: heading.getBoundingClientRect().height,
+        tracking: parseFloat(style.letterSpacing),
+        surnameTracking: parseFloat(surnameStyle.letterSpacing),
+        overflow: heading.scrollWidth > heading.clientWidth,
+      };
+    });
+    if (width > 320) {
+      expect(metrics.height / metrics.lineHeight).toBeCloseTo(2, 1);
+    }
+    expect(metrics.surnameTracking).toBeGreaterThan(metrics.tracking);
+    expect(metrics.overflow).toBe(false);
+    sizes.set(width, metrics.size);
+  }
+  expect(sizes.get(390)!).toBeGreaterThanOrEqual(45);
+  expect(sizes.get(430)!).toBeGreaterThan(sizes.get(390)!);
+  expect(sizes.get(768)!).toBeGreaterThanOrEqual(55);
+  expect(sizes.get(768)!).toBeGreaterThanOrEqual(sizes.get(767)!);
+  expect(sizes.get(1440)!).toBeCloseTo(81.36, 1);
+});
+
 for (const width of [320, 390, 600, 768, 820, 900, 1024, 1152, 1280, 1440, 1920]) {
   test(`the comic spread reflows at ${width}px without changing reading order`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "desktop", "The test sets its own viewport.");

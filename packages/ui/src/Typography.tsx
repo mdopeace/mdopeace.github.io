@@ -4,7 +4,7 @@ import styles from "./ui.module.css";
 
 export type HeadingProps = ComponentPropsWithRef<"h2"> & {
   level: 1 | 2 | 3 | 4 | 5 | 6;
-  size?: "title" | "section" | "display" | "card" | "label" | "feature" | "statement" | "dialog";
+  size?: "title" | "section" | "display" | "display-compact" | "card" | "label" | "feature" | "statement" | "dialog";
   tone?: "default" | "muted" | "emphasis";
 };
 export function Heading({

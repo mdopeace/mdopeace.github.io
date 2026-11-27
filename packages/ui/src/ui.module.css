@@ -166,10 +166,13 @@
   word-spacing: 0.12em;
   text-transform: uppercase;
 }
-.heading[data-size="display"] {
+.heading:is([data-size="display"], [data-size="display-compact"]) {
   font-size: var(--ui-font-display);
   letter-spacing: -0.04em;
   line-height: 0.86;
+}
+.heading[data-size="display-compact"] {
+  font-size: var(--ui-font-display-compact);
 }
 .control {
   display: inline-flex;

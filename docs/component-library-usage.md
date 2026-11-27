@@ -24,6 +24,7 @@ Layout components own gaps. Surface owns padding, border and box shadow. Heading
 Semantic `as` choices retain their native attributes and ref types. Render explicit `li` children in `ul`/`ol`. Use responsive token objects for layout properties, not raw CSS measurements. `className` and `style` remain escape hatches for exceptional layout and artwork integration.
 
 - Divider: decorative by default; use `decorative={false}` for separator semantics.
+- Heading: use `size="display"` for a large headline with room to breathe, or `size="display-compact"` for a tighter composition, such as a headline beside an illustration. Both preserve the selected semantic level.
 - Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list. Set `controlSize="sm"`, `"md"`, or `"lg"` to align a single-line badge with a Button, button-style Link, or Switch of the same size. The badge keeps its own text size and centers its content vertically.
 - Section: `title`, optional `description`, `size`, token-based responsive `contentGap` (default `8`) and `padding` (defaults to the selected size), and children. PortfolioSection adds numbered headings and hash tracking for this app.
 

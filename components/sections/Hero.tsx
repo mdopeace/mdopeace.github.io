@@ -20,7 +20,7 @@ export default function Hero() {
             <Text variant="eyebrow" tone="muted">
               Software Engineer · Bengaluru
             </Text>
-            <Heading level={1} size="display">
+            <Heading level={1} size="display-compact">
               Md Mostafijur <span className="hero-name">Rahman</span>
             </Heading>
           </Stack>
@@ -39,7 +39,7 @@ export default function Hero() {
               See my work
             </Link>
             <PortfolioSummary />
-            <Link variant="text" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+            <Link variant="secondary" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               How I think
             </Link>
           </Inline>
