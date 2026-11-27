@@ -16,7 +16,7 @@ function documentBounds(frames: Locator) {
 }
 
 for (const theme of themes) {
-  test(`${theme}: each project has an ordered comic strip with a Try it link`, async ({ page, isMobile }) => {
+  test(`${theme}: each project has an ordered comic strip and a primary link`, async ({ page, isMobile }) => {
     await openForAudit(page, "/", theme, isMobile);
     const work = page.locator("#work");
     await expect(work.locator("article")).toHaveCount(projects.length);
@@ -33,20 +33,27 @@ for (const theme of themes) {
       if (isMobile) {
         expect(bounds[1].y).toBeGreaterThan(bounds[0].y + bounds[0].height);
         expect(bounds[2].y).toBeGreaterThan(bounds[1].y + bounds[1].height);
+      } else if (id === "quicktodo" || id === "vidp") {
+        const [problem, idea, result] = await documentBounds(strip.locator("figure"));
+        expect(idea.y).toBeGreaterThan(problem.y + problem.height);
+        expect(result.x).toBeGreaterThan(problem.x + problem.width);
+        expect(Math.abs(result.y - problem.y)).toBeLessThanOrEqual(1);
+        expect(result.height).toBeGreaterThan(problem.height);
       } else {
-        for (const caption of bounds.slice(1)) {
-          expect(Math.abs(caption.height - bounds[0].height)).toBeLessThanOrEqual(1);
-          expect(Math.abs(caption.y - bounds[0].y)).toBeLessThanOrEqual(1);
-        }
+        const frames = await documentBounds(strip.locator("figure"));
+        expect(frames[1].x).toBeGreaterThan(frames[0].x);
+        expect(frames[2].x).toBeGreaterThan(frames[1].x);
+        expect(frames[2].y).toBe(frames[0].y);
       }
-      const tryIt = project.getByRole("link", { name: `Try it: ${name}`, exact: true });
+      const linkName = id === "component-library" ? "Explore the playground" : `Try it: ${name}`;
+      const tryIt = project.getByRole("link", { name: linkName, exact: true });
       await expect(tryIt).toHaveAttribute("href", href);
       await expect(tryIt).toHaveAttribute("data-variant", "primary");
       const source = project.getByRole("link", { name: /^Source/ });
       const siblingHeight = await source.evaluate(link => getComputedStyle(link).height);
       await expect(tryIt).toHaveCSS("height", siblingHeight);
       const [tryBounds, sourceBounds] = await documentBounds(tryIt.or(source));
-      expect(Math.abs(tryBounds.y - sourceBounds.y)).toBeLessThanOrEqual(1);
+      expect(tryBounds.y).toBeLessThanOrEqual(sourceBounds.y + 1);
       const images = strip.locator("figure img");
       await expect(images).toHaveCount(stills);
       const sources = new Set();

@@ -5,12 +5,12 @@ const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 test("the character card opens from the first viewport and covers the essentials", async ({ page }) => {
   await page.goto("/");
-  const copy = page.locator("header#top p").filter({ hasText: /^At Tracxn, I work across the web platform\./ });
-  const trigger = copy.getByRole("button", { name: "See my character card" });
+  const actions = page.locator("#top .hero-actions");
+  const trigger = actions.getByRole("button", { name: "See my character card" });
   await expect(trigger).toBeInViewport();
   await expect(trigger).toHaveAttribute("type", "button");
-  await expect(trigger).toHaveCSS("text-decoration-line", "underline");
-  await expect(trigger).toHaveCSS("color", await copy.evaluate(el => getComputedStyle(el).color));
+  await expect(trigger).toHaveAttribute("data-variant", "secondary");
+  await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   await trigger.focus();
   await trigger.press("Enter");
   const summary = page.getByRole("dialog", { name: "Character Card" });
