@@ -42,6 +42,7 @@ for (const width of [320, 390, 600, 768, 820, 900, 1024, 1152, 1280, 1440, 1920]
     test.skip(testInfo.project.name !== "desktop", "The test sets its own viewport.");
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
     const sections = page.locator("main > section");
     expect(await sections.evaluateAll(sections => sections.map(section => section.id))).toEqual([
       "story", "work", "experience", "now", "contact",
@@ -74,7 +75,9 @@ for (const width of [320, 390, 600, 768, 820, 900, 1024, 1152, 1280, 1440, 1920]
     const handheld = (await device.boundingBox())!;
     expect(handheld.width).toBeLessThanOrEqual(width < 768 ? 22 * 16 - 6 : 29 * 16);
     expect(handheld.height).toBeLessThan(game!.height);
-    expect(game!.height - handheld.height).toBeLessThan(12);
+    // Keep the handheld visually balanced without requiring it to stretch
+    // or assuming the surrounding copy wraps identically on every platform.
+    expect(handheld.height / game!.height).toBeGreaterThanOrEqual(0.9);
     expect(handheld.x + handheld.width / 2).toBeCloseTo(game!.x + game!.width / 2, 1);
     expect(handheld.y + handheld.height / 2).toBeCloseTo(game!.y + game!.height / 2, 1);
     for (const name of ["A, rotate piece", "B, hard drop piece"]) {

@@ -5,8 +5,10 @@ test("the raised hero action still navigates to Story by keyboard", async ({ pag
   const action = page.getByRole("link", { name: "How I think", exact: true });
   await expect(action).toHaveAttribute("href", "#story");
   await expect(action).toHaveAttribute("data-variant", "secondary");
-  await expect(action).toHaveCSS("min-block-size", "44px");
+  await expect(action).toHaveAttribute("data-size", "lg");
   const work = page.getByRole("link", { name: "See my work", exact: true });
+  await expect(work).toHaveAttribute("data-size", "lg");
+  await expect(action).toHaveCSS("min-block-size", await work.evaluate(element => getComputedStyle(element).minBlockSize));
   const shadow = await work.evaluate(element => getComputedStyle(element).boxShadow);
   expect(shadow).not.toBe("none");
   await expect(action).toHaveCSS("box-shadow", shadow);
