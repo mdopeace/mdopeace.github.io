@@ -9,14 +9,18 @@ export default function Now() {
   return (
     <Section label="What’s cooking" id="now" index="04">
       <Grid columns={{ base: 1, md: 2 }} gap={5} className="workbench-layout">
-        <Surface as="article" tone="subtle" padding={{ base: 6, sm: 8 }} className="workbench-card">
-          <Stack gap={4} className="workbench-copy">
-            <Badge variant="solid" tone="emphasis" decoration="stamp" className="workbench-stamp">
-              Evolving
-            </Badge>
-            <Text variant="eyebrow" tone="muted">
-              On the workbench · 01
-            </Text>
+        <Surface as="article" tone="subtle" padding={{ base: 6, sm: 8 }}>
+          <Stack gap={4}>
+            <Inline gap={3} align="center" justify="between" wrap={false}>
+              <Text variant="eyebrow" tone="muted">
+                On the workbench · 01
+              </Text>
+              <Inline wrap={false}>
+                <Badge variant="solid" tone="emphasis" decoration="stamp">
+                  Evolving
+                </Badge>
+              </Inline>
+            </Inline>
             <Heading level={3} size="feature">Vidp works. My wishlist keeps growing.</Heading>
             <Text size="body" tone="muted">
               I use Vidp every day. Playback, everyday controls, and deeper

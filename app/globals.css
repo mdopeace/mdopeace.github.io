@@ -912,9 +912,6 @@
     letter-spacing: -0.015em;
     text-shadow: var(--ui-shadow-sm);
   }
-  .workbench-card { position: relative; }
-  .workbench-copy { padding-top: var(--ui-space-10); }
-  .workbench-stamp { position: absolute; top: 1.25rem; right: 1.25rem; }
   @media (min-width: 48rem) {
     .experience-layout { grid-template-columns: 1fr 0.8fr; }
   }
@@ -953,8 +950,6 @@
   display: grid;
   align-items: start;
 }
-#now .workbench-copy { padding-top: 0; }
-#now .workbench-stamp { position: static; align-self: start; }
 /* The page scroll padding already clears the sticky navigation at this overview. */
 #work { scroll-margin-top: 0; }
 

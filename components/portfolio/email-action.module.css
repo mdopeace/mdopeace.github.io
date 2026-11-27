@@ -40,8 +40,6 @@
 }
 
 .overlay > .burst {
-  --ui-border: var(--ui-on-accent);
-  --ui-shadow-color: var(--ui-on-accent);
   white-space: nowrap;
 }
 

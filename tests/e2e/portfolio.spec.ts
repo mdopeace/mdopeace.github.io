@@ -121,6 +121,21 @@ for (const method of ["click", "keyboard"] as const) {
   });
 }
 
+test("the Evolving stamp sits to the right of the workbench label", async ({ page, isMobile }) => {
+  await page.setViewportSize({ width: isMobile ? 320 : 1280, height: 844 });
+  await page.goto("/#now");
+  const note = page.locator("#now article").filter({ hasText: "On the workbench" });
+  const label = note.getByText("On the workbench · 01", { exact: true });
+  const stamp = note.getByText("Evolving", { exact: true });
+  const [labelBox, stampBox, cardBox] = await Promise.all([label.boundingBox(), stamp.boundingBox(), note.boundingBox()]);
+  expect(labelBox).not.toBeNull();
+  expect(stampBox).not.toBeNull();
+  expect(cardBox).not.toBeNull();
+  expect(stampBox!.x).toBeGreaterThan(labelBox!.x + labelBox!.width);
+  expect(stampBox!.x + stampBox!.width).toBeLessThan(cardBox!.x + cardBox!.width);
+  expect(Math.abs((stampBox!.y + stampBox!.height / 2) - (labelBox!.y + labelBox!.height / 2))).toBeLessThan(2);
+});
+
 test("production analytics makes Google requests only after Accept", async ({ page }) => {
   test.skip(!measurementId, "Requires a GA measurement ID");
 
@@ -344,6 +359,9 @@ for (const theme of themes) {
     const face = contact.getByText("POW! Copied!", { exact: true });
     await expect(face).toBeVisible();
     await expect(face).toHaveCSS("animation-name", "none");
+    const themeInk = await copy.evaluate(el => getComputedStyle(el).borderTopColor);
+    await expect(face.locator("..")).toHaveCSS("filter", `drop-shadow(${themeInk} 3px 3px 0px)`);
+    await expect.poll(() => face.evaluate(el => getComputedStyle(el, "::before").backgroundColor)).toBe(themeInk);
     await expectAccessible(page, "Contact burst shown");
   });
 }
