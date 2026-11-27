@@ -10,8 +10,27 @@ for (const theme of themes) {
     await expectAccessible(page, "analytics consent banner");
 
     const privacy = page.getByText(/^Privacy note\./);
-    const privacyOffset = () => privacy.evaluate(element => (element as HTMLElement).offsetTop);
-    const before = await privacyOffset();
+    const settings = page.getByRole("button", { name: "Privacy settings" });
+    const footerLink = page.getByRole("link", { name: "Back to top" });
+    for (const property of ["font-family", "font-size", "font-weight", "color", "letter-spacing"]) {
+      await expect(settings).toHaveCSS(property, await footerLink.evaluate((el, property) => getComputedStyle(el).getPropertyValue(property), property));
+    }
+    const [banner, nav] = await Promise.all([prompt.boundingBox(), page.locator(".site-nav").boundingBox()]);
+    expect(banner!.x).toBe(nav!.x);
+    expect(banner!.width).toBe(nav!.width);
+    await expect(prompt).toBeInViewport({ ratio: 1 });
+    await page.evaluate(() => window.scrollTo({ top: 650, behavior: "instant" }));
+    const scrolled = await prompt.boundingBox();
+    expect(scrolled!.y).toBe(banner!.y);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await expect(privacy).toBeVisible();
+    await expect(prompt).toHaveAttribute("data-layout", "stacked");
+    await expect(prompt.getByText(/^Analytics is (on|off)$/)).toHaveCount(0);
+    const description = prompt.getByText(/Allow Google Analytics cookies/);
+    const descriptionBox = await description.boundingBox();
+    const acceptBox = await prompt.getByRole("button", { name: "Accept" }).boundingBox();
+    expect(acceptBox!.y).toBeGreaterThan(descriptionBox!.y + descriptionBox!.height);
+
     const accept = prompt.getByRole("button", { name: "Accept" });
     const decline = prompt.getByRole("button", { name: "Decline" });
     await accept.focus();
@@ -20,13 +39,16 @@ for (const theme of themes) {
     await expect(decline).toHaveCSS("outline-style", "solid");
     await page.keyboard.press("Enter");
     await expect(prompt).toBeHidden();
-    await expect(privacy).toBeFocused();
-    expect(await privacyOffset()).toBe(before);
+    await expect(page.locator("main")).toBeFocused();
+
+    await settings.focus();
+    await page.keyboard.press("Enter");
+    await expect(prompt).toBeFocused();
     await page.keyboard.press("Tab");
-    const allow = page.getByRole("button", { name: "Allow analytics" });
-    await expect(allow).toBeFocused();
-    await expect(allow).toBeInViewport({ ratio: 1 });
-    await expect(allow).toHaveCSS("outline-style", "solid");
+    await expect(accept).toBeFocused();
+    await decline.press("Enter");
+    await expect(prompt).toBeHidden();
+    await expect(settings).toBeFocused();
 
     // Scan the page from its initial scroll position after checking the footer's
     // keyboard interaction. The sticky header can overlap passing content.
@@ -43,7 +65,7 @@ test("analytics consent updates across tabs without losing focus", async ({ page
   await otherTab.goto("/");
   await otherTab.getByRole("button", { name: "Decline", exact: true }).click();
   await expect(page.getByRole("region", { name: "Analytics cookies" })).toBeHidden();
-  await expect(page.getByText(/^Privacy note\./)).toBeFocused();
+  await expect(page.locator("main")).toBeFocused();
 });
 
 for (const reducedMotion of ["no-preference", "reduce"] as const) {
@@ -60,18 +82,14 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await expect(banner).toHaveAttribute("inert", "");
     await expect(banner).toBeHidden();
 
-    const allow = page.getByRole("button", { name: "Allow analytics" });
-    await expect(allow).toHaveCSS("transition-property", "opacity, display");
-    expect(await allow.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBe(duration);
-    const width = (await allow.boundingBox())!.width;
-    await allow.click();
-    const withdraw = page.getByRole("button", { name: "Turn off analytics" });
-    await expect(withdraw.locator('[data-active="true"]')).toHaveCSS("transition-property", "opacity, visibility");
-    expect(await withdraw.locator('[data-active="true"]').evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBe(0.12);
-    expect((await withdraw.boundingBox())!.width).toBe(width);
-    await withdraw.click();
-    await expect(allow).toBeVisible();
-    await expect(page.getByText(/^Privacy note\./)).toBeFocused();
+    const settings = page.getByRole("button", { name: "Privacy settings" });
+    await settings.click();
+    await expect(banner).toBeVisible();
+    await expect(banner).toHaveAttribute("data-open", "true");
+    await expect(banner).toBeFocused();
+    await banner.getByRole("button", { name: "Decline" }).click();
+    await expect(banner).toBeHidden();
+    await expect(settings).toBeFocused();
   });
 }
 

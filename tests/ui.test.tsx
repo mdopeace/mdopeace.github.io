@@ -49,12 +49,13 @@ it("renders the text Button with link styling and native keyboard activation", a
   render(
     <form onSubmit={onSubmit}>
       <Link href="#details">Details</Link>
-      <Button variant="text" iconOnly aria-label="Show details" onClick={onClick}>Show details</Button>
+      <Button variant="text" size="sm" iconOnly aria-label="Show details" onClick={onClick}>Show details</Button>
     </form>,
   );
   const button = screen.getByRole<HTMLButtonElement>("button", { name: "Show details" });
   expect(button.type).toBe("button");
   expect(button.hasAttribute("data-icon-only")).toBe(false);
+  expect(button.dataset.size).toBe("sm");
   expect(button.className).toBe(screen.getByRole("link", { name: "Details" }).className);
   await user.tab();
   await user.tab();

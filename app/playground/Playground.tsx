@@ -410,6 +410,8 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   const [dashed, setDashed] = useState(false);
   const [dividerTone, setDividerTone] = useState<"default" | "muted">("default");
   const [open, setOpen] = useState(false);
+  const [consentStatus, setConsentStatus] = useState<"none" | "on" | "off">("none");
+  const [consentLayout, setConsentLayout] = useState<"stacked" | "bar">("stacked");
   const [dialogTitleSize, setDialogTitleSize] = useState<"dialog" | "feature">("dialog");
   const [lines, setLines] = useState<"2" | "3" | "5">("3");
   const [expanded, setExpanded] = useState(false);
@@ -477,7 +479,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         {variantControl}
-        {variant !== "text" && sizeControl}
+        {sizeControl}
         <Field label="Label">
           {(field) => (
             <TextInput
@@ -529,7 +531,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       "Button",
       [
         `variant="${variant}"`,
-        variant !== "text" && sizeProp,
+        sizeProp,
         disabled && "disabled",
         loading && "loading",
         (icon || iconOnly) && "startIcon={<FaHeart />}",
@@ -782,6 +784,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     }
   } else if (kind === "consent-note") {
     const notice = "Would you like to enable reminders?";
+    const statusLabel = `Reminders are ${consentStatus}`;
     const choose = (label: string) => {
       setDecision(label);
       setNoteOpen(false);
@@ -789,22 +792,34 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       noticeToggleRef.current?.focus();
     };
     controls = (
-      <Toggle ref={noticeToggleRef} label="Open notice" checked={noteOpen} onChange={(next) => {
-        setNoteOpen(next);
-        setDecision("");
-      }} />
+      <>
+        <Toggle ref={noticeToggleRef} label="Open notice" checked={noteOpen} onChange={(next) => {
+          setNoteOpen(next);
+          setDecision("");
+        }} />
+        <Choice label="Layout" value={consentLayout} options={["stacked", "bar"] as const} onChange={setConsentLayout} disabled={!noteOpen} />
+        <Choice label="Saved status" value={consentStatus} options={["none", "on", "off"] as const} onChange={setConsentStatus} disabled={!noteOpen} />
+      </>
     );
     preview = (
       <Stack gap={4}>
-        <ConsentNote open={noteOpen} onAccept={() => choose("Accepted")} onDecline={() => choose("Declined")}>{notice}</ConsentNote>
+        <ConsentNote open={noteOpen} layout={consentLayout} onAccept={() => choose("Accepted")} onDecline={() => choose("Declined")}>
+          <Stack gap={1} align="start">
+            {consentStatus !== "none" && <Badge>{statusLabel}</Badge>}
+            <Text size="sm">{notice}</Text>
+          </Stack>
+        </ConsentNote>
         <Text role="status">{decision}</Text>
       </Stack>
     );
     code = [
       "<>",
       elementCode("ConsentNote", [
-        "open={open}", "onAccept={closeNotice}", "onDecline={closeNotice}",
-      ], notice),
+        "open={open}", `layout="${consentLayout}"`, "onAccept={closeNotice}", "onDecline={closeNotice}",
+      ], elementCode("Stack", ["gap={1}", 'align="start"'], [
+        ...(consentStatus !== "none" ? [elementCode("Badge", [], statusLabel)] : []),
+        elementCode("Text", ['size="sm"'], notice),
+      ].join("\n"))),
       '<Button ref={reopenRef} onClick={() => setOpen(true)}>Open notice</Button>',
       "</>",
     ].join("\n");

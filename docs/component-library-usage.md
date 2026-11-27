@@ -96,7 +96,7 @@ Switch uses a native checkbox with switch semantics, keyboard operation, form at
 content as `children` and handle decisions via `onAccept` and `onDecline`.
 `acceptLabel` and `declineLabel` default to “Accept” and “Decline”. Set
 `aria-label` or `aria-labelledby` to name the notice. The caller controls
-visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`.
+visibility and any persistence. Import from `@mdopeace/ui/ConsentNote`. Use `layout="bar"` for compact responsive placement. For a saved choice, place a short, explicit status `Badge` above the notice text. Include its ID in the notice’s accessible description. The consuming app owns any fixed positioning and must keep underlying content reachable.
 
 ### Dialog
 

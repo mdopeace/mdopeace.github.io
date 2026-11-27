@@ -10,9 +10,28 @@
   overflow-wrap: anywhere;
 }
 
+.note[data-layout="bar"] {
+  padding: var(--ui-space-3);
+  gap: var(--ui-space-3);
+}
+.note[data-layout="bar"] .actions > button {
+  min-block-size: var(--ui-control-lg);
+}
+@media (min-width: 40rem) {
+  .note[data-layout="bar"] {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding-inline: var(--ui-space-5);
+  }
+  .note[data-layout="bar"] .actions > button {
+    min-block-size: var(--ui-control-md);
+  }
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--ui-space-3);
 }
 

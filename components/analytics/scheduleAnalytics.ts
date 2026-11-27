@@ -1,3 +1,4 @@
+import { GA_COOKIE_DAYS } from "./config";
 import { setAnalyticsSender, trackAnalytics } from "./events";
 
 function measureEngagement() {
@@ -73,6 +74,8 @@ export function scheduleAnalytics(id: string, hasConsent: () => boolean) {
       Object.assign(window, { [disableKey]: false });
       command("js", new Date());
       command("config", id, {
+        cookie_expires: GA_COOKIE_DAYS * 24 * 60 * 60,
+        cookie_update: false,
         allow_google_signals: false,
         allow_ad_personalization_signals: false,
         send_page_view: false,
@@ -98,10 +101,10 @@ export function scheduleAnalytics(id: string, hasConsent: () => boolean) {
 
   return () => {
     cancel();
+    if (script) Object.assign(window, { [disableKey]: true });
     stopMeasuring?.();
     setAnalyticsSender();
     if (script) {
-      Object.assign(window, { [disableKey]: true });
       script.onload = null;
       script.remove();
     }

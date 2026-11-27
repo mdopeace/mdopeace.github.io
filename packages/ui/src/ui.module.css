@@ -302,6 +302,7 @@ button.link {
   text-decoration-line: underline;
   cursor: pointer;
 }
+button.link[data-size] { min-height: var(--ui-space-6); }
 button.link:disabled {
   cursor: not-allowed;
   opacity: 0.65;

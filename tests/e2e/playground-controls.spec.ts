@@ -40,7 +40,7 @@ const scenarios: Record<string, Scenario[]> = {
   ],
   ConsentNote: [{
     setup: properties => properties.getByLabel("Open notice").uncheck(),
-    unavailable: ["Preview width"],
+    unavailable: ["Preview width", "Layout", "Saved status"],
   }],
   "Content & feedback": [{
     setup: (_, preview) => preview.getByRole("button", { name: "Read more" }).click(),

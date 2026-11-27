@@ -156,39 +156,61 @@ test("Experience role and toolkit share a lower edge only when side by side", as
   expect(note.x + note.width).toBeCloseTo(right.x + right.width);
 });
 
-test("production analytics makes Google requests only after Accept", async ({ page }) => {
+test("analytics makes no Google requests until accepted and stops on withdrawal", async ({ page, context }) => {
   test.skip(!measurementId, "Requires a GA measurement ID");
-
+  const key = "portfolio-analytics-consent";
   const googleRequests: string[] = [];
   await page.route(url => /(?:^|\.)(?:googletagmanager|google-analytics)\.com$/.test(url.hostname), async route => {
     googleRequests.push(route.request().url());
-    await route.fulfill({ contentType: "application/javascript", body: "" });
+    await route.fulfill({
+      contentType: "application/javascript",
+      body: `document.cookie="_ga=preview; Path=/"; document.cookie="_ga_${measurementId!.slice(2)}=preview; Path=/";`,
+    });
   });
-
   const prompt = page.getByRole("region", { name: "Analytics cookies" });
+  const settings = page.getByRole("button", { name: "Privacy settings" });
   await page.goto("/");
-  await expect(prompt).toBeVisible();
-  await prompt.scrollIntoViewIfNeeded();
-  await expect(prompt).toBeInViewport();
+  await expect(prompt).toBeInViewport({ ratio: 1 });
   expect(googleRequests).toEqual([]);
+  expect((await context.cookies()).filter(cookie => cookie.name.startsWith("_ga"))).toEqual([]);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBeNull();
 
   await prompt.getByRole("button", { name: "Decline", exact: true }).click();
   await page.reload();
-  await expect(page.getByRole("button", { name: "Allow analytics", exact: true })).toBeVisible();
+  await expect(settings).toBeVisible();
   await expect(prompt).toHaveCount(0);
   expect(googleRequests).toEqual([]);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBe("declined");
 
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await expect(prompt).toBeVisible();
-  expect(googleRequests).toEqual([]);
-
+  await settings.click();
+  await expect(prompt).toBeFocused();
+  const statusBadge = prompt.locator("[data-variant=outline][data-tone=default]:has(+ p)");
+  await expect(statusBadge).toHaveText("Analytics is off");
+  await expect(statusBadge).toBeVisible();
+  await expect(prompt).toHaveAccessibleDescription(/^Analytics is off Allow/);
   const tagUrl = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
   await Promise.all([
     page.waitForResponse(response => response.url() === tagUrl && response.ok()),
     prompt.getByRole("button", { name: "Accept", exact: true }).click(),
   ]);
+  await expect.poll(async () => (await context.cookies()).some(cookie => cookie.name === "_ga")).toBe(true);
   expect(googleRequests).toEqual([tagUrl]);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBe("accepted");
+  await Promise.all([page.waitForResponse(tagUrl), page.reload()]);
+  await expect(prompt).toHaveCount(0);
+  expect(googleRequests).toEqual([tagUrl, tagUrl]);
+
+  await settings.click();
+  await expect(statusBadge).toHaveText("Analytics is on");
+  await expect(statusBadge).toBeVisible();
+  await expect(prompt).toHaveAccessibleDescription(/^Analytics is on Allow/);
+  await prompt.getByRole("button", { name: "Decline", exact: true }).click();
+  await expect(settings).toBeFocused();
+  await expect.poll(async () => (await context.cookies()).filter(cookie => cookie.name.startsWith("_ga"))).toEqual([]);
+  expect(await page.evaluate(id => Reflect.get(window, `ga-disable-${id}`), measurementId)).toBe(true);
+  await page.reload();
+  await expect(prompt).toHaveCount(0);
+  expect(googleRequests).toEqual([tagUrl, tagUrl]);
 });
 
 test("copy email offers the email link when clipboard writing fails", async ({ page }) => {
