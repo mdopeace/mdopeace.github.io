@@ -25,7 +25,7 @@ Semantic `as` choices retain their native attributes and ref types. Render expli
 
 - Divider: decorative by default; use `decorative={false}` for separator semantics.
 - Badge: inline status/tag appearance. Wrap it in a list item yourself when used in a list. Set `controlSize="sm"`, `"md"`, or `"lg"` to align a single-line badge with a Button, button-style Link, or Switch of the same size. The badge keeps its own text size and centers its content vertically.
-- Section: `title`, optional `description`, `size` and children. PortfolioSection adds numbered headings and hash tracking for this app.
+- Section: `title`, optional `description`, `size`, token-based responsive `contentGap` (default `8`) and `padding` (defaults to the selected size), and children. PortfolioSection adds numbered headings and hash tracking for this app.
 
 ## Actions, navigation and icons
 

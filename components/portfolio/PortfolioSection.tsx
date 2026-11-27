@@ -21,6 +21,8 @@ export default function PortfolioSection({
       id={id}
       title={label}
       className="portfolio-section"
+      contentGap={{ base: 5, md: 6, lg: 8 }}
+      padding={{ base: 10, md: 12, lg: 16 }}
       heading={
         <Inline gap={4} wrap={false}>
           <Badge variant="solid" tone="emphasis" decoration="index" size="md" aria-hidden="true">

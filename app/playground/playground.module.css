@@ -23,18 +23,18 @@
 }
 .main {
   min-width: 0;
-  scroll-margin-top: 24px;
+  scroll-margin-top: var(--ui-space-6);
 }
 .componentHeading {
   display: flex;
   align-items: start;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--ui-space-4);
 }
 .componentHeading > div {
   display: grid;
-  gap: 10px;
+  gap: var(--ui-space-2);
 }
 .workbench {
   display: grid;
@@ -49,8 +49,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 16px;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-4);
   border-bottom: 1px solid var(--ui-border);
 }
 .stage {
@@ -59,7 +59,7 @@
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  padding: 32px 20px;
+  padding: var(--ui-space-8) var(--ui-space-5);
   background-color: var(--ui-canvas);
   background-image: radial-gradient(
     color-mix(in srgb, var(--ui-text) 17%, transparent) 1px,
@@ -80,32 +80,32 @@
 }
 .properties {
   display: grid;
-  gap: 24px;
+  gap: var(--ui-space-6);
   align-content: start;
   min-width: 0;
-  padding: 20px;
+  padding: var(--ui-space-5);
   border-top: 2px solid var(--ui-border);
 }
 .snippet {
   display: grid;
-  gap: 12px;
-  padding: 16px;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-4);
 }
 .note {
   display: grid;
   align-content: start;
-  gap: 12px;
+  gap: var(--ui-space-3);
   border-top: 2px solid var(--ui-border);
-  padding-top: 16px;
+  padding-top: var(--ui-space-4);
 }
 .footer {
   border-top: 2px dashed var(--ui-border);
-  padding-block: 24px;
+  padding-block: var(--ui-space-6);
 }
 @media (min-width: 48rem) {
   .workspace {
     grid-template-columns: 180px minmax(0, 1fr);
-    gap: 24px;
+    gap: var(--ui-space-6);
   }
   .sidebar {
     position: sticky;
@@ -127,7 +127,7 @@
     --navigation-columns: 2;
   }
   .stage {
-    padding: 24px 12px;
+    padding: var(--ui-space-6) var(--ui-space-3);
     min-height: 240px;
   }
 }
@@ -147,7 +147,7 @@
   .sidebar {
     max-height: calc(100dvh - 48px);
     overflow-y: auto;
-    padding: 4px;
+    padding: var(--ui-space-1);
   }
 }
 

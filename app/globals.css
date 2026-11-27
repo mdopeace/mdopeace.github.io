@@ -116,9 +116,9 @@
   }
   .site-nav {
     position: sticky;
-    top: 12px;
+    top: var(--ui-space-3);
     z-index: 20;
-    margin-top: 14px;
+    margin-top: var(--ui-space-3);
   }
   .hero-art {
     position: relative;
@@ -546,7 +546,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
     align-items: center;
-    gap: clamp(2rem, 6vw, 5rem);
+    gap: var(--ui-space-8);
   }
   .contact-art {
     position: relative;
@@ -826,7 +826,6 @@
     }
     .contact-grid {
       grid-template-columns: 1fr;
-      gap: 2rem;
     }
     .contact-art {
       min-height: 330px;
@@ -879,9 +878,6 @@
     margin-top: var(--ui-space-8);
     overflow: hidden;
   }
-  .hero-copy {
-    padding: var(--ui-space-6);
-  }
   .hero-summary-copy {
     letter-spacing: -0.01em;
   }
@@ -893,11 +889,6 @@
     text-transform: none;
   }
 
-  @media (min-width: 40rem) {
-    .hero-copy {
-      padding: var(--ui-space-10);
-    }
-  }
   @media (min-width: 48rem) {
     .hero-layout {
       grid-template-columns: 1.15fr 0.85fr;
@@ -907,7 +898,7 @@
 
 @layer components {
   .portfolio-section { border-bottom-color: color-mix(in srgb, var(--ui-border) 42%, transparent); }
-  .hero-layout { position: relative; isolation: isolate; margin-top: 1.75rem; }
+  .hero-layout { position: relative; isolation: isolate; margin-top: var(--ui-space-7); }
   .hero-layout::before {
     content: "";
     position: absolute;
@@ -926,48 +917,43 @@
   @media (min-width: 48rem) {
     .experience-layout { grid-template-columns: 1fr 0.8fr; }
   }
-  @media (min-width: 64rem) {
-    .hero-copy { padding: var(--ui-space-12); }
-  }
 }
 
 /* Issue layout: keep the page order, but vary the size of each spread. */
 #top.hero-layout {
   grid-template-columns: minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(1rem, 2.4vw, 2rem);
+  align-items: stretch;
+  gap: var(--ui-space-4);
   overflow: visible;
 }
 #top.hero-layout::before { content: none; }
 #top .hero-copy {
+  display: grid;
+  align-content: center;
   min-width: 0;
-  padding: clamp(1.2rem, 3.3vw, 3.5rem);
 }
 #top .hero-copy h1 {
   font-size: clamp(2.15rem, 6.4vw, 5.8rem);
   overflow-wrap: anywhere;
 }
-#top .hero-copy > :first-child { gap: clamp(1rem, 2.8vw, 1.75rem); }
 #top .hero-copy p { max-inline-size: 55ch; }
 #top .hero-actions [data-variant="text"] { display: inline-flex; align-items: center; }
 #top .hero-actions > :is(a, button) { min-block-size: 44px; }
 #top .gameboy-stage {
-  justify-self: center;
-  inline-size: min(100%, 29rem);
+  align-items: center;
   min-height: 0;
 }
-#top .gameboy { height: auto; }
+/* Match the surrounding frames, not the size of the handheld inside. */
+#top .gameboy {
+  height: auto;
+  max-inline-size: 29rem;
+  justify-self: center;
+}
 #top .tetris-board { height: clamp(125px, 18vw, 165px); }
 #top .gameboy-controls { min-height: 0; padding-block: 0.4rem; }
-#top .tetris-hud { gap: 4px; }
+#top .tetris-hud { gap: var(--ui-space-1); }
 #top .tetris-preview { width: 36px; }
 
-main > .portfolio-section {
-  padding-block: clamp(2.5rem, 5vw, 4rem);
-}
-main > .portfolio-section > :first-child {
-  gap: clamp(1.25rem, 2.5vw, 2rem);
-}
 .selected-work-layout > [data-work-size] { min-width: 0; }
 #experience .experience-layout {
   display: grid;
@@ -977,9 +963,15 @@ main > .portfolio-section > :first-child {
 #now .workbench-stamp { position: static; align-self: start; }
 
 @media (min-width: 48rem) {
-  #top.hero-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+  /* Keep the column spacing in sync for both illustrated splits. */
+  #top.hero-layout,
+  .contact-grid {
+    gap: var(--ui-space-5);
+  }
+  #top.hero-layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
   #top .hero-copy h1 { font-size: clamp(2.2rem, 5.65vw, 5.25rem); }
-  #top .gameboy-stage { inline-size: 100%; }
   #story .story-spread { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.35fr); }
   #work .selected-work-layout {
     display: grid;
@@ -990,24 +982,27 @@ main > .portfolio-section > :first-child {
   #experience .experience-layout { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
   #now .workbench-layout { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
 }
+@media (min-width: 64rem) {
+  #top.hero-layout,
+  .contact-grid { gap: var(--ui-space-6); }
+}
+@media (min-width: 80rem) {
+  #top.hero-layout,
+  .contact-grid { gap: var(--ui-space-8); }
+}
 @media (max-width: 56.25rem) {
-  #top .gameboy-controls { gap: 0.5rem; padding-inline: 0; }
+  #top .gameboy-controls { gap: var(--ui-space-2); padding-inline: 0; }
   #top .gameboy-speaker { display: none; }
   #top .gameboy-dpad { flex: 0 0 auto; }
 }
 
 @media (max-width: 47.99rem) {
-  #top .gameboy-stage { inline-size: min(100%, 22rem); }
-  #top .hero-actions :is(button, a)[data-variant]:not([data-variant="text"]) { padding-inline: 0.7rem; }
+  #top .gameboy { max-inline-size: calc(22rem - 2 * var(--ui-border-strong)); }
 }
 
 #top .tetris-hud span { line-height: 1.25; }
 #top .gameboy-instructions { margin-block-start: 0.35rem; }
 #top .gameboy-instructions > span { line-height: 1.35; }
-
-@media (min-width: 48rem) and (max-width: 56.25rem) {
-  #top .hero-copy { padding-block: var(--ui-space-8); }
-}
 
 @media (max-width: 47.99rem) {
   #top .gameboy-ab { max-width: 102px; }

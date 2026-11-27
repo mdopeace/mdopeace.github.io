@@ -1,6 +1,22 @@
 import { expect, test } from "@playwright/test";
 import { catalog } from "./playground-catalog";
 
+test("raised buttons use shared padding and icon gaps at each size", async ({ page }) => {
+  await page.goto("/playground/");
+  const preview = page.getByRole("group", { name: "Live preview" });
+  const button = preview.getByRole("button", { name: "Make something" });
+  const size = page.getByRole("combobox", { name: "Size", exact: true });
+  for (const [value, padding, gap] of [
+    ["sm", "4px 8px", "8px"],
+    ["md", "8px 12px", "12px"],
+    ["lg", "12px 16px", "12px"],
+  ]) {
+    await size.selectOption(value);
+    await expect(button).toHaveCSS("padding", padding);
+    await expect(button).toHaveCSS("gap", gap);
+  }
+});
+
 for (const theme of ["light", "dark"] as const) {
   test(`${theme}: code frames stay flat and Burst matches raised Button depth`, async ({ page }) => {
     await page.addInitScript(theme => localStorage.setItem("portfolio-theme", theme), theme);
