@@ -32,7 +32,7 @@ export default function SupportDialog() {
         size="md"
       >
         <Grid columns={{ base: 1, sm: 2 }} gap={4}>
-          <Surface tone="accent" padding={4}>
+          <Surface tone="accent" padding={4} elevation="md">
             <Stack gap={3}>
               <Link
                 href="https://github.com/sponsors/mdopeace"
@@ -46,7 +46,7 @@ export default function SupportDialog() {
               <Text size="sm">Help ship the next small tool</Text>
             </Stack>
           </Surface>
-          <Surface tone="info" padding={4}>
+          <Surface tone="info" padding={4} elevation="md">
             <Stack gap={3}>
               <Link
                 href="https://buymeacoffee.com/mdopeace"

@@ -68,7 +68,7 @@ export function PortfolioSummary() {
         className={styles.dialog}
       >
         <Stack gap={{ base: 3, sm: 6 }}>
-          <Surface padding={0} border="strong" elevation="md">
+          <Surface padding={0} elevation="md">
             <dl className={styles.stats}>
               <div className={styles.identity}>
                 <dt>
@@ -118,7 +118,6 @@ export function PortfolioSummary() {
                   key={projectId}
                   data-project={projectId}
                   tone={projectTones[projectId]}
-                  border="strong"
                   elevation="md"
                   padding={{ base: 2, sm: 3 }}
                   className={styles.project}

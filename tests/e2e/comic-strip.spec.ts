@@ -1,6 +1,31 @@
 import { expect, test } from "@playwright/test";
 import { expectAccessible, expectTextContrast, openForAudit, themes } from "./accessibility";
 
+for (const theme of themes) {
+  test(`${theme}: nested project panels use standard borders while playground defaults to strong`, async ({ page, isMobile }) => {
+    await openForAudit(page, "/", theme, isMobile);
+    const quickTodo = page.getByRole("group", { name: "QuickTodo comic strip" }).getByRole("figure");
+    await expect(quickTodo).toHaveCount(3);
+    const projectPanels = page.locator("#work figure");
+    await expect(projectPanels).toHaveCount(12);
+    for (const panel of await projectPanels.all()) {
+      await expect(panel).toHaveCSS("border-top-width", "2px");
+      await expect(panel).toHaveCSS("box-shadow", /5px 5px 0px 0px/);
+    }
+    await page.goto("/playground/");
+    const preview = page.getByRole("group", { name: "Live preview" });
+    for (const component of ["ComicPanel", "ComicStrip"]) {
+      await page.getByRole("button", { name: component, exact: true }).click();
+      const panels = preview.getByRole("figure");
+      await expect(panels).toHaveCount(component === "ComicPanel" ? 1 : 3);
+      for (const panel of await panels.all()) await expect(panel).toHaveCSS("border-top-width", "3px");
+      await page.getByLabel("Panel border", { exact: true }).selectOption("standard");
+      for (const panel of await panels.all()) await expect(panel).toHaveCSS("border-top-width", "2px");
+      await expect(page.getByLabel("Usage example", { exact: true })).toContainText('border="standard"');
+    }
+  });
+}
+
 test("the strip preserves panel reading order as it reflows", async ({ page, isMobile }) => {
   await page.goto("/playground/");
   await page.getByRole("button", { name: "ComicStrip", exact: true }).click();

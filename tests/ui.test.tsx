@@ -94,7 +94,7 @@ describe("comic components", () => {
           media={<span role="img" aria-label="A spark" />} caption="First beat">
           <a href="#story">Read again</a>
         </ComicPanel>
-        <ComicPanel caption={<strong>Second beat</strong>}>The plot thickens.</ComicPanel>
+        <ComicPanel border="standard" caption={<strong>Second beat</strong>}>The plot thickens.</ComicPanel>
         <ComicPanel>End of story.</ComicPanel>
       </ComicStrip>,
     );
@@ -110,8 +110,10 @@ describe("comic components", () => {
       expect(panel.tagName).toBe("FIGURE");
       expect(panel.getAttribute("data-ui-surface")).toBe("default");
       expect(panel.style.getPropertyValue("--elevation")).toBe("var(--ui-shadow-lg)");
-      expect(panel.style.getPropertyValue("--border-width")).toBe("var(--ui-border-strong)");
     }
+    expect(panels.map(panel => panel.style.getPropertyValue("--border-width"))).toEqual([
+      "var(--ui-border-strong)", "var(--ui-border-standard)", "var(--ui-border-strong)",
+    ]);
     expect(panels[0].lastElementChild?.tagName).toBe("FIGCAPTION");
     expect(panels[0].lastElementChild?.textContent).toBe("First beat");
     expect(panels[0].firstElementChild).toBe(screen.getByRole("img", { name: "A spark" }));

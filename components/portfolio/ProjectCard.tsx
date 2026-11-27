@@ -66,6 +66,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             return (
               <ComicPanel
                 key={stage}
+                border="standard"
                 className={styles.panel}
                 media={still && (
                   <Image

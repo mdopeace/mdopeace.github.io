@@ -401,3 +401,31 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     expect(await error.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBe(parseFloat(duration));
   });
 }
+test("modal interiors use lighter borders and shadows than their frames", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "See my character card" }).click();
+  const character = page.getByRole("dialog", { name: "Character Card" });
+  await expect(character).toHaveCSS("border-top-width", "3px");
+  await expect(character).toHaveCSS("box-shadow", /5px 5px 0px 0px/);
+  const innerCards = character.locator("[data-ui-surface]");
+  await expect(innerCards).toHaveCount(4);
+  for (const card of await innerCards.all()) {
+    await expect(card).toHaveCSS("border-top-width", "2px");
+    await expect(card).toHaveCSS("box-shadow", /3px 3px 0px 0px/);
+  }
+  const guild = character.locator("dl > div").filter({ hasText: "Guild / Base" });
+  await expect(guild).toHaveCSS("border-top-width", "1px");
+  await expect(guild).toHaveCSS("border-bottom-width", "1px");
+  await page.keyboard.press("Escape");
+  await expect(character).toBeHidden();
+
+  await page.getByRole("button", { name: "Support my work" }).click();
+  const support = page.getByRole("dialog", { name: "Fuel the next build" });
+  await expect(support).toHaveCSS("box-shadow", /5px 5px 0px 0px/);
+  const options = support.locator("[data-ui-surface]");
+  await expect(options).toHaveCount(2);
+  for (const option of await options.all()) {
+    await expect(option).toHaveCSS("border-top-width", "2px");
+    await expect(option).toHaveCSS("box-shadow", /3px 3px 0px 0px/);
+  }
+});

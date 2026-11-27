@@ -71,7 +71,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--ui-space-1) var(--ui-space-4);
-  border-block: var(--ui-border-strong) solid var(--ui-border);
+  border-block: var(--ui-border-thin) solid var(--ui-border);
   background: var(--ui-subtle);
 }
 

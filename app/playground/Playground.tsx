@@ -362,6 +362,7 @@ function Snippet({ code }: { code: string }) {
 
 function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: boolean }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
+  const [comicBorder, setComicBorder] = useState<"standard" | "strong">("strong");
   const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
   const [burstTone, setBurstTone] = useState<(typeof comicTones)[number]>("accent");
   const [speechTone, setSpeechTone] = useState<(typeof comicTones)[number]>("default");
@@ -713,21 +714,26 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       height: 240,
     };
     const exploreAlt = "A compass with its needle pointing toward a new heading";
-    const spark = <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark" />;
+    controls = <Choice label="Panel border" value={comicBorder} options={["standard", "strong"] as const} onChange={setComicBorder} />;
+    const borderProp = `border="${comicBorder}"`;
+    const spark = <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark" />;
     const imageProps = (asset: typeof still, alt: string) =>
       elementCode("Image", Object.entries({ ...asset, alt }).map(([prop, value]) =>
         `${prop}={${JSON.stringify(value)}}`,
       ));
     const stillCode = elementCode("ComicPanel", [
       'caption="1. Find a spark"',
+      borderProp,
       `media={${imageProps(still, stillAlt)}}`,
     ]);
     const sparkStripCode = elementCode("ComicPanel", [
       'caption="1. Find a spark"',
+      borderProp,
       `media={${imageProps(still, stillAlt)}}`,
     ], '<SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>');
     const exploreCode = elementCode("ComicPanel", [
       'caption="3. Keep exploring"',
+      borderProp,
       `media={${imageProps(explore, exploreAlt)}}`,
     ], '<SpeechBubble tone="emphasis">Where to next?</SpeechBubble>');
     if (kind === "comic-panel") {
@@ -736,18 +742,18 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     } else {
       preview = (
         <ComicStrip role="group" aria-label="Paper plane story">
-          <ComicPanel media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark">
+          <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark">
             <SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>
           </ComicPanel>
-          <ComicPanel video={video} caption="2. Take flight" />
-          <ComicPanel media={<Image {...explore} alt={exploreAlt} />} caption="3. Keep exploring">
+          <ComicPanel border={comicBorder} video={video} caption="2. Take flight" />
+          <ComicPanel border={comicBorder} media={<Image {...explore} alt={exploreAlt} />} caption="3. Keep exploring">
             <SpeechBubble tone="emphasis">Where to next?</SpeechBubble>
           </ComicPanel>
         </ComicStrip>
       );
       code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"'], [
         sparkStripCode,
-        elementCode("ComicPanel", ['caption="2. Take flight"', `video={${JSON.stringify(video, null, 2)}}`]),
+        elementCode("ComicPanel", ['caption="2. Take flight"', borderProp, `video={${JSON.stringify(video, null, 2)}}`]),
         exploreCode,
       ].join("\n"));
     }
