@@ -35,11 +35,11 @@ export default function Hero() {
             </Text>
           </Stack>
           <Inline gap={3} className="hero-actions">
-            <Link variant="primary" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+            <Link variant="primary" size="lg" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               See my work
             </Link>
-            <PortfolioSummary />
-            <Link variant="secondary" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+            <PortfolioSummary triggerSize="lg" />
+            <Link variant="secondary" size="lg" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               How I think
             </Link>
           </Inline>

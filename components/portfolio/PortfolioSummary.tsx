@@ -2,7 +2,7 @@
 
 import { useId, useRef, useState, type MouseEvent } from "react";
 import { Badge } from "@mdopeace/ui/Badge";
-import { Button, ControlIcon } from "@mdopeace/ui/Button";
+import { Button, ControlIcon, type ButtonProps } from "@mdopeace/ui/Button";
 import { Dialog } from "@mdopeace/ui/Dialog";
 import { Divider } from "@mdopeace/ui/Divider";
 import { Grid, Inline, Stack } from "@mdopeace/ui/Layout";
@@ -29,7 +29,7 @@ const projectTones: Record<string, SurfaceProps["tone"]> = {
   cookieater: "emphasis",
 };
 
-export function PortfolioSummary() {
+export function PortfolioSummary({ triggerSize }: { triggerSize?: ButtonProps["size"] }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const destination = useRef<HTMLElement | null>(null);
@@ -46,6 +46,7 @@ export function PortfolioSummary() {
     <>
       <Button
         variant="secondary"
+        size={triggerSize}
         aria-haspopup="dialog"
         aria-controls={id}
         onClick={() => setOpen(true)}

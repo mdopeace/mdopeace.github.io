@@ -8,6 +8,14 @@ test("the character card opens from the first viewport and covers the essentials
   const actions = page.locator("#top .hero-actions");
   const trigger = actions.getByRole("button", { name: "See my character card" });
   await expect(trigger).toBeInViewport();
+  for (const action of [
+    actions.getByRole("link", { name: "See my work", exact: true }),
+    trigger,
+    actions.getByRole("link", { name: "How I think", exact: true }),
+  ]) {
+    await expect(action).toHaveAttribute("data-size", "lg");
+    await expect(action).toHaveCSS("height", "48px");
+  }
   await expect(trigger).toHaveAttribute("type", "button");
   await expect(trigger).toHaveAttribute("data-variant", "secondary");
   await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
