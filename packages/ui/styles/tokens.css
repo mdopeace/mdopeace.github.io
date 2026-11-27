@@ -45,6 +45,7 @@
   --ui-icon-md: 1.25rem;
   --ui-icon-lg: 1.5rem;
   --ui-border-thin: 1px;
+  --ui-divider-muted: color-mix(in srgb, var(--ui-border) 42%, transparent);
   --ui-border-standard: 2px;
   --ui-border-strong: 3px;
   --ui-rotation-left: -4deg;

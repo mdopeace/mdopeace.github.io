@@ -1,12 +1,34 @@
 import { expect, test } from "@playwright/test";
 import { expectAccessible, expectTextContrast, openForAudit, themes } from "./accessibility";
 
+test("Playground ComicPanel previews an optional title and regular caption", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ComicPanel", exact: true }).click();
+  const caption = page.getByRole("group", { name: "Live preview" }).locator("figcaption");
+  await expect(caption.locator("strong")).toHaveCount(0);
+  await page.getByRole("checkbox", { name: "Caption title" }).check();
+  await expect(caption.locator("strong")).toHaveText("1. Find a spark");
+  await expect(caption.getByText("Start with one observation worth drawing.")).toHaveCSS("font-weight", "400");
+  await expect(page.getByLabel("Usage example", { exact: true })).toContainText('captionTitle="1. Find a spark"');
+});
+
+test("Playground ComicStrip exposes caption alignment and its generated code", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "ComicStrip", exact: true }).click();
+  const strip = page.getByRole("group", { name: "Paper plane story" });
+  await expect(strip).not.toHaveAttribute("data-align-captions", "true");
+  await page.getByRole("checkbox", { name: "Align captions" }).check();
+  await expect(strip).toHaveAttribute("data-align-captions", "true");
+  await expect(page.getByLabel("Usage example", { exact: true })).toContainText("alignCaptions");
+});
+
 for (const theme of themes) {
   test(`${theme}: nested project panels use standard borders while playground defaults to strong`, async ({ page, isMobile }) => {
     await openForAudit(page, "/", theme, isMobile);
+    await page.getByRole("button", { name: "View project: QuickTodo" }).click();
     const quickTodo = page.getByRole("group", { name: "QuickTodo comic strip" }).getByRole("figure");
     await expect(quickTodo).toHaveCount(3);
-    const projectPanels = page.locator("#work figure");
+    const projectPanels = page.locator("#work dialog figure");
     await expect(projectPanels).toHaveCount(12);
     for (const panel of await projectPanels.all()) {
       await expect(panel).toHaveCSS("border-top-width", "2px");

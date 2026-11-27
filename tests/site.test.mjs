@@ -92,8 +92,8 @@ test("copy commands survive the build byte-for-byte", () => {
     m[1].replaceAll("&#10;", "\n"),
   );
   assert.deepEqual(payloads, [
-    "brew tap mdopeace/quicktodo\nbrew install --cask quicktodo",
     "brew tap vidplabs/vidp\nbrew install --cask vidp",
+    "brew tap mdopeace/quicktodo\nbrew install --cask quicktodo",
   ]);
 });
 

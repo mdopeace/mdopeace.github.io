@@ -40,7 +40,7 @@ import type { Size, Tone, Variant, Elevation } from "@mdopeace/ui/tokens";
 import styles from "./playground.module.css";
 import { elementCode, jsxText, completeExample } from "./snippets";
 
-const typographyHeadingSizes = ["feature", "display", "display-compact"] as const;
+const typographyHeadingSizes = ["card", "feature", "display", "display-compact"] as const;
 
 const catalog = [
   {
@@ -397,13 +397,18 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
   const [square, setSquare] = useState(false);
   const [tilt, setTilt] = useState<"none" | "left" | "right">("none");
   const [font, setFont] = useState<"body" | "mono">("body");
-  const [headingSize, setHeadingSize] = useState<(typeof typographyHeadingSizes)[number]>("feature");
+  const [alignComicCaptions, setAlignComicCaptions] = useState(false);
+  const [showComicCaptionTitle, setShowComicCaptionTitle] = useState(false);
+  const [headingSize, setHeadingSize] = useState<(typeof typographyHeadingSizes)[number]>("card");
+  const [headingWeight, setHeadingWeight] = useState<"default" | "bold" | "black">("default");
+  const [surfaceTexture, setSurfaceTexture] = useState<"none" | "halftone" | "halftone-soft">("none");
   const [textSize, setTextSize] = useState<"caption" | "sm" | "md" | "lg">(
     "md",
   );
   const [columns, setColumns] = useState<"1" | "2" | "3">("2");
   const [gap, setGap] = useState<"2" | "4" | "6">("4");
   const [dashed, setDashed] = useState(false);
+  const [dividerTone, setDividerTone] = useState<"default" | "muted">("default");
   const [open, setOpen] = useState(false);
   const [dialogTitleSize, setDialogTitleSize] = useState<"dialog" | "feature">("dialog");
   const [lines, setLines] = useState<"2" | "3" | "5">("3");
@@ -606,6 +611,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     controls = (
       <>
         {toneControl}
+        <Choice label="Halftone texture" value={surfaceTexture} options={["none", "halftone", "halftone-soft"] as const} onChange={setSurfaceTexture} />
         <Choice
           label="Elevation"
           value={elevation}
@@ -617,6 +623,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     preview = (
       <Surface
         tone={tone}
+        texture={surfaceTexture === "none" ? undefined : surfaceTexture}
         elevation={elevation}
         padding={6}
         className={styles.sample}
@@ -638,7 +645,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     );
     code = elementCode(
       "Surface",
-      [`tone="${tone}"`, `elevation="${elevation}"`, "padding={6}"],
+      [`tone="${tone}"`, `elevation="${elevation}"`, "padding={6}", surfaceTexture !== "none" && `texture="${surfaceTexture}"`],
       elementCode(
         "Stack",
         ["gap={3}"],
@@ -717,15 +724,23 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       height: 240,
     };
     const exploreAlt = "A compass with its needle pointing toward a new heading";
-    controls = <Choice label="Panel border" value={comicBorder} options={["standard", "strong"] as const} onChange={setComicBorder} />;
+    controls = (
+      <>
+        <Choice label="Panel border" value={comicBorder} options={["standard", "strong"] as const} onChange={setComicBorder} />
+        {kind === "comic-strip" && <Toggle label="Align captions" checked={alignComicCaptions} onChange={setAlignComicCaptions} />}
+        {kind === "comic-panel" && <Toggle label="Caption title" checked={showComicCaptionTitle} onChange={setShowComicCaptionTitle} />}
+      </>
+    );
     const borderProp = `border="${comicBorder}"`;
-    const spark = <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark" />;
+    const sparkLabel = "1. Find a spark";
+    const sparkCaption = showComicCaptionTitle ? "Start with one observation worth drawing." : sparkLabel;
     const imageProps = (asset: typeof still, alt: string) =>
       elementCode("Image", Object.entries({ ...asset, alt }).map(([prop, value]) =>
         `${prop}={${JSON.stringify(value)}}`,
       ));
     const stillCode = elementCode("ComicPanel", [
-      'caption="1. Find a spark"',
+      ...(showComicCaptionTitle ? [`captionTitle=${JSON.stringify(sparkLabel)}`] : []),
+      `caption=${JSON.stringify(sparkCaption)}`,
       borderProp,
       `media={${imageProps(still, stillAlt)}}`,
     ]);
@@ -740,11 +755,16 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
       `media={${imageProps(explore, exploreAlt)}}`,
     ], '<SpeechBubble tone="emphasis">Where to next?</SpeechBubble>');
     if (kind === "comic-panel") {
-      preview = <div className={styles.comicPanelSample}>{spark}</div>;
+      preview = (
+        <div className={styles.comicPanelSample}>
+          <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />}
+            captionTitle={showComicCaptionTitle ? sparkLabel : undefined} caption={sparkCaption} />
+        </div>
+      );
       code = stillCode;
     } else {
       preview = (
-        <ComicStrip role="group" aria-label="Paper plane story">
+        <ComicStrip role="group" aria-label="Paper plane story" alignCaptions={alignComicCaptions}>
           <ComicPanel border={comicBorder} media={<Image {...still} alt={stillAlt} />} caption="1. Find a spark">
             <SpeechBubble tone="accent">Inspiration strikes.</SpeechBubble>
           </ComicPanel>
@@ -754,7 +774,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           </ComicPanel>
         </ComicStrip>
       );
-      code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"'], [
+      code = elementCode("ComicStrip", ['role="group"', 'aria-label="Paper plane story"', ...(alignComicCaptions ? ["alignCaptions"] : [])], [
         sparkStripCode,
         elementCode("ComicPanel", ['caption="2. Take flight"', borderProp, `video={${JSON.stringify(video, null, 2)}}`]),
         exploreCode,
@@ -882,6 +902,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           options={typographyHeadingSizes}
           onChange={setHeadingSize}
         />
+        <Choice label="Heading weight" value={headingWeight} options={["default", "bold", "black"] as const} onChange={setHeadingWeight} />
         <Choice
           label="Text size"
           value={textSize}
@@ -899,7 +920,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     preview = (
       <Stack gap={4} className={styles.sample}>
         <Text variant="eyebrow">An idea worth making</Text>
-        <Heading level={3} size={headingSize}>
+        <Heading level={3} size={headingSize} weight={headingWeight === "default" ? undefined : headingWeight}>
           Make the useful thing.
         </Heading>
         <Text size={textSize} font={font}>
@@ -914,7 +935,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     code =
       elementCode(
         "Heading",
-        ["level={3}", `size="${headingSize}"`],
+        ["level={3}", `size="${headingSize}"`, ...(headingWeight === "default" ? [] : [`weight="${headingWeight}"`])],
         "Make the useful thing.",
       ) +
       "\n\n" +
@@ -939,6 +960,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           onChange={setGap}
         />
         <Toggle label="Dashed divider" checked={dashed} onChange={setDashed} />
+        <Choice label="Divider tone" value={dividerTone} options={["default", "muted"] as const} onChange={setDividerTone} />
       </>
     );
     preview = (
@@ -963,7 +985,7 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
             </Surface>
           ))}
         </Grid>
-        <Divider variant={dashed ? "dashed" : "solid"} />
+        <Divider variant={dashed ? "dashed" : "solid"} tone={dividerTone} />
       </Stack>
     );
     code = elementCode(
@@ -987,13 +1009,14 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
           .join("\n"),
       ) +
         "\n" +
-        elementCode("Divider", [`variant="${dashed ? "dashed" : "solid"}"`]),
+        elementCode("Divider", [`variant="${dashed ? "dashed" : "solid"}"`, `tone="${dividerTone}"`]),
     );
   } else if (kind === "dialog") {
     controls = (
       <>
         {sizeControl}
         <Choice label="Title size" value={dialogTitleSize} options={["dialog", "feature"]} onChange={setDialogTitleSize} />
+        <Text size="caption" tone="muted">On phones, all sizes align to the page edges.</Text>
       </>
     );
     preview = (

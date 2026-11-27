@@ -893,7 +893,7 @@
 }
 
 @layer components {
-  .portfolio-section { border-bottom-color: color-mix(in srgb, var(--ui-border) 42%, transparent); }
+  .portfolio-section { border-bottom-color: var(--ui-divider-muted); }
   .hero-layout { position: relative; isolation: isolate; margin-top: var(--ui-space-7); }
   .hero-layout::before {
     content: "";
@@ -950,13 +950,14 @@
 #top .tetris-hud { gap: var(--ui-space-1); }
 #top .tetris-preview { width: 36px; }
 
-.selected-work-layout > [data-work-size] { min-width: 0; }
 #experience .experience-layout {
   display: grid;
   align-items: start;
 }
 #now .workbench-copy { padding-top: 0; }
 #now .workbench-stamp { position: static; align-self: start; }
+/* The page scroll padding already clears the sticky navigation at this overview. */
+#work { scroll-margin-top: 0; }
 
 @media (min-width: 48rem) {
   /* Keep the column spacing in sync for both illustrated splits. */
@@ -968,12 +969,6 @@
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   }
   #story .story-spread { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.35fr); }
-  #work .selected-work-layout {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-  }
-  #work [data-work-size="feature"] { grid-column: 1 / -1; }
   #experience .experience-layout { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
   #now .workbench-layout { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
 }

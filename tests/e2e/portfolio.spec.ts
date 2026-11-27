@@ -55,24 +55,40 @@ test("the character card opens from the first viewport and covers the essentials
   await expect(trigger).toBeFocused();
 });
 
-for (const width of [360, 390, 430]) {
-  test(`the character card matches the hero edges at ${width}px`, async ({ page, isMobile }) => {
+for (const width of [320, 390, 430]) {
+  test(`portfolio dialogs match the page edges at ${width}px`, async ({ page, isMobile }) => {
     test.skip(!isMobile, "Mobile layout");
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/");
-    await page.getByRole("button", { name: "See my character card" }).click();
-    const dialog = page.getByRole("dialog", { name: "Character Card" });
-    await expect(dialog).toBeVisible();
     const hero = await page.locator("#top").evaluate(el => {
       const { left, right } = el.getBoundingClientRect();
       return { left, right };
     });
-    const edges = await dialog.evaluate(el => {
-      const { left, right } = el.getBoundingClientRect();
-      return { left, right };
-    });
-    expect(edges).toEqual(hero);
-    expect(await dialog.evaluate(el => el.scrollWidth - el.clientWidth)).toBe(0);
+    for (const [triggerName, name] of [
+      ["See my character card", "Character Card"],
+      ["View project: Vidp", "Vidp"],
+      ["View project: QuickTodo", "QuickTodo"],
+      ["View project: Cookieater", "Cookieater"],
+      ["View project: Component Library", "Component Library"],
+      ["Support my work", "Fuel the next build"],
+    ]) {
+      const trigger = page.getByRole("button", { name: triggerName, exact: true });
+      await trigger.press("Enter");
+      const dialog = page.getByRole("dialog", { name, exact: true });
+      await expect(dialog).toBeVisible();
+      const measured = await dialog.evaluate(el => {
+        const { left, right } = el.getBoundingClientRect();
+        return { edges: { left, right }, overflow: el.scrollWidth - el.clientWidth };
+      });
+      expect(measured.edges).toEqual(hero);
+      expect(measured.overflow).toBe(0);
+      await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+      await expect(dialog.getByRole("button", { name: /^Close/ })).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
   });
 }
@@ -170,12 +186,12 @@ for (const theme of ["light", "dark"] as const) {
     expect(new URL(page.url()).hash).toBe("");
     await expect(page.locator("#work")).toBeFocused();
     const project = page.locator("#work article").filter({ has: page.getByRole("heading", { name: "Vidp", exact: true }) });
-    await project.getByRole("button", { name: "Read more" }).click();
-    await expect(project.getByRole("button", { name: "Read less" })).toHaveAttribute("aria-expanded", "true");
-    await project.getByRole("button", { name: "Read less" }).click();
+    await project.getByRole("button", { name: "View project: Vidp" }).click();
     await project.getByRole("button", { name: "Copy", exact: true }).click();
     await expect(project.getByRole("status")).toHaveText("Copied to clipboard.");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brew tap vidplabs/vidp\nbrew install --cask vidp");
+    await page.keyboard.press("Escape");
+    await expect(project.getByRole("dialog")).toBeHidden();
     const contact = page.locator("#contact");
     const copyEmail = contact.getByRole("button", { name: "Copy email" });
     const actions = await contact.getByRole("button").or(contact.getByRole("link")).all();
@@ -289,6 +305,10 @@ for (const theme of themes) {
     await page.keyboard.press("Enter");
     const dialog = page.getByRole("dialog", { name: "Character Card" });
     await expect(dialog).toBeVisible();
+    const divider = dialog.locator('[data-orientation="horizontal"][data-tone="muted"]');
+    await expect(divider).toHaveCSS("border-top-style", "dashed");
+    const chapterInk = await page.locator("#work").evaluate(section => getComputedStyle(section).borderBottomColor);
+    await expect(divider).toHaveCSS("border-top-color", chapterInk);
     await expectAccessible(page, "Character Card");
     const powerBadges = dialog.getByRole("list", { name: "Powers" }).locator("li > span");
     await expect(powerBadges).toHaveCount(10);

@@ -18,6 +18,7 @@ export type SurfaceProps<T extends Tag = "div"> = Omit<
   as?: T;
   tone?: Tone;
   variant?: "solid" | "soft";
+  texture?: "halftone" | "halftone-soft";
   interactive?: boolean;
   padding?: Responsive<Space>;
   elevation?: Elevation;
@@ -28,6 +29,7 @@ export function Surface<T extends Tag = "div">({
   as,
   tone = "default",
   variant = "solid",
+  texture,
   interactive = false,
   padding = { base: 4, sm: 6 },
   elevation = "lg",
@@ -41,6 +43,7 @@ export function Surface<T extends Tag = "div">({
     ...props,
     "data-ui-surface": tone,
     "data-surface-variant": variant,
+    "data-texture": texture,
     "data-interactive": interactive || undefined,
     className: cx(styles.surface, className),
     style: {

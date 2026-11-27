@@ -136,7 +136,7 @@ export function PortfolioSummary() {
               ))}
             </Grid>
           </Stack>
-          <Divider variant="dashed" />
+          <Divider variant="dashed" tone="muted" />
           <Inline gap={3}>
             <Link href={`mailto:${email}`} variant="primary" startIcon={<FaEnvelope focusable="false" />} startIconSize="sm">Email</Link>
             <Link href={telegramHref} variant="secondary" startIcon={<FaTelegram focusable="false" />} startIconSize="sm">Telegram</Link>

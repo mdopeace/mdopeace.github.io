@@ -1,28 +1,126 @@
 .project {
+  container-type: inline-size;
+  display: grid;
   scroll-margin-top: 6rem;
 }
 
-.panel > .still {
+/* Small print marks in the mosaic's wide tiles only. */
+@media (min-width: 64rem) {
+  .project[data-accent-mark]::after {
+    position: absolute;
+    inset-block-end: var(--ui-space-4);
+    inset-inline-end: var(--ui-space-5);
+    block-size: var(--ui-space-2);
+    content: "";
+    pointer-events: none;
+  }
+  .project[data-accent-mark="playback"]::after {
+    inline-size: var(--ui-space-20);
+    --accent-ink: color-mix(in srgb, var(--ui-info) 72%, var(--ui-local-bg));
+    background: linear-gradient(to right,
+      var(--accent-ink) 0 var(--ui-space-16),
+      transparent var(--ui-space-16) calc(var(--ui-space-16) + var(--ui-space-1)),
+      var(--accent-ink) calc(var(--ui-space-16) + var(--ui-space-1)));
+  }
+  .project[data-accent-mark="blocks"]::after {
+    inline-size: var(--ui-space-2);
+    background: var(--accent-ink);
+    box-shadow: calc(-1 * var(--ui-space-3)) 0 var(--accent-ink),
+      calc(-2 * var(--ui-space-3)) 0 var(--accent-ink);
+    --accent-ink: color-mix(in srgb, var(--ui-accent) 76%, var(--ui-local-bg));
+  }
+}
+
+.intro {
+  display: grid;
+  align-items: center;
+  gap: var(--ui-space-4);
+}
+
+.intro[data-cover-layout="compact"] .artwork {
+  inline-size: min(100%, 12rem);
+}
+
+.intro[data-cover-layout="landscape"] .artwork {
+  inline-size: min(100%, 19.5rem);
+}
+
+@container (min-width: 18.5rem) {
+  .intro[data-cover-layout="compact"] {
+    grid-template-columns: minmax(0, min(42%, 12rem)) minmax(0, 1fr);
+  }
+}
+
+@container (18.5rem <= width < 28rem) {
+  .intro[data-wide-actions] > .copy {
+    display: contents;
+  }
+  .intro[data-wide-actions] .actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 48rem) {
+  @container (min-width: 18.5rem) {
+    .intro[data-cover-layout="landscape"] {
+      grid-template-columns: minmax(0, min(46%, 19.5rem)) minmax(0, 1fr);
+    }
+  }
+}
+
+@container (min-width: 29rem) {
+  .intro[data-cover-layout="landscape"] {
+    grid-template-columns: minmax(0, min(56%, 19.5rem)) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .mosaic.mosaic {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .mosaic > .project {
+    grid-column: span 2;
+  }
+  .mosaic > .project:is(:nth-child(4n + 1), :nth-child(4n + 4)) {
+    grid-column: span 3;
+  }
+}
+
+.artwork {
+  overflow: hidden;
+  background-color: var(--ui-canvas);
+}
+
+.cover,
+.still {
+  display: block;
   width: 100%;
-  aspect-ratio: 6 / 5;
+}
+
+.cover > .stillImage {
+  padding: var(--ui-space-2);
+}
+
+.project .still {
+  aspect-ratio: 16 / 10;
   background: var(--ui-canvas);
 }
 
-.still > .stillImage {
+.stillImage {
   padding: var(--ui-space-3);
 }
 
-@container (min-width: 32rem) {
-  .panel:where(:has(> .still + figcaption)) {
-    display: grid;
-    grid-row: span 2;
-    grid-template-rows: subgrid;
-    row-gap: 0;
-  }
+/* Keep focus distinct against the tint and the texture on these surfaces. */
+:global([data-theme="dark"]) .project[data-ui-surface="accent"] .actions > :is(a, button) {
+  --ui-focus: var(--ui-border);
+}
 
-  .panel > .still + figcaption {
-    margin-block-start: 0;
-  }
+.masthead {
+  --ui-focus: var(--ui-local-text);
+}
+
+.logo {
+  background: var(--ui-canvas);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -33,75 +131,5 @@
 
   .project button[data-variant="ghost"] {
     transition-property: opacity, background-color;
-  }
-}
-
-.panel > figcaption:only-child {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  margin-block-start: 0;
-  border-block-start: 0;
-}
-
-.stage {
-  display: block;
-  margin-block-end: var(--ui-space-1);
-  text-transform: uppercase;
-}
-
-.logo {
-  background: var(--ui-canvas);
-}
-
-.featureStrip .panel,
-.compactStrip .panel {
-  grid-row: auto;
-  grid-template-rows: none;
-}
-
-.featureStrip .still,
-.compactStrip .still {
-  aspect-ratio: 16 / 10;
-}
-
-.featureStrip .panel:not(:last-child) {
-  display: grid;
-  grid-template-columns: minmax(4.5rem, 0.55fr) minmax(0, 1fr);
-}
-
-.featureStrip .panel:not(:last-child) > .still {
-  height: 100%;
-  min-height: 5rem;
-  aspect-ratio: auto;
-}
-
-.featureStrip .panel:not(:last-child) > figcaption {
-  display: grid;
-  align-content: center;
-  margin-block-start: 0;
-  border-block-start: 0;
-  border-inline-start: var(--ui-border-standard) solid var(--ui-border);
-}
-
-@container (min-width: 32rem) {
-  .featureStrip > div {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    grid-template-rows: repeat(2, 1fr);
-  }
-
-  .featureStrip .panel:last-child {
-    display: flex;
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
-
-  .featureStrip .panel:last-child > .still { flex: 1; }
-}
-
-@media (min-width: 48rem) {
-  @container (min-width: 17rem) {
-    .compactStrip > div { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 }

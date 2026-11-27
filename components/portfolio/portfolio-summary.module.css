@@ -2,13 +2,6 @@
   border-radius: var(--ui-radius-none);
 }
 
-@media (width < 40rem) {
-  .dialog.dialog {
-    width: calc(100% - 2 * var(--ui-space-3));
-    max-width: none;
-  }
-}
-
 .stats,
 .stats dd,
 .stats ul,
