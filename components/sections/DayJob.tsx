@@ -14,8 +14,8 @@ const toolkit = [
 export default function DayJob() {
   return (
     <Section label="Experience & toolkit" id="experience" index="03">
-      <Stack gap={6}>
-        <Surface as="article" padding={{ base: 6, sm: 8 }}>
+      <Stack gap={6} className="experience-layout">
+        <Surface as="article" tone="info" padding={{ base: 6, sm: 8 }}>
           <Stack gap={6}>
             <Inline justify="between" gap={4}>
               <Stack gap={3} align="start">
@@ -39,9 +39,9 @@ export default function DayJob() {
           <Inline justify="between" gap={3}>
             <Text variant="eyebrow">Things I work with</Text>
           </Inline>
-          <Grid columns={{ base: 1, md: 2 }} gap={5}>
+          <Grid columns={{ base: 1, md: 2 }} gap={4}>
             {toolkit.map(({ title, label, tone, tools }) => (
-              <Surface key={title} as="article" tone={tone} padding={{ base: 6, sm: 8 }}>
+              <Surface key={title} as="article" tone={tone} padding={4}>
                 <Stack gap={3}>
                   <Text variant="eyebrow">{label}</Text>
                   <Heading level={3} size="card">{title}</Heading>

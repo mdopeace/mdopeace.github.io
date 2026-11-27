@@ -8,14 +8,8 @@ import { Badge } from "@mdopeace/ui/Badge";
 import { Link } from "@mdopeace/ui/Link";
 export default function Hero() {
   return (
-    <Surface
-      as="header"
-      id="top"
-      padding={0}
-      border="strong"
-      className="hero-layout"
-    >
-      <div className="hero-copy">
+    <header id="top" className="hero-layout">
+      <Surface padding={0} border="strong" elevation="md" className="hero-copy">
         <Stack gap={7}>
           <Inline gap={4}>
             <Badge variant="solid" tone="accent" size="md">
@@ -35,24 +29,25 @@ export default function Hero() {
               I notice the little frictions that get in the way of a good
               experience—and I like figuring out how to make them disappear.
             </Text>
-            <PortfolioSummary>
+            <Text size="sm" tone="muted" className="hero-summary-copy">
               At Tracxn, I work across the web platform. Outside work, I turn
               the things I wish existed into small, useful tools.
-            </PortfolioSummary>
+            </Text>
           </Stack>
-          <Inline gap={3}>
+          <Inline gap={3} className="hero-actions">
             <Link variant="primary" href="#work" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
-              See what I’ve made
+              See my work
             </Link>
-            <Link variant="secondary" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
+            <PortfolioSummary />
+            <Link variant="text" href="#story" endIcon={<FaArrowDown style={{ transform: "rotate(-45deg)" }} />}>
               How I think
             </Link>
           </Inline>
         </Stack>
-      </div>
+      </Surface>
       <div className="hero-art gameboy-stage">
         <TetrisGameboy />
       </div>
-    </Surface>
+    </header>
   );
 }

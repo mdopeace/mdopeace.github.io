@@ -8,7 +8,7 @@ import { Link } from "@mdopeace/ui/Link";
 export default function Now() {
   return (
     <Section label="What’s cooking" id="now" index="04">
-      <Grid columns={{ base: 1, md: 2 }} gap={5}>
+      <Grid columns={{ base: 1, md: 2 }} gap={5} className="workbench-layout">
         <Surface as="article" tone="subtle" padding={{ base: 6, sm: 8 }} className="workbench-card">
           <Stack gap={4} className="workbench-copy">
             <Badge variant="solid" tone="emphasis" decoration="stamp" className="workbench-stamp">

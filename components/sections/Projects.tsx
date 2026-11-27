@@ -6,7 +6,7 @@ import Section from "../portfolio/PortfolioSection";
 export default function Projects() {
   return (
     <Section label="Selected work" id="work" index="02">
-      <Stack gap={6}>
+      <Stack gap={6} className="selected-work-layout">
         {projects.map((project) => (
           <ProjectCard key={project.name} project={project} />
         ))}

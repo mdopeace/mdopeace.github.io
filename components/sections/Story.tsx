@@ -7,7 +7,7 @@ import { StoryStep } from "../portfolio/StoryStep";
 export default function Story() {
   return (
     <Section label="How I think" id="story" index="01">
-      <Grid as="ol" columns={{ base: 1, md: 3 }} gap={4}>
+      <Grid as="ol" columns={{ base: 1, md: 3 }} gap={4} className="story-spread">
         <StoryStep title="01 / Notice">
           <Text size="body" tone="muted">
             I’m a cinephile, so it starts with the search for a film worth
@@ -19,8 +19,10 @@ export default function Story() {
         <StoryStep title="02 / Make" tone="info">
           <Text size="body" tone="muted">
             Which made the player the bottleneck. None of them felt like they
-            belonged on a Mac. So I built one that did — native, keyboard
-            driven, mine.
+            belonged on a Mac.
+          </Text>
+          <Text size="lg" weight="bold">
+            So I built one that did. Native, keyboard driven, mine.
           </Text>
         </StoryStep>
         <StoryStep title="03 / Refine" tone="subtle">
