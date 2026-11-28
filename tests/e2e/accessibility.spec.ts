@@ -31,15 +31,21 @@ for (const theme of themes) {
     for (const name of ["SpeechBubble", "Burst"]) {
       await show(name);
       const text = preview.getByText(name === "Burst" ? "POW! Copied!" : /Every good story/);
+      await expect(text).toBeVisible();
+      const swatch = name === "Burst" ? text.locator("..") : text;
+      const toneAttribute = name === "Burst" ? "data-tone" : "data-ui-surface";
       for (const tone of ["default", "accent", "emphasis"]) {
         await page.getByLabel("Tone", { exact: true }).selectOption(tone);
+        await expect(swatch).toHaveAttribute(toneAttribute, tone);
         await expectTextContrast(text, name === "Burst" ? "::after" : undefined);
       }
       await expectAccessible(page, name);
       if (name === "SpeechBubble") {
         await page.getByLabel("Variant", { exact: true }).selectOption("thought");
+        await expect(swatch).toHaveAttribute("data-bubble-variant", "thought");
         for (const tone of ["default", "accent", "emphasis"]) {
           await page.getByLabel("Tone", { exact: true }).selectOption(tone);
+          await expect(swatch).toHaveAttribute(toneAttribute, tone);
           await expectTextContrast(text, undefined, "svg path");
         }
         await expectAccessible(page, "Thought bubble");

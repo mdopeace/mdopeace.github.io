@@ -32,8 +32,14 @@ export async function expectAccessible(page: Page, state: string) {
 
 export async function expectTextContrast(locator: Locator, backgroundPseudo?: string, svgBackground?: string) {
   const { ratio, foregroundColor, backgroundColor } = await locator.evaluate(async (element, { pseudo, svgBackground }) => {
-    // Read the resolved styles after the selected tone has been painted.
+    // A tone change fades the entire preview, not just the text node.
+    // Let the new preview settle before measuring its final contrast.
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const preview = element.closest('[aria-label="Live preview"]') ?? element;
+    const animations = preview.getAnimations({ subtree: true }).filter(animation =>
+      Number.isFinite(animation.effect?.getComputedTiming().endTime),
+    );
+    await Promise.allSettled(animations.map(animation => animation.finished));
     const foregroundColor = getComputedStyle(element).color;
     const svgFace = svgBackground && element.querySelector(svgBackground);
     const backgroundColor = svgFace ? getComputedStyle(svgFace).fill : getComputedStyle(element, pseudo).backgroundColor;

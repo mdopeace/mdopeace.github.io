@@ -38,6 +38,7 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
   const promptRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
   const openedBySettings = useRef(false);
+  const promptFocusFrame = useRef<number | null>(null);
   const promptId = useId();
   const descriptionId = useId();
   const statusId = useId();
@@ -45,6 +46,13 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
   const [dismissed, setDismissed] = useState(false);
   const [decisionOverride, setDecisionOverride] = useState<Decision | null>(null);
   const decisionOverrideRef = useRef<Decision | null>(null);
+  const cancelPromptFocus = useCallback(() => {
+    if (promptFocusFrame.current === null) return;
+    cancelAnimationFrame(promptFocusFrame.current);
+    promptFocusFrame.current = null;
+  }, []);
+  useEffect(() => cancelPromptFocus, [cancelPromptFocus]);
+
   const restoreFocus = useCallback(() => {
     const target = openedBySettings.current
       ? settingsRef.current
@@ -56,6 +64,7 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
     function updateFromStorage(event: StorageEvent) {
       if (event.key !== storageKey && event.key !== null) return;
       if (readDecision()) {
+        cancelPromptFocus();
         if (promptRef.current?.contains(document.activeElement)) restoreFocus();
         setReviewing(false);
       } else {
@@ -69,7 +78,7 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
       window.removeEventListener("storage", updateFromStorage);
       window.removeEventListener(storageKey, notify);
     };
-  }, [restoreFocus]);
+  }, [cancelPromptFocus, restoreFocus]);
 
   const savedDecision = useSyncExternalStore(subscribe, readDecision, () => undefined);
   const decision = decisionOverride ?? savedDecision;
@@ -102,6 +111,7 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
   }, [open]);
 
   function decide(nextDecision: Decision) {
+    cancelPromptFocus();
     let override: Decision | null = null;
     try {
       window.localStorage.setItem(storageKey, nextDecision);
@@ -132,9 +142,13 @@ export default function AnalyticsConsent({ measurementId = GA_MEASUREMENT_ID }: 
           aria-controls={promptId}
           aria-expanded={open}
           onClick={() => {
+            cancelPromptFocus();
             openedBySettings.current = true;
             setReviewing(true);
-            requestAnimationFrame(() => promptRef.current?.focus({ preventScroll: true }));
+            promptFocusFrame.current = requestAnimationFrame(() => {
+              promptFocusFrame.current = null;
+              promptRef.current?.focus({ preventScroll: true });
+            });
           }}
         >
           Privacy settings
