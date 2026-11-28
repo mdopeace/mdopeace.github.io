@@ -259,7 +259,9 @@ flag prevents accidental registry publishing; it is not a restriction on MIT reu
 - **SpeechBubble** frames dialogue or captions in a native `div`. Pass
   `children`, `tone` (`default` by default, `accent`, or `emphasis`), `size` (default `md`), and
   `tail` (`bottom-start` by default, `bottom-end`, `top-start`, or `top-end`).
-  Leave room above or below the panel for the tail.
+  Set `variant="thought"` for a cloud outline and dotted tail. The default
+  `variant="speech"` keeps the square frame and pointed tail. Leave room above
+  or below the bubble for the tail and prefer short text for the cloud shape.
 - **Burst** highlights short captions or feedback. Pass `children`, `size`
   (default `md`), `tone` (`accent` by default, `default`, or
   `emphasis`), and optional `animated` for entry. Motion follows the OS

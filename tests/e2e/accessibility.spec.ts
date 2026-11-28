@@ -5,6 +5,13 @@ for (const theme of themes) {
   test(`${theme}: home and support dialog meet WCAG A/AA axe rules`, async ({ page, isMobile }) => {
     await openForAudit(page, "/", theme, isMobile);
     await expectAccessible(page, "home");
+    const thought = page.locator("#contact [data-bubble-variant=thought]");
+    await expect(thought).toHaveAttribute("data-tail", "bottom-start");
+    await expectTextContrast(thought, undefined, "svg path");
+    const bubble = (await thought.boundingBox())!;
+    const art = (await page.locator("#contact .contact-art").boundingBox())!;
+    expect(bubble.x).toBeGreaterThan(art.x);
+    expect(bubble.x + bubble.width).toBeLessThan(art.x + art.width);
     await page.getByRole("button", { name: "Support my work" }).click();
     await expect(page.getByRole("dialog", { name: "Fuel the next build" })).toBeVisible();
     await expectAccessible(page, "support dialog");
@@ -29,6 +36,14 @@ for (const theme of themes) {
         await expectTextContrast(text, name === "Burst" ? "::after" : undefined);
       }
       await expectAccessible(page, name);
+      if (name === "SpeechBubble") {
+        await page.getByLabel("Variant", { exact: true }).selectOption("thought");
+        for (const tone of ["default", "accent", "emphasis"]) {
+          await page.getByLabel("Tone", { exact: true }).selectOption(tone);
+          await expectTextContrast(text, undefined, "svg path");
+        }
+        await expectAccessible(page, "Thought bubble");
+      }
     }
     await show("ConsentNote");
     await expect(preview.getByRole("region", { name: "Consent notice" })).toBeVisible();

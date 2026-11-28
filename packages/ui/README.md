@@ -148,7 +148,8 @@ remain outside it. Copy always includes the complete code.
 
 ### Comic
 
-`SpeechBubble` frames speech or captions with a directional tail. `Burst`
+`SpeechBubble` frames speech or captions with a directional tail; use
+`variant="thought"` for a cloud and dotted tail. `Burst`
 highlights text and can announce feedback. `ComicPanel` frames `media` or
 `children` with an optional `caption`. Its `border` defaults to `"strong"`;
 use `border="standard"` for a lighter frame when nesting a panel in a card.

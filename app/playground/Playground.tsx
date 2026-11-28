@@ -265,6 +265,7 @@ function hasPreviewWidthControl(kind: ComponentId) {
   ));
 }
 
+const bubbleVariants = ["speech", "thought"] as const;
 const tails = ["bottom-start", "bottom-end", "top-start", "top-end"] as const;
 const comicTones = ["default", "accent", "emphasis"] as const;
 const sizes = ["sm", "md", "lg"] as const;
@@ -365,6 +366,7 @@ function Snippet({ code }: { code: string }) {
 function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: boolean }) {
   const [width, setWidth] = useState<"narrow" | "wide">("wide");
   const [comicBorder, setComicBorder] = useState<"standard" | "strong">("strong");
+  const [bubbleVariant, setBubbleVariant] = useState<(typeof bubbleVariants)[number]>("speech");
   const [tail, setTail] = useState<(typeof tails)[number]>("bottom-start");
   const [burstTone, setBurstTone] = useState<(typeof comicTones)[number]>("accent");
   const [speechTone, setSpeechTone] = useState<(typeof comicTones)[number]>("default");
@@ -663,13 +665,14 @@ function Playground({ kind, animateEntry }: { kind: ComponentId; animateEntry: b
     const caption = "Every good story starts with a little curiosity.";
     controls = (
       <>
+        <Choice label="Variant" value={bubbleVariant} options={bubbleVariants} onChange={setBubbleVariant} />
         <Choice label="Tail" value={tail} options={tails} onChange={setTail} />
         <Choice label="Tone" value={speechTone} options={comicTones} onChange={setSpeechTone} />
         {sizeControl}
       </>
     );
-    preview = <SpeechBubble tail={tail} tone={speechTone} size={size}>{caption}</SpeechBubble>;
-    code = elementCode("SpeechBubble", [`tail="${tail}"`, `tone="${speechTone}"`, sizeProp], caption);
+    preview = <SpeechBubble className={bubbleVariant === "thought" ? styles.thoughtSample : undefined} variant={bubbleVariant} tail={tail} tone={speechTone} size={size}>{caption}</SpeechBubble>;
+    code = elementCode("SpeechBubble", [`variant="${bubbleVariant}"`, `tail="${tail}"`, `tone="${speechTone}"`, sizeProp], caption);
   } else if (kind === "burst") {
     const message = "POW! Copied!";
     controls = (
