@@ -91,6 +91,27 @@ it("reopens the notice from Privacy settings and clears analytics cookies on wit
   expect(document.activeElement).toBe(settings);
 });
 
+it("does not move focus back into a notice closed before the next frame", async () => {
+  localStorage.setItem(storageKey, "accepted");
+  const frames = new Map<number, FrameRequestCallback>();
+  let id = 0;
+  vi.spyOn(window, "requestAnimationFrame").mockImplementation(callback => {
+    frames.set(++id, callback);
+    return id;
+  });
+  vi.spyOn(window, "cancelAnimationFrame").mockImplementation(frame => { frames.delete(frame); });
+
+  render(<AnalyticsConsent measurementId={testId} />);
+  const settings = screen.getByRole("button", { name: "Privacy settings" });
+  fireEvent.click(settings);
+  expect(frames.size).toBe(1);
+  fireEvent.click(screen.getByRole("button", { name: "Decline" }));
+  await act(async () => {});
+  act(() => { for (const callback of frames.values()) callback(0); });
+
+  expect(document.activeElement).toBe(settings);
+});
+
 it("stops active tracking when withdrawal cannot be saved", () => {
   localStorage.setItem(storageKey, "accepted");
   vi.spyOn(localStorage, "setItem").mockImplementation(() => { throw new Error("blocked"); });
