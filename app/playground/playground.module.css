@@ -164,6 +164,11 @@
   max-inline-size: min(20rem, 75%);
 }
 
+.thoughtSample {
+  justify-self: center;
+  text-align: center;
+}
+
 .comicPanelSample {
   inline-size: 100%;
   max-inline-size: 27rem;

@@ -30,12 +30,13 @@ export async function expectAccessible(page: Page, state: string) {
   });
 }
 
-export async function expectTextContrast(locator: Locator, backgroundPseudo?: string) {
-  const { ratio, foregroundColor, backgroundColor } = await locator.evaluate(async (element, pseudo) => {
+export async function expectTextContrast(locator: Locator, backgroundPseudo?: string, svgBackground?: string) {
+  const { ratio, foregroundColor, backgroundColor } = await locator.evaluate(async (element, { pseudo, svgBackground }) => {
     // Read the resolved styles after the selected tone has been painted.
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     const foregroundColor = getComputedStyle(element).color;
-    const backgroundColor = getComputedStyle(element, pseudo).backgroundColor;
+    const svgFace = svgBackground && element.querySelector(svgBackground);
+    const backgroundColor = svgFace ? getComputedStyle(svgFace).fill : getComputedStyle(element, pseudo).backgroundColor;
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d")!;
     function luminance(color: string) {
@@ -57,6 +58,6 @@ export async function expectTextContrast(locator: Locator, backgroundPseudo?: st
       foregroundColor,
       backgroundColor,
     };
-  }, backgroundPseudo);
+  }, { pseudo: backgroundPseudo, svgBackground });
   expect(ratio, `Text contrast of ${foregroundColor} on ${backgroundColor}`).toBeGreaterThanOrEqual(4.5);
 }

@@ -258,6 +258,58 @@ test("Burst has no width control and is centered at every size", async ({ page }
   }
 });
 
+test("thought bubbles keep their text and keyboard focus as the shape changes", async ({ page }) => {
+  await page.goto("/playground/");
+  await page.getByRole("button", { name: "SpeechBubble", exact: true }).click();
+  const variant = page.getByRole("combobox", { name: "Variant", exact: true });
+  const tail = page.getByRole("combobox", { name: "Tail", exact: true });
+  const bubble = page.locator("[data-bubble-variant]");
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await variant.selectOption("speech");
+    await variant.focus();
+    await variant.selectOption("thought");
+    await expect(variant).toBeFocused();
+    await expect(bubble).toHaveAttribute("data-bubble-variant", "thought");
+    await expect(bubble).toContainText("Every good story");
+    const shape = bubble.locator("svg").first();
+    await expect(shape).toHaveCSS("animation-name", /shapeFade/);
+    const expectedDuration = reducedMotion === "reduce" ? "--ui-fade-fast" : "--ui-fade-normal";
+    await expect.poll(() => shape.evaluate((node, variable) => {
+      const style = getComputedStyle(node);
+      const duration = (value: string) => value.trim().endsWith("ms") ? parseFloat(value) / 1000 : parseFloat(value);
+      return duration(style.animationDuration) === duration(style.getPropertyValue(variable));
+    }, expectedDuration)).toBe(true);
+    await page.keyboard.press("Tab");
+    await expect(tail).toBeFocused();
+    for (const direction of ["bottom-start", "bottom-end", "top-start", "top-end"]) {
+      await tail.selectOption(direction);
+      await expect(bubble).toHaveAttribute("data-tail", direction);
+      const box = (await bubble.boundingBox())!;
+      const tailArt = bubble.locator("svg").last();
+      const dots = (await tailArt.boundingBox())!;
+      await expect(tailArt).toHaveCSS("scale", "none");
+      await expect(tailArt).toHaveCSS("filter", await shape.evaluate(svg => getComputedStyle(svg).filter));
+      await expect.poll(() => tailArt.locator("g").evaluate(g => {
+        const transform = (g as SVGGElement).getScreenCTM()!;
+        return [Math.sign(transform.a), Math.sign(transform.d)];
+      })).toEqual([direction.endsWith("end") ? -1 : 1, direction.startsWith("top") ? -1 : 1]);
+      expect(dots.x + dots.width / 2 < box.x + box.width / 2).toBe(direction.endsWith("start"));
+      expect(dots.y + dots.height / 2 < box.y + box.height / 2).toBe(direction.startsWith("top"));
+    }
+  }
+  const shape = bubble.locator("svg").first();
+  const outline = shape.locator("path");
+  const standard = await outline.getAttribute("d");
+  await page.getByRole("combobox", { name: "Size", exact: true }).selectOption("sm");
+  await expect(bubble).toHaveAttribute("data-size", "sm");
+  await expect(outline).toHaveAttribute("d", standard!);
+  expect(await shape.evaluate((svg: SVGSVGElement) => {
+    const transform = svg.getScreenCTM()!;
+    return Math.abs(transform.a - transform.d) < 0.001;
+  })).toBe(true);
+});
+
 test("comic previews wrap at 320px and honor the browser's motion preference", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto("/playground/");

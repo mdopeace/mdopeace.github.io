@@ -189,6 +189,21 @@ describe("comic components", () => {
     expect(bubble.tabIndex).toBe(-1);
   });
 
+  it("adds the decorative cloud and dots without replacing the speech bubble's text or native element", () => {
+    const ref = createRef<HTMLDivElement>();
+    const { rerender } = render(<SpeechBubble ref={ref}>One thought.</SpeechBubble>);
+    const bubble = ref.current!;
+    expect(bubble.getAttribute("data-bubble-variant")).toBe("speech");
+    expect(bubble.querySelector("svg")).toBeNull();
+    rerender(<SpeechBubble ref={ref} variant="thought" tail="top-end" tone="accent" size="sm">One thought.</SpeechBubble>);
+    expect(ref.current).toBe(bubble);
+    expect(bubble.textContent).toBe("One thought.");
+    expect(bubble.getAttribute("data-bubble-variant")).toBe("thought");
+    expect(bubble.getAttribute("data-tail")).toBe("top-end");
+    expect(bubble.querySelectorAll("svg[aria-hidden=true]")).toHaveLength(2);
+    expect(bubble.querySelectorAll("circle")).toHaveLength(2);
+  });
+
   it("keeps a feedback status mounted as its message changes and leaves static text silent", () => {
     const { rerender } = render(<Burst>POW!</Burst>);
     expect(screen.getByText("POW!")).toBeTruthy();

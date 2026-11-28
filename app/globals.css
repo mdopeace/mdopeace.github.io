@@ -562,23 +562,8 @@
     right: 4%;
     z-index: 2;
     width: clamp(145px, 33%, 155px);
-    aspect-ratio: 1200 / 779;
-    animation: contact-cloud-float 4.8s ease-in-out infinite;
-  }
-  .contact-thought-label {
-    position: absolute;
-    top: 30%;
-    left: 4%;
-    right: 14%;
-    height: 30%;
-    display: grid;
-    place-items: center;
-    color: #25231f;
-    font-size: clamp(0.64rem, 1.15vw, 0.78rem);
-    font-weight: 900;
-    line-height: 1.2;
     text-align: center;
-    transform: translate(6%, 2%);
+    animation: contact-cloud-float 4.8s ease-in-out infinite;
   }
   .contact-illustration {
     position: relative;
@@ -826,10 +811,7 @@
     .contact-thought {
       top: 5%;
       right: 3%;
-      width: clamp(106px, 28%, 114px);
-    }
-    .contact-thought span {
-      font-size: 0.58rem;
+      width: clamp(140px, 34%, 145px);
     }
   }
   /* Trailing middot groups the set and wraps better than a flex gap. */

@@ -9,7 +9,7 @@
 .bubble[data-size="sm"] { font-size: var(--ui-font-sm); }
 .bubble[data-size="lg"] { font-size: var(--ui-font-lg); }
 
-.bubble::after {
+.bubble[data-bubble-variant="speech"]::after {
   content: "";
   position: absolute;
   inline-size: var(--ui-space-3);
@@ -32,4 +32,97 @@
   inset-block-end: auto;
   inset-block-start: calc(var(--ui-space-2) * -1);
   transform: rotate(225deg);
+}
+
+.bubble[data-bubble-variant="thought"] {
+  --bubble-tail-offset: calc(-1 * var(--ui-space-2));
+  isolation: isolate;
+  background-color: transparent;
+  box-sizing: border-box;
+  inline-size: max-content;
+  max-inline-size: min(100%, 32ch);
+  aspect-ratio: 2.6;
+  align-content: center;
+  padding-inline: max(var(--pad), 1.2em);
+  padding-block: max(var(--pad), var(--ui-space-4));
+}
+
+.bubble[data-bubble-variant="thought"][data-size="sm"] {
+  --bubble-tail-offset: var(--ui-space-1);
+}
+
+.cloud,
+.dots {
+  position: absolute;
+  z-index: -1;
+  overflow: visible;
+  pointer-events: none;
+  fill: var(--ui-local-bg);
+  stroke: var(--ui-border);
+  stroke-width: var(--ui-border-strong);
+  stroke-linejoin: round;
+  filter: drop-shadow(var(--ui-shadow-md-offset) var(--ui-shadow-md-offset) 0 var(--ui-shadow-color));
+}
+
+.cloud {
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.dots {
+  inline-size: var(--ui-space-6);
+  block-size: var(--ui-space-6);
+  inset-block-start: calc(100% + var(--bubble-tail-offset));
+  inset-inline-start: 16%;
+}
+
+/* Mirror the circles, not the SVG that casts the shadow. */
+.dotTrail {
+  transform-box: view-box;
+  transform-origin: center;
+  scale: var(--bubble-tail-x, 1) var(--bubble-tail-y, 1);
+}
+
+.bubble:is([data-tail="top-start"], [data-tail="top-end"]) .dots {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + var(--bubble-tail-offset));
+  --bubble-tail-y: -1;
+}
+
+.bubble:is([data-tail="top-end"], [data-tail="bottom-end"]) .dots {
+  inset-inline-start: auto;
+  inset-inline-end: 16%;
+  --bubble-tail-x: -1;
+}
+
+.dotTrail:dir(rtl) {
+  scale: calc(var(--bubble-tail-x, 1) * -1) var(--bubble-tail-y, 1);
+}
+
+.cloud,
+.dots {
+  animation: shapeFade var(--ui-fade-normal) var(--ui-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud,
+  .dots {
+    --reduced-animation-duration: var(--ui-fade-fast);
+    animation-duration: var(--reduced-animation-duration);
+  }
+}
+
+@media (forced-colors: active) {
+  .cloud,
+  .dots {
+    fill: Canvas;
+    stroke: CanvasText;
+    filter: none;
+    forced-color-adjust: none;
+  }
+}
+
+@keyframes shapeFade {
+  from { opacity: 0; }
 }

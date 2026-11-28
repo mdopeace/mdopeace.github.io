@@ -24,9 +24,8 @@ test("preview pages load Next assets and link to each other under the base path"
 });
 
 test("preview pages use prefixed images and a noindex directive without analytics", () => {
-  for (const file of ["contact-thought-bubble.webp", "contact-maker.webp"]) {
-    assert.ok(home.includes(`src="${basePath}/${file}"`), file);
-  }
+  assert.ok(home.includes(`src="${basePath}/contact-maker.webp"`));
+  assert.match(home, /data-bubble-variant="thought"/);
   for (const html of [home, playground]) {
     assert.ok(html.includes(`property="og:image" content="https://mdopeace.github.io${basePath}/opengraph-image.png"`));
     assert.match(html, /<meta name="robots" content="noindex, nofollow"\s*\/>/);
